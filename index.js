@@ -4,6 +4,39 @@
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
+function importTree(inData) {
+/*////////
+let test = importTree(importData)
+/////////*/
+  var ligData;
+  var level;
+  var label;
+  var outData = [];
+  var nearestParents = [];
+  var newNode;
+  var parent;
+
+  label = importData[0][0];
+  outData[0] = label;
+  outData[1] = [];
+  nearestParents[0] = outData;
+
+  for ( let lig = 1; lig < inData.length; lig++ ) {
+    ligData = inData[lig];
+    level = ligData.length-1;
+    label = ligData[level];
+
+    newNode = [];
+    newNode[0] = label;
+    newNode[1] = [];
+
+    parent = nearestParents[level -1];
+    parent[1].push(newNode);
+    nearestParents[level] = newNode;
+  }
+
+return Array.from(outData);
+}
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
@@ -20,13 +53,33 @@ $(document).ready(function () {
 }); // ******************************************************  F I N   R E A D Y
 //  ****************************************************************************
 
-var treeTest = [{a: [{b: []}, {c: []}, {d: [{e: []}]}]}];
+// var treeTest = [{a: [{b: []}, {c: []}, {d: [{e: []}]}]}];
 
-var tt = ['a', [['b', []], ['c', []], ['d', [['e', []]]]]];
-var tt2 =
-  ['a',
-    ['b',
-      ['x',[], 'y',[]] ], ['c', []], ['d',
-        ['e', []]]];
+          var ttest = ['a', [['b', []], ['c', []], ['d', [['e', []]]]]];
 
-var tt3 = [["BESOINS"],["BESOINS","PERSONNE"],["BESOINS","PERSONNE","CONDUCTEUR"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","VISUELLES"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","VISUELLES","Acuité visuelle"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","VISUELLES","Daltonisme"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","VISUELLES","Sensibilité aux contrastes"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","AUDITIVES"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","ATTENTION / CONCENTRATION"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","REFLEXES / REACTIONS"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","PHYSIQUES"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","LOGIQUE"],["BESOINS","PERSONNE","CONDUCTEUR","CAPACITES","MECANIQUE"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE","Calme"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE","Tendu"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE","Imprudent"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE","Agité"],["BESOINS","PERSONNE","CONDUCTEUR","PERSONNALITE","Triste"]];
+var importData = [
+  ["BESOINS"],
+  ["","PERSONNE"],
+  ["","","CONDUCTEUR"],
+  ["","","","CAPACITES"],
+  ["","","","","VISUELLES"],
+  ["","","","","","Acuité visuelle"],
+  ["","","","","","Daltonisme"],
+  ["","","","","","Sensibilité contrastes"],
+  ["","","","","AUDITIVES"],
+  ["","","","","ATTENTION"],
+  ["","","","","REFLEXES"],
+  ["","","","","PHYSIQUES"],
+  ["","","","","LOGIQUE"],
+  ["","","","","MECANIQUE"],
+  ["","","","PERSONNALITE"],
+  ["","","","","Calme"],
+  ["","","","","Tendu"],
+  ["","","","","Imprudent"],
+  ["","","","","Agité"],
+  ["","","","","Triste"]
+];
+
+var ontoTree = [];
+// Array à 2 cases représente un noeud: case 0 = étiquette, 1 = ensemble (Array) des descendants immédiats (fils). Si pas de descendant, l'Array est vide ([]).
+// exemple: ["meuble", [["chaise",[]], ["table", []]]
