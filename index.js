@@ -53,33 +53,7 @@ $(document).ready(function () {
 }); // ******************************************************  F I N   R E A D Y
 //  ****************************************************************************
 
-// var treeTest = [{a: [{b: []}, {c: []}, {d: [{e: []}]}]}];
-
-          var ttest = ['a', [['b', []], ['c', []], ['d', [['e', []]]]]];
-
-var importData = [
-  ["BESOINS"],
-  ["","PERSONNE"],
-  ["","","CONDUCTEUR"],
-  ["","","","CAPACITES"],
-  ["","","","","VISUELLES"],
-  ["","","","","","Acuité visuelle"],
-  ["","","","","","Daltonisme"],
-  ["","","","","","Sensibilité contrastes"],
-  ["","","","","AUDITIVES"],
-  ["","","","","ATTENTION"],
-  ["","","","","REFLEXES"],
-  ["","","","","PHYSIQUES"],
-  ["","","","","LOGIQUE"],
-  ["","","","","MECANIQUE"],
-  ["","","","PERSONNALITE"],
-  ["","","","","Calme"],
-  ["","","","","Tendu"],
-  ["","","","","Imprudent"],
-  ["","","","","Agité"],
-  ["","","","","Triste"]
-];
-
 var ontoTree = [];
 // Array à 2 cases représente un noeud: case 0 = étiquette, 1 = ensemble (Array) des descendants immédiats (fils). Si pas de descendant, l'Array est vide ([]).
 // exemple: ["meuble", [["chaise",[]], ["table", []]]
+ontoTree = importTree(importData);
