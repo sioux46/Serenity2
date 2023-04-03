@@ -4,6 +4,32 @@
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
+
+function findNodeByLabel(label, node) {
+  var childs = node[1];
+  if ( !childs ) return;
+  for ( let i = 0; i < childs.length; i++ ) {
+    let child = childs[i];
+    if ( child[0] == label ) return child;
+  }
+}
+//
+
+function findChildsLabels(node) {
+  var labels = [];
+  var childs = node[1];
+  for ( let i = 0; i < childs.length;i++ ) {
+    labels.push(childs[i][0]);
+  }
+  return labels;
+}
+//
+
+//function findChildsLabelsByLabel(label) {
+//  var node = findNodeByLabel();
+//}
+//
+
 function importTree(inData) {
 /*////////
 let test = importTree(importData)
