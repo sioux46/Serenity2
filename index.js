@@ -61,8 +61,9 @@ let test = importTree(importData)
     nearestParents[level] = newNode;
   }
 
-return Array.from(outData);
+  return Array.from(outData);
 }
+//
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
@@ -73,6 +74,7 @@ return Array.from(outData);
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
+  $("#start").css({"display": "block"});
 
 
 
