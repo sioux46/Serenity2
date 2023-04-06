@@ -2,12 +2,17 @@
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
+  background-color: #e9ecef; /* beige; */
 }
 
 .s-page {
   display: none;
   height: 100%;
   width: 100%;
+}
+
+#start {
+  /* background-color: beige; */
 }
 
 /*

@@ -15,6 +15,24 @@ function findNodeByLabel(label, node) {
 }
 //
 
+function deepFindNodeByLabel(label, node) {
+  function deepFindNode(label, node) {
+    if ( label == node[0] ) result_deepFindNode = node;
+
+    let childs = node[1];
+    if ( !childs ) return;
+
+    for ( var i = 0; i < childs.length; i++ ) {
+      let child = childs[i];
+      deepFindNode(label, child);
+    }
+  }
+  var result_deepFindNode = [];
+  deepFindNode(label, node);
+  return result_deepFindNode;
+}
+//
+
 function findChildsLabels(node) {
   var labels = [];
   var childs = node[1];
@@ -25,10 +43,6 @@ function findChildsLabels(node) {
 }
 //
 
-//function findChildsLabelsByLabel(label) {
-//  var node = findNodeByLabel();
-//}
-//
 
 function importTree(inData) {
 /*////////

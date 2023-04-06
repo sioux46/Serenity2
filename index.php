@@ -22,16 +22,18 @@
 <!--   START    -->
 <!--            -->
     <div id="start" class="s-page">
-      <div class="container-fluid mt-0 pt-2 pb-0 bg-primary text-white text-center">
+      <div class="container-fluid mt-0 pt-2 pb-0 mb-5 bg-primary text-white text-center">
         <h1 class="display-5">DEVA</h1>
-        <h3>Sérénité!</h3>
+        <h3>Sérénité</h3>
       </div>
-        <div class="container">
-          <button type="button" class="btn btn-info">Préparer un voyage</button>
-          <button type="button" class="btn btn-info">Exécute un voyage</button>
-          <button type="button" class="btn btn-info">Terminer</button>
+      <div class="container">
+        <div  class="d-grid gap-4 text-center">
+          <button type="button" class="btn btn-outline-primary btn-lg">Préparer un voyage</button>
+          <button type="button" class="btn btn-outline-primary btn-lg">Exécute un voyage</button>
+          <button type="button" class="btn btn-outline-primary btn-lg">Terminer</button>
         </div>
-      <div>
+      </div>
+    </div>
 <!--
     <div  class="row justify-content-evenly mt-5">
       <div class="col-sm-5 border border-2 m-3">
