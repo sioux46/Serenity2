@@ -11,8 +11,20 @@ body {
   width: 100%;
 }
 
-#start {
-  /* background-color: beige; */
+.s-btn {
+  height: 3em;
+  border-radius: 0;
+  font-size: 2em;
+}
+
+.ontoTree-btn {
+  height: 2.5em;
+  border-radius: 0;
+  font-size: 2em;
+}
+
+.ontoTree-cont {
+  width: 80%;
 }
 
 /*
