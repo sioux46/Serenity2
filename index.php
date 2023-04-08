@@ -43,21 +43,24 @@
         <h1 id="ontoTree-parent" class="display-5"></h1>
       </div>
       <div class="container ontoTree-cont">
-        <div  class="d-grid gap-0">
-          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
-          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success btn-lg"></button>
+        <div  class="d-grid gap-1">
+          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
         </div>
       </div>
     </div>
 <!--                                M O D A L S     -->
 <!--                    -->
 <!--   modalOntoTree    -->
-<!--                    -->
+<!--
 <div id="modalOntoTree" class="modal fade" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -84,7 +87,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!--                    -->
 <!--   input modal      -->
 <!--                    -->

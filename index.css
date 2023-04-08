@@ -18,13 +18,16 @@ body {
 }
 
 .ontoTree-btn {
-  height: 2.5em;
+  height: 2.1em;
   border-radius: 0;
-  font-size: 2em;
+  border-left: 0;
+  border-right: 0;
+  font-size: 1.5em;
+  background-color: white;
 }
 
 .ontoTree-cont {
-  width: 80%;
+   width: 90%;
 }
 
 /*

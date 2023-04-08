@@ -91,16 +91,19 @@ function importTree(inData) {
 
 
 
-function initOntoTreeChoose(label, labels) {
+function initOntoTreeChoose(label, labs) {
+  let labels;
+  if ( labs ) labels = labs;
+  else labels = deepFindChildsLabels(label);
   $("#ontoTree-choose").find("#ontoTree-parent").text(label);
 // clear
-  for ( let i = 0; i < 7; i++ ) {
+  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
     $("#ontoTree-choose").find(item).text("");
     $("#ontoTree-choose").find(item).css({"display": "none"});
   }
 // feel
-  for ( let i = 0; i < 7; i++ ) {
+  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
     if ( labels[i] ) {
       $("#ontoTree-choose").find(item).css({"display": "inline-block"});
@@ -121,45 +124,55 @@ $(document).ready(function () {
   $("#start").css({"display": "block"});
   // $("#modalOntoTree").find("#ontoTreeTitle").text([ontoTree[1][0][0]]);
 
-
-// *****************************************************  */
-/* $(some button).on("click", function (ev) {
-  let label = $("#modalOntoTree").find("#ontoTree-title").text();
-  let node = deepFindNodeByLabel(label, ontoTree);
-  let subLabels = deepFindChildsLabels(label);
-  for ( let i = 0; i < 7; i++ ) {
-    var item = "#ontoTree-item" + i;
-    $("#modalOntoTree").find(item).text(subLabels[i]);
-  }
-  $("#modalOntoTree").modal("handleUpdate").modal("show");
-}); */
-// *********************************************************
-
 /////       show ontoTree-choose
 $("#pretravel").on("click", function (ev) {
   $("#start").css({"display": "none"});
   $("#ontoTree-choose").css({"display": "block"});
-  // initOntoTreeChoose(ontoTree[0], deepFindChildsLabels(ontoTree[0]));
-  initOntoTreeChoose("CAPACITES", deepFindChildsLabels("CAPACITES"));
+  initOntoTreeChoose("BESOINS");
 });
+
 /////        change ontoTree-parent in ontoTree-choose
 $("#ontoTree-parent").on("click", function (ev) {
   $("#inputModal").modal("show");
   $("#inputModal").find("input").focus();
 });
 
+/////        change ontoTree-btn list
+$(".ontoTree-btn").on("click", function(ev) {
+  let label = $(this).text();
+  initOntoTreeChoose(label);
+});
+
 /////         handling modal input
 $("#inputModal").find("#inputModalOK").on("click", function (ev) {
   let newLabel = $("#inputModal").find("input").val();
+  if ( !newLabel ) newLabel = "BESOINS";
   $("#inputModal").modal("hide");
-  initOntoTreeChoose(newLabel, deepFindChildsLabels(newLabel));
+  initOntoTreeChoose(newLabel);
 });
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
 
+const ONTO_TREE_ITEMS_NB = 10;
 var ontoTree = [];
 // Array à 2 cases représente un noeud: case 0 = étiquette, 1 = ensemble (Array) des descendants immédiats (fils). Si pas de descendant, l'Array est vide ([]).
 // exemple: ["meuble", [["chaise",[]], ["table", []]]
 
 ontoTree = importTree(importData);
+
+
+
+
+// *****************************************************  */
+/* $(some button).on("click", function (ev) {
+  let label = $("#modalOntoTree").find("#ontoTree-title").text();
+  let node = deepFindNodeByLabel(label, ontoTree);
+  let subLabels = deepFindChildsLabels(label);
+  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
+    var item = "#ontoTree-item" + i;
+    $("#modalOntoTree").find(item).text(subLabels[i]);
+  }
+  $("#modalOntoTree").modal("handleUpdate").modal("show");
+}); */
+// *********************************************************
