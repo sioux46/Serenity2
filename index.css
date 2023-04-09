@@ -20,14 +20,39 @@ body {
 .ontoTree-btn {
   height: 2.1em;
   border-radius: 0;
+  border-top-width: 0.1em;
   border-left: 0;
   border-right: 0;
+  border-bottom: 0;
   font-size: 1.5em;
   background-color: white;
+  /* pointer-events: none !important; */
+  
+  &:hover {
+    background-color: white !important;
+    color: var(--bs-btn-color);
+  }
+
+  &:focus {
+    background-color: white !important;
+    color: var(--bs-btn-color);
+  }
+
+  &.active {
+    &:hover {
+      background-color: white !important;
+      color: var(--bs-btn-color);
+    }
+
+    &:focus {
+      background-color: white !important;
+      color: var(--bs-btn-color);
+    }
+  }
 }
 
-.ontoTree-cont {
-   width: 90%;
+.ontoTree-content {
+  width: 90%;
 }
 
 /*

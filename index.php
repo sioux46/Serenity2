@@ -42,8 +42,8 @@
       <div class="container-fluid mt-0 ps-3 pt-2 pb-5 mb-4 bg-success text-white">
         <h1 id="ontoTree-parent" class="display-5"></h1>
       </div>
-      <div class="container ontoTree-cont">
-        <div  class="d-grid gap-1">
+      <div class="container ontoTree-content">
+        <div  class="d-grid gap-2">
           <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
           <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
           <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>

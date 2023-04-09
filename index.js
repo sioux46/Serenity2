@@ -99,17 +99,19 @@ function initOntoTreeChoose(label, labs) {
 // clear
   for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
+    $("#ontoTree-choose").find(item).css({"border-bottom-width": 0});
     $("#ontoTree-choose").find(item).text("");
     $("#ontoTree-choose").find(item).css({"display": "none"});
   }
 // feel
-  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
+  for ( let i = 0; i < labels.length; i++ ) {
     let item = "#ontoTree-item" + i;
-    if ( labels[i] ) {
-      $("#ontoTree-choose").find(item).css({"display": "inline-block"});
-      $("#ontoTree-choose").find(item).text(labels[i]);
-    }
+//    if ( i == 0 )
+//        $("#ontoTree-choose").find(item).css({"border-top-width": 0});
+    $("#ontoTree-choose").find(item).css({"display": "inline-block"});
+    $("#ontoTree-choose").find(item).text(labels[i]);
   }
+  $("#ontoTree-choose").trigger("click");
 }
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
@@ -121,6 +123,7 @@ function initOntoTreeChoose(label, labs) {
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
+/////       show start page
   $("#start").css({"display": "block"});
   // $("#modalOntoTree").find("#ontoTreeTitle").text([ontoTree[1][0][0]]);
 
@@ -149,6 +152,10 @@ $("#inputModal").find("#inputModalOK").on("click", function (ev) {
   if ( !newLabel ) newLabel = "BESOINS";
   $("#inputModal").modal("hide");
   initOntoTreeChoose(newLabel);
+});
+
+$(".ontoTree-btn").on("mouseup", function (ev) {
+  $("#ontoTree-choose").trigger("click");
 });
 
 }); // *********************************************  F I N   R E A D Y
