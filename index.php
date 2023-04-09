@@ -23,7 +23,7 @@
 <!--            -->
     <div id="start" class="s-page">
       <div class="container-fluid mt-0 pt-2 pb-0 mb-5 bg-primary text-white text-center">
-        <h1 class="display-5">DEVA</h1>
+        <h1 class="s-start display-5">DEVA</h1>
         <h3>Sérénité</h3>
       </div>
       <div class="container">
@@ -39,7 +39,7 @@
 <!--  ontoTree-choose    -->
 <!--                     -->
     <div id="ontoTree-choose" class="s-page">
-      <div class="container-fluid mt-0 ps-3 pt-2 pb-5 mb-4 bg-success text-white">
+      <div class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
         <h1 id="ontoTree-parent" class="display-5"></h1>
       </div>
       <div class="container ontoTree-content">

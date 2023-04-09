@@ -11,10 +11,23 @@ body {
   width: 100%;
 }
 
+.s-start {
+  font-weight: 600;
+}
+
 .s-btn {
   height: 3em;
   border-radius: 0;
   font-size: 2em;
+}
+
+.ontoTree-content {
+  position: relative;
+  width: 90%;
+}
+
+#ontoTree-parent {
+  text-align: center;
 }
 
 .ontoTree-btn {
@@ -26,8 +39,7 @@ body {
   border-bottom: 0;
   font-size: 1.5em;
   background-color: white;
-  /* pointer-events: none !important; */
-  
+
   &:hover {
     background-color: white !important;
     color: var(--bs-btn-color);
@@ -49,10 +61,6 @@ body {
       color: var(--bs-btn-color);
     }
   }
-}
-
-.ontoTree-content {
-  width: 90%;
 }
 
 /*

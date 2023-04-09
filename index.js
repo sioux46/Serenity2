@@ -96,6 +96,7 @@ function initOntoTreeChoose(label, labs) {
   if ( labs ) labels = labs;
   else labels = deepFindChildsLabels(label);
   $("#ontoTree-choose").find("#ontoTree-parent").text(label);
+
 // clear
   for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
@@ -106,12 +107,11 @@ function initOntoTreeChoose(label, labs) {
 // feel
   for ( let i = 0; i < labels.length; i++ ) {
     let item = "#ontoTree-item" + i;
-//    if ( i == 0 )
-//        $("#ontoTree-choose").find(item).css({"border-top-width": 0});
-    $("#ontoTree-choose").find(item).css({"display": "inline-block"});
-    $("#ontoTree-choose").find(item).text(labels[i]);
+    $("#ontoTree-choose").find(item).css({"display": "inline-block"});      $("#ontoTree-choose").find(item).text(labels[i]);
   }
-  $("#ontoTree-choose").trigger("click");
+// animate
+  $(".ontoTree-content").css({"top": "50em"});
+  $(".ontoTree-content").animate({"top": 0}, 400);
 }
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
