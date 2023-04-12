@@ -1,0 +1,10 @@
+
+/* Define standard variables and values */
+$textcolor: darkblue;
+$fontsize: 20px;
+
+/* Use the variables */
+body {
+  color: $textcolor;
+  font-size: $fontsize;
+}

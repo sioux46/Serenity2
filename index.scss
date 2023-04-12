@@ -1,9 +1,12 @@
+
 /* Define standard variables and values */
+$colorBeige: #e9ecef;
+
 /* Use the variables */
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  background-color: #e9ecef;
+  background-color: $colorBeige;
 }
 
 .s-page {
@@ -40,22 +43,28 @@ body {
   border-bottom: 0;
   font-size: 1.5em;
   background-color: white;
-}
-.ontoTree-btn:hover {
-  background-color: white !important;
-  color: var(--bs-btn-color);
-}
-.ontoTree-btn:focus {
-  background-color: white !important;
-  color: var(--bs-btn-color);
-}
-.ontoTree-btn.active:hover {
-  background-color: white !important;
-  color: var(--bs-btn-color);
-}
-.ontoTree-btn.active:focus {
-  background-color: white !important;
-  color: var(--bs-btn-color);
+
+  &:hover {
+    background-color: white !important;
+    color: var(--bs-btn-color);
+  }
+
+  &:focus {
+    background-color: white !important;
+    color: var(--bs-btn-color);
+  }
+
+  &.active {
+    &:hover {
+      background-color: white !important;
+      color: var(--bs-btn-color);
+    }
+
+    &:focus {
+      background-color: white !important;
+      color: var(--bs-btn-color);
+    }
+  }
 }
 
 /*
@@ -85,5 +94,3 @@ body {
   margin: auto;
 }
 */
-
-/*# sourceMappingURL=index.css.map */

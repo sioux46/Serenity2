@@ -2,7 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1" user-scalable="no" maximum-scale="1" minimum-scale="1">
     <title>DEVA</title>
     <!-- ====== Bootstrap ====== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -44,16 +44,16 @@
       </div>
       <div class="container ontoTree-content">
         <div  class="d-grid gap-2">
-          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
-          <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success btn-lg overflow-hidden"></button>
+          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
         </div>
       </div>
     </div>
