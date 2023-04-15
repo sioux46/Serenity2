@@ -65,9 +65,10 @@ function importTree(inData) {
   var newNode;
   var parent;
 
-  label = importData[0][0];
+  label = inData[0][0];
   outData[0] = label;
   outData[1] = [];
+  outData[2] = "";
   nearestParents[0] = outData;
 
   for ( let lig = 1; lig < inData.length; lig++ ) {
@@ -80,6 +81,7 @@ function importTree(inData) {
     newNode[1] = [];
 
     parent = nearestParents[level -1];
+    newNode[2] = parent[0]; // parent label
     parent[1].push(newNode);
     nearestParents[level] = newNode;
   }
@@ -89,27 +91,33 @@ function importTree(inData) {
 //
 /*************************************** Tree Handling END */
 
+/////       show ontoTree-choose page
+function showOntoTreeChoose(label) {
 
+}
 
+/////
 function initOntoTreeChoose(label, labs) {
   let labels;
   if ( labs ) labels = labs;
   else labels = deepFindChildsLabels(label);
+
+  let lastParent = $("#ontoTree-choose").find("#ontoTree-parent").text();
   $("#ontoTree-choose").find("#ontoTree-parent").text(label);
 
-// clear
+  // clear
   for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
     $("#ontoTree-choose").find(item).css({"border-bottom-width": 0});
     $("#ontoTree-choose").find(item).text("");
     $("#ontoTree-choose").find(item).css({"display": "none"});
   }
-// feel
+  // feel
   for ( let i = 0; i < labels.length; i++ ) {
     let item = "#ontoTree-item" + i;
     $("#ontoTree-choose").find(item).css({"display": "inline-block"});      $("#ontoTree-choose").find(item).text(labels[i]);
   }
-// animate
+  // animate
   $(".ontoTree-content").css({"top": "50em"});
   $(".ontoTree-content").animate({"top": 0}, 400);
 }
@@ -125,9 +133,8 @@ $(document).ready(function () {
 
 /////       show start page
   $("#start").css({"display": "block"});
-  // $("#modalOntoTree").find("#ontoTreeTitle").text([ontoTree[1][0][0]]);
 
-/////       show ontoTree-choose
+/////       show ontoTree-choose page
 $("#pretravel").on("click", function (ev) {
   $("#start").css({"display": "none"});
   $("#ontoTree-choose").css({"display": "block"});
@@ -146,14 +153,22 @@ $(".ontoTree-btn").on("click", function(ev) {
   initOntoTreeChoose(label);
 });
 
-/////         handling modal input
-$("#inputModal").find("#inputModalOK").on("click", function (ev) {
+/////         handling modal INPUT choose label
+$("#inputModalChooseLabelOK").on("click", function (ev) {
   let newLabel = $("#inputModal").find("input").val();
   if ( !newLabel ) newLabel = "BESOINS";
   $("#inputModal").modal("hide");
   initOntoTreeChoose(newLabel);
 });
 
+/////         handling modal  BUTTON PARENT choose label
+$("#buttonParentModalChooseLabel").on("click", function (ev) {
+  let node = deepFindNodeByLabel($("#ontoTree-parent").text(), ontoTree);
+  $("#inputModal").modal("hide");
+  initOntoTreeChoose(node[2]);
+});
+
+////////
 $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
