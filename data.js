@@ -1,4 +1,33 @@
 
+// console.error(persons[1].telephones[0].type) ---> fixe
+var persons = [
+////////////////////////////////////
+  {
+    "nom": "Dupont",
+    "prenom": "Jean",
+    "age": 32,
+    "rue": "rue des Lilas",
+    "ville": "Paris",
+    "pays": "France",
+    "fixe": "01 23 45 67 89",
+    "mobile": "06 12 34 56 78",
+    "email": "jean.dupont@example.com"
+  },
+/////////////////////////////////////
+    {
+    "nom": "Dubois",
+    "prenom": "Alain",
+    "age": 45,
+    "rue": "rue du Pont",
+    "ville": "Lyon",
+    "pays": "France",
+    "fixe": "01 23 45 67 89",
+    "mobile": "06 12 34 56 78",
+    "email": "alain.dubois@toto.com"
+  }
+///////////////////////////////////
+];
+
 var importData = [
   ["BESOINS"],
   ["","PERSONNE"],

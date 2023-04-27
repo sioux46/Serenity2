@@ -1,6 +1,7 @@
 
 /* Define standard variables and values */
 $colorBeige: #e9ecef;
+$enable-button-pointers: true;
 
 /* Use the variables */
 body {
@@ -25,13 +26,20 @@ body {
   font-size: 2em;
 }
 
-.ontoTree-content {
-  position: relative;
+#ontoTree-content {
   width: 90%;
+}
+
+#ontoTree-choose div {
+  position: relative;
 }
 
 #ontoTree-parent {
   text-align: center;
+}
+
+#ontoTree-parent:hover {
+  cursor: pointer;
 }
 
 .ontoTree-btn {

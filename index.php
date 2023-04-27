@@ -41,10 +41,10 @@
 <!--  ontoTree-choose    -->
 <!--                     -->
     <div id="ontoTree-choose" class="s-page">
-      <div class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
+      <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
         <h1 id="ontoTree-parent" class="display-5"></h1>
       </div>
-      <div class="container ontoTree-content">
+      <div id="ontoTree-content" class="container">
         <div  class="d-grid gap-2">
           <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
           <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
@@ -90,9 +90,9 @@
     </div>
   </div>
 </div> -->
-<!--                                  -->
-<!--   input modal  choose label      -->
-<!--                                  -->
+<!--                                             -->
+<!--   input modal  choose label in ontoTree     -->
+<!--                                             -->
 <div id="inputModal" class="modal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -102,7 +102,7 @@
       </div>
       <div class="modal-body">
         <div class="d-grid gap-2">
-          <button id="buttonParentModalChooseLabel" type="button" class="btn btn-success inputModalChooseLabelOK" data-bs-dismiss="modal">Rubrique parente</button>
+          <button id="buttonParentModalChooseLabel" type="button" class="btn btn-lg btn-success inputModalChooseLabelOK" data-bs-dismiss="modal">Rubrique parente</button>
           <h5 class="modal-title">Ou taper un nom de rubrique</h5>
           <input type="text" class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
         </div>

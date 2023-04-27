@@ -1,8 +1,51 @@
 // index.js
 
+/*********************************************************************
+************************************************************ class
+**********************************************************************/
+
+class Person {
+  constructor(firstName, lastName, phoneNumber) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber = phoneNumber;
+  }
+
+  getInfo() {
+    return `${this.firstName} ${this.lastName} (Tel: ${this.model})`;
+  }
+}
+/*
+const person1 = new Person("Pierre", "Durand", 0673232630);
+const car2 = new Car("Toyota", "Corolla", 2020);
+console.error(car1); // Car { make: 'Honda', model: 'Civic', year: 2019 }
+console.error(car2); // Car { make: 'Toyota', model: 'Corolla', year: 2020 }
+car = new Car("Honda", "Civic", 2019);
+console.error(car1.getInfo()); // "This car is a 2019 Honda Civic."
+*/
+
 ////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////
+function getDateNow() {
+  // Créer une nouvelle instance de l'objet Date
+  let date = new Date();
+
+  // Retourner la date sous forme de chaîne de caractères
+  return date.toLocaleDateString();
+}
+
+///////////////////////////////////////
+
+function getDate(day, month,year) {
+
+  // Create a new date
+  let theDate = new Date(year, month - 1, day);
+  return theDate.toLocaleDateString();
+}
+
 
 /*************************************** Tree Handling START */
 ///////////////////////////////////////
@@ -92,12 +135,12 @@ function importTree(inData) {
 /*************************************** Tree Handling END */
 
 /////       show ontoTree-choose page
-function showOntoTreeChoose(label) {
+function showOntoTreeChoose(label, move) {
 
 }
 
 /////
-function initOntoTreeChoose(label, labs) {
+function initOntoTreeChoose(label, move, labs) {
   let labels;
   if ( labs ) labels = labs;
   else labels = deepFindChildsLabels(label);
@@ -118,8 +161,15 @@ function initOntoTreeChoose(label, labs) {
     $("#ontoTree-choose").find(item).css({"display": "inline-block"});      $("#ontoTree-choose").find(item).text(labels[i]);
   }
   // animate
-  $(".ontoTree-content").css({"top": "50em"});
-  $(".ontoTree-content").animate({"top": 0}, 400);
+
+  if ( move ) {
+    if ( move == "up" )
+        $("#ontoTree-content, #ontoTree-title").css({"top": "50em"});
+    else /* if ( move == "down" ) */
+        $("#ontoTree-content, #ontoTree-title").css({"top": "-50em"});
+
+    $("#ontoTree-content, #ontoTree-title").animate({"top": 0}, 400);
+  }
 }
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
@@ -131,6 +181,70 @@ function initOntoTreeChoose(label, labs) {
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
+/*      open text file from client device   ****************
+
+  <input id="openTxtFileInput" type="file" accept=".txt" style="display:none;">
+
+  <button id="boutInputPhase3" class="btn btn-lg btn-success btn-block"  style="display:none";>Choisir la liste des mots</button>
+
+  // click on #boutInputPhase3
+  $("#boutInputPhase3").on("click", function () {
+    $("#openTxtFileInput").attr("accept", ".txt");
+    $("#openTxtFileInput").trigger("click");
+  });
+
+  // lecture fichier .txt pour phase 3
+function readFile(ev) {
+  var file = ev.target.files[0];
+  if ( !file || !( file.name.match(/\.txt$/)) ) return;
+  var reader = new FileReader();
+  reader.onload = function(ev2) {
+    try {
+      custom_Phase3 = JSON.parse(ev2.target.result);
+      objTest3 = buildObjTab(custom_Phase3);
+    } catch (ex) {
+      alert("Erreur de lecture: vérifier la syntaxe du fichier");
+    }
+    $("#openTxtFileInput").val(""); // erase previous value
+  };
+  reader.readAsText(file);
+}
+
+// From GPT
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Load Text File</title>
+  </head>
+  <body>
+    <input type="file" id="file-input">
+    <pre id="file-content"></pre>
+    <script>
+      function loadTextFile() {
+        const fileInput = document.getElementById('file-input');
+        const fileContent = document.getElementById('file-content');
+
+        fileInput.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            fileContent.innerText = reader.result;
+          };
+
+          reader.readAsText(file);
+        });
+      }
+
+      loadTextFile();
+    </script>
+  </body>
+</html>
+
+*/
+
+//////////////////////////////////////////////////////////////////////
+
 /////       show start page
   $("#start").css({"display": "block"});
 
@@ -138,25 +252,25 @@ $(document).ready(function () {
 $("#pretravel").on("click", function (ev) {
   $("#start").css({"display": "none"});
   $("#ontoTree-choose").css({"display": "block"});
-  initOntoTreeChoose("BESOINS");
+  initOntoTreeChoose(ontoTree[0]);
 });
 
 /////        change ontoTree-parent in ontoTree-choose
 $("#ontoTree-parent").on("click", function (ev) {
   $("#inputModal").modal("show");
-  $("#inputModal").find("input").focus();
+  // $("#inputModal").find("input").focus();
 });
 
 /////        change ontoTree-btn list
 $(".ontoTree-btn").on("click", function(ev) {
   let label = $(this).text();
-  initOntoTreeChoose(label);
+  initOntoTreeChoose(label, "up");
 });
 
 /////         handling modal INPUT choose label
 $("#inputModalChooseLabelOK").on("click", function (ev) {
   let newLabel = $("#inputModal").find("input").val();
-  if ( !newLabel ) newLabel = "BESOINS";
+  if ( !newLabel ) newLabel = ontoTree[0];
   $("#inputModal").modal("hide");
   initOntoTreeChoose(newLabel);
 });
@@ -165,7 +279,7 @@ $("#inputModalChooseLabelOK").on("click", function (ev) {
 $("#buttonParentModalChooseLabel").on("click", function (ev) {
   let node = deepFindNodeByLabel($("#ontoTree-parent").text(), ontoTree);
   $("#inputModal").modal("hide");
-  initOntoTreeChoose(node[2]);
+  initOntoTreeChoose(node[2], "down");
 });
 
 ////////
