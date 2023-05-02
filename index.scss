@@ -1,11 +1,13 @@
 
-/* Define standard variables and values */
+// Define standard variables and values
+
 $colorBeige: #e9ecef;
 $enable-button-pointers: true;
 
-/* Use the variables */
+//Use the variables
+
 body {
-  /* font-family: "Times New Roman", Times, serif; */
+  // font-family: "Times New Roman", Times, serif;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   background-color: $colorBeige;
 }
