@@ -45,18 +45,22 @@ body {
   font-size: 1.5rem;
   background-color: white;
 }
+
 .ontoTree-btn:hover {
   background-color: white !important;
   color: var(--bs-btn-color);
 }
+
 .ontoTree-btn:focus {
   background-color: white !important;
   color: var(--bs-btn-color);
 }
+
 .ontoTree-btn.active:hover {
   background-color: white !important;
   color: var(--bs-btn-color);
 }
+
 .ontoTree-btn.active:focus {
   background-color: white !important;
   color: var(--bs-btn-color);
