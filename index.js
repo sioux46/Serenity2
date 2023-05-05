@@ -134,9 +134,14 @@ function importTree(inData) {
 //
 /*************************************** Tree Handling END */
 
-/////       show ontoTree-choose page
-function showOntoTreeChoose(label, move) {
-
+/////       show page
+function showPage(pageID) {
+  $("#start").animate({"width": 0, "opacity": 0}, 400, function() {
+      $("#start").css({"display": "none"});
+      $("#startButton").css("display", "block");
+      activePage = pageID;
+      $(pageID).css({"display": "block"});
+  });
 }
 
 /////
@@ -245,17 +250,28 @@ function readFile(ev) {
 
 //////////////////////////////////////////////////////////////////////
 
+
 /////       show start page
-  $("#start").css({"display": "block"});
+$("#start").css({"display": "block"});
+
+/////       open start page
+$("#startButton").on("click", function (ev) {
+  if ( activePage ) {
+    $("#startButton").css("display", "none");
+    $("#start").css({"display": "block", "width": "0%", "opacity": 0});
+    $(activePage).css("display", "none");
+    activePage = "";
+    $("#start").animate({"width": "100%", "opacity": 1}, 400);
+  }
+});
 
 /////       show ontoTree-choose page
 $("#pretravel").on("click", function (ev) {
-  $("#start").css({"display": "none"});
-  $("#ontoTree-choose").css({"display": "block"});
+  showPage("#ontoTree-choose");
   initOntoTreeChoose(ontoTree[0]);
 });
 
-/////        change ontoTree-parent in ontoTree-choose
+/////        change ontoTree-parent within ontoTree-choose
 $("#ontoTree-parent").on("click", function (ev) {
   $("#inputModal").modal("show");
   // $("#inputModal").find("input").focus();
@@ -291,6 +307,9 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
 //  *******************************************************************
 
 const ONTO_TREE_ITEMS_NB = 10;
+
+var activePage = "";
+
 var ontoTree = [];
 // Array à 2 cases représente un noeud: case 0 = étiquette, 1 = ensemble (Array) des descendants immédiats (fils). Si pas de descendant, l'Array est vide ([]).
 // exemple: ["meuble", [["chaise",[]], ["table", []]]

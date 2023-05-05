@@ -6,6 +6,7 @@
     <title>DEVA</title>
 <!-- ====== Bootstrap link ====== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <!-- jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.rawgit.com/mgalante/jquery.redirect/master/jquery.redirect.js"></script>
@@ -23,17 +24,21 @@
 <!--            -->
 <!--   START    -->
 <!--            -->
+    <button id="startButton" class="btn" type="button">
+      <img src="icons/carBlue.svg" width=60>
+    </button>
+
     <div id="start" class="s-page">
-      <div class="container-fluid mt-0 pt-2 pb-0 mb-5 bg-primary text-white text-center">
+      <div class="container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
+        <img src="icons/carWhite.svg" width=50>
         <h1 class="s-start display-5">DEVA</h1>
-        <h3>Sérénité</h3>
       </div>
       <div class="container">
         <div class="d-grid gap-4 text-center">
           <!-- data-bs-target="#modalOntoTree" -->
-          <button id="pretravel" type="button" class="s-btn btn btn-outline-primary btn-lg" >Préparer un voyage</button>
-          <button type="button" class="s-btn btn btn-outline-primary btn-lg">Exécute un voyage</button>
-          <button type="button" class="s-btn btn btn-outline-primary btn-lg">Terminer</button>
+          <button id="pretravel" type="button" class="s-btn btn btn-outline-primary btn-lg" >Planifier/Consulter l'agenda des voyages</button>
+          <button type="button" class="s-btn btn btn-outline-primary btn-lg">Le voyage en cours</button>
+          <button type="button" class="s-btn btn btn-outline-primary btn-lg">Paramétrer DEVA</button>
         </div>
       </div>
     </div>
@@ -59,37 +64,6 @@
         </div>
       </div>
     </div>
-<!--                                M O D A L S     -->
-<!--                    -->
-<!--   modalOntoTree    -->
-<!--
-<div id="modalOntoTree" class="modal fade" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 id="ontoTree-title" class="modal-title fs-5"></h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="container">
-          <div  class="d-grid gap-4 text-center">
-            <button id="ontoTreeItem0" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem1" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem2" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem3" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem4" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem5" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-            <button id="ontoTreeItem6" type="button" class="ontoTree-btn btn btn-outline-primary btn-lg"></button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> -->
 <!--                                             -->
 <!--   input modal  choose label in ontoTree     -->
 <!--                                             -->
