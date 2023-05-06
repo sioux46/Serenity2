@@ -12,7 +12,6 @@ body {
 
 .s-page {
   z-index: 500;
-  position: fixed;
   display: none;
   height: 100%;
   width: 100%;
@@ -20,12 +19,6 @@ body {
 
 .s-start {
   font-weight: 600;
-}
-
-.s-btn {
-  height: 3em;
-  border-radius: 0;
-  font-size: 2em;
 }
 
 #ontoTree-content {
@@ -55,8 +48,9 @@ body {
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.5em;
+  font-size: 1.2em;
   background-color: white;
+  vertical-align: text-top;
 }
 .ontoTree-btn:hover {
   background-color: white !important;
