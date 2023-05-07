@@ -45,7 +45,7 @@
 <!--  ontoTree-choose    -->
 <!--                     -->
     <div id="ontoTree-choose" class="s-page">
-      <div id="ontoTree-title" class="container pt-3 pb-3 mb-4 bg-success text-white">
+      <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
         <h1 id="ontoTree-parent" class="mb-0"></h1>
       </div>
       <div id="ontoTree-content" class="container">
