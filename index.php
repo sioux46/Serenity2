@@ -25,7 +25,7 @@
 <!--   START    -->
 <!--            -->
     <button id="startButton" class="btn" type="button">
-      <img src="icons/carBlue.svg" width=60>
+      <img src="icons/carBlue.svg" width=50>
     </button>
     <div id="start" class="s-page">
       <div class="container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
@@ -35,9 +35,9 @@
       <div class="container">
         <div class="d-grid gap-4 text-center">
           <!-- data-bs-target="#modalOntoTree" -->
-          <button id="pretravel" type="button" class="s-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
-          <button type="button" class="s-btn btn btn-outline-primary">Le voyage en cours</button>
-          <button type="button" class="s-btn btn btn-outline-primary">Paramétrer DEVA</button>
+          <button id="pretravel" type="button" class="start-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
+          <button type="button" class="start-btn btn btn-outline-primary">Le voyage en cours</button>
+          <button type="button" class="start-btn btn btn-outline-primary">Paramétrer DEVA</button>
         </div>
       </div>
     </div>
@@ -45,8 +45,8 @@
 <!--  ontoTree-choose    -->
 <!--                     -->
     <div id="ontoTree-choose" class="s-page">
-      <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
-        <h1 id="ontoTree-parent" class="display-5"></h1>
+      <div id="ontoTree-title" class="container pt-3 pb-3 mb-4 bg-success text-white">
+        <h1 id="ontoTree-parent" class="mb-0"></h1>
       </div>
       <div id="ontoTree-content" class="container">
         <div  class="d-grid gap-2">

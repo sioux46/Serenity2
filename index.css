@@ -21,16 +21,20 @@ body {
   font-weight: 600;
 }
 
-#ontoTree-content {
-  width: 90%;
-}
-
 #ontoTree-choose {
   z-index: 400;
 }
 
+#ontoTree-title {
+  width: 88%;
+}
+
 #ontoTree-choose div {
   position: relative;
+}
+
+#ontoTree-content {
+  width: 90%;
 }
 
 #ontoTree-parent {
@@ -41,16 +45,22 @@ body {
   cursor: pointer;
 }
 
+.start-btn {
+  border-radius: 0.5rem;
+  font-size: 2.5rem;
+  border-width: 3px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .ontoTree-btn {
-  height: 2.1em;
   border-radius: 0;
-  border-top-width: 0.1em;
+  border-top-width: 0.2rem;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.2em;
+  font-size: 1.7rem;
   background-color: white;
-  vertical-align: text-top;
 }
 .ontoTree-btn:hover {
   background-color: white !important;

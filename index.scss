@@ -26,22 +26,21 @@ body {
   font-weight: 600;
 }
 
-.s-btn {
-  // height: 1rem !important;
-  // border-radius: 0;
-  // font-size: 1.5rem;
-}
-
-#ontoTree-content {
-  width: 90%;
-}
-
 #ontoTree-choose {
   z-index: 400;
 }
 
+#ontoTree-title {
+  width: 88%;
+}
+
 #ontoTree-choose div {
+  // for all div inside
   position: relative;
+}
+
+#ontoTree-content {
+  width: 90%;
 }
 
 #ontoTree-parent {
@@ -52,16 +51,25 @@ body {
   cursor: pointer;
 }
 
+.start-btn {
+  border-radius: 0.5rem;
+  font-size: 2.5rem;
+  // font-weight: 900;
+  border-width: 3px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .ontoTree-btn {
-  height: 2.1em;
+  //  height: 2.1em;
   border-radius: 0;
-  border-top-width: 0.1em;
+  border-top-width: 0.2rem;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.2em;
+  font-size: 1.7rem;
+  // font-weight: 900;
   background-color: white;
-  vertical-align: text-top;
 
   &:hover {
     background-color: white !important;
