@@ -163,17 +163,18 @@ function initOntoTreeChoose(label, move, labs) {
   // feel
   for ( let i = 0; i < labels.length; i++ ) {
     let item = "#ontoTree-item" + i;
-    $("#ontoTree-choose").find(item).css({"display": "inline-block"});      $("#ontoTree-choose").find(item).text(labels[i]);
+    $("#ontoTree-choose").find(item).css({"display": "inline-block"});
+    $("#ontoTree-choose").find(item).text(labels[i]);
   }
   // animate
 
   if ( move ) {
     if ( move == "up" )
-        $("#ontoTree-content, #ontoTree-title").css({"top": "50em"});
+        $("#ontoTree-content").css({"top": "50em"});
     else /* if ( move == "down" ) */
-        $("#ontoTree-content, #ontoTree-title").css({"top": "-50em"});
+        $("#ontoTree-content").css({"top": "-50em"});
 
-    $("#ontoTree-content, #ontoTree-title").animate({"top": 0}, 400);
+    $("#ontoTree-content").animate({"top": 0}, 300);
   }
 }
 
@@ -261,7 +262,7 @@ $("#startButton").on("click", function (ev) {
     $("#start").css({"display": "block", "width": "0%", "opacity": 0});
     $(activePage).css("display", "none");
     activePage = "";
-    $("#start").animate({"width": "100%", "opacity": 1}, 400);
+    $("#start").animate({"width": "100%", "opacity": 1}, 300);
   }
 });
 

@@ -45,11 +45,11 @@
 <!--  ontoTree-choose    -->
 <!--                     -->
     <div id="ontoTree-choose" class="s-page">
-      <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
-        <h1 id="ontoTree-parent" class="mb-0"></h1>
-      </div>
       <div id="ontoTree-content" class="container">
         <div  class="d-grid gap-2">
+          <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
+            <h1 id="ontoTree-parent" class="mb-0"></h1>
+          </div>
           <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
           <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
           <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
