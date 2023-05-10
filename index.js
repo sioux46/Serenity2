@@ -262,12 +262,18 @@ $("#startButton").on("click", function (ev) {
     $("#start").css({"display": "block", "width": "0%", "opacity": 0});
     $(activePage).css("display", "none");
     activePage = "";
-    $("#start").animate({"width": "100%", "opacity": 1}, 300);
+    $("#start").animate({"width": "100%", "opacity": 1}, 200);
   }
 });
 
 /////       show ontoTree-choose page
-$("#pretravel").on("click", function (ev) {
+$("#sheduleButton").on("click", function (ev) {
+  showPage("#shedule");
+  initOntoTreeChoose(ontoTree[0]);
+});
+
+/////       show ontoTree-choose page
+$("#paramButton").on("click", function (ev) {
   showPage("#ontoTree-choose");
   initOntoTreeChoose(ontoTree[0]);
 });
@@ -304,6 +310,12 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
+////////   Calendar
+$('#evoCalendar').evoCalendar({
+  calendarEvents: evoCalEvents
+});
+
+
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
 
@@ -316,6 +328,8 @@ var ontoTree = [];
 // exemple: ["meuble", [["chaise",[]], ["table", []]]
 
 ontoTree = importTree(importData);
+
+
 
 
 

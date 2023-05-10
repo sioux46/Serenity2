@@ -10,6 +10,15 @@ body {
   background-color: $colorBeige;
 }
 
+#topBar {
+  position: fixed;
+  z-index: 1000;
+  top: 0.4rem;
+  left: 0.4rem;
+  background-color: white;
+  border-radius: 50%;
+}
+
 #startButton {
   display: none;
 }
