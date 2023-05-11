@@ -39,7 +39,7 @@
   <!-- <i style="font-size:24px;" class="fas fa-clock"></i> -->
   <div id="start" class="s-page">
     <div class="container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
-      <img src="icons/carWhite.svg" width=50>
+      <img src="icons/carWhite.svg" width=40>
       <h1 class="s-start display-5">DEVA</h1>
     </div>
     <div class="container">

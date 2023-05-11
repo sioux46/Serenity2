@@ -2,14 +2,14 @@ evoCalEvents = [
   {
     id:"required-id-1",
     name:"New Year",
-    date:"Wed Jan 01 2020 00:00:00 GMT-0800 (Pacific Standard Time)",
+    date:"Tue May 02 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
     type:"holiday",
     everyYear:true
   },
   {
     id:"required-id-2",
     name:"Valentine's Day",
-    date:"Fri Feb 14 2020 00:00:00 GMT-0800 (Pacific Standard Time)",
+    date:"Fri Feb 14 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
     type:"holiday",
     everyYear:true,
     color:"#222"
@@ -17,8 +17,8 @@ evoCalEvents = [
   {
     id:"required-id-3",
     name:"Custom Date",
-    badge:"08/03 - 08/05",
-    date: ["August/03/2020","August/05/2020"],
+    badge:"08/03-08/05",
+    date: ["August/03/2023","August/05/2023"],
     description:"Description here",
     type:"event"
   }

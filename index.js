@@ -310,11 +310,37 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
-////////   Calendar
+////////   evoCalendar
 $('#evoCalendar').evoCalendar({
-  calendarEvents: evoCalEvents
+  calendarEvents: evoCalEvents,
+  language:'fr',
+  todayHighlight: true,
+  firstDayOfWeek: 1, // Monday
+  sidebarToggler:true,
+  sidebarDisplayDefault: false,
+  //format:"dd/mm/yyyy",
+  titleFormat:"MM yyyy",
+  eventHeaderFormat:"d MM, yyyy"
 });
 
+$("#evoCalendar").evoCalendar('addCalendarEvent', [
+  {
+    id: "event1",
+    name:"18h30-19h",
+    description: "Prendre Pierre et Paul et Jacques",
+    date:"February/14/2023",
+    type:"birthday",
+    everyYear:true
+  }
+]);
+
+
+$("#evoCalendar").on('selectEvent',function(activeEvent) {
+  prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+});
+
+
+// prompt("Je n'ai rien entendu."); alert("Je n'ai rien entendu.")
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
