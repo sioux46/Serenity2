@@ -330,13 +330,20 @@ $("#evoCalendar").evoCalendar('addCalendarEvent', [
     description: "Prendre Pierre et Paul et Jacques",
     date:"February/14/2023",
     type:"birthday",
-    everyYear:true
   }
 ]);
 
 
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
   prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+});
+
+$("#evoCalendar").on('selectDate',function(newDate, oldDate) {
+  //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+});
+
+$("#calEventButton").on("click", function (ev) {
+  prompt("Nouvel event");
 });
 
 

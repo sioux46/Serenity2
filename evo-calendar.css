@@ -210,7 +210,7 @@ th[colspan="7"] {
   text-transform: uppercase;
   font-weight: 600;
   font-size: 30px;
-  color: hsl(157, 53%, 28%);
+  color: #5a5a5a;
 }
 
 th[colspan="7"]::after {
@@ -1036,6 +1036,16 @@ button.icon-button > span.chevron-arrow-right {
 }
 p.event-desc {
   font-size: 1.2rem !important;
+}
+
+.event-plus {
+  z-index: 1000;
+}
+
+#calEventButton {
+  padding: 0;
+  border: 0;
+  background-color: white;
 }
 
 /*# sourceMappingURL=evo-calendar.css.map */

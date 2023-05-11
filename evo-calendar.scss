@@ -189,7 +189,7 @@ th[colspan="7"] {
     text-transform: uppercase;
     font-weight: 600;
     font-size: 30px;
-    color: $month-bg-color;
+    color: #5a5a5a; // $month-bg-color;
 }
 th[colspan="7"]::after {
     content: '';
@@ -992,8 +992,18 @@ button.icon-button > span.chevron-arrow-right {
         font-size: 14px;
     }
 }
-
+// ********************  DEVA ***********
 p.event-desc {
   // font-weight: 900 !important;
   font-size: 1.2rem !important;
+}
+
+.event-plus {
+  z-index: 1000;
+}
+
+#calEventButton {
+  padding: 0;
+  border: 0;
+  background-color: white;
 }
