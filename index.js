@@ -320,19 +320,23 @@ $('#evoCalendar').evoCalendar({
   sidebarDisplayDefault: false,
   //format:"dd/mm/yyyy",
   titleFormat:"MM yyyy",
-  eventHeaderFormat:"d MM, yyyy"
+  eventHeaderFormat:"d MM, yyyy",
 });
 
+$("#evoCalendar").evoCalendar('setTheme', "midnight_blue");
+
+/*
 $("#evoCalendar").evoCalendar('addCalendarEvent', [
   {
     id: "event1",
-    name:"18h30-19h",
+    name:"21h-23h",
     description: "Prendre Pierre et Paul et Jacques",
-    date:"February/14/2023",
+    date:"May/15/2023",
     type:"birthday",
+    color:"#b44"
   }
 ]);
-
+*/
 
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
   prompt($('#evoCalendar').get(0).evoCalendar.$current.date);

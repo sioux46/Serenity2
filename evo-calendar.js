@@ -570,8 +570,8 @@
             markup += '<div class="calendar-events">'+
                             '<div class="event-header"><p></p></div>'+
                             '<div class="event-list"></div>'+
-                            '<div class="event-plus">'+
-                              '<button id="calEventButton" type="button">'+
+                            '<div class="event-plus">'+                     // SEB+
+                              '<button id="calEventButton" class="btn" type="button">'+
                                 '<img src="icons/plus.svg" width=70>'+
                               '</button>'+
                             '</div>'+

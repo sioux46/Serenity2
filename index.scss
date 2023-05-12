@@ -20,8 +20,8 @@ body {
   //left: -2.8rem;
   display: inline-block;
   z-index: 1000;
-  margin-bottom: 1rem;
-  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.3rem;
   margin-left: 0.5rem;
 }
 
@@ -29,6 +29,7 @@ body {
   display: none;
   background-color: white;
   border-radius: 50%;
+  vertical-align: initial;
 }
 
 .s-page {

@@ -11,7 +11,7 @@
  *
 */
 
-$month-bg-color: hsla(157, 53%, 28%, 1); // #3c8458; // 8773c1
+$month-bg-color: #3c8458; //hsla(157, 53%, 28%, 1); // hsla(180, 80%, 16%, 1); //   8773c1
 
 *, ::after, ::before {
     -webkit-box-sizing: border-box;
@@ -189,7 +189,7 @@ th[colspan="7"] {
     text-transform: uppercase;
     font-weight: 600;
     font-size: 30px;
-    color: #5a5a5a; // $month-bg-color;
+    color: #5a5a5a; // $month-bg-color; // SEB+
 }
 th[colspan="7"]::after {
     content: '';
@@ -999,7 +999,7 @@ p.event-desc {
 }
 
 .event-plus {
-  z-index: 1000;
+  // z-index: 1000;
 }
 
 #calEventButton {

@@ -12,6 +12,7 @@
     <script src="https://cdn.rawgit.com/mgalante/jquery.redirect/master/jquery.redirect.js"></script>
 <!-- Evo Calendar -->
     <link rel="stylesheet" href="evo-calendar.css" />
+    <link rel="stylesheet" href="evo-calendar.midnight-blue.css" />
     <script src="evo-calendar.js"></script>
     <!-- -->
     <link rel="stylesheet" href="index.css">
@@ -30,7 +31,7 @@
 <!-- TOP BAR -->
   <div id="topBar">
     <button id="startButton" class="btn" type="button">
-      <img src="icons/carBlue.svg" width=50>
+      <img src="icons/carBlue.svg" width=30>
     </button>
   </div>
 <!--            -->
@@ -77,7 +78,7 @@
   <!--    shedule     -->
   <!--                -->
   <div id="shedule" class="s-page">
-    <div id="shedule-content" class="container">
+    <div id="shedule-content" class="container-fluid"> 
       <div id="evoCalendar"></div>
     </div>
   </div>
