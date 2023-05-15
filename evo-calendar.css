@@ -33,8 +33,6 @@ input:focus, textarea:focus, button:focus {
   background-color: #fbfbfb;
   color: #5a5a5a;
   width: 100%;
-  -webkit-box-shadow: 0 10px 50px -20px #3c8458;
-  box-shadow: 0 10px 50px -20px #3c8458;
   margin: 0 auto;
   overflow: hidden;
   z-index: 1;
@@ -49,8 +47,6 @@ input:focus, textarea:focus, button:focus {
   background-color: #3c8458;
   color: #fff;
   z-index: 1;
-  -webkit-box-shadow: 5px 0 18px -3px #3c8458;
-  box-shadow: 5px 0 18px -3px #3c8458;
   -webkit-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
@@ -64,8 +60,6 @@ input:focus, textarea:focus, button:focus {
   -webkit-transform: translateX(-100%);
   -ms-transform: translateX(-100%);
   transform: translateX(-100%);
-  -webkit-box-shadow: none;
-  box-shadow: none;
 }
 
 .calendar-sidebar > span#sidebarToggler {
@@ -80,8 +74,6 @@ input:focus, textarea:focus, button:focus {
   background-color: #3c8458;
   padding: 10px 8px;
   cursor: pointer;
-  -webkit-box-shadow: 5px 0 18px -3px #3c8458;
-  box-shadow: 5px 0 18px -3px #3c8458;
 }
 
 .calendar-sidebar > .calendar-year {
@@ -335,8 +327,6 @@ tr.calendar-body .calendar-day .day[disabled] {
   background-color: #3c8458;
   padding: 10px;
   cursor: pointer;
-  -webkit-box-shadow: 5px 0 18px -3px #3c8458;
-  box-shadow: 5px 0 18px -3px #3c8458;
   z-index: 1;
 }
 
@@ -470,15 +460,15 @@ tr.calendar-body .calendar-day .day[disabled] {
 
 .event-indicator {
   position: absolute;
-  width: -moz-max-content;
+  widht: max-content;
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   top: 100%;
   left: 50%;
-  -webkit-transform: translate(-50%, calc(-100% - 5px));
-  -ms-transform: translate(-50%, calc(-100% - 5px));
-  transform: translate(-50%, calc(-100% - 5px));
+  -webkit-transform: translate(-50%, -100%);
+  -ms-transform: translate(-50%, -100%);
+  transform: translate(-50%, -100%);
 }
 
 .event-indicator > .type-bullet {

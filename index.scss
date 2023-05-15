@@ -1,13 +1,13 @@
 /* Define standard variables and values */
 $colorBeige: #e9ecef;
 $enable-button-pointers: true;
-$bsBlue: #3b6bf5;
+$bsBlue: #000b87; // #3b6bf5;
 
 /* Use the variables */
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  background-color: $colorBeige;
+  // background-color: $colorBeige;
 }
 
 #DIVA {
@@ -18,11 +18,10 @@ body {
   //position: relative;
   //top: 2.4rem;
   //left: -2.8rem;
-  display: inline-block;
+  display: block;
   z-index: 1000;
-  margin-bottom: 0.3rem;
-  margin-top: 0.3rem;
-  margin-left: 0.5rem;
+  // margin-bottom: 0.3rem;
+  // margin-top: 0.3rem;
 }
 
 #startButton {
@@ -30,6 +29,12 @@ body {
   background-color: white;
   border-radius: 50%;
   vertical-align: initial;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.deva-tittle {
+  background-color: darkblue !important;
 }
 
 .s-page {
@@ -70,13 +75,15 @@ body {
   cursor: pointer;
 }
 
-.start-btn {
-  border-radius: 0.5rem;
-  font-size: 2rem;
+.start-page-btn {
+  border-radius: 0; // 0.5rem;
+  font-size: 1.8rem; // 2rem;
   // font-weight: 900;
   border-width: 3px;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  color: $bsBlue !important;
+  border-color: $bsBlue !important;
 }
 
 .ontoTree-btn {
@@ -86,7 +93,8 @@ body {
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.7rem;
+  //padding-bottom: 0;
+  font-size: 1.5rem; // 1.7rem;
   // font-weight: 900;
   background-color: white;
 

@@ -321,9 +321,8 @@ $('#evoCalendar').evoCalendar({
   //format:"dd/mm/yyyy",
   titleFormat:"MM yyyy",
   eventHeaderFormat:"d MM, yyyy",
+  //theme: "Midnight Blue"
 });
-
-$("#evoCalendar").evoCalendar('setTheme', "midnight_blue");
 
 /*
 $("#evoCalendar").evoCalendar('addCalendarEvent', [
@@ -331,7 +330,7 @@ $("#evoCalendar").evoCalendar('addCalendarEvent', [
     id: "event1",
     name:"21h-23h",
     description: "Prendre Pierre et Paul et Jacques",
-    date:"May/15/2023",
+    date:"05/15/2023",
     type:"birthday",
     color:"#b44"
   }
@@ -339,15 +338,30 @@ $("#evoCalendar").evoCalendar('addCalendarEvent', [
 */
 
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
-  prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+  //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+  prompt(activeEvent.handleObj.handler.arguments[1].id);
 });
 
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+  $("#evoCalendar").evoCalendar('toggleEventList',true);
+
 });
 
 $("#calEventButton").on("click", function (ev) {
-  prompt("Nouvel event");
+
+  let event = prompt("Nouvel event");
+  $("#evoCalendar").evoCalendar('addCalendarEvent', [
+    {
+      id: '' + Math.random(),
+      name:"24h",
+      description: event,
+      date:"05/15/2023",
+      type:"birthday",
+      color:"#b44"
+    }
+  ]);
+
 });
 
 

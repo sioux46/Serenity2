@@ -3,14 +3,14 @@ evoCalEvents = [
     id:"required-id-1",
     name:"New Year",
     //date:"Tue May 02 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
-    date:"May/14/2023",
+    date:"05/14/2023",
     type:"birthday",
   },
   {
     id:"required-id-2",
     name:"18h30-19h",
     //date:"Fri Feb 14 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
-    date:"May/15/2023",
+    date:"05/15/2023",
     type:"birthday",
     color:"#b44"
   },
@@ -18,7 +18,7 @@ evoCalEvents = [
     id:"required-id-3",
     name:"Custom Date",
     badge:"08/03-08/05",
-    date: ["May/03/2023","May/05/2023"],
+    date: ["05/03/2023","05/05/2023"],
     description:"Description here",
     type:"event"
   },
@@ -26,7 +26,7 @@ evoCalEvents = [
   id: "event1",
   name:"21h-23h",
   description: "Prendre Pierre et Paul et Jacques",
-  date:"May/15/2023",
+  date:"05/15/2023",
   type:"birthday",
   color:"#b44",
   theme: "midnight_blue"

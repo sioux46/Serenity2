@@ -31,7 +31,7 @@
 <!-- TOP BAR -->
   <div id="topBar">
     <button id="startButton" class="btn" type="button">
-      <img src="icons/carBlue.svg" width=30>
+      <img src="icons/carBlue.svg" width=40>
     </button>
   </div>
 <!--            -->
@@ -39,16 +39,16 @@
 <!--            -->
   <!-- <i style="font-size:24px;" class="fas fa-clock"></i> -->
   <div id="start" class="s-page">
-    <div class="container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
+    <div class="deva-tittle container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
       <img src="icons/carWhite.svg" width=40>
       <h1 class="s-start display-5">DEVA</h1>
     </div>
     <div class="container">
       <div class="d-grid gap-4 text-center">
         <!-- data-bs-target="#modalOntoTree" -->
-        <button id="sheduleButton" type="button" class="start-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
-        <button type="button" class="start-btn btn btn-outline-primary">Le voyage en cours</button>
-        <button id="paramButton" type="button" class="start-btn btn btn-outline-primary">Paramétrer DEVA</button>
+        <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
+        <button type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
+        <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramétrer DEVA</button>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
   <div id="ontoTree-choose" class="s-page">
     <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
-        <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-4 bg-success text-white">
+        <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
           <h1 id="ontoTree-parent" class="mb-0"></h1>
         </div>
         <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
@@ -78,7 +78,7 @@
   <!--    shedule     -->
   <!--                -->
   <div id="shedule" class="s-page">
-    <div id="shedule-content" class="container-fluid"> 
+    <div id="shedule-content"> <!--  class="container-fluid" -->
       <div id="evoCalendar"></div>
     </div>
   </div>
