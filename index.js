@@ -310,7 +310,7 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
-////////   evoCalendar
+///////////////////////////////////////   EVO CALENDAR
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -321,8 +321,9 @@ $('#evoCalendar').evoCalendar({
   //format:"dd/mm/yyyy",
   titleFormat:"MM yyyy",
   eventHeaderFormat:"d MM, yyyy",
-  //theme: "Midnight Blue"
 });
+
+calendar = $('#evoCalendar').get(0).evoCalendar;
 
 /*
 $("#evoCalendar").evoCalendar('addCalendarEvent', [
@@ -338,8 +339,9 @@ $("#evoCalendar").evoCalendar('addCalendarEvent', [
 */
 
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
-  //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
-  prompt(activeEvent.handleObj.handler.arguments[1].id);
+  //prompt(calendar.$current.date);
+  //alert(activeEvent.handleObj.handler.arguments[1].id);
+  console.log("selectEvent");
 });
 
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
@@ -349,18 +351,22 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 });
 
 $("#calEventButton").on("click", function (ev) {
-
   let event = prompt("Nouvel event");
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
-      name:"24h",
+      name: "24h",
       description: event,
-      date:"05/15/2023",
-      type:"birthday",
-      color:"#b44"
+      date: calendar.$active.event_date,
+      type: "toto",
+      color: "#fe7f78",
+      tata: "test"
     }
   ]);
+
+
+  $("#evoCalendar").evoCalendar('removeCalendarEvent', eventID);
+
 
 });
 
@@ -380,7 +386,7 @@ var ontoTree = [];
 
 ontoTree = importTree(importData);
 
-
+var calendar;
 
 
 

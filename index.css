@@ -90,6 +90,11 @@ body {
   color: var(--bs-btn-color);
 }
 
+.event-plus {
+  position: relative;
+  top: 2px;
+}
+
 /*
 .parent {
   width: 50%;

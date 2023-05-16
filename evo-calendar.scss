@@ -320,12 +320,12 @@ tr.calendar-body .calendar-day .day[disabled] {
 }
 .event-list > .event-empty {
     padding: 15px 10px;
-    background-color: rgba(135,115,193,.15);
+    background-color: white; // rgba(135,115,193,.15);  SEB+
     border: 1px solid $month-bg-color;
 }
 .event-list > .event-empty > p {
     margin: 0;
-    color: #755eb5;
+    color: #444; // #755eb5; SEB+
 }
 .event-container {
     position: relative;

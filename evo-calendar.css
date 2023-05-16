@@ -338,13 +338,13 @@ tr.calendar-body .calendar-day .day[disabled] {
 
 .event-list > .event-empty {
   padding: 15px 10px;
-  background-color: rgba(135, 115, 193, 0.15);
+  background-color: white;
   border: 1px solid #3c8458;
 }
 
 .event-list > .event-empty > p {
   margin: 0;
-  color: #755eb5;
+  color: #444;
 }
 
 .event-container {

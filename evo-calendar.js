@@ -646,8 +646,8 @@
             }
             markup += '</div>';
         }
-        eventListEl.append(markup)
-    }
+        eventListEl.append(markup);
+    };
 
     // v1.0.0 - Add single event to event list
     EvoCalendar.prototype.addEventList = function(event_data) {
@@ -658,11 +658,11 @@
         markup = '<div class="event-container" role="button" data-event-index="'+(event_data.id)+'">';
         markup += '<div class="event-icon"><div class="event-bullet-'+event_data.type+'"';
         if (event_data.color) {
-            markup += 'style="background-color:'+event_data.color+'"'
+            markup += 'style="background-color:'+event_data.color+'"';
         }
         markup += '></div></div><div class="event-info"><p class="event-title">'+_.limitTitle(event_data.name);
         if (event_data.badge) markup += '<span>'+event_data.badge+'</span>';
-        markup += '</p>'
+        markup += '</p>';
         if (event_data.description) markup += '<p class="event-desc">'+event_data.description+'</p>';
         markup += '</div>';
         markup += '</div>';
@@ -671,7 +671,7 @@
         _.$elements.eventEl.find('[data-event-index="'+(event_data.id)+'"]')
         .off('click.evocalendar')
         .on('click.evocalendar', _.selectEvent);
-    }
+    };
     // v1.0.0 - Remove single event to event list
     EvoCalendar.prototype.removeEventList = function(event_data) {
         var _ = this, markup;
@@ -857,13 +857,13 @@
         var _ = this;
         var el = $(event.target).closest('.event-container');
         var id = $(el).data('eventIndex').toString();
-        var index = _.options.calendarEvents.map(function (event) { return (event.id).toString() }).indexOf(id);
+        var index = _.options.calendarEvents.map(function (event) { return (event.id).toString(); }).indexOf(id);
         var modified_event = _.options.calendarEvents[index];
         if (modified_event.date instanceof Array) {
             modified_event.dates_range = _.getBetweenDates(modified_event.date);
         }
-        $(_.$elements.calendarEl).trigger("selectEvent", [_.options.calendarEvents[index]])
-    }
+        $(_.$elements.calendarEl).trigger("selectEvent", [_.options.calendarEvents[index]]);
+    };
 
     // v1.0.0 - Select year
     EvoCalendar.prototype.selectYear = function(event) {
