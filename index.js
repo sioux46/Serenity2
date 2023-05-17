@@ -136,7 +136,7 @@ function importTree(inData) {
 
 /////       show page
 function showPage(pageID) {
-  $("#start").animate({"top": "-50rem"}, 300, function() {
+  $("#start").animate({"top": "-50rem"}, 400, function() {
       $("#start").css({"display": "none"});
       $("#startButton").css("display", "block");
       activePage = pageID;
@@ -174,7 +174,7 @@ function initOntoTreeChoose(label, move, labs) {
     else /* if ( move == "down" ) */
         $("#ontoTree-content").css({"top": "-50em"});
 
-    $("#ontoTree-content").animate({"top": 0}, 300);
+    $("#ontoTree-content").animate({"top": 0}, 400);
   }
 }
 
@@ -262,7 +262,7 @@ $("#startButton").on("click", function (ev) {
     $(activePage).css("display", "none");
     activePage = "";
     $("#start").css({"display": "block", "top": "-50rem"});
-    $("#start").animate({"top": 0}, 300);
+    $("#start").animate({"top": 0}, 400);
   }
 });
 
@@ -310,7 +310,7 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
-///////////////////////////////////////   EVO CALENDAR   /////
+/////////////////////////////////////////////////   EVO CALENDAR   /////
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -341,21 +341,38 @@ $(".calendar-body, #sidebarToggler, #eventListToggler").on("click", function (ev
   $(".event-trash").css("display", "none");
 });
 
+/*
+$(".event-trash").on("click", function (ev) {
+  let ID = activeEvent.handleObj.handler.arguments[1].id;
+  $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
+});
+*/
+
+//////////
 $("#evoCalendar").on('selectEvent',function(activeEvent) {  // selectEvent
   //prompt(calendar.$current.date);
   //alert(activeEvent.handleObj.handler.arguments[1].id);
   console.log("selectEvent");
+
+  if ( $(".event-container:hover").children(".event-trash").css("display") == "block" ) {
+    let ID = activeEvent.handleObj.handler.arguments[1].id;
+    $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
+    return;
+  }
+
   $(".event-container").children(".event-trash").css("display", "none");
   $(".event-container:hover").children(".event-trash").css("display", "block");
 
 });
 
+/////////
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
   $("#evoCalendar").evoCalendar('toggleEventList',true);
 
 });
 
+////////////
 $(".event-plus").on("click", function (ev) {
   let event = prompt("Nouvel event");
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
@@ -369,12 +386,9 @@ $(".event-plus").on("click", function (ev) {
       tata: "test"
     }
   ]);
-
-
-//  $("#evoCalendar").evoCalendar('removeCalendarEvent', eventID);
-
-
 });
+
+
 
 
 // prompt("Je n'ai rien entendu."); alert("Je n'ai rien entendu.")
