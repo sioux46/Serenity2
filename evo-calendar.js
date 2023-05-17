@@ -556,7 +556,7 @@
                             '<table class="calendar-table">'+
                                 '<tr><th colspan="7"></th></tr>'+
                                 '<tr class="calendar-header">';
-                                for(var i = 0; i < _.$label.days.length; i++ ){
+                                for(let i = 0; i < _.$label.days.length; i++ ){
                                     var headerClass = "calendar-header-day";
                                     if (_.$label.days[i] === _.initials.weekends.sat || _.$label.days[i] === _.initials.weekends.sun) {
                                         headerClass += ' --weekend';
@@ -571,8 +571,8 @@
                             '<div class="event-header"><p></p></div>'+
                             '<div class="event-list"></div>'+
                             '<div class="event-plus">'+                     // SEB+
-                              '<button id="calEventButton" class="btn" type="button">'+
-                                '<img src="icons/plus.svg" width=70>'+
+                              '<button class="btn" type="button">'+
+                                '<img src="icons/plus-circle-fill.svg" width=40>'+
                               '</button>'+
                             '</div>'+
                         '</div>';
@@ -634,7 +634,7 @@
         }
         function eventAdder(event) {
             hasEventToday = true;
-            _.addEventList(event)
+            _.addEventList(event);
         }
         // IF: no event for the selected date
         if(!hasEventToday) {
@@ -665,6 +665,16 @@
         markup += '</p>';
         if (event_data.description) markup += '<p class="event-desc">'+event_data.description+'</p>';
         markup += '</div>';
+
+        // trash
+        markup += '<div class="event-trash">'+                     // SEB+
+          '<button class="btn" type="button">'+
+            '<img src="icons/trash.svg" width=25>'+
+          '</button>'+
+        '</div>';
+
+
+
         markup += '</div>';
         eventListEl.append(markup);
 
@@ -685,16 +695,16 @@
             } else {
                 markup += '<p>'+_.initials.dates[_.options.language].noEventForThisDay+'</p>';
             }
-            eventListEl.append(markup)
+            eventListEl.append(markup);
         }
-    }
+    };
 
     // v1.0.0 - Build Sidebar: Year text
     EvoCalendar.prototype.buildSidebarYear = function() {
         var _ = this;
 
         _.$elements.sidebarEl.find('.calendar-year > p').text(_.$active.year);
-    }
+    };
 
     // v1.0.0 - Build Sidebar: Months list text
     EvoCalendar.prototype.buildSidebarMonths = function() {
@@ -702,7 +712,7 @@
 
         _.$elements.sidebarEl.find('.calendar-months > [data-month-val]').removeClass('active-month');
         _.$elements.sidebarEl.find('.calendar-months > [data-month-val="'+_.$active.month+'"]').addClass('active-month');
-    }
+    };
 
     // v1.0.0 - Build Calendar: Title, Days
     EvoCalendar.prototype.buildCalendar = function() {
@@ -799,8 +809,8 @@
             if (thisDate.find('span.event-indicator > .type-bullet > .type-'+type).length === 0) {
                 htmlToAppend = '<div class="type-bullet"><div ';
 
-                htmlToAppend += 'class="type-'+event.type+'"'
-                if (event.color) { htmlToAppend += 'style="background-color:'+event.color+'"' }
+                htmlToAppend += 'class="type-'+event.type+'"';
+                if (event.color) { htmlToAppend += 'style="background-color:'+event.color+'"' ; }
                 htmlToAppend += '></div></div>';
                 thisDate.find('.event-indicator').append(htmlToAppend);
             }

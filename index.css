@@ -24,6 +24,7 @@ body {
 }
 
 .s-page {
+  position: relative;
   display: none;
   height: 100%;
   width: 100%;
@@ -92,7 +93,13 @@ body {
 
 .event-plus {
   position: relative;
-  top: 2px;
+}
+
+.event-trash {
+  display: none;
+  position: absolute;
+  left: 13rem;
+  top: 0.5rem;
 }
 
 /*

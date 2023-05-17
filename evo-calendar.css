@@ -44,7 +44,7 @@ input:focus, textarea:focus, button:focus {
   width: 200px;
   height: 100%;
   float: left;
-  background-color: #3c8458;
+  background-color: #7c1f02;
   color: #fff;
   z-index: 1;
   -webkit-transition: all 0.3s ease;
@@ -71,7 +71,7 @@ input:focus, textarea:focus, button:focus {
   -webkit-transform: translate(100%, 0);
   -ms-transform: translate(100%, 0);
   transform: translate(100%, 0);
-  background-color: #3c8458;
+  background-color: #7c1f02;
   padding: 10px 8px;
   cursor: pointer;
 }
@@ -264,7 +264,7 @@ tr.calendar-body .calendar-day .day.calendar-active:hover {
 
 tr.calendar-body .calendar-day .day.calendar-today {
   color: #fff;
-  background-color: #3c8458;
+  background-color: #7c1f02;
 }
 
 tr.calendar-body .calendar-day .day.calendar-today:hover {
@@ -324,7 +324,7 @@ tr.calendar-body .calendar-day .day[disabled] {
   height: 40px;
   top: 0;
   right: 0;
-  background-color: #3c8458;
+  background-color: #7c1f02;
   padding: 10px;
   cursor: pointer;
   z-index: 1;
@@ -339,7 +339,7 @@ tr.calendar-body .calendar-day .day[disabled] {
 .event-list > .event-empty {
   padding: 15px 10px;
   background-color: white;
-  border: 1px solid #3c8458;
+  border: 1px solid #7c1f02;
 }
 
 .event-list > .event-empty > p {
@@ -491,7 +491,7 @@ tr.calendar-body .calendar-day .day[disabled] {
 /* fallback color */
 .event-container > .event-icon > div[class^=event-bullet-],
 .event-indicator > .type-bullet > div[class^=type-] {
-  background-color: #3c8458;
+  background-color: #7c1f02;
 }
 
 .event-container > .event-icon > div.event-bullet-event,
@@ -807,7 +807,7 @@ button.icon-button > span.chevron-arrow-right {
     position: relative;
     padding: 10px 20px;
     text-align: center;
-    background-color: #3c8458;
+    background-color: #7c1f02;
     -webkit-box-shadow: 0 3px 8px -3px rgba(53, 43, 80, 0.65);
     box-shadow: 0 3px 8px -3px rgba(53, 43, 80, 0.65);
   }
@@ -828,7 +828,7 @@ button.icon-button > span.chevron-arrow-right {
     width: 100%;
     height: calc(100% - 43px);
     overflow-y: auto;
-    background-color: #3c8458;
+    background-color: #7c1f02;
     -webkit-transform: translateY(0);
     -ms-transform: translateY(0);
     transform: translateY(0);

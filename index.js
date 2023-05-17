@@ -136,7 +136,7 @@ function importTree(inData) {
 
 /////       show page
 function showPage(pageID) {
-  $("#start").animate({"width": 0, "opacity": 0}, 400, function() {
+  $("#start").animate({"top": "-50rem"}, 300, function() {
       $("#start").css({"display": "none"});
       $("#startButton").css("display", "block");
       activePage = pageID;
@@ -259,10 +259,10 @@ $("#start").css({"display": "block"});
 $("#startButton").on("click", function (ev) {
   if ( activePage ) {
     $("#startButton").css("display", "none");
-    $("#start").css({"display": "block", "width": "0%", "opacity": 0});
     $(activePage).css("display", "none");
     activePage = "";
-    $("#start").animate({"width": "100%", "opacity": 1}, 200);
+    $("#start").css({"display": "block", "top": "-50rem"});
+    $("#start").animate({"top": 0}, 300);
   }
 });
 
@@ -310,7 +310,7 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
-///////////////////////////////////////   EVO CALENDAR
+///////////////////////////////////////   EVO CALENDAR   /////
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -318,7 +318,6 @@ $('#evoCalendar').evoCalendar({
   firstDayOfWeek: 1, // Monday
   sidebarToggler:true,
   sidebarDisplayDefault: false,
-  //format:"dd/mm/yyyy",
   titleFormat:"MM yyyy",
   eventHeaderFormat:"d MM, yyyy",
 });
@@ -338,10 +337,17 @@ $("#evoCalendar").evoCalendar('addCalendarEvent', [
 ]);
 */
 
-$("#evoCalendar").on('selectEvent',function(activeEvent) {
+$(".calendar-body, #sidebarToggler, #eventListToggler").on("click", function (ev) {
+  $(".event-trash").css("display", "none");
+});
+
+$("#evoCalendar").on('selectEvent',function(activeEvent) {  // selectEvent
   //prompt(calendar.$current.date);
   //alert(activeEvent.handleObj.handler.arguments[1].id);
   console.log("selectEvent");
+  $(".event-container").children(".event-trash").css("display", "none");
+  $(".event-container:hover").children(".event-trash").css("display", "block");
+
 });
 
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
@@ -350,7 +356,7 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 
 });
 
-$("#calEventButton").on("click", function (ev) {
+$(".event-plus").on("click", function (ev) {
   let event = prompt("Nouvel event");
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
@@ -358,14 +364,14 @@ $("#calEventButton").on("click", function (ev) {
       name: "24h",
       description: event,
       date: calendar.$active.event_date,
-      type: "toto",
+      type: "event",
       color: "#fe7f78",
       tata: "test"
     }
   ]);
 
 
-  $("#evoCalendar").evoCalendar('removeCalendarEvent', eventID);
+//  $("#evoCalendar").evoCalendar('removeCalendarEvent', eventID);
 
 
 });

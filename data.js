@@ -4,14 +4,14 @@ evoCalEvents = [
     name:"New Year",
     //date:"Tue May 02 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
     date:"05/14/2023",
-    type:"birthday",
+    type:"event",
   },
   {
     id:"required-id-2",
     name:"18h30-19h",
     //date:"Fri Feb 14 2023 00:00:00 GMT-0800 (Pacific Standard Time)",
     date:"05/15/2023",
-    type:"birthday",
+    type:"event",
     color:"#b44"
   },
   {
@@ -27,8 +27,8 @@ evoCalEvents = [
   name:"21h-23h",
   description: "Prendre Pierre et Paul et Jacques",
   date:"05/15/2023",
-  type:"birthday",
-  color:"#b44",
+  type:"event",
+  color:"#0e7a79",
   theme: "midnight_blue"
   }
 ];
