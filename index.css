@@ -95,6 +95,7 @@ body {
 
 .event-plus {
   position: relative;
+  display: inline-block;
 }
 
 .event-trash {
