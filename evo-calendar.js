@@ -670,7 +670,7 @@
           '<button class="btn" type="button">'+
             '<img src="icons/trash.svg" width=25>'+
           '</button>'+
-        '</div>'; 
+        '</div>';
 
         markup += '</div>';
 

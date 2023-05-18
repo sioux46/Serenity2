@@ -346,6 +346,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
   //prompt(calendar.$current.date);
   //alert(activeEvent.handleObj.handler.arguments[1].id);
   console.log("selectEvent");
+  $(".event-container").children(".event-info").children(".event-title").css("display", "inline-block");
 
   if ( $(".event-container:hover").children(".event-trash").css("display") == "block" ) {
     let ID = activeEvent.handleObj.handler.arguments[1].id;
