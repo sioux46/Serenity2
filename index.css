@@ -96,14 +96,13 @@ body {
 .event-plus {
   position: relative;
   display: inline-block;
+  top: 2px;
 }
 
 .event-trash {
   display: none;
-  position: absolute;
-  left: 13rem;
-  top: 0.5rem;
-  z-index: 1000;
+  position: relative;
+  float: right;
 }
 
 /*

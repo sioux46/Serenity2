@@ -85,7 +85,7 @@
 <!-- **************************************************************************************** -->
 <!-- *******************************************************************   M O D A L   ****** -->
 <!--                                             -->
-<!--   input modal  choose label in ontoTree     -->
+<!--   inputModal  choose label in ontoTree     -->
 <!--                                             -->
   <div id="inputModal" class="modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -109,22 +109,25 @@
     </div>
   </div>
 
-  <!--                                -->
-  <!--    modal  create new event     -->
-  <!--                                -->
+  <!--                                     -->
+  <!--    eventModal  create new event     -->
+  <!--                                     -->
     <div id="eventModal" class="modal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h3 class="modal-title"><b>Nouvel événement</b></h3>
+            <h3 class="modal-title">Nouvel évènement</h3>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="d-grid gap-2">
-        <!--      <button id="buttonParentModalChooseLabel" type="button" class="btn btn-lg btn-success inputModalChooseLabelOK" data-bs-dismiss="modal">Rubrique parente</button> -->
-              <h5 class="modal-title">Heure de l'événement</h5>
-              <div class="cs-form">
-                <input id="time" type="time" class="s-time form-control" value="10:05 AM" />
+              <div class="mb-2">
+                <label for="sEventTitle" class="form-label">Titre</label>
+                <input id="sEventTitle" type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="sEventTime" class="form-label">Heure</label>
+                <input id="sEventTime" type="time" class="form-control"/>
               </div>
             </div>
           </div>

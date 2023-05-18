@@ -29,7 +29,6 @@ evoCalEvents = [
   date:"05/15/2023",
   type:"event",
   color:"#0e7a79",
-  theme: "midnight_blue"
   }
 ];
 

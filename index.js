@@ -353,8 +353,8 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
     return;
   }
 
-  $(".event-container").children(".event-trash").css("display", "none");
-  $(".event-container:hover").children(".event-trash").css("display", "block");
+  $(".event-container").children(".event-info").children(".event-trash").css("display", "none");
+  $(".event-container:hover").children(".event-info").children(".event-trash").css("display", "block");
 
 });
 
@@ -369,22 +369,23 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 $(".event-plus").on("click", function (ev) {
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
-  $("#eventModal").find(".s-time").val(`${hours}:${minutes}`);
+  $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
   $("#eventModal").modal("show");
 });
 
 $("#newEventOK").on("click", function (ev) {
-  let time = $("#eventModal").find(".s-time").val();
+  let time = $("#eventModal").find("#sEventTime").val();
+  let title = $("#eventModal").find("#sEventTitle").val();
 
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
       name: time,
-      description: event,
+      description: title,
       date: calendar.$active.event_date,
       type: "event",
-      color: "#fe7f78",
-      tata: "test"
+      color: "#009099", // "#fe7f78",
+      title: title
     }
   ]);
   $("#eventModal").modal("hide");

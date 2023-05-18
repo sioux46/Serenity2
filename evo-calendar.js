@@ -664,14 +664,22 @@
         if (event_data.badge) markup += '<span>'+event_data.badge+'</span>';
         markup += '</p>';
         if (event_data.description) markup += '<p class="event-desc">'+event_data.description+'</p>';
-        markup += '</div>';
 
         // trash
         markup += '<div class="event-trash">'+                     // SEB+
           '<button class="btn" type="button">'+
             '<img src="icons/trash.svg" width=25>'+
           '</button>'+
-        '</div>';
+        '</div>'; 
+
+        markup += '</div>';
+
+        /* trash
+        markup += '<div class="event-trash">'+                     // SEB+
+          '<button class="btn" type="button">'+
+            '<img src="icons/trash.svg" width=25>'+
+          '</button>'+
+        '</div>'; */
 
 
 
