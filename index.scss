@@ -20,6 +20,7 @@ body {
   //left: -2.8rem;
   display: block;
   z-index: 1000;
+  margin: 2px;
   // margin-bottom: 0.3rem;
   // margin-top: 0.3rem;
 }
@@ -27,6 +28,7 @@ body {
 #startButton {
   display: none;
   background-color: white;
+  border: 2px solid darkblue;
   border-radius: 50%;
   vertical-align: initial;
   margin-left: auto;

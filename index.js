@@ -371,7 +371,6 @@ $(".event-plus").on("click", function (ev) {
   let minutes = new Date().getMinutes();
   $("#eventModal").find(".s-time").val(`${hours}:${minutes}`);
   $("#eventModal").modal("show");
-  // $("#inputModal").find("input").focus();
 });
 
 $("#newEventOK").on("click", function (ev) {
