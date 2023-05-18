@@ -310,7 +310,13 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
+////////////////////////////////////////// event modal
+
+
+
 /////////////////////////////////////////////////   EVO CALENDAR   /////
+
+/////////////////               init evoCalendar
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -324,32 +330,19 @@ $('#evoCalendar').evoCalendar({
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
 
-/*
-$("#evoCalendar").evoCalendar('addCalendarEvent', [
-  {
-    id: "event1",
-    name:"21h-23h",
-    description: "Prendre Pierre et Paul et Jacques",
-    date:"05/15/2023",
-    type:"birthday",
-    color:"#b44"
-  }
-]);
-*/
-
+///////////  hide trash
 $(".calendar-body, #sidebarToggler, #eventListToggler").on("click", function (ev) {
   $(".event-trash").css("display", "none");
 });
 
 /*
-$(".event-trash").on("click", function (ev) {
-  let ID = activeEvent.handleObj.handler.arguments[1].id;
-  $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
-});
+<div class="cs-form">
+  <input type="time" class="form-control" value="10:05 AM" />
+</div>
 */
 
-//////////
-$("#evoCalendar").on('selectEvent',function(activeEvent) {  // selectEvent
+//////////////////////////////////////////////////   selectEvent + removeCalendarEvent
+$("#evoCalendar").on('selectEvent',function(activeEvent) {
   //prompt(calendar.$current.date);
   //alert(activeEvent.handleObj.handler.arguments[1].id);
   console.log("selectEvent");
@@ -365,20 +358,29 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {  // selectEvent
 
 });
 
-/////////
+////////////////////////////////////////////////////////       selectDate
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
-  //prompt($('#evoCalendar').get(0).evoCalendar.$current.date);
+  //console.log(($('#evoCalendar').get(0).evoCalendar.$current.date));
+  console.log(calendar.$active.event_date);
   $("#evoCalendar").evoCalendar('toggleEventList',true);
-
 });
 
-////////////
+//////////////////////////////////////////////////////    create new event
 $(".event-plus").on("click", function (ev) {
-  let event = prompt("Nouvel event");
+  let hours = new Date().getHours();
+  let minutes = new Date().getMinutes();
+  $("#eventModal").find(".s-time").val(`${hours}:${minutes}`);
+  $("#eventModal").modal("show");
+  // $("#inputModal").find("input").focus();
+});
+
+$("#newEventOK").on("click", function (ev) {
+  let time = $("#eventModal").find(".s-time").val();
+
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
-      name: "24h",
+      name: time,
       description: event,
       date: calendar.$active.event_date,
       type: "event",
@@ -386,12 +388,9 @@ $(".event-plus").on("click", function (ev) {
       tata: "test"
     }
   ]);
+  $("#eventModal").modal("hide");
 });
 
-
-
-
-// prompt("Je n'ai rien entendu."); alert("Je n'ai rien entendu.")
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************

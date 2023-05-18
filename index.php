@@ -108,6 +108,34 @@
       </div>
     </div>
   </div>
+
+  <!--                                -->
+  <!--    modal  create new event     -->
+  <!--                                -->
+    <div id="eventModal" class="modal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title"><b>Nouvel événement</b></h3>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-grid gap-2">
+        <!--      <button id="buttonParentModalChooseLabel" type="button" class="btn btn-lg btn-success inputModalChooseLabelOK" data-bs-dismiss="modal">Rubrique parente</button> -->
+              <h5 class="modal-title">Heure de l'événement</h5>
+              <div class="cs-form">
+                <input id="time" type="time" class="s-time form-control" value="10:05 AM" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button id="newEventOK"  type="button" class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 <!--
     <div  class="row justify-content-evenly mt-5">
       <div class="col-sm-5 border border-2 m-3">
