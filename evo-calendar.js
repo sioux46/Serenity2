@@ -667,7 +667,7 @@
 
         // trash
         markup += '<div class="event-trash">'+                     // SEB+
-          '<button class="btn" type="button">'+
+          '<button class="btn" type="button" onclick="trashClick()">'+
             '<img src="icons/trash.svg" width=25>'+
           '</button>'+
         '</div>';

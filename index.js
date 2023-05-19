@@ -178,6 +178,11 @@ function initOntoTreeChoose(label, move, labs) {
   }
 }
 
+// click trash
+function trashClick() {
+  flagEditTrash = "trash";
+}
+
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -330,9 +335,14 @@ $('#evoCalendar').evoCalendar({
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
 
-///////////  hide trash
-$(".calendar-body, #sidebarToggler, #eventListToggler").on("click", function (ev) {
+///////////  hide trash on unsel event
+$(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
   $(".event-trash").css("display", "none");
+});
+
+////////// trash click
+$(".event-trash").on("click", function () {
+  console.error("click trash");
 });
 
 /*
@@ -345,10 +355,13 @@ $(".calendar-body, #sidebarToggler, #eventListToggler").on("click", function (ev
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
   //prompt(calendar.$current.date);
   //alert(activeEvent.handleObj.handler.arguments[1].id);
-  console.log("selectEvent");
+  // console.error("selectEvent");
   $(".event-container").children(".event-info").children(".event-title").css("display", "inline-block");
 
-  if ( $(".event-container:hover").children(".event-info").children(".event-trash").css("display") == "block" ) {
+
+//  if ( $(".event-container:hover").children(".event-info").children(".event-trash").css("display") == "block" ) {
+  if ( flagEditTrash) {
+    flagEditTrash = "";
     let ID = activeEvent.handleObj.handler.arguments[1].id;
     $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
     return;
@@ -407,6 +420,7 @@ var ontoTree = [];
 ontoTree = importTree(importData);
 
 var calendar;
+var flagEditTrash;
 
 
 
