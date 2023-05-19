@@ -348,7 +348,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
   console.log("selectEvent");
   $(".event-container").children(".event-info").children(".event-title").css("display", "inline-block");
 
-  if ( $(".event-container:hover").children(".event-trash").css("display") == "block" ) {
+  if ( $(".event-container:hover").children(".event-info").children(".event-trash").css("display") == "block" ) {
     let ID = activeEvent.handleObj.handler.arguments[1].id;
     $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
     return;
