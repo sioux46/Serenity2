@@ -183,6 +183,26 @@ function trashClick() {
   flagEditTrash = "trash";
 }
 
+////
+function sortEvents(date) { // date
+  let test = evoCalEvents;
+  let eventNumber = events.length;
+    let newEventList = events;
+  if ( eventNumber == 0 || eventNumber == 1 ) return newEventList;
+  let sorted = true;
+  let newEvent;
+
+  for ( let i = eventNumber-1; i > 0 ; i-- ) {
+    if ( newEventList[i].name > newEventList[i-1].name ) return newEventList;
+
+    newEvent = newEventList[i];
+    events[i] = newEventList[i-1];
+    newEventList[i-1] = newEvent;
+    return newEventList;
+  }
+  return newEventList; // ?
+}
+
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -271,6 +291,8 @@ $("#startButton").on("click", function (ev) {
   }
 });
 
+/////////////////////////////////////////////////   ONTO TREE   /////
+
 /////       show ontoTree-choose page
 $("#sheduleButton").on("click", function (ev) {
   showPage("#shedule");
@@ -340,16 +362,6 @@ $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("
   $(".event-trash").css("display", "none");
 });
 
-////////// trash click
-$(".event-trash").on("click", function () {
-  console.error("click trash");
-});
-
-/*
-<div class="cs-form">
-  <input type="time" class="form-control" value="10:05 AM" />
-</div>
-*/
 
 //////////////////////////////////////////////////   selectEvent + removeCalendarEvent
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
@@ -403,6 +415,9 @@ $("#newEventOK").on("click", function (ev) {
     }
   ]);
   $("#eventModal").modal("hide");
+
+  let test = sortEvents( calendar.$active.events[0].date );
+  // calendar.$active.events = test;
 });
 
 
