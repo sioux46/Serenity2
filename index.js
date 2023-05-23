@@ -407,6 +407,17 @@ $(".event-plus").on("click", function (ev) {
 
 $("#newEventOK").on("click", function (ev) {
   let time = $("#eventModal").find("#sEventTime").val();
+  let splitTime = time.split(':');
+  time = `${splitTime[0]}h${splitTime[1]}`;
+
+  let time2 = $("#eventModal").find("#sEventTime2").val();
+  if ( time2 ) {
+    splitTime = time2.split(':');
+    time2 = `${splitTime[0]}h${splitTime[1]}`;
+    time += ` à ${time2}`;
+  }
+  else {
+  }
   let title = $("#eventModal").find("#sEventTitle").val();
 
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
@@ -417,7 +428,6 @@ $("#newEventOK").on("click", function (ev) {
       date: calendar.$active.event_date,
       type: "event",
       color: "#009099", // "#fe7f78",
-      title: title
     }
   ]);
   $("#eventModal").modal("hide");

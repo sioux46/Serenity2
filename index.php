@@ -122,12 +122,16 @@
           <div class="modal-body">
             <div class="d-grid gap-2">
               <div class="mb-2">
-                <label for="sEventTitle" class="form-label">Titre</label>
+                <label for="sEventTitle" class="form-label">Titre:</label>
                 <input id="sEventTitle" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="sEventTime" class="form-label">Heure</label>
+                <label for="sEventTime" class="form-label">Heure de début:</label>
                 <input id="sEventTime" type="time" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="sEventTime2" class="form-label">Heure de fin:</label>
+                <input id="sEventTime2" type="time" class="form-control"/>
               </div>
             </div>
           </div>
