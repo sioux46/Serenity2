@@ -185,22 +185,28 @@ function trashClick() {
 
 ////
 function sortEvents(date) { // date
-  let test = evoCalEvents;
-  let eventNumber = events.length;
-    let newEventList = events;
-  if ( eventNumber == 0 || eventNumber == 1 ) return newEventList;
+  // let test = evoCalEvents;
+  let eventIndex = [];
+  let eventRank = 0;
+
+  for (let i = 0; i < evoCalEvents.length; i++) {
+    if ( evoCalEvents[i].date == calendar.$active.date ) eventIndex[eventRank++] = i;
+  }
+  let eventNumber = eventIndex.length;
+
+  if ( eventNumber == 0 || eventNumber == 1 ) return;
   let sorted = true;
   let newEvent;
 
   for ( let i = eventNumber-1; i > 0 ; i-- ) {
-    if ( newEventList[i].name > newEventList[i-1].name ) return newEventList;
+    if ( evoCalEvents[eventIndex[i]].name > evoCalEvents[eventIndex[i-1]].name ) return;
 
-    newEvent = newEventList[i];
-    events[i] = newEventList[i-1];
-    newEventList[i-1] = newEvent;
-    return newEventList;
+    newEvent = evoCalEvents[eventIndex[i]];
+    evoCalEvents[eventIndex[i]] = evoCalEvents[eventIndex[i-1]];
+    evoCalEvents[eventIndex[i-1]] = newEvent;
+    // return;
   }
-  return newEventList; // ?
+  // return newEventList; // ?
 }
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
@@ -416,8 +422,10 @@ $("#newEventOK").on("click", function (ev) {
   ]);
   $("#eventModal").modal("hide");
 
-  let test = sortEvents( calendar.$active.events[0].date );
-  // calendar.$active.events = test;
+  let activeDate = calendar.$active.events[0].date;
+  sortEvents( activeDate );
+  calendar.selectDate( "01/01/2022" ); // refresh date display
+  calendar.selectDate( activeDate );
 });
 
 

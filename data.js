@@ -14,6 +14,7 @@ evoCalEvents = [
     type:"event",
     color:"#b44"
   },
+  /*
   {
     id:"required-id-3",
     name:"Custom Date",
@@ -22,6 +23,7 @@ evoCalEvents = [
     description:"Description here",
     type:"event"
   },
+  */
   {
   id: "event1",
   name:"21h-23h",
