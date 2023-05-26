@@ -214,6 +214,14 @@ function sortEvents(date) { // date
   // return newEventList; // ?
 }
 
+////
+function clearEventModal(ev) {                // clear fields
+  $("#eventModal").find("#sEventTitle").val("");
+  $("#eventModal").find("#sEventTime").val("");
+  $("#eventModal").find("#sEventTime2").val("");
+}
+
+
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
@@ -363,7 +371,10 @@ $("#ontoTree-title").on("click", function (ev) {
 
 /////////////////               init evoCalendar
 
-evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
+if ( localStorage.eventList ) {
+  evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
+}
+else evoCalEvents = [];
 
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
@@ -399,10 +410,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
   if ( flagEditTrash == "edit" ) { //     SHOW eventModal     // edit event
     $("#eventModal").attr("data-event-id", event.id); // save event ID in data attr
 
-    //        clear fields
-    $("#eventModal").find("#sEventTitle").val("");
-    $("#eventModal").find("#sEventTime").val("");
-    $("#eventModal").find("#sEventTime2").val("");
+    clearEventModal();
 
     //        feel modal with event description
     $("#eventModal").find("#sEventTitle").val(event.description); // title/description
@@ -439,6 +447,7 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 
 ///// show eventModal                     ADD NEW EVENT
 $(".event-plus").on("click", function (ev) {
+  clearEventModal();
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
   $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
