@@ -88,6 +88,11 @@ body {
   border-color: $sDarkBlue !important;
 }
 
+.start-page-btn:hover {
+  // border-width: 4px;
+  background-color: #e3e3ed;
+}
+
 .ontoTree-btn {
   //  height: 2.1em;
   border-radius: 0;
@@ -130,7 +135,8 @@ body {
   //left: 20px;
 }
 
-.event-trash {
+.event-trash,
+.event-edit {
   display: none;
   position: relative; // absolute
   // left: 13rem;

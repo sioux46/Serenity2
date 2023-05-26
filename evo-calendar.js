@@ -672,16 +672,14 @@
           '</button>'+
         '</div>';
 
-        markup += '</div>';
-
-        /* trash
-        markup += '<div class="event-trash">'+                     // SEB+
-          '<button class="btn" type="button">'+
-            '<img src="icons/trash.svg" width=25>'+
+        // edit
+        markup += '<div class="event-edit">'+                     // SEB+
+          '<button class="btn" type="button" onclick="editClick()">'+
+            '<img src="icons/pencil.svg" width=25>'+
           '</button>'+
-        '</div>'; */
+        '</div>';
 
-
+        markup += '</div>';
 
         markup += '</div>';
         eventListEl.append(markup);

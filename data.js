@@ -1,4 +1,4 @@
-evoCalEvents = [
+evoCalEventsTest = [
   {
     id:"required-id-1",
     name:"New Year",

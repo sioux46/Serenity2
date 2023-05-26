@@ -112,7 +112,7 @@
   <!--                                     -->
   <!--    eventModal  create new event     -->
   <!--                                     -->
-    <div id="eventModal" class="modal" tabindex="-1">
+    <div id="eventModal" data-event-id= "" class="modal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">

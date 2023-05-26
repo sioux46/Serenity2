@@ -67,6 +67,10 @@ body {
   border-color: #000b87 !important;
 }
 
+.start-page-btn:hover {
+  background-color: #e3e3ed;
+}
+
 .ontoTree-btn {
   border-radius: 0;
   border-top-width: 0.2rem;
@@ -99,7 +103,8 @@ body {
   top: 2px;
 }
 
-.event-trash {
+.event-trash,
+.event-edit {
   display: none;
   position: relative;
   float: right;

@@ -183,6 +183,11 @@ function trashClick() {
   flagEditTrash = "trash";
 }
 
+// click edit
+function editClick() {
+  flagEditTrash = "edit";
+}
+
 ////
 function sortEvents(date) { // date
   // let test = evoCalEvents;
@@ -311,10 +316,9 @@ $("#paramButton").on("click", function (ev) {
   initOntoTreeChoose(ontoTree[0]);
 });
 
-/////        change ontoTree-parent within ontoTree-choose
+/////        change ontoTree-parent within ontoTree-choose WITH DIALOG
 $("#ontoTree-parent").on("click", function (ev) {
-  $("#inputModal").modal("show");
-  // $("#inputModal").find("input").focus();
+//  $("#inputModal").modal("show");
 });
 
 /////        change ontoTree-btn list
@@ -343,6 +347,14 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
   $("#ontoTree-choose").trigger("click");
 });
 
+////////
+$("#ontoTree-title").on("click", function (ev) {
+  let node = deepFindNodeByLabel($("#ontoTree-parent").text(), ontoTree);
+  initOntoTreeChoose(node[2], "down");
+});
+
+
+
 ////////////////////////////////////////// event modal
 
 
@@ -350,6 +362,9 @@ $(".ontoTree-btn").on("mouseup", function (ev) {
 /////////////////////////////////////////////////   EVO CALENDAR   /////
 
 /////////////////               init evoCalendar
+
+evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
+
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -362,35 +377,57 @@ $('#evoCalendar').evoCalendar({
 });
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
+// evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
 
 ///////////  hide trash on unsel event
 $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
-  $(".event-trash").css("display", "none");
+  $(".event-trash, .event-edit").css("display", "none");
 });
 
 
-//////////////////////////////////////////////////   selectEvent + removeCalendarEvent
+//////////////////////////////////////////////////   selectEvent + edit or trash event
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
-  //prompt(calendar.$current.date);
-  //alert(activeEvent.handleObj.handler.arguments[1].id);
-  // console.error("selectEvent");
-  $(".event-container").children(".event-info").children(".event-title").css("display", "inline-block");
 
+  let event = activeEvent.handleObj.handler.arguments[1];
 
-//  if ( $(".event-container:hover").children(".event-info").children(".event-trash").css("display") == "block" ) {
-  if ( flagEditTrash) {
+  if ( flagEditTrash == "trash") {                          // trash event
+    $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
     flagEditTrash = "";
-    let ID = activeEvent.handleObj.handler.arguments[1].id;
-    $("#evoCalendar").evoCalendar('removeCalendarEvent', ID);
     return;
   }
 
-  $(".event-container").children(".event-info").children(".event-trash").css("display", "none");
-  $(".event-container:hover").children(".event-info").children(".event-trash").css("display", "block");
+  if ( flagEditTrash == "edit" ) { //     SHOW eventModal     // edit event
+    $("#eventModal").attr("data-event-id", event.id); // save event ID in data attr
+
+    //        clear fields
+    $("#eventModal").find("#sEventTitle").val("");
+    $("#eventModal").find("#sEventTime").val("");
+    $("#eventModal").find("#sEventTime2").val("");
+
+    //        feel modal with event description
+    $("#eventModal").find("#sEventTitle").val(event.description); // title/description
+
+    let splitTime12 = event.name.split(' à ');   // time/name
+
+    let splitTime1 = splitTime12[0].split('h');
+    let time = `${splitTime1[0]}:${splitTime1[1]}`;
+    $("#eventModal").find("#sEventTime").val(time);
+
+    if ( splitTime12[1] ) {
+      let splitTime2 = splitTime12[1].split('h');
+      let time = `${splitTime2[0]}:${splitTime2[1]}`;
+      $("#eventModal").find("#sEventTime2").val(time);
+    }
+
+    $("#eventModal").modal("show");
+  }
+
+  $(".event-container").children(".event-info").children(".event-trash, .event-edit").css("display", "none");
+  $(".event-container:hover").children(".event-info").children(".event-trash, .event-edit").css("display", "block");
 
 });
 
-////////////////////////////////////////////////////////       selectDate
+////////////////////////////////////////////////////////    on selectDate
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   //console.log(($('#evoCalendar').get(0).evoCalendar.$current.date));
   console.log(calendar.$active.event_date);
@@ -398,6 +435,9 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 });
 
 //////////////////////////////////////////////////////    create new event
+                                                    //  or update old event
+
+///// show eventModal                     ADD NEW EVENT
 $(".event-plus").on("click", function (ev) {
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
@@ -405,6 +445,7 @@ $(".event-plus").on("click", function (ev) {
   $("#eventModal").modal("show");
 });
 
+/////                                                READ eventModal
 $("#newEventOK").on("click", function (ev) {
   let time = $("#eventModal").find("#sEventTime").val();
   let splitTime = time.split(':');
@@ -416,26 +457,42 @@ $("#newEventOK").on("click", function (ev) {
     time2 = `${splitTime[0]}h${splitTime[1]}`;
     time += ` à ${time2}`;
   }
-  else {
-  }
-  let title = $("#eventModal").find("#sEventTitle").val();
 
-  $("#evoCalendar").evoCalendar('addCalendarEvent', [
-    {
-      id: '' + Math.random(),
-      name: time,
-      description: title,
-      date: calendar.$active.event_date,
-      type: "event",
-      color: "#009099", // "#fe7f78",
+  let title = $("#eventModal").find("#sEventTitle").val(); // title/description
+
+  if ( flagEditTrash == "edit") {  // update event
+    let eventId = $("#eventModal").attr("data-event-id");
+
+    for ( let event of evoCalEvents ) {
+      if ( event.id == eventId ) {
+        event.description = title;   // title/description;
+        event.name = time;   // name/time;
+      }
     }
-  ]);
+    flagEditTrash = "";
+  }
+
+  else {    // new event
+    $("#evoCalendar").evoCalendar('addCalendarEvent', [
+      {
+        id: '' + Math.random(),
+        name: time,                 // time/name
+        description: title,
+        date: calendar.$active.event_date,
+        type: "event",
+        color: "#009099", // "#fe7f78",
+      }
+    ]);
+  }
+
   $("#eventModal").modal("hide");
 
   let activeDate = calendar.$active.events[0].date;
   sortEvents( activeDate );
   calendar.selectDate( "01/01/2022" ); // refresh date display
   calendar.selectDate( activeDate );
+
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 });
 
 
@@ -454,6 +511,7 @@ ontoTree = importTree(importData);
 
 var calendar;
 var flagEditTrash;
+var evoCalEvents;
 
 
 
