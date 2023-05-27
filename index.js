@@ -383,8 +383,9 @@ $('#evoCalendar').evoCalendar({
   firstDayOfWeek: 1, // Monday
   sidebarToggler:true,
   sidebarDisplayDefault: false,
+  eventDisplayDefault: true,
   titleFormat:"MM yyyy",
-  eventHeaderFormat:"d MM, yyyy",
+  eventHeaderFormat:"d MM yyyy",
 });
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
@@ -394,7 +395,6 @@ calendar = $('#evoCalendar').get(0).evoCalendar;
 $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
   $(".event-trash, .event-edit").css("display", "none");
 });
-
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
