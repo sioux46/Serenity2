@@ -217,7 +217,7 @@ function sortEvents(date) { // date
 ////
 function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTitle").val("");
-  $("#eventModal").find("#sEventTime").val("");
+  $("#eventModal").find("#sEventTime").val("").attr("min",);
   $("#eventModal").find("#sEventTime2").val("");
 }
 
@@ -456,6 +456,19 @@ $(".event-plus").on("click", function (ev) {
 
 /////                                                READ eventModal
 $("#newEventOK").on("click", function (ev) {
+  let val = $("#sEventTime").val();
+  let val2 = $("#sEventTime2").val();
+
+  if ( val2  &&  val2 < val ) {
+    $("#sEventTime2").val(val);
+    return;
+  }
+  if ( !val && val2 ) {
+    $("#sEventTime").val(val2);
+    return;
+  }
+  if ( !val && !val2 ) return;
+
   let time = $("#eventModal").find("#sEventTime").val();
   let splitTime = time.split(':');
   time = `${splitTime[0]}h${splitTime[1]}`;
@@ -494,7 +507,7 @@ $("#newEventOK").on("click", function (ev) {
     ]);
   }
 
-  $("#eventModal").modal("hide");
+  $("#eventModal").modal("hide");   // HIDE MODAL
 
   let activeDate = calendar.$active.events[0].date;
   sortEvents( activeDate );
@@ -504,6 +517,11 @@ $("#newEventOK").on("click", function (ev) {
   localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 });
 
+/////
+$("#sEventTime, #sEventTime2").on("click", function (ev) {
+  let val2 = $("#sEventTime2").val();
+  if ( !val2 ) $("#sEventTime2").val(val);
+});
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
