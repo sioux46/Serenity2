@@ -32,6 +32,37 @@ body {
   width: 100%;
 }
 
+.start-page-btn {
+  border-radius: 0;
+  font-size: 1.8rem;
+  border-width: 4px;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.start-page-btn:hover {
+  background-color: #e3e3ed;
+}
+
+#sheduleButton {
+  color: #7c1f02 !important;
+  border-color: #7c1f02 !important;
+}
+
+#voyageButton {
+  color: #000b87 !important;
+  border-color: #000b87 !important;
+}
+
+#paramButton {
+  color: #008959 !important;
+  border-color: #008959 !important;
+}
+
+#voyage-title {
+  background-color: #000b87;
+}
+
 .s-start {
   font-weight: 600;
 }
@@ -55,20 +86,6 @@ body {
 
 #ontoTree-parent:hover {
   cursor: pointer;
-}
-
-.start-page-btn {
-  border-radius: 0;
-  font-size: 1.8rem;
-  border-width: 3px;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  color: #000b87 !important;
-  border-color: #000b87 !important;
-}
-
-.start-page-btn:hover {
-  background-color: #e3e3ed;
 }
 
 .ontoTree-btn {

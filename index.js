@@ -319,6 +319,12 @@ $("#sheduleButton").on("click", function (ev) {
 });
 
 /////       show ontoTree-choose page
+$("#voyageButton").on("click", function (ev) {
+  showPage("#voyage");
+  initOntoTreeChoose(ontoTree[0]);
+});
+
+/////       show ontoTree-choose page
 $("#paramButton").on("click", function (ev) {
   showPage("#ontoTree-choose");
   initOntoTreeChoose(ontoTree[0]);

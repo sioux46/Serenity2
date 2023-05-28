@@ -47,14 +47,36 @@
       <div class="d-grid gap-4 text-center">
         <!-- data-bs-target="#modalOntoTree" -->
         <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
-        <button type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
+
+        <button id="voyageButton" type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
+
         <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramétrer DEVA</button>
       </div>
     </div>
   </div>
-<!--                     -->
-<!--  ontoTree-choose    -->
-<!--                     -->
+  <!--                -->
+  <!--    shedule     -->
+  <!--                -->
+  <div id="shedule" class="s-page">
+    <div id="shedule-content"> <!--  class="container-fluid" -->
+      <div id="evoCalendar"></div>
+    </div>
+  </div>
+  <!--                -->
+  <!--    voyage      -->
+  <!--                -->
+  <div id="voyage" class="s-page">
+    <div  class="d-grid gap-2">
+      <div id="voyage-title" class="container-fluid pt-3 pb-3 mb-2 text-white text-center">
+        <div id="voyage-content"> <!--  class="container-fluid" -->
+          <div class="s-page-title container-fluid"><h1>Le voyage en cours</h1></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--                     -->
+  <!--  ontoTree-choose    -->
+  <!--                     -->
   <div id="ontoTree-choose" class="s-page">
     <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
@@ -72,14 +94,6 @@
         <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
         <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
       </div>
-    </div>
-  </div>
-  <!--                -->
-  <!--    shedule     -->
-  <!--                -->
-  <div id="shedule" class="s-page">
-    <div id="shedule-content"> <!--  class="container-fluid" -->
-      <div id="evoCalendar"></div>
     </div>
   </div>
 <!-- **************************************************************************************** -->
