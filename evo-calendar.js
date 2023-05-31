@@ -272,6 +272,7 @@
             }
             return newTitle.join(' ') + '...'
         }
+        if ( title == "hundefined") title = "  ";               // SEB+
         return title;
     }
 

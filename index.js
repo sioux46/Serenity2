@@ -217,7 +217,7 @@ function sortEvents(date) { // date
 ////
 function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTitle").val("");
-  $("#eventModal").find("#sEventTime").val("").attr("min",);
+  $("#eventModal").find("#sEventTime").val("");
   $("#eventModal").find("#sEventTime2").val("");
 }
 
@@ -456,7 +456,7 @@ $(".event-plus").on("click", function (ev) {
   clearEventModal();
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
-  $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
+//  $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
   $("#eventModal").modal("show");
 });
 
@@ -473,7 +473,7 @@ $("#newEventOK").on("click", function (ev) {
     $("#sEventTime").val(val2);
     return;
   }
-  if ( !val && !val2 ) return;
+//  if ( !val && !val2 ) return;
 
   let time = $("#eventModal").find("#sEventTime").val();
   let splitTime = time.split(':');
@@ -525,8 +525,7 @@ $("#newEventOK").on("click", function (ev) {
 
 /////
 $("#sEventTime, #sEventTime2").on("click", function (ev) {
-  let val2 = $("#sEventTime2").val();
-  if ( !val2 ) $("#sEventTime2").val(val);
+//  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
 }); // *********************************************  F I N   R E A D Y

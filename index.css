@@ -41,7 +41,11 @@ body {
 }
 
 .start-page-btn:hover {
-  background-color: #e3e3ed;
+  background-color: #eaeaea;
+}
+
+.start-page-btn:active {
+  background-color: #ddd !important;
 }
 
 #sheduleButton {
