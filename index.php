@@ -45,11 +45,9 @@
     </div>
     <div class="container">
       <div class="d-grid gap-4 text-center">
-        <!-- data-bs-target="#modalOntoTree" -->
+                                                <!-- data-bs-target="#modalOntoTree" -->
         <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
-
         <button id="voyageButton" type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
-
         <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramétrer DEVA</button>
       </div>
     </div>
@@ -122,7 +120,6 @@
       </div>
     </div>
   </div>
-
   <!--                                     -->
   <!--    eventModal  create new event     -->
   <!--                                     -->
@@ -156,7 +153,6 @@
         </div>
       </div>
     </div>
-
 <!--
     <div  class="row justify-content-evenly mt-5">
       <div class="col-sm-5 border border-2 m-3">
