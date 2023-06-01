@@ -462,6 +462,8 @@ $(".event-plus").on("click", function (ev) {
 
 /////                                                READ eventModal
 $("#newEventOK").on("click", function (ev) {
+
+  let title = $("#eventModal").find("#sEventTitle").val(); // title/description
   let val = $("#sEventTime").val();
   let val2 = $("#sEventTime2").val();
 
@@ -473,7 +475,7 @@ $("#newEventOK").on("click", function (ev) {
     $("#sEventTime").val(val2);
     return;
   }
-//  if ( !val && !val2 ) return;
+  if ( !val && !val2 && !title ) return;
 
   let time = $("#eventModal").find("#sEventTime").val();
   let splitTime = time.split(':');
@@ -485,8 +487,6 @@ $("#newEventOK").on("click", function (ev) {
     time2 = `${splitTime[0]}h${splitTime[1]}`;
     time += ` à ${time2}`;
   }
-
-  let title = $("#eventModal").find("#sEventTitle").val(); // title/description
 
   if ( flagEditTrash == "edit") {  // update event
     let eventId = $("#eventModal").attr("data-event-id");

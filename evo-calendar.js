@@ -128,11 +128,11 @@
                         closeEventListText: "Sluit de event lijst"
                     }
                 }
-            }
+            };
             _.initials.weekends = {
                 sun: _.initials.dates[_.options.language].daysShort[0],
                 sat: _.initials.dates[_.options.language].daysShort[6]
-            }
+            };
 
 
             // Format Calendar Events into selected format
@@ -143,7 +143,7 @@
                         console.log("%c Event named: \""+_.options.calendarEvents[i].name+"\" doesn't have a unique ID ", "color:white;font-weight:bold;background-color:#e21d1d;");
                     }
                     if(_.isValidDate(_.options.calendarEvents[i].date)) {
-                        _.options.calendarEvents[i].date = _.formatDate(_.options.calendarEvents[i].date, _.options.format)
+                        _.options.calendarEvents[i].date = _.formatDate(_.options.calendarEvents[i].date, _.options.format);
                     }
                 }
             }
@@ -158,7 +158,7 @@
                 month: (isNaN(this.month) || this.month == null) ? new Date().getMonth() : this.month,
                 year: (isNaN(this.year) || this.year == null) ? new Date().getFullYear() : this.year,
                 date: _.formatDate(_.initials.dates[_.defaults.language].months[new Date().getMonth()]+' '+new Date().getDate()+' '+ new Date().getFullYear(), _.options.format)
-            }
+            };
 
             // ACTIVE
             _.$active = {
@@ -167,14 +167,14 @@
                 date: _.$current.date,
                 event_date: _.$current.date,
                 events: []
-            }
+            };
 
             // LABELS
             _.$label = {
                 days: [],
                 months: _.initials.dates[_.defaults.language].months,
                 days_in_month: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-            }
+            };
 
             // HTML Markups (template)
             _.$markups = {
@@ -182,7 +182,7 @@
                 mainHTML: '',
                 sidebarHTML: '',
                 eventHTML: ''
-            }
+            };
             // HTML DOM elements
             _.$elements = {
                 calendarEl: $(element),
@@ -196,15 +196,15 @@
                 activeDayEl: null,
                 activeMonthEl: null,
                 activeYearEl: null
-            }
+            };
             _.$breakpoints = {
                 tablet: 768,
                 mobile: 425
-            }
+            };
             _.$UI = {
                 hasSidebar: true,
                 hasEvent: true
-            }
+            };
 
             _.formatDate = $.proxy(_.formatDate, _);
             _.selectDate = $.proxy(_.selectDate, _);
@@ -256,8 +256,8 @@
         }
         _.$elements.calendarEl.empty();
         _.$elements.calendarEl.attr('class', _.initials.default_class);
-        $(_.$elements.calendarEl).trigger("destroy", [_])
-    }
+        $(_.$elements.calendarEl).trigger("destroy", [_]);
+    };
 
     // v1.0.0 - Limit title (...)
     EvoCalendar.prototype.limitTitle = function(title, limit) {
@@ -267,19 +267,19 @@
             var t = title.split(' ');
             for (var i=0; i<t.length; i++) {
                 if (t[i].length + newTitle.join('').length <= limit) {
-                    newTitle.push(t[i])
+                    newTitle.push(t[i]);
                 }
             }
-            return newTitle.join(' ') + '...'
+            return newTitle.join(' ') + '...';
         }
         if ( title == "hundefined") title = "  ";               // SEB+
         return title;
-    }
+    };
 
     // v1.1.2 - Check and filter strings
     EvoCalendar.prototype.stringCheck = function(d) {
         return d.replace(/[^\w]/g, '\\$&');
-    }
+    };
 
     // v1.0.0 - Parse format (date)
     EvoCalendar.prototype.parseFormat = function(format) {
@@ -301,7 +301,7 @@
         var _ = this;
         if (!date)
             return '';
-        language = language ? language : _.defaults.language
+        language = language ? language : _.defaults.language;
         if (typeof format === 'string')
             format = _.parseFormat(format);
         if (format.toDisplay)
@@ -361,7 +361,7 @@
             return true;
         }
         return false;
-    }
+    };
 
     // v1.0.0 - Check if event has the same event type in the same date
     EvoCalendar.prototype.hasSameDayEventType = function(date, type) {
@@ -386,7 +386,7 @@
             return true;
         }
         return false;
-    }
+    };
 
     // v1.0.0 - Set calendar theme
     EvoCalendar.prototype.setTheme = function(themeName) {
@@ -396,7 +396,7 @@
 
         if (_.options.theme) $(_.$elements.calendarEl).removeClass(prevTheme);
         if (_.options.theme !== 'default') $(_.$elements.calendarEl).addClass(_.options.theme);
-    }
+    };
 
     // v1.0.0 - Called in every resize
     EvoCalendar.prototype.resize = function() {
@@ -409,7 +409,7 @@
 
             if (_.windowW <= _.$breakpoints.mobile) { // mobile
                 $(window)
-                    .off('click.evocalendar.evo-' + _.instanceUid)
+                    .off('click.evocalendar.evo-' + _.instanceUid);
             } else {
                 $(window)
                     .on('click.evocalendar.evo-' + _.instanceUid, $.proxy(_.toggleOutside, _));
@@ -424,7 +424,7 @@
             $(window)
                 .off('click.evocalendar.evo-' + _.instanceUid);
         }
-    }
+    };
 
     // v1.0.0 - Initialize event listeners
     EvoCalendar.prototype.initEventListener = function() {
@@ -486,7 +486,7 @@
 
         // remove event listener for each day
         _.$elements.innerEl.find('.calendar-day').children()
-        .off('click.evocalendar')
+        .off('click.evocalendar');
 
         // remove event listener for each month
         _.$elements.sidebarEl.find('[data-month-val]')
@@ -522,7 +522,7 @@
         }
         firstDay = new Date(_.$active.year, _.$active.month).getDay() - weekStart;
         _.startingDay = firstDay < 0 ? (_.$label.days.length + firstDay) : firstDay;
-    }
+    };
 
     // v1.0.0 - Build the bones! (incl. sidebar, inner, events), called once in every initialization
     EvoCalendar.prototype.buildTheBones = function() {
@@ -603,7 +603,7 @@
         _.initEventListener(); // test
 
         _.resize();
-    }
+    };
 
     // v1.0.0 - Build Event: Event list
     EvoCalendar.prototype.buildEventList = function() {
@@ -620,7 +620,7 @@
         if (_.options.calendarEvents) {
             for (var i = 0; i < _.options.calendarEvents.length; i++) {
                 if(_.isBetweenDates(_.$active.date, _.options.calendarEvents[i].date)) {
-                    eventAdder(_.options.calendarEvents[i])
+                    eventAdder(_.options.calendarEvents[i]);
                 }
                 else if (_.options.calendarEvents[i].everyYear) {
                     var d = new Date(_.$active.date).getMonth() + 1 + ' ' + new Date(_.$active.date).getDate();
@@ -628,10 +628,10 @@
                     // var dates = [_.formatDate(_.options.calendarEvents[i].date[0], 'mm/dd'), _.formatDate(_.options.calendarEvents[i].date[1], 'mm/dd')];
 
                     if(d==dd) {
-                        eventAdder(_.options.calendarEvents[i])
+                        eventAdder(_.options.calendarEvents[i]);
                     }
                 }
-            };
+            }
         }
         function eventAdder(event) {
             hasEventToday = true;
@@ -767,7 +767,7 @@
         // set event listener for each day
         _.$elements.innerEl.find('.calendar-day').children()
         .off('click.evocalendar')
-        .on('click.evocalendar', _.selectDate)
+        .on('click.evocalendar', _.selectDate);
 
         var selectedDate = _.$elements.innerEl.find("[data-date-val='" + _.$active.date + "']");
 
@@ -908,7 +908,7 @@
             if(_.$UI.hasSidebar) _.toggleSidebar(false);
         }
 
-        $(_.$elements.calendarEl).trigger("selectYear", [_.$active.year])
+        $(_.$elements.calendarEl).trigger("selectYear", [_.$active.year]);
 
         _.buildSidebarYear();
         _.buildCalendar();
@@ -936,7 +936,7 @@
         }
 
         // EVENT FIRED: selectMonth
-        $(_.$elements.calendarEl).trigger("selectMonth", [_.initials.dates[_.options.language].months[_.$active.month], _.$active.month])
+        $(_.$elements.calendarEl).trigger("selectMonth", [_.initials.dates[_.options.language].months[_.$active.month], _.$active.month]);
     };
 
     // v1.0.0 - Select specific date
@@ -946,7 +946,7 @@
         var date, year, month, activeDayEl, isSameDate;
 
         if (typeof event === 'string' || typeof event === 'number' || event instanceof Date) {
-            date = _.formatDate(new Date(event), _.options.format)
+            date = _.formatDate(new Date(event), _.options.format);
             year = new Date(date).getFullYear();
             month = new Date(date).getMonth();
 
@@ -955,7 +955,7 @@
             activeDayEl = _.$elements.innerEl.find("[data-date-val='" + date + "']");
         } else {
             activeDayEl = $(event.currentTarget);
-            date = activeDayEl.data('dateVal')
+            date = activeDayEl.data('dateVal');
         }
         isSameDate = _.$active.date === date;
         // Set new active date
@@ -969,20 +969,20 @@
         if (!isSameDate) _.buildEventList();
 
         // EVENT FIRED: selectDate
-        $(_.$elements.calendarEl).trigger("selectDate", [_.$active.date, oldDate])
+        $(_.$elements.calendarEl).trigger("selectDate", [_.$active.date, oldDate]);
     };
 
     // v1.0.0 - Return active date
     EvoCalendar.prototype.getActiveDate = function() {
         var _ = this;
         return _.$active.date;
-    }
+    };
 
     // v1.0.0 - Return active events
     EvoCalendar.prototype.getActiveEvents = function() {
         var _ = this;
         return _.$active.events;
-    }
+    };
 
     // v1.0.0 - Hide Sidebar/Event List if clicked outside
     EvoCalendar.prototype.toggleOutside = function(event) {
@@ -992,7 +992,7 @@
 
         if (_.$UI.hasSidebar && isInnerClicked) _.toggleSidebar(false);
         if (_.$UI.hasEvent && isInnerClicked) _.toggleEventList(false);
-    }
+    };
 
     // v1.0.0 - Toggle Sidebar
     EvoCalendar.prototype.toggleSidebar = function(event) {
@@ -1078,10 +1078,10 @@
         }
         if (arr instanceof Array) { // Arrays of events
             for(var i=0; i < arr.length; i++) {
-                addEvent(arr[i])
+                addEvent(arr[i]);
             }
         } else if (typeof arr === 'object') { // Single event
-            addEvent(arr)
+            addEvent(arr);
         }
     };
 
@@ -1107,17 +1107,17 @@
         }
         if (arr instanceof Array) { // Arrays of index
             for(var i=0; i < arr.length; i++) {
-                deleteEvent(arr[i])
+                deleteEvent(arr[i]);
             }
         } else { // Single index
-            deleteEvent(arr)
+            deleteEvent(arr);
         }
     };
 
     // v1.0.0 - Check if date is valid
     EvoCalendar.prototype.isValidDate = function(d){
         return new Date(d) && !isNaN(new Date(d).getTime());
-    }
+    };
 
     $.fn.evoCalendar = function() {
         var _ = this,

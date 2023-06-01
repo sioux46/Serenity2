@@ -247,7 +247,7 @@ tr.calendar-body .calendar-day .day:active {
 tr.calendar-body .calendar-day .day.calendar-active,
 tr.calendar-body .calendar-day .day.calendar-active:hover {
     color: #5a5a5a;
-    border-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 1); // 0.5);                SEB+
 }
 
 tr.calendar-body .calendar-day .day.calendar-today {
@@ -996,7 +996,8 @@ button.icon-button > span.chevron-arrow-right {
 // ********************  DEVA ***********
 p.event-desc {
   // font-weight: 900 !important;
-  font-size: 1.2rem !important;
+  font-size: 1.24rem !important;
+  margin-top: 0 !important;
 }
 
 .event-plus {
