@@ -86,6 +86,7 @@ body {
 
 #ontoTree-parent {
   text-align: center;
+  font-size: 1.5rem;
 }
 
 #ontoTree-parent:hover {
@@ -98,7 +99,7 @@ body {
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   background-color: white;
 }
 .ontoTree-btn:hover {
