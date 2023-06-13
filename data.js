@@ -66,7 +66,7 @@ var persons = [
 ];
 
 var importData = [
-  ["DEPLACEMENT CONCERNÉ"],
+  ["BUT DU VOYAGE"],
   ["","VEHICULE"],
   ["","","ENTRETIEN DU VEHICULE "],
   ["","","","Lavage"],
