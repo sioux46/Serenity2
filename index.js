@@ -546,6 +546,72 @@ var flagEditTrash;
 var evoCalEvents;
 
 
+/////////////////////////////////////////////    TESTS
+
+/*
+// API endpoint
+const url = "https://api.openai.com/v1/completions";
+
+
+$.ajax({
+  'url': 'coucou.php',
+  'type': 'get',
+  'complete': function(xhr, result) {
+    if (result != 'success') {
+      alert ( 'Erreur api');
+    }
+    else {
+
+      const headers = {
+          "Authorization": `Bearer ${xhr.responseText}`,
+          "Content-Type": "application/json"
+      };
+
+      // Request payload
+      const payload = {
+          model: "text-davinci-003", // "gpt-3.5-turbo",
+          messages: [
+              // { role: "system", content: "You are a helpful assistant." },
+              { role: "user", content: "Who won the world series in 2020?" }
+          ]
+      };
+
+      // Send the request
+      fetch(url, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(payload)
+      })
+          .then(response => response.json())
+          .then(data => {
+              // Parse the response
+              const reply = data.choices[0].message.content;
+              // Print the model's reply
+              console.log("Model's reply:", reply);
+          })
+          .catch(error => console.error(error));
+
+    }
+  }
+});
+
+*/
+// Request headers
+
+
+    $.ajax({
+      'url': 'chatgpttest.php',
+      'type': 'get',
+      'complete': function(xhr, result) {
+        if (result != 'success') {
+          alert ( 'Erreur réseau. Protocole non sauvé.', 'Stroop error!');
+        }
+        else {
+          var reponse = xhr.responseText;
+          console.log(reponse);
+        }
+      }
+    });
 
 
 // *****************************************************  */
