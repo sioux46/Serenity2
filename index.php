@@ -1,4 +1,8 @@
-<!doctype html>
+
+<?php
+// Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
+$version = "3.06.26.1"; 
+?>
 <html lang="fr">
   <head>
     <meta charset="utf-8">

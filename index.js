@@ -221,6 +221,23 @@ function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTime2").val("");
 }
 
+////
+function chatTest(ev) {                       // chatGPT test
+  $.ajax({
+    'url': 'chatgpttest.php',
+    'type': 'get',
+    'complete': function(xhr, result) {
+      if (result != 'success') {
+        alert ( 'Erreur API OpenAI !');
+      }
+      else {
+        var reponse = xhr.responseText;
+        console.log(reponse);
+      }
+    }
+  });
+}
+
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
@@ -546,25 +563,7 @@ var flagEditTrash;
 var evoCalEvents;
 
 
-/////////////////////////////////////////////    ChatGPT
-
-
-    $.ajax({
-      'url': 'chatgpttest.php',
-      'type': 'get',
-      'complete': function(xhr, result) {
-        if (result != 'success') {
-          alert ( 'Erreur réseau. Protocole non sauvé.', 'Stroop error!');
-        }
-        else {
-          var reponse = xhr.responseText;
-          console.log(reponse);
-        }
-      }
-    });
-
-
-// *****************************************************  
+// *****************************************************
 /* $(some button).on("click", function (ev) {
   let label = $("#modalOntoTree").find("#ontoTree-title").text();
   let node = deepFindNodeByLabel(label, ontoTree);
