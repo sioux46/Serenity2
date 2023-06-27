@@ -238,6 +238,27 @@ function chatTest(ev) {                       // chatGPT test
   });
 }
 
+////
+function pythonTest(ev) {                       // python test
+  const data = {
+    param1: '3',
+    param2: '5'
+  };
+
+  fetch('testPython.py', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the server's response here
+    console.log(data.result);
+  })
+  .catch(error => {
+    // Handle any errors that occur during the request
+    console.error(error);
+  });
+}
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
