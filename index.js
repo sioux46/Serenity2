@@ -245,7 +245,7 @@ function pythonTest(ev) {                       // python test
     param2: '5'
   };
 
-  fetch('testPython.py', {
+  fetch('testPythonPOST.py', {
     method: 'POST',
     body: JSON.stringify(data)
   })
