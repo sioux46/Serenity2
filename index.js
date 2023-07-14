@@ -238,6 +238,7 @@ function chatTest(ev) {                       // chatGPT test
   });
 }
 
+/*
 ////
 function pythonTest(ev) {                       // python test
   const data = {
@@ -257,6 +258,30 @@ function pythonTest(ev) {                       // python test
   .catch(error => {
     // Handle any errors that occur during the request
     console.error(error);
+  });
+}
+*/
+
+////
+function pythonTest(ev) {                       // python test
+  const data = {
+    param1: '3',
+    param2: '5'
+  };
+
+  $.ajax({
+    url: 'testPythonPOST.py',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+    success: function(response) {
+      // Handle the server's response here
+      console.log(response.result);
+    },
+    error: function(error) {
+      // Handle any errors that occur during the request
+      console.error(error);
+    }
   });
 }
 
