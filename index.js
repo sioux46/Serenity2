@@ -225,7 +225,8 @@ function clearEventModal(ev) {                // clear fields
 function chatTest(ev) {                       // chatGPT test
   $.ajax({
     'url': 'chatgpttest.php',
-    'type': 'get',
+    'type': 'post',
+    'data': { model: JSON.stringify('gpt-3.5-turbo') },
     'complete': function(xhr, result) {
       if (result != 'success') {
         alert ( 'Erreur API OpenAI !');
