@@ -222,11 +222,33 @@ function clearEventModal(ev) {                // clear fields
 }
 
 ////
-function chatTest(ev) {                       // chatGPT test
+function chatTest(mod, temp, sty, userCont, det) {                       // chatGPT test
+  let model, temperature, style;
+  if (!mod) model = 'gpt-3.5-turbo-0613';
+  else model = mod;
+
+  if (!temp) temperature = 0.7;
+  else temperature = temp;
+
+  if (!sty) style = 'C3PO, le robot maitre d\'hotel de Star Wars';
+  else if ( sty == 'none' ) style = '';
+  else style = sty;
+
+  if (!userCont) userContent = 'Pouvez-vous regarder le temps fera-t-il demain à Paris ?';
+  else userContent = userCont;
+
+  details = det;
+
   $.ajax({
     'url': 'chatgpttest.php',
     'type': 'post',
-    'data': { model: JSON.stringify('gpt-3.5-turbo') },
+    'data': {
+              model: JSON.stringify(model),
+              temperature: JSON.stringify(temperature),
+              style: JSON.stringify(style),
+              userContent: JSON.stringify(userContent),
+              details: JSON.stringify(details),
+            },
     'complete': function(xhr, result) {
       if (result != 'success') {
         alert ( 'Erreur API OpenAI !');
@@ -606,6 +628,8 @@ var ontoTree = [];
 ontoTree = importTree(importData);
 
 var calendar;
+// exemple: calendar.getActiveDate();
+
 var flagEditTrash;
 var evoCalEvents;
 
