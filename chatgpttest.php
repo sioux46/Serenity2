@@ -8,6 +8,7 @@ $headers = array(
     'Authorization: Bearer ' . $apiKey
 );
 
+$newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
@@ -15,21 +16,39 @@ $userContent = json_decode($_POST['userContent'], true);
 $details = json_decode($_POST['details'], true);
 
 if ( $style ) $style = " en vous exprimant dans le style de $style ";
-if ( $details ) $details = " et en donnant $details de détails ";
+if ( $details ) $details = " et $details ";
 
 // echo ' ' . $details . ' ';
 
-$data = array(
-    'model' => $model,
-    'messages' => array(
+if ( $newChat ) {
+  $data = array(
+      'model' => $model,
+      'messages' => array(
 
-        array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur de maitre et mon secrétaire particulier et mon assistant. Je suis votre client et je m\'appelle Seb. Vous devez répondre à mes questions $style $details"),
+          array('role' =>'system', 'content' => "Vous: Au revoir, mettons fin à cette conversation."),
+          array('role' => 'user', 'content' => "Bonjour, J'ai une nouvelle question"),
 
-        array('role' => 'user', 'content' => $userContent),
-    ),
-    // 'max_tokens' => 100,
-    'temperature' => $temperature
-);
+          array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
+
+          array('role' => 'user', 'content' => $userContent),
+      ),
+      // 'max_tokens' => 100,
+      'temperature' => $temperature
+  );
+}
+else {
+  $data = array(
+      'model' => $model,
+      'messages' => array(
+
+          array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
+
+          array('role' => 'user', 'content' => $userContent),
+      ),
+      // 'max_tokens' => 100,
+      'temperature' => $temperature
+  );
+}
 
 $options = array(
     'http' => array(
@@ -49,6 +68,6 @@ if ($response === false) {
     $responseData = json_decode($response, true);
     // Access the assistant's reply
     $assistantReply = end($responseData['choices'])['message']['content'];
-    echo 'Norbert: ' . $assistantReply;
+    echo $assistantReply;
 }
 ?>

@@ -150,21 +150,21 @@ function initOntoTreeChoose(label, move, labs) {
   if ( labs ) labels = labs;
   else labels = deepFindChildsLabels(label);
 
-  let lastParent = $("#ontoTree-choose").find("#ontoTree-parent").text();
-  $("#ontoTree-choose").find("#ontoTree-parent").text(label);
+  let lastParent = $("#param").find("#ontoTree-parent").text();
+  $("#param").find("#ontoTree-parent").text(label);
 
   // clear
   for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
     let item = "#ontoTree-item" + i;
-    $("#ontoTree-choose").find(item).css({"border-bottom-width": 0});
-    $("#ontoTree-choose").find(item).text("");
-    $("#ontoTree-choose").find(item).css({"display": "none"});
+    $("#param").find(item).css({"border-bottom-width": 0});
+    $("#param").find(item).text("");
+    $("#param").find(item).css({"display": "none"});
   }
   // feel
   for ( let i = 0; i < labels.length; i++ ) {
     let item = "#ontoTree-item" + i;
-    $("#ontoTree-choose").find(item).css({"display": "inline-block"});
-    $("#ontoTree-choose").find(item).text(labels[i]);
+    $("#param").find(item).css({"display": "inline-block"});
+    $("#param").find(item).text(labels[i]);
   }
   // animate
 
@@ -222,19 +222,22 @@ function clearEventModal(ev) {                // clear fields
 }
 
 ////
-function chatTest(mod, temp, sty, userCont, det) {                       // chatGPT test
-  let model, temperature, style;
+function chatTest(newCh, mod, temp, sty, userCont, det) {                       // chatGPT test
+  let newChat, model, temperature, style, détails;
+
+  newChat = newCh;
+
   if (!mod) model = 'gpt-3.5-turbo-0613';
   else model = mod;
 
-  if (!temp) temperature = 0.7;
+  if (!temp) temperature = 0.5;
   else temperature = temp;
 
   if (!sty) style = 'C3PO, le robot maitre d\'hotel de Star Wars';
   else if ( sty == 'none' ) style = '';
   else style = sty;
 
-  if (!userCont) userContent = 'Pouvez-vous regarder le temps fera-t-il demain à Paris ?';
+  if (!userCont) userContent = 'Pouvez-vous me dire le temps fera-t-il demain à Paris ?';
   else userContent = userCont;
 
   details = det;
@@ -243,6 +246,7 @@ function chatTest(mod, temp, sty, userCont, det) {                       // chat
     'url': 'chatgpttest.php',
     'type': 'post',
     'data': {
+              newChat: JSON.stringify(newChat),
               model: JSON.stringify(model),
               temperature: JSON.stringify(temperature),
               style: JSON.stringify(style),
@@ -256,9 +260,41 @@ function chatTest(mod, temp, sty, userCont, det) {                       // chat
       else {
         var reponse = xhr.responseText;
         console.log(reponse);
+        return reponse;
       }
     }
   });
+}
+
+////                             Speech Synthesis
+function doSpeechSynth (text) {
+  var ut = new SpeechSynthesisUtterance();
+ut.text = text;
+ut.lang = 'fr-FR';
+ut.rate = 1;
+// ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
+speechSynthesis.speak(ut);
+
+}
+
+////                            Speech Recognition
+function startStopSpeechRecog () {
+  if (recognizing) {
+    recognition.stop();
+    resetRecog();
+  }
+  else {
+    recognition.start();
+    recognizing = true;
+    console.log("Click to Stop");
+}
+
+}
+
+////
+function resetRecog() {
+  recognizing = false;
+  console.log("Click to Speak");
 }
 
 /*
@@ -398,25 +434,25 @@ $("#startButton").on("click", function (ev) {
 
 /////////////////////////////////////////////////   ONTO TREE   /////
 
-/////       show ontoTree-choose page
+/////       show shedule page
 $("#sheduleButton").on("click", function (ev) {
   showPage("#shedule");
   initOntoTreeChoose(ontoTree[0]);
 });
 
-/////       show ontoTree-choose page
+/////       show voyage page
 $("#voyageButton").on("click", function (ev) {
   showPage("#voyage");
   initOntoTreeChoose(ontoTree[0]);
 });
 
-/////       show ontoTree-choose page
+/////       show param page
 $("#paramButton").on("click", function (ev) {
-  showPage("#ontoTree-choose");
+  showPage("#param");
   initOntoTreeChoose(ontoTree[0]);
 });
 
-/////        change ontoTree-parent within ontoTree-choose WITH DIALOG
+/////        change ontoTree-parent within param WITH DIALOG
 $("#ontoTree-parent").on("click", function (ev) {
 //  $("#inputModal").modal("show");
 });
@@ -444,7 +480,7 @@ $("#buttonParentModalChooseLabel").on("click", function (ev) {
 
 ////////
 $(".ontoTree-btn").on("mouseup", function (ev) {
-  $("#ontoTree-choose").trigger("click");
+  $("#param").trigger("click");
 });
 
 ////////
@@ -632,6 +668,23 @@ var calendar;
 
 var flagEditTrash;
 var evoCalEvents;
+
+//                              init SpeechRecognition
+var recognizing = false;
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var recognition = new SpeechRecognition();
+recognition.continuous = true;
+resetRecog();
+recognition.onend = resetRecog;
+recognition.onresult = function (event) {
+  for (var i = event.resultIndex; i < event.results.length; ++i) {
+    if (event.results[i].isFinal) {
+      // textarea.value += event.results[i][0].transcript;
+      console.log(event.results[i][0].transcript);
+    }
+  }
+};
+
 
 
 // *****************************************************

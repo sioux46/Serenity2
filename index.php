@@ -3,6 +3,7 @@
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
 $version = "3.06.26.1";
 ?>
+<!DOCTYPE html>
 <html lang="fr">
   <head>
     <meta charset="utf-8">
@@ -29,6 +30,7 @@ $version = "3.06.26.1";
   <!-- -->
   <script src="data.js"></script>
   <script src="index.js"></script>
+  <script src="speech.js"></script>
 <!-- ************************************************************************** -->
   <div id="DIVA">
 <!-- TOP BAR -->
@@ -76,9 +78,9 @@ $version = "3.06.26.1";
     </div>
   </div>
   <!--                     -->
-  <!--  ontoTree-choose    -->
+  <!--  param    -->
   <!--                     -->
-  <div id="ontoTree-choose" class="s-page">
+  <div id="param" class="s-page">
     <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
         <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">

@@ -71,11 +71,11 @@ body {
   font-weight: 600;
 }
 
-#ontoTree-choose {
+#param {
   z-index: 400;
 }
 
-#ontoTree-choose div {
+#param div {
   position: relative;
 }
 
