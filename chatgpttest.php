@@ -41,7 +41,7 @@ else {
       'model' => $model,
       'messages' => array(
 
-          array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
+        //  array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
 
           array('role' => 'user', 'content' => $userContent),
       ),

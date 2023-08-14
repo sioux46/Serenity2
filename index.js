@@ -260,24 +260,24 @@ function chatTest(newCh, mod, temp, sty, userCont, det) {                       
       else {
         var reponse = xhr.responseText;
         console.log(reponse);
-        return reponse;
+        doSpeechSynth(reponse);
+        // return reponse;
       }
     }
   });
 }
 
-////                             Speech Synthesis
+////                                    Speech Synthesis
 function doSpeechSynth (text) {
   var ut = new SpeechSynthesisUtterance();
-ut.text = text;
-ut.lang = 'fr-FR';
-ut.rate = 1;
-// ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
-speechSynthesis.speak(ut);
-
+  ut.text = text;
+  ut.lang = 'fr-FR';
+  ut.rate = 1;
+  // ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
+  speechSynthesis.speak(ut);
 }
 
-////                            Speech Recognition
+////                                   Speech Recognition
 function startStopSpeechRecog () {
   if (recognizing) {
     recognition.stop();
@@ -287,8 +287,7 @@ function startStopSpeechRecog () {
     recognition.start();
     recognizing = true;
     console.log("Click to Stop");
-}
-
+  }
 }
 
 ////
@@ -296,6 +295,39 @@ function resetRecog() {
   recognizing = false;
   console.log("Click to Speak");
 }
+
+////
+function initRecognition() {
+
+  let SpeechRecog = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = new SpeechRecog();
+
+  recognition.continuous = false;
+  recognition.lang = "fr-FR";
+  // recognition.interimResults = true;
+
+  resetRecog();
+  recognition.onend = resetRecog;
+  recognition.onresult = function (event) {
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        let result = event.results[i][0].transcript;
+        console.log(result);
+        recogResult = result;
+        chatTest(true, "", "", "none", result, "de façon concise");
+      }
+    }
+  };
+  return recognition;
+}
+
+////
+function recogChatSynt() {
+
+  startStopSpeechRecog();
+
+}
+
 
 /*
 ////
@@ -671,19 +703,9 @@ var evoCalEvents;
 
 //                              init SpeechRecognition
 var recognizing = false;
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-var recognition = new SpeechRecognition();
-recognition.continuous = true;
-resetRecog();
-recognition.onend = resetRecog;
-recognition.onresult = function (event) {
-  for (var i = event.resultIndex; i < event.results.length; ++i) {
-    if (event.results[i].isFinal) {
-      // textarea.value += event.results[i][0].transcript;
-      console.log(event.results[i][0].transcript);
-    }
-  }
-};
+var recognition = initRecognition();
+var recogResult = "";
+
 
 
 
