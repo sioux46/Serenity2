@@ -221,8 +221,8 @@ function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTime2").val("");
 }
 
-////
-function chatTest(newCh, mod, temp, sty, userCont, det) {                       // chatGPT test
+///////////////////////////////////////////////////////////////////////////////////////////
+function chatTest(newCh, mod, temp, sty, userCont, det) {                       // chatGPT
   let newChat, model, temperature, style, détails;
 
   newChat = newCh;
@@ -246,6 +246,7 @@ function chatTest(newCh, mod, temp, sty, userCont, det) {                       
     'url': 'chatgpttest.php',
     'type': 'post',
     'data': {
+              chatBuffer: JSON.stringify(chatBuffer),
               newChat: JSON.stringify(newChat),
               model: JSON.stringify(model),
               temperature: JSON.stringify(temperature),
@@ -260,41 +261,16 @@ function chatTest(newCh, mod, temp, sty, userCont, det) {                       
       else {
         var reponse = xhr.responseText;
         console.log(reponse);
-        doSpeechSynth(reponse);
+        let userMessage = { role: "assistant", content: reponse };
+        chatBuffer.push(userMessage);
+        doSpeechSynth(reponse.replace(/-/g, match => " "));
         // return reponse;
       }
     }
   });
 }
 
-////                                    Speech Synthesis
-function doSpeechSynth (text) {
-  var ut = new SpeechSynthesisUtterance();
-  ut.text = text;
-  ut.lang = 'fr-FR';
-  ut.rate = 1;
-  // ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
-  speechSynthesis.speak(ut);
-}
-
-////                                   Speech Recognition
-function startStopSpeechRecog () {
-  if (recognizing) {
-    recognition.stop();
-    resetRecog();
-  }
-  else {
-    recognition.start();
-    recognizing = true;
-    console.log("Click to Stop");
-  }
-}
-
-////
-function resetRecog() {
-  recognizing = false;
-  console.log("Click to Speak");
-}
+//                                  *** Speech Recognition ***
 
 ////
 function initRecognition() {
@@ -311,10 +287,21 @@ function initRecognition() {
   recognition.onresult = function (event) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        let result = event.results[i][0].transcript;
-        console.log(result);
-        recogResult = result;
-        chatTest(true, "", "", "none", result, "de façon concise");
+        recogResult = event.results[i][0].transcript;
+        console.log(recogResult);
+        if ( newChat ) chatBuffer = [];
+        newChat = false;
+        let userMessage = { role: "user", content: recogResult };
+        chatBuffer.push(userMessage);
+
+  //  ChatGPT **********************************************************
+  //            newChat, model, temperature, style, userContent, details
+
+        if ( recogResult )
+          chatTest(newChat, "", reponseTemperature, reponseStyle, recogResult, responseDetail);
+
+
+  //  ******************************************************************
       }
     }
   };
@@ -322,59 +309,57 @@ function initRecognition() {
 }
 
 ////
+function startStopRecog () {
+  if (recognizing) {
+    recognition.stop();
+    resetRecog();
+  }
+  else {
+    recognition.start();
+    recognizing = true;
+    console.log("Écoute");
+  }
+}
+
+////
+function resetRecog() {
+  recognizing = false;
+  console.log("Réponse: ");
+}
+
+////                                  ***  Speech Synthesis ***
+function doSpeechSynth (text) {
+  var ut = new SpeechSynthesisUtterance();
+  ut.text = text;
+  ut.lang = 'fr-FR';
+  ut.rate = 0.95;
+  // ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
+  ut.onend = function(e) {
+    recogResult = "";
+    startStopRecog();
+  };
+
+
+  window.speechSynthesis.speak(ut);
+}
+
+////                            KEYBOARD EVENTS
+$(document).keydown(function (event) {
+  if ( event.which == 32 ) {
+    // if ( window.speechSynthesis.paused ) window.speechSynthesis.resume();
+    // else window.speechSynthesis.pause();
+    if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  }
+});
+
+/////////////////////////////////////////////////////
+////                             TRIPLE PLAY
 function recogChatSynt() {
-
-  startStopSpeechRecog();
-
+  startStopRecog();
 }
 
 
-/*
-////
-function pythonTest(ev) {                       // python test
-  const data = {
-    param1: '3',
-    param2: '5'
-  };
 
-  fetch('testPythonPOST.py', {
-    method: 'POST',
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => {
-    // Handle the server's response here
-    console.log(data.result);
-  })
-  .catch(error => {
-    // Handle any errors that occur during the request
-    console.error(error);
-  });
-}
-*/
-
-////
-function pythonTest(ev) {                       // python test
-  const data = {
-    param1: '3',
-    param2: '5'
-  };
-
-  $.ajax({
-    url: 'testPythonPOST.py',
-    type: 'POST',
-    data: JSON.stringify(data),
-    contentType: 'application/json',
-    success: function(response) {
-      // Handle the server's response here
-      console.log(response.result);
-    },
-    error: function(error) {
-      // Handle any errors that occur during the request
-      console.error(error);
-    }
-  });
-}
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
 ///////////////////////////////////////////////////////////////////////
@@ -385,67 +370,6 @@ function pythonTest(ev) {                       // python test
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
-/*      open text file from client device   ****************
-
-  <input id="openTxtFileInput" type="file" accept=".txt" style="display:none;">
-
-  <button id="boutInputPhase3" class="btn btn-lg btn-success btn-block"  style="display:none";>Choisir la liste des mots</button>
-
-  // click on #boutInputPhase3
-  $("#boutInputPhase3").on("click", function () {
-    $("#openTxtFileInput").attr("accept", ".txt");
-    $("#openTxtFileInput").trigger("click");
-  });
-
-  // lecture fichier .txt pour phase 3
-function readFile(ev) {
-  var file = ev.target.files[0];
-  if ( !file || !( file.name.match(/\.txt$/)) ) return;
-  var reader = new FileReader();
-  reader.onload = function(ev2) {
-    try {
-      custom_Phase3 = JSON.parse(ev2.target.result);
-      objTest3 = buildObjTab(custom_Phase3);
-    } catch (ex) {
-      alert("Erreur de lecture: vérifier la syntaxe du fichier");
-    }
-    $("#openTxtFileInput").val(""); // erase previous value
-  };
-  reader.readAsText(file);
-}
-
-// From GPT
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Load Text File</title>
-  </head>
-  <body>
-    <input type="file" id="file-input">
-    <pre id="file-content"></pre>
-    <script>
-      function loadTextFile() {
-        const fileInput = document.getElementById('file-input');
-        const fileContent = document.getElementById('file-content');
-
-        fileInput.addEventListener('change', (event) => {
-          const file = event.target.files[0];
-          const reader = new FileReader();
-
-          reader.onload = () => {
-            fileContent.innerText = reader.result;
-          };
-
-          reader.readAsText(file);
-        });
-      }
-
-      loadTextFile();
-    </script>
-  </body>
-</html>
-
-*/
 
 //////////////////////////////////////////////////////////////////////
 
@@ -705,19 +629,9 @@ var evoCalEvents;
 var recognizing = false;
 var recognition = initRecognition();
 var recogResult = "";
-
-
-
-
-// *****************************************************
-/* $(some button).on("click", function (ev) {
-  let label = $("#modalOntoTree").find("#ontoTree-title").text();
-  let node = deepFindNodeByLabel(label, ontoTree);
-  let subLabels = deepFindChildsLabels(label);
-  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
-    var item = "#ontoTree-item" + i;
-    $("#modalOntoTree").find(item).text(subLabels[i]);
-  }
-  $("#modalOntoTree").modal("handleUpdate").modal("show");
-}); */
-// *********************************************************
+//                               init ChatGPT
+var chatBuffer = [];
+var newChat = true;
+var responseDetail = "de façon concise";
+var reponseStyle = "none";
+var reponseTemperature = 0.5;

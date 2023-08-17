@@ -8,6 +8,8 @@ $headers = array(
     'Authorization: Bearer ' . $apiKey
 );
 
+$chatBuffer = json_decode($_POST['chatBuffer'], true);
+
 $newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
@@ -15,40 +17,30 @@ $style = json_decode($_POST['style'], true);
 $userContent = json_decode($_POST['userContent'], true);
 $details = json_decode($_POST['details'], true);
 
+
 if ( $style ) $style = " en vous exprimant dans le style de $style ";
 if ( $details ) $details = " et $details ";
 
 // echo ' ' . $details . ' ';
 
-if ( $newChat ) {
+$messages = $chatBuffer;
+// for ( $i = 0; $i < count($messages); $i++ ) {
+// }
+
+$sharedSysMessage = array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Monsieur Seb. Vous devez répondre gentiment à mes questions $style $details Vous devez chercher les réponses sur internet si necessaire.");
+
+// echo "before";
+// print_r($messages);
+
+array_push($sharedSysMessage, $messages);
+
   $data = array(
       'model' => $model,
-      'messages' => array(
-
-          array('role' =>'system', 'content' => "Vous: Au revoir, mettons fin à cette conversation."),
-          array('role' => 'user', 'content' => "Bonjour, J'ai une nouvelle question"),
-
-          array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
-
-          array('role' => 'user', 'content' => $userContent),
-      ),
+      'messages' => $messages,
       // 'max_tokens' => 100,
       'temperature' => $temperature
   );
-}
-else {
-  $data = array(
-      'model' => $model,
-      'messages' => array(
-
-        //  array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Seb. Vous devez répondre à mes questions $style $details"),
-
-          array('role' => 'user', 'content' => $userContent),
-      ),
-      // 'max_tokens' => 100,
-      'temperature' => $temperature
-  );
-}
+// }
 
 $options = array(
     'http' => array(

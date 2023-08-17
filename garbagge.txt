@@ -1,0 +1,128 @@
+
+
+
+// *****************************************************
+/* $(some button).on("click", function (ev) {
+  let label = $("#modalOntoTree").find("#ontoTree-title").text();
+  let node = deepFindNodeByLabel(label, ontoTree);
+  let subLabels = deepFindChildsLabels(label);
+  for ( let i = 0; i < ONTO_TREE_ITEMS_NB; i++ ) {
+    var item = "#ontoTree-item" + i;
+    $("#modalOntoTree").find(item).text(subLabels[i]);
+  }
+  $("#modalOntoTree").modal("handleUpdate").modal("show");
+}); */
+// *********************************************************
+
+
+
+/*      open text file from client device   ****************
+
+  <input id="openTxtFileInput" type="file" accept=".txt" style="display:none;">
+
+  <button id="boutInputPhase3" class="btn btn-lg btn-success btn-block"  style="display:none";>Choisir la liste des mots</button>
+
+  // click on #boutInputPhase3
+  $("#boutInputPhase3").on("click", function () {
+    $("#openTxtFileInput").attr("accept", ".txt");
+    $("#openTxtFileInput").trigger("click");
+  });
+
+  // lecture fichier .txt pour phase 3
+function readFile(ev) {
+  var file = ev.target.files[0];
+  if ( !file || !( file.name.match(/\.txt$/)) ) return;
+  var reader = new FileReader();
+  reader.onload = function(ev2) {
+    try {
+      custom_Phase3 = JSON.parse(ev2.target.result);
+      objTest3 = buildObjTab(custom_Phase3);
+    } catch (ex) {
+      alert("Erreur de lecture: vérifier la syntaxe du fichier");
+    }
+    $("#openTxtFileInput").val(""); // erase previous value
+  };
+  reader.readAsText(file);
+}
+
+// From GPT
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Load Text File</title>
+  </head>
+  <body>
+    <input type="file" id="file-input">
+    <pre id="file-content"></pre>
+    <script>
+      function loadTextFile() {
+        const fileInput = document.getElementById('file-input');
+        const fileContent = document.getElementById('file-content');
+
+        fileInput.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+
+          reader.onload = () => {
+            fileContent.innerText = reader.result;
+          };
+
+          reader.readAsText(file);
+        });
+      }
+
+      loadTextFile();
+    </script>
+  </body>
+</html>
+
+*/
+
+
+/*
+////
+function pythonTest(ev) {                       // python test
+  const data = {
+    param1: '3',
+    param2: '5'
+  };
+
+  fetch('testPythonPOST.py', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the server's response here
+    console.log(data.result);
+  })
+  .catch(error => {
+    // Handle any errors that occur during the request
+    console.error(error);
+  });
+}
+
+
+////
+function pythonTest(ev) {                       // python test
+  const data = {
+    param1: '3',
+    param2: '5'
+  };
+
+  $.ajax({
+    url: 'testPythonPOST.py',
+    type: 'POST',
+    data: JSON.stringify(data),
+    contentType: 'application/json',
+    success: function(response) {
+      // Handle the server's response here
+      console.log(response.result);
+    },
+    error: function(error) {
+      // Handle any errors that occur during the request
+      console.error(error);
+    }
+  });
+}
+*/
