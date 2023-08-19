@@ -8,31 +8,23 @@ $headers = array(
     'Authorization: Bearer ' . $apiKey
 );
 
-$chatBuffer = json_decode($_POST['chatBuffer'], true);
+$messages = json_decode($_POST['chatBuffer'], true);
 
 $newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
-$userContent = json_decode($_POST['userContent'], true);
+// $userContent = json_decode($_POST['userContent'], true);
 $details = json_decode($_POST['details'], true);
 
+/*
+$meteo3 = array('role' => "user", 'content' => "Est-ce qu'il va pleuvoir demain ?");
+$meteo4 = array('role' => "assistant", 'content' =>  "Oui, il y a 40 % de chances de pluie demain.");
+*/
 
-if ( $style ) $style = " en vous exprimant dans le style de $style ";
-if ( $details ) $details = " et $details ";
-
-// echo ' ' . $details . ' ';
-
-$messages = $chatBuffer;
-// for ( $i = 0; $i < count($messages); $i++ ) {
-// }
-
-$sharedSysMessage = array('role' => 'system', 'content' => "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et je m'appelle Monsieur Seb. Vous devez répondre gentiment à mes questions $style $details Vous devez chercher les réponses sur internet si necessaire.");
-
-// echo "before";
-// print_r($messages);
-
-array_push($sharedSysMessage, $messages);
+/* echo "before";
+print_r($chatBuffer);
+exit; */
 
   $data = array(
       'model' => $model,

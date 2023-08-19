@@ -189,7 +189,7 @@ function editClick() {
 }
 
 ////
-function sortEvents(date) { // date
+function sortCalendarEvents(date) { // date
   // let test = evoCalEvents;
   let eventIndex = [];
   let eventRank = 0;
@@ -221,38 +221,62 @@ function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTime2").val("");
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-function chatTest(newCh, mod, temp, sty, userCont, det) {                       // chatGPT
-  let newChat, model, temperature, style, détails;
+//////////////////////////////////////////////////////////////  D I A L O G
+///////////////////////////////////////////////////
 
-  newChat = newCh;
+////
+function questionAnalyse(question) {          // questionAnalyse
 
-  if (!mod) model = 'gpt-3.5-turbo-0613';
-  else model = mod;
+  if ( !question ) return;
 
-  if (!temp) temperature = 0.5;
-  else temperature = temp;
+  if ( question.match(/^(H|h)ello Norbert$/) ) {
+    var reponse = "Bonjour Monsieur Seb. Que puij faire pour vous ?";
 
-  if (!sty) style = 'C3PO, le robot maitre d\'hotel de Star Wars';
-  else if ( sty == 'none' ) style = '';
-  else style = sty;
+    console.log(reponse);
+    if ( responseMode == "audio" ) {
+      doSpeechSynth(reponse);
+    }
+    else {
+      console.log("Réponse texte");
+    }
+  }
 
-  if (!userCont) userContent = 'Pouvez-vous me dire le temps fera-t-il demain à Paris ?';
-  else userContent = userCont;
+  else {
+    questionAnswer = "chatGPT" ;
+    if ( newChat ) {
+      chatBuffer = [];
+      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Vous êtes un assistant d'informations météorologiques. Répondez aux questions sur la météo. Je suis votre client et je m'appelle Monsieur Seb. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
+      chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui ?" });
+      chatBuffer.push({ role: "user", content: "Le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
+      newChat = false;
+    }
 
-  details = det;
+    // chatBuffer.push({ role: "system", content: "Exprimez-vous dans le style de C3PO, le robot maitre d'hotel de Star Wars" });
+    chatBuffer.push({ role: "system", content: "Exprimez-vous comme un chauffeur de maitre et de façon concise" });
+
+    chatBuffer.push({ role: "assistant", content: question });
+
+
+    //********************************************************** ChatGPT
+    // Load globals before call
+      chatGPTcall();
+    //******************************************************************
+  }
+}
+
+/////
+function chatGPTcall() {       /***** chatGPT call *****/
 
   $.ajax({
-    'url': 'chatgpttest.php',
+    'url': 'chatGPT.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(chatBuffer),
               newChat: JSON.stringify(newChat),
-              model: JSON.stringify(model),
-              temperature: JSON.stringify(temperature),
-              style: JSON.stringify(style),
-              userContent: JSON.stringify(userContent),
-              details: JSON.stringify(details),
+              model: JSON.stringify(reponseModel),
+              temperature: JSON.stringify(reponseTemperature),
+              style: JSON.stringify(reponseStyle),
+              details: JSON.stringify(responseDetail),
             },
     'complete': function(xhr, result) {
       if (result != 'success') {
@@ -260,17 +284,22 @@ function chatTest(newCh, mod, temp, sty, userCont, det) {                       
       }
       else {
         var reponse = xhr.responseText;
-        console.log(reponse);
-        let userMessage = { role: "assistant", content: reponse };
-        chatBuffer.push(userMessage);
-        doSpeechSynth(reponse.replace(/-/g, match => " "));
+        console.log("Réponse: " + reponse);
+        let assistantMessage = { role: "assistant", content: reponse };
+        chatBuffer.push(assistantMessage);
+        if ( responseMode == "audio" ) {
+          doSpeechSynth(reponse.replace(/-/g, match => " "));
+        }
+        else {
+          console.log("Réponse texte");
+        }
         // return reponse;
       }
     }
   });
 }
 
-//                                  *** Speech Recognition ***
+//                                          *** Speech RECOGNITION ***
 
 ////
 function initRecognition() {
@@ -282,34 +311,47 @@ function initRecognition() {
   recognition.lang = "fr-FR";
   // recognition.interimResults = true;
 
-  resetRecog();
+  // resetRecog();
   recognition.onend = resetRecog;
   recognition.onresult = function (event) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         recogResult = event.results[i][0].transcript;
         console.log(recogResult);
-        if ( newChat ) chatBuffer = [];
-        newChat = false;
-        let userMessage = { role: "user", content: recogResult };
-        chatBuffer.push(userMessage);
+        questionAnalyse(recogResult);
 
-  //  ChatGPT **********************************************************
-  //            newChat, model, temperature, style, userContent, details
-
-        if ( recogResult )
-          chatTest(newChat, "", reponseTemperature, reponseStyle, recogResult, responseDetail);
-
-
-  //  ******************************************************************
       }
     }
   };
   return recognition;
 }
 
+/*
 ////
-function startStopRecog () {
+function startRecog() {
+  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  if (recognizing) {
+    recognition.stop();
+    resetRecog();
+  }
+  recognition.start();
+  recognizing = true;
+  console.log("Écoute");
+}
+
+////
+function stopRecog() {
+  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  if (recognizing) {
+    recognition.stop();
+    resetRecog();
+  }
+}
+*/
+
+////
+function startStopRecog() { // and stop speech
+  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   if (recognizing) {
     recognition.stop();
     resetRecog();
@@ -324,21 +366,21 @@ function startStopRecog () {
 ////
 function resetRecog() {
   recognizing = false;
-  console.log("Réponse: ");
+  recogResult = "";
+  console.log("Fin d'écoute");
 }
 
-////                                  ***  Speech Synthesis ***
+////                                         ***  Speech SYTHESIS ***
 function doSpeechSynth (text) {
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
   ut.lang = 'fr-FR';
-  ut.rate = 0.95;
+  ut.rate = 0.97;
   // ut.onend = function(event) { alert('Finished in ' + event.elapsedTime + ' seconds.'); };
   ut.onend = function(e) {
     recogResult = "";
     startStopRecog();
   };
-
 
   window.speechSynthesis.speak(ut);
 }
@@ -594,7 +636,7 @@ $("#newEventOK").on("click", function (ev) {
   $("#eventModal").modal("hide");   // HIDE MODAL
 
   let activeDate = calendar.$active.events[0].date;
-  sortEvents( activeDate );
+  sortCalendarEvents( activeDate );
   calendar.selectDate( "01/01/2022" ); // refresh date display
   calendar.selectDate( activeDate );
 
@@ -625,6 +667,9 @@ var calendar;
 var flagEditTrash;
 var evoCalEvents;
 
+var questionAnswer = "chatGPT"; // chatGPT v DEVA
+var responseMode = "audio"; // audio v text
+
 //                              init SpeechRecognition
 var recognizing = false;
 var recognition = initRecognition();
@@ -632,6 +677,9 @@ var recogResult = "";
 //                               init ChatGPT
 var chatBuffer = [];
 var newChat = true;
-var responseDetail = "de façon concise";
-var reponseStyle = "none";
+var reponseModel = 'gpt-3.5-turbo-0613';
+var responseDetail = " de façon concise. ";
+// var responseDetail = ". ";
+var reponseStyle = " ";
+// var reponseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars ";
 var reponseTemperature = 0.5;
