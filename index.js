@@ -228,24 +228,40 @@ function clearEventModal(ev) {                // clear fields
 function questionAnalyse(question) {          // questionAnalyse
 
   if ( !question ) return;
+  var reponse = "";
 
-  if ( question.match(/^(H|h)ello Norbert$/) ) {
-    var reponse = "Bonjour Monsieur Seb. Que puij faire pour vous ?";
+  if ( question.match(/^Hello Norbert$/i) ) {
+    reponse = "Bonjour Monsieur. Que puij faire pour vous ?";
+  }
+  else if ( question.match(/(ouvr|affich|montr)/i) &&
+            question.match(/agenda/i) ) {
+    $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
+    reponse = "OK";
+  }
 
-    console.log(reponse);
+  else if ( question.match(/(ouvr|affich|montr)/i) &&
+            question.match(/paramètre/i) ) {
+    $("#startButton").trigger("click");
+    $("#paramButton").trigger("click");
+    reponse = "OK";
+  }
+  
+  //-----------------------
+  if ( reponse ) {
     if ( responseMode == "audio" ) {
+      console.log("Réponse audio:");
       doSpeechSynth(reponse);
     }
-    else {
-      console.log("Réponse texte");
-    }
+    else console.log("Réponse texte:"); // afficher dans log
+    console.log(reponse);
+
   }
 
   else {
     questionAnswer = "chatGPT" ;
     if ( newChat ) {
       chatBuffer = [];
-      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Vous êtes un assistant d'informations météorologiques. Répondez aux questions sur la météo. Je suis votre client et je m'appelle Monsieur Seb. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
+      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Vous êtes un assistant d'informations météorologiques. Répondez aux questions sur la météo. Je suis votre client et mon nom est Monsieur. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
       chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui ?" });
       chatBuffer.push({ role: "user", content: "Le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
       newChat = false;
@@ -430,7 +446,7 @@ $("#startButton").on("click", function (ev) {
   }
 });
 
-/////////////////////////////////////////////////   ONTO TREE   /////
+///////////////////////////////////////////////  SHOW PAGES   /////
 
 /////       show shedule page
 $("#sheduleButton").on("click", function (ev) {
