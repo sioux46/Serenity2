@@ -33,11 +33,22 @@ $version = "3.06.26.1";
   <script src="speech.js"></script>
 <!-- ************************************************************************** -->
   <div id="DIVA">
-<!-- TOP BAR -->
-  <div id="topBar">
-    <button id="startButton" class="btn" type="button">
+<!--           -->
+<!--  TOP BAR  -->
+<!--           -->
+
+  <div id="toolBar">
+    <button id="startButton" class="btn toolbarButton" type="button">
       <img src="icons/carBlue.svg" width=40>
     </button>
+    <div id="dialogButtons">
+      <button id="micButton" class="btn toolbarButton" type="button">
+        <img src="icons/mic-mute-fill.svg" width=40>
+      </button>
+      <button id="speakerButton" class="btn toolbarButton" type="button">
+        <img src="icons/volume-mute-fill.svg" width=40>
+      </button>
+    </div>
   </div>
 <!--            -->
 <!--   START    -->
@@ -57,17 +68,17 @@ $version = "3.06.26.1";
       </div>
     </div>
   </div>
-  <!--                -->
-  <!--    shedule     -->
-  <!--                -->
+<!--                -->
+<!--    shedule     -->
+<!--                -->
   <div id="shedule" class="s-page">
     <div id="shedule-content"> <!--  class="container-fluid" -->
       <div id="evoCalendar"></div>
     </div>
   </div>
-  <!--                -->
-  <!--    voyage      -->
-  <!--                -->
+<!--                -->
+<!--    voyage      -->
+<!--                -->
   <div id="voyage" class="s-page">
     <div  class="d-grid gap-2">
       <div id="voyage-title" class="container-fluid pt-3 pb-3 mb-2 text-white text-center">
@@ -77,9 +88,9 @@ $version = "3.06.26.1";
       </div>
     </div>
   </div>
-  <!--                     -->
-  <!--  param    -->
-  <!--                     -->
+<!--               -->
+<!--     param     -->
+<!--               -->
   <div id="param" class="s-page">
     <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">

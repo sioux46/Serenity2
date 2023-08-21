@@ -138,7 +138,7 @@ function importTree(inData) {
 function showPage(pageID) {
   $("#start").animate({"top": "-50rem"}, 400, function() {
       $("#start").css({"display": "none"});
-      $("#startButton").css("display", "block");
+      $(".toolbarButton").css("display", "inline-block");
       activePage = pageID;
       $(pageID).css({"display": "block"});
   });
@@ -221,8 +221,22 @@ function clearEventModal(ev) {                // clear fields
   $("#eventModal").find("#sEventTime2").val("");
 }
 
+////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////  D I A L O G
 ///////////////////////////////////////////////////
+
+////
+function addCalEvent(time, title, date) {
+  $("#evoCalendar").evoCalendar('addCalendarEvent', [
+    {
+      id: '' + Math.random(),
+      name: time,                 // time/name
+      description: title,
+      date: date, // calendar.$active.event_date,
+      type: "event",
+      color: "#009099", // "#fe7f78",
+    }]);
+}
 
 ////
 function questionAnalyse(question) {          // questionAnalyse
@@ -233,20 +247,24 @@ function questionAnalyse(question) {          // questionAnalyse
   if ( question.match(/^Hello Norbert$/i) ) {
     reponse = "Bonjour Monsieur. Que puij faire pour vous ?";
   }
-  else if ( question.match(/(ouvr|affich|montr)/i) &&
-            question.match(/agenda/i) ) {
-    $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
-    reponse = "OK";
+  //......................................... page change
+  else if ( question.match(/(ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
+    if ( question.match(/agenda/i) ) {
+      $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
+      reponse = "OK";
+    }
+    else if ( question.match(/paramètre/i) ) {
+      $("#startButton").trigger("click"); $("#paramButton").trigger("click");
+      reponse = "OK";
+    }
+    else if ( question.match(/voyage/i) ) {
+      $("#startButton").trigger("click"); $("#voyageButton").trigger("click");
+      reponse = "OK";
+    }
   }
 
-  else if ( question.match(/(ouvr|affich|montr)/i) &&
-            question.match(/paramètre/i) ) {
-    $("#startButton").trigger("click");
-    $("#paramButton").trigger("click");
-    reponse = "OK";
-  }
-  
-  //-----------------------
+
+  //--------------------------------  if reponse
   if ( reponse ) {
     if ( responseMode == "audio" ) {
       console.log("Réponse audio:");
@@ -261,7 +279,7 @@ function questionAnalyse(question) {          // questionAnalyse
     questionAnswer = "chatGPT" ;
     if ( newChat ) {
       chatBuffer = [];
-      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Vous êtes un assistant d'informations météorologiques. Répondez aux questions sur la météo. Je suis votre client et mon nom est Monsieur. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
+      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et mon nom est Monsieur. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
       chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui ?" });
       chatBuffer.push({ role: "user", content: "Le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
       newChat = false;
@@ -435,10 +453,12 @@ $(document).ready(function () {
 /////       show start page
 $("#start").css({"display": "block"});
 
-/////       open start page
+/////////////////////////////////////////////  toolBar buttons  /////
+
+//                                       open start page
 $("#startButton").on("click", function (ev) {
   if ( activePage ) {
-    $("#startButton").css("display", "none");
+    $("#toolBar").css("display", "none");
     $(activePage).css("display", "none");
     activePage = "";
     $("#start").css({"display": "block", "top": "-50rem"});
@@ -446,23 +466,53 @@ $("#startButton").on("click", function (ev) {
   }
 });
 
+//                                             toggle mic
+$("#micButton").on("click", function (ev) {
+  if ( questionMode == "text" ) {
+    questionMode = "audio";
+    $("#micButton img").attr("src", "icons/mic-fill.svg");
+  }
+  else {
+    questionMode = "text";
+    $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
+  }
+  startStopRecog ();
+});
+
+//                                          toggle speaker
+$("#speakerButton").on("click", function (ev) {
+  if ( responseMode == "text" ) {
+    responseMode = "audio";
+    $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
+
+  }
+  else {
+    responseMode = "text";
+    $("#speakerButton img").attr("src", "icons/volume-mute-fill.svg");
+  }
+});
+
+
 ///////////////////////////////////////////////  SHOW PAGES   /////
 
 /////       show shedule page
 $("#sheduleButton").on("click", function (ev) {
   showPage("#shedule");
+  $("#toolBar").css("display", "block");
   initOntoTreeChoose(ontoTree[0]);
 });
 
 /////       show voyage page
 $("#voyageButton").on("click", function (ev) {
   showPage("#voyage");
+  $("#toolBar").css("display", "block");
   initOntoTreeChoose(ontoTree[0]);
 });
 
 /////       show param page
 $("#paramButton").on("click", function (ev) {
   showPage("#param");
+  $("#toolBar").css("display", "block");
   initOntoTreeChoose(ontoTree[0]);
 });
 
@@ -677,14 +727,21 @@ var ontoTree = [];
 
 ontoTree = importTree(importData);
 
-var calendar;
-// exemple: calendar.getActiveDate();
+$("#micButton img").attr("src", "icons/mic-mute-fill.svg");
+$("#micButton").css("background-color", "yellow !important");
+$("#speakerButton img").css("src", "icons/volume-mute-fill.svg");
 
-var flagEditTrash;
+//                                      calendar
+
+var calendar;     // exemple: calendar.getActiveDate();
 var evoCalEvents;
 
+var flagEditTrash;
+
 var questionAnswer = "chatGPT"; // chatGPT v DEVA
-var responseMode = "audio"; // audio v text
+
+var questionMode = "text"; // audio v text
+var responseMode = "text"; // audio v text
 
 //                              init SpeechRecognition
 var recognizing = false;

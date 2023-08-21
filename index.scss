@@ -12,29 +12,44 @@ body {
   // background-color: $colorBeige;
 }
 
-#DIVA {
-  // position: relative;
-}
-
-#topBar {
+#toolBar {
   //position: relative;
   //top: 2.4rem;
   //left: -2.8rem;
-  display: block;
+  display: none;
   z-index: 1000;
-  margin: 2px;
-  // margin-bottom: 0.3rem;
-  // margin-top: 0.3rem;
+  // margin: 2px;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.3rem;
 }
 
-#startButton {
+#dialogButtons {
+  display: inline-block;
+  float: right;
+}
+
+.toolbarButton {
   display: none;
   background-color: white;
-  border: 3px solid $sebDarkBlue;
-  border-radius: 50%;
   vertical-align: initial;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 50%;
+}
+
+#startButton {
+  border: 3px solid $sebDarkBlue;
+}
+
+#micButton {
+  background-color: yellow !important; // $sebDarkBlue
+}
+
+#speakerButton {
+  // border: 3px solid $colorBeige;
+  background-color: yellow !important;
 }
 
 .deva-tittle {

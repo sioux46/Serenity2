@@ -5,20 +5,39 @@ body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-#topBar {
-  display: block;
+#toolBar {
+  display: none;
   z-index: 1000;
-  margin: 2px;
+  margin-right: 2rem;
+  margin-left: 2rem;
+  margin-bottom: 0.3rem;
+  margin-top: 0.3rem;
 }
 
-#startButton {
+#dialogButtons {
+  display: inline-block;
+  float: right;
+}
+
+.toolbarButton {
   display: none;
   background-color: white;
-  border: 3px solid hsl(235, 100%, 30%);
-  border-radius: 50%;
   vertical-align: initial;
   margin-left: auto;
   margin-right: auto;
+  border-radius: 50%;
+}
+
+#startButton {
+  border: 3px solid hsl(235, 100%, 30%);
+}
+
+#micButton {
+  background-color: yellow !important;
+}
+
+#speakerButton {
+  background-color: yellow !important;
 }
 
 .deva-tittle {
