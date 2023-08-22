@@ -199,7 +199,7 @@
             };
             _.$breakpoints = {
                 tablet: 768,
-                mobile: 425
+                mobile: 425,
             };
             _.$UI = {
                 hasSidebar: true,
@@ -538,12 +538,12 @@
             markup = '<div class="calendar-sidebar">'+
                         '<div class="calendar-year">'+
                         '<button class="icon-button" role="button" data-year-val="prev" title="'+_.initials.dates[_.options.language].previousYearText+'">'+
-                                '<span class="chevron-arrow-left"></span>'+
-                            '</button>'+
+                              '<span class="chevron-arrow-left"></span>'+
+                        '</button>'+
                             '&nbsp;<p></p>&nbsp;'+
-                            '<button class="icon-button" role="button" data-year-val="next" title="'+_.initials.dates[_.options.language].nextYearText+'">'+
+                        '<button class="icon-button" role="button" data-year-val="next" title="'+_.initials.dates[_.options.language].nextYearText+'">'+
                                 '<span class="chevron-arrow-right"></span>'+
-                            '</button>'+
+                        '</button>'+
                         '</div><div class="month-list">'+
                         '<ul class="calendar-months">';
                             for(var i = 0; i < _.$label.months.length; i++) {
@@ -586,10 +586,18 @@
             if (!_.$elements.eventEl) _.$elements.eventEl = $(_.$elements.calendarEl).find('.calendar-events');
 
             // if: _.options.sidebarToggler
+            /*                                    SEB+ Original
             if(_.options.sidebarToggler) {
                 $(_.$elements.sidebarEl).append('<span id="sidebarToggler" role="button" aria-pressed title="'+_.initials.dates[_.options.language].closeSidebarText+'"><button class="icon-button"><span class="bars"></span></button></span>');
                 if(!_.$elements.sidebarToggler) _.$elements.sidebarToggler = $(_.$elements.sidebarEl).find('span#sidebarToggler');
             }
+            */
+            //                                    SEB+ Modifié
+            if(_.options.sidebarToggler) {
+                $(_.$elements.sidebarEl).append('<span id="sidebarToggler" role="button" aria-pressed title="'+_.initials.dates[_.options.language].closeSidebarText+'"><button class="icon-button"><span class="chevron-arrow-left"></span></button></span>'); // SEB+
+                if(!_.$elements.sidebarToggler) _.$elements.sidebarToggler = $(_.$elements.sidebarEl).find('span#sidebarToggler');
+            }
+
             if(_.options.eventListToggler) {
                 $(_.$elements.calendarEl).append('<span id="eventListToggler" role="button" aria-pressed title="'+_.initials.dates[_.options.language].closeEventListText+'"><button class="icon-button"><span class="chevron-arrow-right"></span></button></span>');
                 if(!_.$elements.eventListToggler) _.$elements.eventListToggler = $(_.$elements.calendarEl).find('span#eventListToggler');

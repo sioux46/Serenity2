@@ -279,7 +279,7 @@ function questionAnalyse(question) {          // questionAnalyse
     questionAnswer = "chatGPT" ;
     if ( newChat ) {
       chatBuffer = [];
-      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client et mon nom est Monsieur. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
+      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Vous devez répondre gentiment à mes questions " +  reponseStyle + responseDetail + "Vous devez chercher les réponses sur internet si necessaire." });
       chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui ?" });
       chatBuffer.push({ role: "user", content: "Le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
       newChat = false;
@@ -346,7 +346,10 @@ function initRecognition() {
   // recognition.interimResults = true;
 
   // resetRecog();
-  recognition.onend = resetRecog;
+  recognition.onend =  function (event) {
+    // resetRecog();
+    if ( questionMode == "audio" ) startRecog(); // re-enter listening
+  };
   recognition.onresult = function (event) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
@@ -360,14 +363,10 @@ function initRecognition() {
   return recognition;
 }
 
-/*
+
 ////
 function startRecog() {
   if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
-  if (recognizing) {
-    recognition.stop();
-    resetRecog();
-  }
   recognition.start();
   recognizing = true;
   console.log("Écoute");
@@ -376,12 +375,10 @@ function startRecog() {
 ////
 function stopRecog() {
   if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
-  if (recognizing) {
     recognition.stop();
     resetRecog();
-  }
+    recogResult = "";
 }
-*/
 
 ////
 function startStopRecog() { // and stop speech
@@ -471,12 +468,13 @@ $("#micButton").on("click", function (ev) {
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
+    startRecog();
   }
   else {
     questionMode = "text";
     $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
+    stopRecog();
   }
-  startStopRecog ();
 });
 
 //                                          toggle speaker
@@ -735,6 +733,7 @@ $("#speakerButton img").css("src", "icons/volume-mute-fill.svg");
 
 var calendar;     // exemple: calendar.getActiveDate();
 var evoCalEvents;
+$(".calendar-sidebar > .calendar-year").css("padding", "20px");
 
 var flagEditTrash;
 
@@ -751,7 +750,7 @@ var recogResult = "";
 var chatBuffer = [];
 var newChat = true;
 var reponseModel = 'gpt-3.5-turbo-0613';
-var responseDetail = " de façon concise. ";
+var responseDetail = " de façon détaillée. ";
 // var responseDetail = ". ";
 var reponseStyle = " ";
 // var reponseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars ";
