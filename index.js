@@ -267,6 +267,8 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
   //--------------------------------  if reponse
   if ( reponse ) {
     if ( reponseMode == "audio" ) {
+      fillLog("réponse", reponse);
+
       console.log("Réponse audio:");
       doSpeechSynth(reponse);
     }
@@ -279,9 +281,9 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
     questionAnswer = "chatGPT" ;
     if ( newChat ) {
       chatBuffer = [];
-      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Vous devez répondre gentiment à mes questions et vous devez chercher les réponses sur internet si necessaire." });
-      chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui ?" });
-      chatBuffer.push({ role: "assistant", content: "Le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
+      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Vous devez répondre aimablement à mes questions." });
+      chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui à Paris ?" });
+      chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
       newChat = false;
     }
 
@@ -318,6 +320,8 @@ function chatGPTcall() {       /***** chatGPT call *****/
       }
       else {
         var reponse = xhr.responseText;
+        fillLog("reponse", reponse);
+
         console.log("Réponse: " + reponse);
         let assistantMessage = { role: "assistant", content: reponse };
         // assistant response added to buffer, ready for nexte question
@@ -356,6 +360,7 @@ function initRecognition() {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         recogResult = event.results[i][0].transcript;
+        fillLog("question", recogResult);
         console.log(recogResult);
         questionAnalyse(recogResult);
 
@@ -406,10 +411,11 @@ function resetRecog() {
   if ( questionMode == "paused" ) {
     console.log("paused");
   }
-  else {
+  
+  // else {
     // questionMode = "text";
     // $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-  }
+  // }
 }
 
 ////                                         ***  Speech SYTHESIS ***
@@ -436,6 +442,13 @@ function doSpeechSynth (text) {
   };
 
   window.speechSynthesis.speak(ut);
+}
+
+////
+function fillLog(who, text) {
+  if ( who == "question" )
+          $("#logTextarea").val( $("#logTextarea").val() + userName + ": " + text + "\n");
+  else    $("#logTextarea").val( $("#logTextarea").val() + assistantName + ": " + text + "\n");
 }
 
 ////                            KEYBOARD EVENTS
@@ -490,6 +503,8 @@ $("#micButton").on("click", function (ev) {
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
+    reponseMode = "audio";
+    $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
     if ( !window.speechSynthesis.speaking  && !recognizing ) startRecog();
   }
   else {
@@ -776,3 +791,6 @@ var responseDetail = " de façon peu détaillée. ";
 var reponseStyle = " ";
 // var reponseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars ";
 var reponseTemperature = 0.5;
+
+var userName = "Seb";
+var assistantName = "Norbert";

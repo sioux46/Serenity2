@@ -28,6 +28,7 @@ body {
 #dialogButtons {
   display: inline-block;
   float: right;
+  margin-top: 0.6rem;
 }
 
 .toolbarButton {
@@ -40,7 +41,7 @@ body {
 }
 
 #startButton {
-  border: 3px solid $sebDarkBlue;
+  // border: 3px solid $sebDarkBlue;
 }
 
 #micButton {
@@ -189,6 +190,13 @@ body {
   float: right;
 }
 
+#logTextarea {
+  height: 15rem;
+}
+
+#logTitle {
+
+}
 /*
 .parent {
   width: 50%;

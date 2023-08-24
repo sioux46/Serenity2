@@ -39,7 +39,7 @@ $version = "3.06.26.1";
 
   <div id="toolBar">
     <button id="startButton" class="btn toolbarButton" type="button">
-      <img src="icons/carBlue.svg" width=40>
+      <img src="icons/splash.png" width=55>
     </button>
     <div id="dialogButtons">
       <button id="micButton" class="btn toolbarButton" type="button">
@@ -86,6 +86,10 @@ $version = "3.06.26.1";
           <div class="s-page-title container-fluid"><h1>Le voyage en cours</h1></div>
         </div>
       </div>
+    </div>
+    <div id="logTitle" class="container form-floating d-grid gap-2">
+      <div>Historique du dialogue</div>
+      <textarea id="logTextarea" autofocus readonly class="form-control "></textarea>
     </div>
   </div>
 <!--               -->

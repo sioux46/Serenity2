@@ -17,6 +17,7 @@ body {
 #dialogButtons {
   display: inline-block;
   float: right;
+  margin-top: 0.6rem;
 }
 
 .toolbarButton {
@@ -26,10 +27,6 @@ body {
   margin-left: auto;
   margin-right: auto;
   border-radius: 50%;
-}
-
-#startButton {
-  border: 3px solid hsl(235, 100%, 30%);
 }
 
 #micButton {
@@ -149,6 +146,10 @@ body {
   display: none;
   position: relative;
   float: right;
+}
+
+#logTextarea {
+  height: 15rem;
 }
 
 /*
