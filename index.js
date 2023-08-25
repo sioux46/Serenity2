@@ -250,6 +250,7 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
   //......................................... page change
   else if ( question.match(/(ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
     if ( question.match(/agenda/i) ) {
+
       $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
       reponse = "OK";
     }
@@ -278,17 +279,32 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
   }
 
   else {
+
     questionAnswer = "chatGPT" ;
+    console.log("Réponse chatGPT");
     if ( newChat ) {
       chatBuffer = [];
-      chatBuffer.push({ role: "system", content: "Vous êtes Norbert, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Vous devez répondre aimablement à mes questions." });
+      // Mon nom est " + userName + ".
+      chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
       chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui à Paris ?" });
       chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
+      //chatBuffer.push({ role: "user", content: "Quel jour sommes-nous ?" });
+      //chatBuffer.push({ role: "assistant", content: "Aujourd'hui nous sommes mardi" });
+      //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
+      //chatBuffer.push({ role: "assistant", content: "Nous sommes le 25 décembre 2022" });
+
+      chatBuffer.push({ role: "user", content: "Effacez mon agenda pour aujourd'hui, demain et après demain." });
+      chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
+      chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour aujourd’hui:  dentiste 9h30, déjeuner avec Diane de 13h15 à 17h45."});
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous pour aujourd'hui ajoutés" });
+      chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
+
       newChat = false;
     }
 
     // chatBuffer.push({ role: "system", content: "Exprimez-vous dans le style de C3PO, le robot maitre d'hotel de Star Wars" });
-    chatBuffer.push({ role: "system", content: "Exprimez-vous comme un chauffeur de maitre" +  reponseStyle + responseDetail });
+    chatBuffer.push({ role: "system", content: "Répondez" +  reponseStyle + responseDetail });
 
     chatBuffer.push({ role: "user", content: question });
 
@@ -411,7 +427,7 @@ function resetRecog() {
   if ( questionMode == "paused" ) {
     console.log("paused");
   }
-  
+
   // else {
     // questionMode = "text";
     // $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
@@ -487,19 +503,11 @@ $("#start").css({"display": "block"});
 
 /////////////////////////////////////////////  toolBar buttons  /////
 
-//                                       open start page
-$("#startButton").on("click", function (ev) {
-  if ( activePage ) {
-    $("#toolBar").css("display", "none");
-    $(activePage).css("display", "none");
-    activePage = "";
-    $("#start").css({"display": "block", "top": "-50rem"});
-    $("#start").animate({"top": 0}, 400);
-  }
-});
-//------------------------------------------
 //                                             toggle mic
 $("#micButton").on("click", function (ev) {
+  if ( questionMode == "paused" ) return;
+  if ( !recognizing ) questionMode = "text"; // bug fix
+
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
@@ -524,10 +532,37 @@ $("#speakerButton").on("click", function (ev) {
   else {
     reponseMode = "text";
     $("#speakerButton img").attr("src", "icons/volume-mute-fill.svg");
+    if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   }
 });
 
+///////////////////////////////////////////////  DIALOG OFFCANVAS /////
+
+$("#chatParamUserName").on("change", function (e) {
+  userName = $("#chatParamUserName").val();
+});
+$("#chatParamAssistantName").on("change", function (e) {
+  userName = $("#chatParamAssistantName").val();
+});
+$("#chatParamStyle").on("change", function (e) {
+  reponseStyle = $("#chatParamStyle").val();
+});
+$("#chatParamDetail").on("change", function (e) {
+  responseDetail = $("#chatParamDetail").val();
+});
+
 ///////////////////////////////////////////////  SHOW PAGES   /////
+
+/////                        open start page
+$("#startButton").on("click", function (ev) {
+  if ( activePage ) {
+    $("#toolBar").css("display", "none");
+    $(activePage).css("display", "none");
+    activePage = "";
+    $("#start").css({"display": "block", "top": "-50rem"});
+    $("#start").animate({"top": 0}, 400);
+  }
+});
 
 /////       show shedule page
 $("#sheduleButton").on("click", function (ev) {
@@ -786,11 +821,11 @@ var recogResult = "";
 var chatBuffer = [];
 var newChat = true;
 var reponseModel = 'gpt-3.5-turbo-0613';
-var responseDetail = " de façon peu détaillée. ";
+var responseDetail = " de façon concise. ";
 // var responseDetail = ". ";
 var reponseStyle = " ";
 // var reponseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars ";
-var reponseTemperature = 0.5;
+var reponseTemperature = 0;
 
 var userName = "Seb";
 var assistantName = "Norbert";

@@ -34,7 +34,7 @@ $version = "3.06.26.1";
 <!-- ************************************************************************** -->
   <div id="DIVA">
 <!--           -->
-<!--  TOP BAR  -->
+<!--  TOOLBAR  -->
 <!--           -->
 
   <div id="toolBar">
@@ -48,6 +48,48 @@ $version = "3.06.26.1";
       <button id="speakerButton" class="btn toolbarButton" type="button">
         <img src="icons/volume-mute-fill.svg" width=40>
       </button>
+      <button id="chatParamButton" class="btn toolbarButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
+        <img src="icons/list.svg" width=40>
+      </button>
+    </div>
+  </div>
+<!--   toolbar offcanvas   -->
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Préférences pour le dialogue</strong></h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div>
+        <div class="d-grid gap-2">
+          <div class="mb-2">
+            <label for="chatParamUserName" class="form-label">Nom du conducteur:</label>
+            <input id="chatParamUserName" type="text" class="form-control"/>
+          </div>
+          <div class="mb-2">
+            <label for="chatParamAssistantName" class="form-label">Nom de l'assistant:</label>
+            <input id="chatParamAssistantName" type="text" class="form-control"/>
+          </div>
+          <div class="mb-2">
+            <label for="chatParamStyle" class="form-label">Style des réponses:</label>
+            <input id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
+          </div>
+          <div class="mb-2">
+            <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
+            <input id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
+          </div>
+        </div>
+      </div>
+      <div class="dropdown mt-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          Dropdown button
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Action</a></li>
+          <li><a class="dropdown-item" href="#">Another action</a></li>
+          <li><a class="dropdown-item" href="#">Something else here</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 <!--            -->
@@ -88,7 +130,7 @@ $version = "3.06.26.1";
       </div>
     </div>
     <div id="logTitle" class="container form-floating d-grid gap-2">
-      <div>Historique du dialogue</div>
+      <div><strong>Historique du dialogue</strong></div>
       <textarea id="logTextarea" autofocus readonly class="form-control "></textarea>
     </div>
   </div>
