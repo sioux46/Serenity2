@@ -240,7 +240,6 @@ function addCalEvent(time, title, date) {
 
 ////
 function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S E
-
   if ( !question ) return;
   var reponse = "";
 
@@ -301,6 +300,8 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
       chatBuffer.push({ role: "assistant", content: "Rendez-vous pour aujourd'hui ajoutés" });
       chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
       chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
+
+      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ".L'heure actuelle est " + actualTime() });
 
       newChat = false;
     }
@@ -379,7 +380,7 @@ function initRecognition() {
       if (event.results[i].isFinal) {
         recogResult = event.results[i][0].transcript;
         fillLog("question", recogResult);
-        console.log(recogResult);
+        console.log("question: " + recogResult);
         questionAnalyse(recogResult);
 
       }
@@ -483,7 +484,48 @@ function recogChatSynt() {
   startStopRecog();
 }
 
+////
+function actualDate() {
+  // Obtenir la date actuelle
+  const dateActuelle = new Date();
 
+  // Noms des mois en français
+  const nomsMois = [
+    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+  ];
+
+  // Obtenir le jour, le mois et l'année
+  const jour = dateActuelle.getDate().toString().padStart(2, '0');
+  const moisEnChiffres = (dateActuelle.getMonth() + 1).toString().padStart(2, '0'); // Notez que les mois sont indexés à partir de 0
+  const moisEnLettres = nomsMois[dateActuelle.getMonth()];
+  const annee = dateActuelle.getFullYear().toString();
+
+  // Format final : jour + mois en lettres + année
+  const dateFormatee = jour + " " + moisEnLettres + " " + annee;
+
+  // Afficher la date formatée
+  console.log(dateFormatee);
+  return dateFormatee;
+}
+
+////
+function actualTime() {
+  // Obtenir la date et l'heure actuelles à Paris
+  const parisTimezoneOffset = 2; // Décalage horaire de Paris en heures (UTC+2 pendant l'heure d'été)
+  const dateActuelle = new Date();
+  const utcMilliseconds = dateActuelle.getTime() + (dateActuelle.getTimezoneOffset() * 60000); // Convertir en UTC
+  const parisMilliseconds = utcMilliseconds + (parisTimezoneOffset * 3600000); // Ajouter le décalage horaire de Paris
+
+  const heureParis = new Date(parisMilliseconds);
+
+  const heures = heureParis.getHours().toString().padStart(2, '0');
+  const minutes = heureParis.getMinutes().toString().padStart(2, '0');
+  const secondes = heureParis.getSeconds().toString().padStart(2, '0');
+
+  console.log("Heure à Paris : " + `${heures}:${minutes}:${secondes}`);
+  return `${heures}:${minutes}:${secondes}`;
+}
 
 
 ////////////////////////////////////////////////  Fin F U N C T I O N S
