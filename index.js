@@ -287,7 +287,9 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
       // Mon nom est " + userName + ".
       chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
       chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui à Paris ?" });
-      chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25°C." });
+      chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25 degrès." });
+      chatBuffer.push({ role: "user", content: "Et demain ?" });
+      chatBuffer.push({ role: "assistant", content: "Demain à Paris, le temps devrait être pluvieux avec une température moyenne de 19 degrès." });
       //chatBuffer.push({ role: "user", content: "Quel jour sommes-nous ?" });
       //chatBuffer.push({ role: "assistant", content: "Aujourd'hui nous sommes mardi" });
       //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
@@ -304,7 +306,7 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
     }
 
     // chatBuffer.push({ role: "system", content: "Exprimez-vous dans le style de C3PO, le robot maitre d'hotel de Star Wars" });
-    chatBuffer.push({ role: "system", content: "Répondez" +  reponseStyle + responseDetail });
+    chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " et " + responseDetail + "." });
 
     chatBuffer.push({ role: "user", content: question });
 
@@ -327,7 +329,7 @@ function chatGPTcall() {       /***** chatGPT call *****/
               newChat: JSON.stringify(newChat),
               model: JSON.stringify(reponseModel),
               temperature: JSON.stringify(reponseTemperature),
-              style: JSON.stringify(reponseStyle),
+              style: JSON.stringify(responseStyle),
               details: JSON.stringify(responseDetail),
             },
     'complete': function(xhr, result) {
@@ -424,9 +426,6 @@ function resetRecog() {
   recogResult = "";
   console.log("Fin d'écoute");
   $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-  if ( questionMode == "paused" ) {
-    console.log("paused");
-  }
 
   // else {
     // questionMode = "text";
@@ -444,6 +443,7 @@ function doSpeechSynth (text) {
   ut.onstart = function(e) {
     if ( questionMode == "audio" ) {
       questionMode = "paused";
+      console.log("Start paused");
       $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
     }
   };
@@ -452,6 +452,7 @@ function doSpeechSynth (text) {
     recogResult = "";
     if ( questionMode == "paused" && !recognizing ) {
       questionMode = "audio";
+      console.log("End paused");
       $("#micButton img").attr("src", "icons/mic-fill.svg");
       startRecog();
     }
@@ -538,18 +539,31 @@ $("#speakerButton").on("click", function (ev) {
 
 ///////////////////////////////////////////////  DIALOG OFFCANVAS /////
 
+$("#chatParamButton").on("click", function(e) {
+  $("#chatParamUserName").val(userName);
+  $("#chatParamAssistantName").val(assistantName);
+  $("#chatParamStyle").val(responseStyle);
+  $("#chatParamDetail").val(responseDetail);
+});
+
 $("#chatParamUserName").on("change", function (e) {
   userName = $("#chatParamUserName").val();
+  localStorage.setItem('userName', JSON.stringify(userName));
 });
 $("#chatParamAssistantName").on("change", function (e) {
-  userName = $("#chatParamAssistantName").val();
-});
+  assistantName = $("#chatParamAssistantName").val();
+  localStorage.setItem('assistantName', JSON.stringify(assistantName));
+  });
 $("#chatParamStyle").on("change", function (e) {
-  reponseStyle = $("#chatParamStyle").val();
+  responseStyle = $("#chatParamStyle").val();
+  localStorage.setItem('responseStyle', JSON.stringify(responseStyle));
 });
 $("#chatParamDetail").on("change", function (e) {
   responseDetail = $("#chatParamDetail").val();
+  localStorage.setItem('responseDetail', JSON.stringify(responseDetail));
 });
+
+
 
 ///////////////////////////////////////////////  SHOW PAGES   /////
 
@@ -821,11 +835,31 @@ var recogResult = "";
 var chatBuffer = [];
 var newChat = true;
 var reponseModel = 'gpt-3.5-turbo-0613';
-var responseDetail = " de façon concise. ";
-// var responseDetail = ". ";
-var reponseStyle = " ";
-// var reponseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars ";
 var reponseTemperature = 0;
 
-var userName = "Seb";
-var assistantName = "Norbert";
+//
+var userName;
+var assistantName;
+var responseStyle;
+// var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars
+var responseDetail;
+
+if ( localStorage.responseStyle ) {
+  responseStyle = JSON.parse(localStorage.getItem('responseStyle'));
+}
+else responseStyle = " ";
+
+if ( localStorage.responseDetail ) {
+  responseDetail = JSON.parse(localStorage.getItem('responseDetail'));
+}
+else responseDetail = " de façon concise ";
+
+if ( localStorage.userName ) {
+  userName = JSON.parse(localStorage.getItem('userName'));
+}
+else userName = " Monsieur ";
+
+if ( localStorage.assistantName ) {
+  assistantName = JSON.parse(localStorage.getItem('assistantName'));
+}
+else assistantName = " Norbert ";

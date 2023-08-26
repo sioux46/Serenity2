@@ -57,7 +57,7 @@ $version = "3.06.26.1";
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Préférences pour le dialogue</strong></h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      <button id="chatParamButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
       <div>

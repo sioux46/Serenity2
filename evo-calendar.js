@@ -1099,7 +1099,7 @@
 
         function deleteEvent(data) {
             // Array index
-            var index = _.options.calendarEvents.map(function (event) { return event.id }).indexOf(data);
+            var index = _.options.calendarEvents.map(function (event) { return event.id; }).indexOf(data);
 
             if (index >= 0) {
                 var event = _.options.calendarEvents[index];
