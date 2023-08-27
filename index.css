@@ -8,8 +8,6 @@ body {
 #toolBar {
   display: none;
   z-index: 1000;
-  margin-right: 2rem;
-  margin-left: 2rem;
   margin-bottom: 0.3rem;
   margin-top: 0.3rem;
 }
@@ -65,8 +63,8 @@ body {
 }
 
 #sheduleButton {
-  color: hsl(12, 100%, 35%) !important;
-  border-color: hsl(12, 100%, 35%) !important;
+  color: rgb(199, 16, 16) !important;
+  border-color: rgb(199, 16, 16) !important;
 }
 
 #voyageButton {
@@ -149,7 +147,23 @@ body {
 }
 
 #logTextarea {
-  height: 15rem;
+  height: 25rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+#questionTextarea {
+  height: 7rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+#questionButton {
+  position: relative;
+  padding: 0;
+  margin-left: auto;
+  width: fit-content;
+  top: -0.6rem;
 }
 
 /*

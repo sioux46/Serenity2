@@ -237,44 +237,45 @@ function addCalEvent(time, title, date) {
       color: "#009099", // "#fe7f78",
     }]);
 }
-
+/////////////////////////////////////////////////////////////////////////////////
 ////
 function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S E
   if ( !question ) return;
-  var reponse = "";
+  var response = "";
 
-  if ( question.match(/^Monsieur Norbert$/i) ) {
-    reponse = "Bonjour Monsieur. Que puij faire pour vous ?";
+  if ( question.match(/^Bonjour Norbert$/i) ) {
+    response = "Bonjour Monsieur. Que puij faire pour vous ?";
   }
   //......................................... page change
   else if ( question.match(/(ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
     if ( question.match(/agenda/i) ) {
 
       $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
-      reponse = "OK";
+      response = "OK";
     }
     else if ( question.match(/paramètre/i) ) {
       $("#startButton").trigger("click"); $("#paramButton").trigger("click");
-      reponse = "OK";
+      response = "OK";
     }
     else if ( question.match(/voyage/i) ) {
       $("#startButton").trigger("click"); $("#voyageButton").trigger("click");
-      reponse = "OK";
+      response = "OK";
     }
   }
 
 
   //--------------------------------  if reponse
-  if ( reponse ) {
+  if ( response ) {
+
     if ( reponseMode == "audio" ) {
-      fillLog("réponse", reponse);
-
       console.log("Réponse audio:");
-      doSpeechSynth(reponse);
+      doSpeechSynth(response);
     }
-    else console.log("Réponse texte:"); // afficher dans log
-    console.log(reponse);
-
+    else {
+      console.log("Réponse texte:");
+      fillLog("response", response);
+    }
+    console.log(response);
   }
 
   else {
@@ -339,7 +340,7 @@ function chatGPTcall() {       /***** chatGPT call *****/
       }
       else {
         var reponse = xhr.responseText;
-        fillLog("reponse", reponse);
+        fillLog("response", reponse);
 
         console.log("Réponse: " + reponse);
         let assistantMessage = { role: "assistant", content: reponse };
@@ -468,6 +469,8 @@ function fillLog(who, text) {
           $("#logTextarea").val( $("#logTextarea").val() + userName + ": " + text + "\n");
   else    $("#logTextarea").val( $("#logTextarea").val() + assistantName + ": " + text + "\n");
 }
+
+
 
 ////                            KEYBOARD EVENTS
 /* $(document).keydown(function (event) {
@@ -605,6 +608,16 @@ $("#chatParamDetail").on("change", function (e) {
   localStorage.setItem('responseDetail', JSON.stringify(responseDetail));
 });
 
+$("#questionButton").on("click", function(e) {
+  let question = $("#questionTextarea").val();
+  if ( question ) {
+    fillLog("question", question);
+    $("#questionTextarea").val("");
+    questionAnalyse(question);
+  }
+
+});
+
 
 
 ///////////////////////////////////////////////  SHOW PAGES   /////
@@ -707,6 +720,14 @@ $('#evoCalendar').evoCalendar({
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
 // evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
+
+///////////// manage/hide togglers
+$(".calendar-table th").on("click", function(e) {
+  $("#evoCalendar").evoCalendar('toggleSidebar');
+});
+
+$("#sidebarToggler").css("display","none");
+$("#eventListToggler").css("display","none");
 
 ///////////  hide trash on unsel event
 $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
@@ -877,7 +898,7 @@ var recogResult = "";
 var chatBuffer = [];
 var newChat = true;
 var reponseModel = 'gpt-3.5-turbo-0613';
-var reponseTemperature = 0;
+var reponseTemperature = 0.2;
 
 //
 var userName;

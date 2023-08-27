@@ -2,7 +2,7 @@
 $colorBeige: #e9ecef;
 $enable-button-pointers: true;
 $sebDarkBlue: hsla(235, 100%, 30%, 1); // #000b87; // darkblue;
-$sebBrown: hsla(12, 100%, 35%, 1); // #8f1d00;  // #882107; // #7c1f02;
+$sebBrown: rgb(199, 16, 16); // rgb(190, 190, 190); // hsla(12, 100%, 35%, 1); // #8f1d00;  // #882107; // #7c1f02;
 $sebGreen: #008959;
 
 /* Use the variables */
@@ -19,8 +19,8 @@ body {
   display: none;
   z-index: 1000;
   // margin: 2px;
-  margin-right: 2rem;
-  margin-left: 2rem;
+  // margin-right: 2rem;
+  // margin-left: 2rem;
   margin-bottom: 0.3rem;
   margin-top: 0.3rem;
 }
@@ -193,12 +193,25 @@ body {
 }
 
 #logTextarea {
-  height: 15rem;
+  height: 25rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 
-#logTitle {
-
+#questionTextarea {
+  height: 7rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
+
+#questionButton {
+  position: relative;
+  padding: 0;
+  margin-left: auto;
+  width: fit-content;
+  top: -0.6rem;
+}
+
 /*
 .parent {
   width: 50%;

@@ -129,9 +129,14 @@ $version = "3.06.26.1";
         </div>
       </div>
     </div>
-    <div id="logTitle" class="container form-floating d-grid gap-2">
-      <div><strong>Historique du dialogue</strong></div>
-      <textarea id="logTextarea" autofocus readonly class="form-control "></textarea>
+    <div id="voyageText" class="container form-floating d-grid gap-2">
+      <div><strong>Vous avez la parole:</strong></div>
+      <textarea id="questionTextarea" class="form-control" autofocus></textarea>
+      <button id="questionButton" class="btn" type="button">
+        <img src="icons/forward-fill.svg" width=40>
+      </button>
+    <div><strong>Historique du dialogue:</strong></div>
+    <textarea id="logTextarea" autofocus readonly class="form-control"></textarea>
     </div>
   </div>
 <!--               -->
