@@ -133,10 +133,13 @@ $version = "3.06.26.1";
       <div><strong>Vous avez la parole:</strong></div>
       <textarea id="questionTextarea" class="form-control" autofocus></textarea>
       <button id="questionButton" class="btn" type="button">
-        <img src="icons/forward-fill.svg" width=40>
+        <img src="icons/forward.svg" width=36>
       </button>
-    <div><strong>Historique du dialogue:</strong></div>
-    <textarea id="logTextarea" autofocus readonly class="form-control"></textarea>
+      <div><strong>Historique du dialogue:</strong></div>
+      <textarea id="logTextarea" autofocus readonly class="form-control"></textarea>
+      <button id="logButton" class="btn" type="button">
+        <img src="icons/trash.svg" width=30>
+      </button>
     </div>
   </div>
 <!--               -->

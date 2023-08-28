@@ -147,7 +147,7 @@ body {
 }
 
 #logTextarea {
-  height: 25rem;
+  height: 20rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
 }
@@ -156,6 +156,13 @@ body {
   height: 7rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
+}
+
+#logButton {
+  position: relative;
+  padding: 0;
+  margin-left: auto;
+  width: fit-content;
 }
 
 #questionButton {

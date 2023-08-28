@@ -267,15 +267,15 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
   //--------------------------------  if reponse
   if ( response ) {
 
-    if ( reponseMode == "audio" ) {
+    if ( reponseMode != "text" ) {
       console.log("Réponse audio:");
       doSpeechSynth(response);
     }
     else {
       console.log("Réponse texte:");
-      fillLog("response", response);
     }
     console.log(response);
+    fillLog("response", response);
   }
 
   else {
@@ -435,13 +435,23 @@ function resetRecog() {
   // }
 }
 
-////                                         ***  Speech SYTHESIS ***
+////                                         ********  Speech SYTHESIS ********
 function doSpeechSynth (text) {
+  // speechSynthesis.cancel(); // removes anything 'stuck'
+
+  if ( !voices ) {
+    voices = speechSynthesis.getVoices();
+    // actualVoice = voices[0]; // Rocko
+  }
+
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
   ut.lang = 'fr-FR';
-  ut.rate = 0.97;
-
+  ut.rate = 1;
+  ut.voiceURI = 'native';
+  ut.volume = 1;
+  // ut.voice = voices[0];
+  // ut.voice = actualVoice;
   ut.onstart = function(e) {
     if ( questionMode == "audio" ) {
       questionMode = "paused";
@@ -449,7 +459,6 @@ function doSpeechSynth (text) {
       $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
     }
   };
-
   ut.onend = function(e) {
     recogResult = "";
     if ( questionMode == "paused" && !recognizing ) {
@@ -459,15 +468,14 @@ function doSpeechSynth (text) {
       startRecog();
     }
   };
-
   window.speechSynthesis.speak(ut);
 }
 
 ////
 function fillLog(who, text) {
   if ( who == "question" )
-          $("#logTextarea").val( $("#logTextarea").val() + userName + ": " + text + "\n");
-  else    $("#logTextarea").val( $("#logTextarea").val() + assistantName + ": " + text + "\n");
+          $("#logTextarea").val( $("#logTextarea").val() + "  " + userName + ": " + text + "\n");
+  else    $("#logTextarea").val( $("#logTextarea").val() + "  " + assistantName + ": " + text + "\n");
 }
 
 
@@ -551,14 +559,15 @@ $("#start").css({"display": "block"});
 
 //                                             toggle mic
 $("#micButton").on("click", function (ev) {
+
   if ( questionMode == "paused" ) return;
   if ( !recognizing ) questionMode = "text"; // bug fix
 
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
-    reponseMode = "audio";
-    $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
+    //reponseMode = "audio";
+    //$("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
     if ( !window.speechSynthesis.speaking  && !recognizing ) startRecog();
   }
   else {
@@ -570,6 +579,16 @@ $("#micButton").on("click", function (ev) {
 //------------------------------------------
 //                                          toggle speaker
 $("#speakerButton").on("click", function (ev) {
+  // init speech
+  if ( speechFlag ) {
+    speechFlag = false;
+    let ut = new SpeechSynthesisUtterance();
+    ut.text = "";
+    ut.lang = 'fr-FR';
+    ut.voiceURI = 'native';
+    window.speechSynthesis.speak(ut);
+  }
+
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
     $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
@@ -615,11 +634,10 @@ $("#questionButton").on("click", function(e) {
     $("#questionTextarea").val("");
     questionAnalyse(question);
   }
-
 });
-
-
-
+$("#logButton").on("click", function(e) {
+  $("#logTextarea").val("");
+});
 ///////////////////////////////////////////////  SHOW PAGES   /////
 
 /////                        open start page
@@ -894,6 +912,12 @@ var reponseMode = "text"; // audio v text
 var recognizing = false;
 var recognition = initRecognition();
 var recogResult = "";
+
+//                              init speechSynthesis
+var voices;
+var actualVoice;
+var speechFlag = true;
+
 //                              init ChatGPT
 var chatBuffer = [];
 var newChat = true;
