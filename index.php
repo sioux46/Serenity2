@@ -1,7 +1,5 @@
 
 <?php
-// Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-$version = "3.06.26.1";
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -78,7 +76,11 @@ $version = "3.06.26.1";
             <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
             <input id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
           </div>
-        </div>
+          <div class="mb-2">
+            <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
+            <input id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
+          </div>
+</div>
       </div>
       <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -100,6 +102,7 @@ $version = "3.06.26.1";
     <div class="deva-tittle container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
       <img src="icons/splash.png" width="60px" style="border-radius: 50%"> <!-- carWhite.svg -->
       <h1 class="s-start display-5">DEVA</h1>
+      <small id=devaVersion></small>
     </div>
     <div class="container">
       <div class="d-grid gap-4 text-center">
@@ -136,7 +139,7 @@ $version = "3.06.26.1";
         <img src="icons/forward.svg" width=36>
       </button>
       <div><strong>Historique du dialogue:</strong></div>
-      <textarea id="logTextarea" autofocus readonly class="form-control"></textarea>
+      <textarea id="logTextarea" autofocus class="form-control"></textarea>
       <button id="logButton" class="btn" type="button">
         <img src="icons/trash.svg" width=30>
       </button>

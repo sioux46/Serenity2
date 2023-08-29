@@ -1,4 +1,7 @@
 // index.js
+//
+// Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
+var devaVersion = "v3.08.29.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -302,7 +305,7 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
       chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
       chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
 
-      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ".L'heure actuelle est " + actualTime() });
+      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". L'heure actuelle est " + actualTime() + ". Le jour de la semaine est " + actualDay(actualDate()) });
 
       newChat = false;
     }
@@ -330,7 +333,7 @@ function chatGPTcall() {       /***** chatGPT call *****/
               chatBuffer: JSON.stringify(chatBuffer),
               newChat: JSON.stringify(newChat),
               model: JSON.stringify(reponseModel),
-              temperature: JSON.stringify(reponseTemperature),
+              temperature: JSON.stringify(parseFloat(reponseTemperature)),
               style: JSON.stringify(responseStyle),
               details: JSON.stringify(responseDetail),
             },
@@ -523,6 +526,32 @@ function actualDate() {
 }
 
 ////
+function actualDay(dateString) {
+    const months = [
+        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+
+    const daysOfWeek = [
+        "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+    ];
+
+    const parts = dateString.split(" ");
+    const day = parseInt(parts[0]);
+    const month = months.indexOf(parts[1]);
+    const year = parseInt(parts[2]);
+
+    const dateObject = new Date(year, month, day);
+    const dayOfWeek = dateObject.getDay();
+
+    return daysOfWeek[dayOfWeek];
+
+    // const inputDate = "29 Août 2023";
+    // const dayOfWeek = getDayOfWeek(inputDate);
+    // console.log(`Le ${inputDate} était un ${dayOfWeek}.`);
+}
+
+////
 function actualTime() {
   // Obtenir la date et l'heure actuelles à Paris
   const parisTimezoneOffset = 2; // Décalage horaire de Paris en heures (UTC+2 pendant l'heure d'été)
@@ -550,7 +579,7 @@ function actualTime() {
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
-
+$("#devaVersion").text(devaVersion);
 //////////////////////////////////////////////////////////////////////
 
 
@@ -581,18 +610,22 @@ $("#micButton").on("click", function (ev) {
     stopRecog();
   }
 });
-//------------------------------------------
-//                                          toggle speaker
+//-------------------------------------------------------------
+//                                              toggle speaker
 $("#speakerButton").on("click", function (ev) {
   // init speech
+  // let ut = new SpeechSynthesisUtterance("");
+  // window.speechSynthesis.speak(ut);
+
   if ( speechFlag ) {
     speechFlag = false;
-    let ut = new SpeechSynthesisUtterance();
-    ut.text = "";
-    ut.lang = 'fr-FR';
-    ut.voiceURI = 'native';
+    let ut = new SpeechSynthesisUtterance("");
+    // ut.text = "";
+    // ut.lang = 'fr-FR';
+    // ut.voiceURI = 'native';
     window.speechSynthesis.speak(ut);
   }
+  //...................................
 
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
@@ -613,6 +646,7 @@ $("#chatParamButton").on("click", function(e) {
   $("#chatParamAssistantName").val(assistantName);
   $("#chatParamStyle").val(responseStyle);
   $("#chatParamDetail").val(responseDetail);
+  $("#chatParamTemperature").val(reponseTemperature);
 });
 
 $("#chatParamUserName").on("change", function (e) {
@@ -630,6 +664,10 @@ $("#chatParamStyle").on("change", function (e) {
 $("#chatParamDetail").on("change", function (e) {
   responseDetail = $("#chatParamDetail").val();
   localStorage.setItem('responseDetail', JSON.stringify(responseDetail));
+});
+$("#chatParamTemperature").on("change", function (e) {
+  reponseTemperature = $("#chatParamTemperature").val();
+  localStorage.setItem('reponseTemperature', JSON.stringify(reponseTemperature));
 });
 
 $("#questionButton").on("click", function(e) {
@@ -926,14 +964,14 @@ var speechFlag = true;
 //                              init ChatGPT
 var chatBuffer = [];
 var newChat = true;
-var reponseModel = 'gpt-3.5-turbo-0613';
-var reponseTemperature = 0.2;
 
-//
+//                        Paramètres chatGPT
+var reponseModel = 'gpt-3.5-turbo-0613';
+var reponseTemperature;
 var userName;
 var assistantName;
 var responseStyle;
-// var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars
+// var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars"
 var responseDetail;
 
 if ( localStorage.responseStyle ) {
@@ -955,3 +993,8 @@ if ( localStorage.assistantName ) {
   assistantName = JSON.parse(localStorage.getItem('assistantName'));
 }
 else assistantName = " Norbert ";
+
+if ( localStorage.reponseTemperature ) {
+  reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
+}
+else reponseTemperature = 0.2;
