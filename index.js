@@ -448,9 +448,11 @@ function doSpeechSynth (text) {
   ut.text = text;
   ut.lang = 'fr-FR';
   ut.rate = 1;
-  ut.voiceURI = 'native';
+  ut.pitch = 1; // girl = 2
+  // ut.voiceURI = 'native';
   ut.volume = 1;
-  // ut.voice = voices[0];
+  // Thomas, Amélie, Google UK English, Grandma (Français (Canada)), Flo (Français (Canada))
+  ut.voice = voices.filter(function(voice) {return voice.name == 'Thomas';})[0];
   // ut.voice = actualVoice;
   ut.onstart = function(e) {
     if ( questionMode == "audio" ) {
@@ -554,7 +556,10 @@ $(document).ready(function () {
 
 /////       show start page
 $("#start").css({"display": "block"});
-
+/////        get voices
+speechSynthesis.addEventListener("voiceschanged", () => {
+  voices = speechSynthesis.getVoices();
+});
 /////////////////////////////////////////////  toolBar buttons  /////
 
 //                                             toggle mic
