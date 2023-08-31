@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.08.29.1";
+var devaVersion = "v3.08.31.3";
 
 /*********************************************************************
 ************************************************************ class
@@ -339,26 +339,33 @@ function chatGPTcall() {       /***** chatGPT call *****/
             },
     'complete': function(xhr, result) {
       if (result != 'success') {
-        alert ( 'Erreur API OpenAI !');
+        console.log("Fatal error API OpenAI!!!!");
       }
       else {
         var reponse = xhr.responseText;
         fillLog("response", reponse);
-
         console.log("Réponse: " + reponse);
-        let assistantMessage = { role: "assistant", content: reponse };
-        // assistant response added to buffer, ready for nexte question
-        chatBuffer.push(assistantMessage);
+
+        if ( reponse.match(/^Error/) ) {
+          console.log("Error API OpenAI !");
+        }
+        else {
+          let assistantMessage = { role: "assistant", content: reponse };
+          // assistant response added to buffer, ready for nexte question
+          chatBuffer.push(assistantMessage);
+        }
+
         if ( reponseMode == "audio" ) {
           console.log("Réponse audio");
-          doSpeechSynth(reponse.replace(/-/g, match => " "));
+          doSpeechSynth(reponse.replace(/-/g, match => " ")); // hypen don't work
         }
         else {
           console.log("Réponse texte");
-          if ( questionMode == "audio" ) startRecog();
+          if ( questionMode == "audio" && !reponse.match(/^Error/) ) startRecog();
         }
-        // return reponse;
       }
+        // return reponse;
+
     }
   });
 }
@@ -396,7 +403,7 @@ function initRecognition() {
 
 ////
 function startRecog() {
-  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   $("#micButton img").attr("src", "icons/mic-fill.svg");
   recognition.start();
   recognizing = true;
@@ -405,7 +412,7 @@ function startRecog() {
 
 ////
 function stopRecog() {
-  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   recognition.stop();
   resetRecog();
   recogResult = "";
@@ -413,7 +420,7 @@ function stopRecog() {
 
 ////
 function startStopRecog() { // and stop speech
-  if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   if (recognizing) {
     recognition.stop();
     resetRecog();
@@ -440,7 +447,7 @@ function resetRecog() {
 
 ////                                         ********  Speech SYTHESIS ********
 function doSpeechSynth (text) {
-  // speechSynthesis.cancel(); // removes anything 'stuck'
+  speechSynthesis.cancel(); // removes anything 'stuck'
 
   if ( !voices ) {
     voices = speechSynthesis.getVoices();
@@ -458,32 +465,41 @@ function doSpeechSynth (text) {
   ut.voice = voices.filter(function(voice) {return voice.name == 'Thomas';})[0];
   // ut.voice = actualVoice;
   ut.onstart = function(e) {
-    if ( questionMode == "audio" ) {
+  /*  if ( questionMode == "audio" ) {
       questionMode = "paused";
       console.log("Start paused");
       $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-    }
+    } */
   };
   ut.onend = function(e) {
     recogResult = "";
-    if ( questionMode == "paused" && !recognizing ) {
+  /*  if ( questionMode == "paused" && !recognizing ) {
       questionMode = "audio";
       console.log("End paused");
       $("#micButton img").attr("src", "icons/mic-fill.svg");
       startRecog();
-    }
+    } */
+    if ( questionMode == "audio" ) startRecog();
   };
   window.speechSynthesis.speak(ut);
 }
 
-////
+////                                  fillLog
 function fillLog(who, text) {
   if ( who == "question" )
           $("#logTextarea").val( $("#logTextarea").val() + "  " + userName + ": " + text + "\n");
   else    $("#logTextarea").val( $("#logTextarea").val() + "  " + assistantName + ": " + text + "\n");
 }
 
-
+////                                audioState
+function audioState() {
+  let state = {};
+  state.questionMode = questionMode;
+  state.recognizing = recognizing;
+  state.reponseMode = reponseMode;
+  state.speaking = window.speechSynthesis.speaking;
+  return state;
+}
 
 ////                            KEYBOARD EVENTS
 /* $(document).keydown(function (event) {
@@ -594,14 +610,19 @@ speechSynthesis.addEventListener("voiceschanged", () => {
 //                                             toggle mic
 $("#micButton").on("click", function (ev) {
 
-  if ( questionMode == "paused" ) return;
-  if ( !recognizing ) questionMode = "text"; // bug fix
+  // if ( questionMode == "paused" ) return;
+  if ( !recognizing ) {
+    questionMode = "text"; // bug fix
+
+  }
 
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
+    //                    force audio to true
     //reponseMode = "audio";
     //$("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
+
     if ( !window.speechSynthesis.speaking  && !recognizing ) startRecog();
   }
   else {
@@ -609,6 +630,7 @@ $("#micButton").on("click", function (ev) {
     $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
     stopRecog();
   }
+  setTimeout( function() { console.log(audioState()); }, 500);
 });
 //-------------------------------------------------------------
 //                                              toggle speaker
@@ -637,6 +659,7 @@ $("#speakerButton").on("click", function (ev) {
     $("#speakerButton img").attr("src", "icons/volume-mute-fill.svg");
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   }
+  setTimeout( function() { console.log(audioState()); }, 500);
 });
 
 ///////////////////////////////////////////////  DIALOG OFFCANVAS /////

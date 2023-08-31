@@ -80,7 +80,7 @@
             <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
             <input id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
           </div>
-</div>
+        </div>
       </div>
       <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
