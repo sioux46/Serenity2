@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.08.31.3";
+var devaVersion = "v3.09.01.4";
 
 /*********************************************************************
 ************************************************************ class
@@ -229,12 +229,37 @@ function clearEventModal(ev) {                // clear fields
 ///////////////////////////////////////////////////
 
 ////
-function addCalEvent(time, title, date) {
+// time: name, description: description, date: date
+function collectEvents() {
+  let events = [];
+  let content = "";
+  for ( let event of evoCalEvents ) {
+    content = "Ajoutez un rendez-vous à mon agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+    if ( event.name != "hundefined") {
+      if ( event.name.match(/à/) ) content += " de " + event.name;
+      else content += " à " + event.name;
+    }
+    events.push({ role: "user", content: content});
+
+    content = "Rendez-vous ajouté à votre agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+    if ( event.name != "hundefined") {
+      if ( event.name.match(/à/) ) content += " de " + event.name;
+      else content += " à " + event.name;
+    }
+    events.push({ role: "assistant", content: content});
+  }
+
+  return events;
+}
+
+////
+// time: name, description: description, date: date
+function addCalEvent(time, descrition, date) {
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
       name: time,                 // time/name
-      description: title,
+      description: description,
       date: date, // calendar.$active.event_date,
       type: "event",
       color: "#009099", // "#fe7f78",
@@ -282,31 +307,31 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
   }
 
   else {
-
     questionAnswer = "chatGPT" ;
     console.log("Réponse chatGPT");
     if ( newChat ) {
       chatBuffer = [];
       // Mon nom est " + userName + ".
       chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
-      chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui à Paris ?" });
-      chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25 degrès." });
-      chatBuffer.push({ role: "user", content: "Et demain ?" });
-      chatBuffer.push({ role: "assistant", content: "Demain à Paris, le temps devrait être pluvieux avec une température moyenne de 19 degrès." });
+      // chatBuffer.push({ role: "user", content: "Quel temps fait-il aujourd'hui à Paris ?" });
+      // chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25 degrès." });
+      // chatBuffer.push({ role: "user", content: "Et demain ?" });
+      // chatBuffer.push({ role: "assistant", content: "Demain à Paris, le temps devrait être pluvieux avec une température moyenne de 19 degrès." });
       //chatBuffer.push({ role: "user", content: "Quel jour sommes-nous ?" });
       //chatBuffer.push({ role: "assistant", content: "Aujourd'hui nous sommes mardi" });
       //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
       //chatBuffer.push({ role: "assistant", content: "Nous sommes le 25 décembre 2022" });
 
-      chatBuffer.push({ role: "user", content: "Effacez mon agenda pour aujourd'hui, demain et après demain." });
+      chatBuffer.push({ role: "user", content: "Effacez entièrement mon agenda." });
       chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
-      chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour aujourd’hui:  dentiste 9h30, déjeuner avec Diane de 13h15 à 17h45."});
-      chatBuffer.push({ role: "assistant", content: "Rendez-vous pour aujourd'hui ajoutés" });
-      chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
-      chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
+      // chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour aujourd’hui:  dentiste 9h30, déjeuner avec Diane de 13h15 à 17h45."});
+      // chatBuffer.push({ role: "assistant", content: "Rendez-vous pour aujourd'hui ajoutés" });
+      // chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
+      // chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
 
       chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". L'heure actuelle est " + actualTime() + ". Le jour de la semaine est " + actualDay(actualDate()) });
 
+      chatBuffer = chatBuffer.concat(collectEvents());
       newChat = false;
     }
 
@@ -405,6 +430,7 @@ function initRecognition() {
 function startRecog() {
   // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   $("#micButton img").attr("src", "icons/mic-fill.svg");
+  $("#micButton").css("border", "3px solid #fa0039");
   recognition.start();
   recognizing = true;
   console.log("Écoute");
@@ -438,6 +464,7 @@ function resetRecog() {
   recogResult = "";
   console.log("Fin d'écoute");
   $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
+  $("#micButton").css("border", "3px solid white");
 
   // else {
     // questionMode = "text";
@@ -457,8 +484,8 @@ function doSpeechSynth (text) {
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
   ut.lang = 'fr-FR';
-  ut.rate = 1;
-  ut.pitch = 1; // girl = 2
+  ut.rate = parseFloat(speechRate);
+  ut.pitch = parseFloat(speechPitch); // girl = 2
   // ut.voiceURI = 'native';
   ut.volume = 1;
   // Thomas, Amélie, Google UK English, Grandma (Français (Canada)), Flo (Français (Canada))
@@ -487,8 +514,8 @@ function doSpeechSynth (text) {
 ////                                  fillLog
 function fillLog(who, text) {
   if ( who == "question" )
-          $("#logTextarea").val( $("#logTextarea").val() + "  " + userName + ": " + text + "\n");
-  else    $("#logTextarea").val( $("#logTextarea").val() + "  " + assistantName + ": " + text + "\n");
+          $("#logTextarea").val( $("#logTextarea").val() + "> " + userName + ": " + text + "\n");
+  else    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text + "\n\n");
 }
 
 ////                                audioState
@@ -510,12 +537,7 @@ function audioState() {
   }
 }); */
 
-/////////////////////////////////////////////////////
-////                             TRIPLE PLAY
-function recogChatSynt() {
-  startStopRecog();
-}
-
+/////////////////////////////////////////////////////   DATE @ TIME
 ////
 function actualDate() {
   // Obtenir la date actuelle
@@ -539,6 +561,26 @@ function actualDate() {
   // Afficher la date formatée
   console.log(dateFormatee);
   return dateFormatee;
+}
+
+////
+// Fonction pour obtenir une date en français à partir d'une date au format 'MM/DD/YYYY'
+function dateFromDate(dateStr) {
+  // Divisez la chaîne de date en mois, jour et année
+  const dateParts = dateStr.split('/');
+  const mois = parseInt(dateParts[0]) - 1; // Les mois sont indexés à partir de 0
+  const jour = parseInt(dateParts[1]);
+  const annee = parseInt(dateParts[2]);
+
+  // Créez un objet Date
+  const date = new Date(annee, mois, jour);
+
+  // Obtenez la date formatée en français
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  var dateEnFrancais = new Intl.DateTimeFormat('fr-FR', options).format(date);
+
+  if ( dateEnFrancais.match(/^1/) ) dateEnFrancais = dateEnFrancais.replace(/^1/, "premier");
+  return dateEnFrancais;
 }
 
 ////
@@ -566,6 +608,26 @@ function actualDay(dateString) {
     // const dayOfWeek = getDayOfWeek(inputDate);
     // console.log(`Le ${inputDate} était un ${dayOfWeek}.`);
 }
+
+////
+// Fonction pour obtenir le jour de la semaine à partir d'une date au format 'MM/DD/YYYY'
+function dayFromDate(dateStr) {
+  // Divisez la chaîne de date en mois, jour et année
+  const dateParts = dateStr.split('/');
+  const mois = parseInt(dateParts[0]) - 1; // Les mois sont indexés à partir de 0
+  const jour = parseInt(dateParts[1]);
+  const annee = parseInt(dateParts[2]);
+
+  // Créez un objet Date
+  const date = new Date(annee, mois, jour);
+
+  // Obtenez le nom du jour de la semaine
+  const options = { weekday: 'long' };
+  const jourSemaine = new Intl.DateTimeFormat('fr-FR', options).format(date);
+
+  return jourSemaine;
+}
+
 
 ////
 function actualTime() {
@@ -605,9 +667,9 @@ $("#start").css({"display": "block"});
 speechSynthesis.addEventListener("voiceschanged", () => {
   voices = speechSynthesis.getVoices();
 });
-/////////////////////////////////////////////  toolBar buttons  /////
+////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
-//                                             toggle mic
+//                                                      toggle mic
 $("#micButton").on("click", function (ev) {
 
   // if ( questionMode == "paused" ) return;
@@ -619,6 +681,8 @@ $("#micButton").on("click", function (ev) {
   if ( questionMode == "text" ) {
     questionMode = "audio";
     $("#micButton img").attr("src", "icons/mic-fill.svg");
+    $("#micButton").css("border", "3px solid #fa0039");
+
     //                    force audio to true
     //reponseMode = "audio";
     //$("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
@@ -628,12 +692,13 @@ $("#micButton").on("click", function (ev) {
   else {
     questionMode = "text";
     $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
+    $("#micButton").css("border", "3px solid white");
     stopRecog();
   }
   setTimeout( function() { console.log(audioState()); }, 500);
 });
 //-------------------------------------------------------------
-//                                              toggle speaker
+//                                                        toggle speaker
 $("#speakerButton").on("click", function (ev) {
   // init speech
   // let ut = new SpeechSynthesisUtterance("");
@@ -647,16 +712,18 @@ $("#speakerButton").on("click", function (ev) {
     // ut.voiceURI = 'native';
     window.speechSynthesis.speak(ut);
   }
-  //...................................
+  //........ fin init
 
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
     $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
+    $("#speakerButton").css("border", "3px solid #fa0039");
 
   }
   else {
     reponseMode = "text";
     $("#speakerButton img").attr("src", "icons/volume-mute-fill.svg");
+    $("#speakerButton").css("border", "3px solid white");
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   }
   setTimeout( function() { console.log(audioState()); }, 500);
@@ -670,6 +737,8 @@ $("#chatParamButton").on("click", function(e) {
   $("#chatParamStyle").val(responseStyle);
   $("#chatParamDetail").val(responseDetail);
   $("#chatParamTemperature").val(reponseTemperature);
+  $("#chatParamSpeechRate").val(speechRate);
+  $("#chatParamSpeechPitch").val(speechPitch);
 });
 
 $("#chatParamUserName").on("change", function (e) {
@@ -693,6 +762,16 @@ $("#chatParamTemperature").on("change", function (e) {
   localStorage.setItem('reponseTemperature', JSON.stringify(reponseTemperature));
 });
 
+$("#chatParamSpeechRate").on("change", function (e) {
+  speechRate = $("#chatParamSpeechRate").val();
+  localStorage.setItem('speechRate', JSON.stringify(speechRate));
+});
+
+$("#chatParamSpeechPitch").on("change", function (e) {
+  speechPitch = $("#chatParamSpeechPitch").val();
+  localStorage.setItem('speechPitch', JSON.stringify(speechPitch));
+});
+
 $("#questionButton").on("click", function(e) {
   let question = $("#questionTextarea").val();
   if ( question ) {
@@ -703,6 +782,7 @@ $("#questionButton").on("click", function(e) {
 });
 $("#logButton").on("click", function(e) {
   $("#logTextarea").val("");
+  newChat = true;
 });
 ///////////////////////////////////////////////  SHOW PAGES   /////
 
@@ -810,6 +890,7 @@ $(".calendar-table th").on("click", function(e) {
   $("#evoCalendar").evoCalendar('toggleSidebar');
 });
 
+// disable toggler buttons
 $("#sidebarToggler").css("display","none");
 $("#eventListToggler").css("display","none");
 
@@ -817,6 +898,10 @@ $("#eventListToggler").css("display","none");
 $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
   $(".event-trash, .event-edit").css("display", "none");
 });
+
+ $(".month").on("click", function(e) {
+  $(".calendar-table th").trigger("click");
+ });
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
 $("#evoCalendar").on('selectEvent',function(activeEvent) {
@@ -957,10 +1042,6 @@ var ontoTree = [];
 
 ontoTree = importTree(importData);
 
-$("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-$("#micButton").css("background-color", "yellow !important");
-$("#speakerButton img").css("src", "icons/volume-mute-fill.svg");
-
 //                                      calendar
 
 var calendar;     // exemple: calendar.getActiveDate();
@@ -983,6 +1064,8 @@ var recogResult = "";
 var voices;
 var actualVoice;
 var speechFlag = true;
+var speechRate = 1;
+var speechPitch = 1;
 
 //                              init ChatGPT
 var chatBuffer = [];
@@ -1021,3 +1104,13 @@ if ( localStorage.reponseTemperature ) {
   reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
 }
 else reponseTemperature = 0.2;
+
+if ( localStorage.speechRate ) {
+  speechRate = JSON.parse(localStorage.getItem('speechRate'));
+}
+else speechRate = 1;
+
+if ( localStorage.speechPitch ) {
+  speechPitch = JSON.parse(localStorage.getItem('speechPitch'));
+}
+else speechPitch = 1;

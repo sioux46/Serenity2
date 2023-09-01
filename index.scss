@@ -4,6 +4,9 @@ $enable-button-pointers: true;
 $sebDarkBlue: hsla(235, 100%, 30%, 1); // #000b87; // darkblue;
 $sebBrown: rgb(199, 16, 16); // rgb(190, 190, 190); // hsla(12, 100%, 35%, 1); // #8f1d00;  // #882107; // #7c1f02;
 $sebGreen: #008959;
+$devaRed: #fa0039;
+
+// hsl(235, 0%, 64%) !important  // deva gray color
 
 /* Use the variables */
 body {
@@ -12,6 +15,7 @@ body {
   // background-color: $colorBeige;
 }
 
+//                        TOOLBAR
 #toolBar {
   //position: relative;
   //top: 2.4rem;
@@ -38,12 +42,7 @@ body {
   margin-left: auto;
   margin-right: auto;
   border-radius: 50%;
-}
-
-///////////////////////////////////
-
-#startButton {
-  // border: 3px solid $sebDarkBlue;
+  border: 3px solid white;
 }
 
 #micButton {

@@ -81,6 +81,14 @@
             <input id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
           </div>
         </div>
+        <div class="mb-2">
+          <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
+          <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
+        </div>
+        <div class="mb-2">
+          <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
+          <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
+        </div>
       </div>
       <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
