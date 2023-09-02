@@ -1,8 +1,16 @@
 /* Define standard variables and values */
+html {
+  overscroll-behavior: none;
+}
+
 /* Use the variables */
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.calendar-events {
+  user-select: none;
 }
 
 #toolBar {
@@ -47,10 +55,16 @@ body {
   width: 100%;
 }
 
+.s-start {
+  font-weight: 600;
+  margin: 0;
+}
+
 .start-page-btn {
   border-radius: 0;
   font-size: 1.8rem;
-  border-width: 3px;
+  border-left-width: 10px;
+  border-right-width: 10px;
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
@@ -76,14 +90,11 @@ body {
 #paramButton {
   color: #008959 !important;
   border-color: #008959 !important;
+  margin-bottom: 2rem;
 }
 
 #voyage-title {
   background-color: hsl(235, 100%, 30%);
-}
-
-.s-start {
-  font-weight: 600;
 }
 
 #param {
@@ -162,6 +173,7 @@ body {
 #logButton {
   position: relative;
   padding: 0;
+  margin-bottom: 10px;
   margin-left: auto;
   width: fit-content;
 }

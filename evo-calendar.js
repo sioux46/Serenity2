@@ -231,12 +231,12 @@
             $(_.$elements.calendarEl).addClass('evo-calendar calendar-initialized');
             if (_.windowW <= _.$breakpoints.tablet) { // tablet/mobile
                 _.toggleSidebar(false);
-                _.toggleEventList(false);
+              //  _.toggleEventList(false);                                       // SEB
             } else {
                 if (!_.options.sidebarDisplayDefault) _.toggleSidebar(false);
                 else _.toggleSidebar(true);
 
-                if (!_.options.eventDisplayDefault) _.toggleEventList(false);
+                if (!_.options.eventDisplayDefault) _.toggleEventList(true);   // SEB -(false)
                 else _.toggleEventList(true);
             }
             if (_.options.theme) _.setTheme(_.options.theme); // set calendar theme
@@ -405,7 +405,7 @@
 
         if (_.windowW <= _.$breakpoints.tablet) { // tablet
             _.toggleSidebar(false);
-            _.toggleEventList(false);
+          //  _.toggleEventList(false);                     // SEB
 
             if (_.windowW <= _.$breakpoints.mobile) { // mobile
                 $(window)
@@ -418,7 +418,7 @@
             if (!_.options.sidebarDisplayDefault) _.toggleSidebar(false);
             else _.toggleSidebar(true);
 
-            if (!_.options.eventDisplayDefault) _.toggleEventList(false);
+            if (!_.options.eventDisplayDefault) _.toggleEventList(true);  // SEB -(false)
             else _.toggleEventList(true);
 
             $(window)
@@ -999,7 +999,7 @@
         isInnerClicked = event.target === _.$elements.innerEl[0];
 
         if (_.$UI.hasSidebar && isInnerClicked) _.toggleSidebar(false);
-        if (_.$UI.hasEvent && isInnerClicked) _.toggleEventList(false);
+        if (_.$UI.hasEvent && isInnerClicked) _.toggleEventList(false);  // SEB
     };
 
     // v1.0.0 - Toggle Sidebar
@@ -1020,7 +1020,7 @@
         }
 
         if (_.windowW <= _.$breakpoints.tablet) {
-            if (_.$UI.hasSidebar && _.$UI.hasEvent) _.toggleEventList();
+          //  if (_.$UI.hasSidebar && _.$UI.hasEvent) _.toggleEventList();  // SEB-
         }
     };
 

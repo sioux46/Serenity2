@@ -8,11 +8,19 @@ $devaRed: #fa0039;
 
 // hsl(235, 0%, 64%) !important  // deva gray color
 
+html {
+  overscroll-behavior: none;
+}
+
 /* Use the variables */
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
   // background-color: $colorBeige;
+}
+
+.calendar-events {
+  user-select: none;
 }
 
 //                        TOOLBAR
@@ -70,11 +78,20 @@ body {
   //text-align: center;
 }
 
+.s-start {
+  font-weight: 600;
+  margin: 0;
+}
+
 .start-page-btn {
   border-radius: 0; // 0.5rem;
   font-size: 1.8rem; // 2rem;
   //font-weight: 900;
-  border-width: 3px;
+  // border-width: 3px;
+  border-left-width: 10px;
+  border-right-width: 10px;
+  // border-top-width: 0;
+  // border-bottom-width: 0;
   padding-top: 2rem;
   padding-bottom: 2rem;
   //  color: $sebDarkBlue !important;
@@ -102,14 +119,11 @@ body {
 #paramButton {
   color: $sebGreen !important;
   border-color: $sebGreen !important;
+  margin-bottom: 2rem;
 }
 
 #voyage-title {
   background-color: $sebDarkBlue;
-}
-
-.s-start {
-  font-weight: 600;
 }
 
 #param {
@@ -206,6 +220,7 @@ body {
 #logButton {
   position: relative;
   padding: 0;
+  margin-bottom: 10px;
   margin-left: auto;
   width: fit-content;
   // top: -0.6rem;

@@ -107,7 +107,7 @@
 <!--            -->
   <!-- <i style="font-size:24px;" class="fas fa-clock"></i> -->
   <div id="start" class="s-page">
-    <div class="deva-tittle container-fluid mt-0 p-2 pb-1 mb-5 bg-primary text-white text-center">
+    <div class="deva-tittle container-fluid mt-0 p-2 pb-1 mb-4 bg-primary text-white text-center">
       <img src="icons/splash.png" width="60px" style="border-radius: 50%"> <!-- carWhite.svg -->
       <h1 class="s-start display-5">DEVA</h1>
       <small id=devaVersion></small>
