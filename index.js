@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.02.5";
+var devaVersion = "v3.09.03.5";
 
 /*********************************************************************
 ************************************************************ class
@@ -271,8 +271,11 @@ function addCalEvent(time, descrition, date) {
 ////
 function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S E
   if ( !question ) return;
-  var response = "";
+  response = "";
 
+  if ( question.match(/Merci Norbert/i)) { // stopRecog
+    response = "Je vous en pris";
+  }
   if ( question.match(/^Bonjour Norbert$/i) ) {
     response = "Bonjour Monsieur. Que puij faire pour vous ?";
   }
@@ -326,31 +329,32 @@ function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S 
       chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
       chatBuffer.push({ role: "user", content: "Effacez entièrement mon agenda." });
       chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
-      // chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour aujourd’hui:  dentiste 9h30, déjeuner avec Diane de 13h15 à 17h45."});
-      // chatBuffer.push({ role: "assistant", content: "Rendez-vous pour aujourd'hui ajoutés" });
-      // chatBuffer.push({ role: "user", content: "Ajoutez à mon agenda les rendez-vous suivant pour demain: cinéma avec Annick à 11h10."});
-      // chatBuffer.push({ role: "assistant", content: "Rendez-vous pour demain ajoutés" });
+
+      chatBuffer.push({ role: "system", content: "Vous avez accès à mon agenda qui contient mes rendez-vous" });
+      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif " });
+      chatBuffer.push({ role: "user", content: "Ajoutez un rdv pour le premier janvier 2024 à 9 heure, motif: Diane picine" });
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
+      chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Diane" });
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
 
       chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
 
+      chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
+
+      chatBuffer.push({ role: "system", content: "Voici le contenu de mon agenda. Répondez au questions que je vais vous poser" });
+
       // ajout de l'agenda
       chatBuffer = chatBuffer.concat(collectEvents());
+      chatBuffer.push({ role: "system", content: "Je viens de vous donner le contenu de mon agenda. Répondez au questions sur les rendez-vous contenus dans cet agenda" });
 
-      chatBuffer.push({ role: "system", content: "Quand vous répondez 'Rendez-vous ajouté à l'agenda', ajoutez le jour de la semaine, la date, l'heure et le motif" });
-      chatBuffer.push({ role: "system", content: "Quand vous répondez 'Voici vos rendez-vous', ajoutez le jour de la semaine, la date, l'heure et le motif" });
 
       newChat = false;
     }
 ///////
+
+
     chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTime() + "." });
 
-    //chatBuffer.push({ role: "system", content: "Quand vous répondez 'Rendez-vous ajouté à l'agenda', ajoutez le jour de la semaine, la date, l'heure et le motif" });
-    //chatBuffer.push({ role: "system", content: "Quand vous répondez 'Voici vos rendez-vous', ajoutez le jour de la semaine, la date, l'heure et le motif" });
-    chatBuffer.push({ role: "system", content: "Donnez le jour, le mois, l'année, l'heure et le motif quand vous répondez au sujet d'un rendez-vous" });
-
-
-    // chatBuffer.push({ role: "system", content: "Exprimez-vous dans le style de C3PO, le robot maitre d'hotel de Star Wars" });
-    chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " et " + responseDetail + "." });
 
     chatBuffer.push({ role: "user", content: question });
 
@@ -506,21 +510,17 @@ function doSpeechSynth (text) {
   ut.voice = voices.filter(function(voice) {return voice.name == 'Thomas';})[0];
   // ut.voice = actualVoice;
   ut.onstart = function(e) {
-  /*  if ( questionMode == "audio" ) {
-      questionMode = "paused";
-      console.log("Start paused");
-      $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-    } */
+    //
   };
   ut.onend = function(e) {
     recogResult = "";
-  /*  if ( questionMode == "paused" && !recognizing ) {
-      questionMode = "audio";
-      console.log("End paused");
-      $("#micButton img").attr("src", "icons/mic-fill.svg");
+    if ( questionMode == "audio" && response != "Je vous en pris" ) {
       startRecog();
-    } */
-    if ( questionMode == "audio" ) startRecog();
+      return;
+    }
+    questionMode = "audio";
+    $("#micButton").trigger("click");
+    $("#micButton").trigger("click");
   };
   window.speechSynthesis.speak(ut);
 }
@@ -529,7 +529,15 @@ function doSpeechSynth (text) {
 function fillLog(who, text) {
   if ( who == "question" )
           $("#logTextarea").val( $("#logTextarea").val() + "> " + userName + ": " + text + "\n");
-  else    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text + "\n\n");
+  else  {
+    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text + "\n\n");
+    if ( text == "Je vous en pris" ) {
+    questionMode = "audio";
+    $("#micButton").trigger("click");
+    $("#micButton").trigger("click");
+    $("#micButton").trigger("click");
+  }
+  }
 }
 
 ////                                audioState
@@ -687,10 +695,8 @@ speechSynthesis.addEventListener("voiceschanged", () => {
 //                                                      toggle mic
 $("#micButton").on("click", function (ev) {
 
-  // if ( questionMode == "paused" ) return;
   if ( !recognizing ) {
     questionMode = "text"; // bug fix
-
   }
 
   if ( questionMode == "text" ) {
@@ -918,7 +924,7 @@ $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("
 });
 
  $(".month").on("click", function(e) {
-  // $('#evoCalendar').evoCalendar('toggleSidebar');
+ $('#evoCalendar').evoCalendar('toggleEventList', false);
  });
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
@@ -1079,6 +1085,7 @@ var recognition = initRecognition();
 var recogResult = "";
 
 //                              init speechSynthesis
+var response;
 var voices;
 var actualVoice;
 var speechFlag = true;

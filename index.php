@@ -115,7 +115,7 @@
     <div class="container">
       <div class="d-grid gap-4 text-center">
                                                 <!-- data-bs-target="#modalOntoTree" -->
-        <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Planifier/Consulter l'agenda des voyages</button>
+        <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Agenda des voyages</button>
         <button id="voyageButton" type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
         <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramétrer DEVA</button>
       </div>
