@@ -269,21 +269,27 @@ function addCalEvent(time, descrition, date) {
 }
 /////////////////////////////////////////////////////////////////////////////////
 ////
-function questionAnalyse(question) {           // Q U E S T I O N   A N A L Y S E
+function questionAnalyse(question) {   //*********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
+  let prevResponse = response;
   response = "";
 
-  if ( question.match(/Merci Norbert/i)) { // stopRecog
+  if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog
     response = "Je vous en pris";
   }
-  if ( question.match(/^Bonjour Norbert$/i) ) {
-    response = "Bonjour Monsieur. Que puij faire pour vous ?";
+  if ( question.match(new RegExp("^Bonjour " + assistantName, 'i'))) {
+    response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
   //......................................... page change
   else if ( question.match(/(ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
     if ( question.match(/agenda/i) ) {
-
       $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
+      let date = prevResponse.match(/(\d{2})\s+(.+)\s+(\d{4})/i );
+      if ( date ) {
+        let dateForEvo = chatToEvoDate(date);
+        console.log(dateForEvo);
+        $('#evoCalendar').evoCalendar('selectDate', dateForEvo);
+      }
       response = "OK";
     }
     else if ( question.match(/paramètre/i) ) {
@@ -406,9 +412,9 @@ function chatGPTcall() {       /***** chatGPT call *****/
           console.log("Réponse texte");
           if ( questionMode == "audio" && !reponse.match(/^Error/) ) startRecog();
         }
-      }
-        // return reponse;
+        response = reponse; // local to glob
 
+      }
     }
   });
 }
@@ -560,6 +566,21 @@ function audioState() {
 }); */
 
 /////////////////////////////////////////////////////   DATE @ TIME
+
+////
+function chatToEvoDate(date) {
+  // date[0]  "30 août 2023"
+  d = date;
+  const monthNum = {
+    "janvier": "01", "février": "02", "mars": "03", "avril": "04", "mai": "05", "juin": "06", "juillet": "07", "août": "08", "septembre": "09", "octobre": "10", "novembre": "11", "décembre": "12" };
+
+  if ( d[1].length == 1 ) d[1] = "0" + d[1];
+  if ( d[2].length == 1 ) d[2] = "0" + d[2];
+
+  let date2 = monthNum[d[2]] + "/" + d[1] + "/" + d[3];
+  return date2;
+}
+
 ////
 function actualDate() {
   // Obtenir la date actuelle
@@ -567,8 +588,8 @@ function actualDate() {
 
   // Noms des mois en français
   const nomsMois = [
-    "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-    "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    "janvier", "février", "mars", "avril", "mai", "juin",
+    "juillet", "août", "septembre", "octobre", "novembre", "décembre"
   ];
 
   // Obtenir le jour, le mois et l'année
@@ -763,10 +784,16 @@ $("#chatParamButton").on("click", function(e) {
 });
 
 $("#chatParamUserName").on("change", function (e) {
+  if ( userName != $("#chatParamUserName").val() ) {
+    $("#logButton").trigger("click");
+  }
   userName = $("#chatParamUserName").val();
   localStorage.setItem('userName', JSON.stringify(userName));
 });
 $("#chatParamAssistantName").on("change", function (e) {
+  if ( assistantName != $("#chatParamAssitantName").val() ) {
+    $("#logButton").trigger("click");
+  }
   assistantName = $("#chatParamAssistantName").val();
   localStorage.setItem('assistantName', JSON.stringify(assistantName));
   });
@@ -1118,12 +1145,12 @@ else responseDetail = " de façon concise ";
 if ( localStorage.userName ) {
   userName = JSON.parse(localStorage.getItem('userName'));
 }
-else userName = " Monsieur ";
+else userName = "Monsieur";
 
 if ( localStorage.assistantName ) {
   assistantName = JSON.parse(localStorage.getItem('assistantName'));
 }
-else assistantName = " Norbert ";
+else assistantName = "Norbert";
 
 if ( localStorage.reponseTemperature ) {
   reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
