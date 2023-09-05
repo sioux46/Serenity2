@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.04.1";
+var devaVersion = "v3.09.05.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -498,6 +498,7 @@ function resetRecog() {
 
 ////                                         ********  Speech SYTHESIS ********
 function doSpeechSynth (text) {
+  if ( !window.speechSynthesis ) return;  // if android webview
   speechSynthesis.cancel(); // removes anything 'stuck'
 
   if ( !voices ) {
@@ -708,9 +709,11 @@ $("#devaVersion").text(devaVersion);
 /////       show start page
 $("#start").css({"display": "block"});
 /////        get voices
+if ( window.speechSynthesis ) { // if not android webview
 speechSynthesis.addEventListener("voiceschanged", () => {
   voices = speechSynthesis.getVoices();
 });
+}
 ////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
 //                                                      toggle mic
