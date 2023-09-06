@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.05.1";
+var devaVersion = "v3.09.05.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -1134,7 +1134,7 @@ var chatBuffer = [];
 var newChat = true;
 
 //                        Paramètres chatGPT
-var reponseModel = 'gpt-3.5-turbo-16k-0613'; // 'gpt-3.5-turbo-0613';  //'gpt-4'; //   'gpt-4-0613'; // 
+var reponseModel = 'gpt-3.5-turbo-16k-0613'; // 'gpt-3.5-turbo-0613';  //'gpt-4'; //   'gpt-4-0613'; //
 var reponseTemperature;
 var userName;
 var assistantName;
