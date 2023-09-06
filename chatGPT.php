@@ -14,7 +14,6 @@ $newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
-// $userContent = json_decode($_POST['userContent'], true);
 $details = json_decode($_POST['details'], true);
 
 /*

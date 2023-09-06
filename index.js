@@ -274,17 +274,22 @@ function questionAnalyse(question) {   //*********************** Q U E S T I O N
   let prevResponse = response;
   response = "";
 
-  if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog
+  if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog handled in fillLog()
     response = "Je vous en pris";
   }
   if ( question.match(new RegExp("^Bonjour " + assistantName, 'i'))) {
     response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
-  //......................................... page change
-  else if ( question.match(/(ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
+  //........................................................................ page change
+  else if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
     if ( question.match(/agenda/i) ) {
       $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
-      let date = prevResponse.match(/(\d{2})\s+(.+)\s+(\d{4})/i );
+
+      let prevR = prevResponse;
+      if ( prevR.match(/premier rendez-vous/i) ) prevR = prevR.replace(/premier rendez-vous/i, "");
+      if ( prevR.match(/Premier/i) ) prevR = prevR.replace(/Premier/i, "01");
+      if ( prevR.match(/1er/i) ) prevR = prevR.replace(/1er/i, "01");
+      let date = prevR.match(/(\d{2})\s+(.+)\s+(\d{4})/i );
       if ( date ) {
         let dateForEvo = chatToEvoDate(date);
         console.log(dateForEvo);
@@ -333,11 +338,9 @@ function questionAnalyse(question) {   //*********************** Q U E S T I O N
       //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
       //chatBuffer.push({ role: "assistant", content: "Nous sommes le 25 décembre 2022" });
       chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
-      chatBuffer.push({ role: "user", content: "Effacez entièrement mon agenda." });
-      chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
+//      chatBuffer.push({ role: "user", content: "Effacez entièrement mon agenda." });
+//      chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
 
-      chatBuffer.push({ role: "system", content: "Vous avez accès à mon agenda qui contient mes rendez-vous" });
-      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif " });
       chatBuffer.push({ role: "user", content: "Ajoutez un rdv pour le premier janvier 2024 à 9 heure, motif: Diane picine" });
       chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
       chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Diane" });
@@ -352,6 +355,9 @@ function questionAnalyse(question) {   //*********************** Q U E S T I O N
       // ajout de l'agenda
       chatBuffer = chatBuffer.concat(collectEvents());
       chatBuffer.push({ role: "system", content: "Je viens de vous donner le contenu de mon agenda. Répondez au questions sur les rendez-vous contenus dans cet agenda" });
+      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda qui contient mes rendez-vous" });
+      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif " });
+      chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer un rendez-vous ou de lister les rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif " });
 
 
       newChat = false;
@@ -955,6 +961,7 @@ $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("
 
  $(".month").on("click", function(e) {
  $('#evoCalendar').evoCalendar('toggleEventList', false);
+ $('#evoCalendar').evoCalendar('toggleSidebar', false);
  });
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
@@ -1127,7 +1134,7 @@ var chatBuffer = [];
 var newChat = true;
 
 //                        Paramètres chatGPT
-var reponseModel = 'gpt-3.5-turbo-0613';
+var reponseModel = 'gpt-3.5-turbo-16k-0613'; // 'gpt-3.5-turbo-0613';  //'gpt-4'; //   'gpt-4-0613'; // 
 var reponseTemperature;
 var userName;
 var assistantName;
