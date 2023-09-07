@@ -256,7 +256,7 @@ function collectEvents() {
 
 ////
 // time: name, description: description, date: date
-function addCalEvent(time, descrition, date) {
+function addCalEvent(time, description, date) {
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
@@ -267,36 +267,49 @@ function addCalEvent(time, descrition, date) {
       color: "#009099", // "#fe7f78",
     }]);
 }
+
 /////////////////////////////////////////////////////////////////////////////////
 ////
 function questionAnalyse(question) {   //*********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  let prevResponse = response;
-  response = "";
+  let prevResponse;
+  if ( response ) prevResponse = response.replace(/"/g, ' '); // quotes sup
+  response = ""; // global
+
+
 
   if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog handled in fillLog()
     response = "Je vous en pris";
   }
-  if ( question.match(new RegExp("^Bonjour " + assistantName, 'i'))) {
+  else if ( question.match(new RegExp("^Bonjour " + assistantName, 'i'))) {
     response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
-  //........................................................................ page change
-  else if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) {
-    if ( question.match(/agenda/i) ) {
-      $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
 
-      let prevR = prevResponse;
-      if ( prevR.match(/premier rendez-vous/i) ) prevR = prevR.replace(/premier rendez-vous/i, "");
-      if ( prevR.match(/Premier/i) ) prevR = prevR.replace(/Premier/i, "01");
-      if ( prevR.match(/1er/i) ) prevR = prevR.replace(/1er/i, "01");
-      let date = prevR.match(/(\d{2})\s+(.+)\s+(\d{4})/i );
-      if ( date ) {
-        let dateForEvo = chatToEvoDate(date);
-        console.log(dateForEvo);
-        $('#evoCalendar').evoCalendar('selectDate', dateForEvo);
+  //...............................................................   D E V A    page change
+  else  {
+    let action = "";
+    if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) action = "show";
+  //  else if ( question.match(/(ajoute|rajoute|nouveau rendez-vous)/i) ) action = "add";
+
+    if ( action == "show" ) {
+      if ( question.match(/agenda/i) ) {
+        $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
+
+        let prevR = prevResponse;
+        // if ( prevR.match(/premier rendez-vous/i) ) prevR = prevR.replace(/premier rendez-vous/i, "");
+        if ( prevR.match(/Premier/i) ) prevR = prevR.replace(/Premier/i, "01");
+        if ( prevR.match(/1er/i) ) prevR = prevR.replace(/1er/i, "01");
+
+        let date = prevR.match(new RegExp("\\s+(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i'));
+        if ( date ) {
+          let dateForEvo = chatToEvoDate(date);
+          console.log(dateForEvo);
+          $('#evoCalendar').evoCalendar('selectDate', dateForEvo);
+        }
+        response = "OK";
       }
-      response = "OK";
     }
+
     else if ( question.match(/paramètre/i) ) {
       $("#startButton").trigger("click"); $("#paramButton").trigger("click");
       response = "OK";
@@ -337,27 +350,28 @@ function questionAnalyse(question) {   //*********************** Q U E S T I O N
       //chatBuffer.push({ role: "assistant", content: "Aujourd'hui nous sommes mardi" });
       //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
       //chatBuffer.push({ role: "assistant", content: "Nous sommes le 25 décembre 2022" });
-      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
-//      chatBuffer.push({ role: "user", content: "Effacez entièrement mon agenda." });
-//      chatBuffer.push({ role: "assistant", content: "Votre agenda est vide" });
+      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
+      chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
+//      chatBuffer.push({ role: "system", content: "Ne mettez jamais de guillemets simples ni de guillemets double dans vos réponses" });
 
-      chatBuffer.push({ role: "user", content: "Ajoutez un rdv pour le premier janvier 2024 à 9 heure, motif: Diane picine" });
+      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
+      chatBuffer.push({ role: "user", content: "Supprimez tous les rendez-vous de mon agenda." });
+      chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous de votre agenda ont été supprimés. Votre agenda est vide" });
+
+      chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 9 heure, motif: Diane picine" });
       chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
       chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Diane" });
       chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
 
-      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
 
-      chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
-
-      chatBuffer.push({ role: "system", content: "Voici le contenu de mon agenda. Répondez au questions que je vais vous poser" });
+      // chatBuffer.push({ role: "system", content: "Voici le contenu de mon agenda. Répondez au questions que je vais vous poser" });
 
       // ajout de l'agenda
       chatBuffer = chatBuffer.concat(collectEvents());
-      chatBuffer.push({ role: "system", content: "Je viens de vous donner le contenu de mon agenda. Répondez au questions sur les rendez-vous contenus dans cet agenda" });
-      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda qui contient mes rendez-vous" });
-      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif " });
-      chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer un rendez-vous ou de lister les rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif " });
+      // chatBuffer.push({ role: "system", content: "Je viens de vous donner le contenu de mon agenda. Répondez au questions sur les rendez-vous contenus dans cet agenda" });
+      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda qui contient les rendez-vous que je viens de vous donner." });
+      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif du rendez-vous " });
+      chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer un rendez-vous ou de lister les rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
 
 
       newChat = false;
@@ -406,8 +420,10 @@ function chatGPTcall() {       /***** chatGPT call *****/
         }
         else {
           let assistantMessage = { role: "assistant", content: reponse };
+
           // assistant response added to buffer, ready for nexte question
           chatBuffer.push(assistantMessage);
+          handleResponse(reponse);
         }
 
         if ( reponseMode == "audio" ) {
@@ -425,6 +441,47 @@ function chatGPTcall() {       /***** chatGPT call *****/
   });
 }
 
+///////////////////////////////////////////// R E S P O N S E analyse
+////
+function handleResponse(rep) {
+  let action = "";
+  if ( rep.match(/(ajouté|rajouté|nouveau rendez-vous)/i) ) action = "add";
+  else if ( rep.match(/(supprimé|enlevé)/i) ) action = "remove";
+
+  if ( action ) {
+    if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
+    if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
+
+    let date = rep.match(new RegExp("\\s+(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i'));
+    if ( !date ) return;
+    let dateForEvo = chatToEvoDate(date);
+
+    let time = rep.match(/\s+à\s+(\d{1,2})/i);
+    if ( !time ) time = ""; else time = time[1] + "h";
+
+    let description = rep.match(/(motif\s+|motif:\s+|avec\s+)(.*)/);
+    if ( !description ) description = ""; else description = description[2];
+
+    console.log(time);
+    console.log(dateForEvo);
+    console.log(description);
+
+    if ( action == "add" ) $('#evoCalendar').evoCalendar('addCalendarEvent', addCalEvent(time, description, dateForEvo));
+
+    else if (action == "remove") {
+      for ( let event of evoCalEvents ) {
+        if ( event.date != dateForEvo ) continue;
+        if ( event.name == time || event.name.match(RegExp(time)) ) {
+          $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+        }
+      }
+    }
+
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////
 //                                          *** Speech RECOGNITION ***
 
 ////
@@ -436,6 +493,7 @@ function initRecognition() {
   recognition.continuous = false;
   recognition.lang = "fr-FR";
   // recognition.interimResults = true;
+
 
   // resetRecog();
   recognition.onend =  function (event) {
@@ -461,7 +519,7 @@ function startRecog() {
   // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   $("#micButton img").attr("src", "icons/mic-fill.svg");
   $("#micButton").css("border", "3px solid #fa0039");
-  recognition.start();
+  try { recognition.start(); } catch(e) {}
   recognizing = true;
   console.log("Écoute");
 }
@@ -540,10 +598,13 @@ function doSpeechSynth (text) {
 
 ////                                  fillLog
 function fillLog(who, text) {
+  let debText = "> ";
+  if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
   if ( who == "question" )
-          $("#logTextarea").val( $("#logTextarea").val() + "> " + userName + ": " + text + "\n");
+          $("#logTextarea").val( $("#logTextarea").val() + debText + userName + ": " + text + "\n");
   else  {
-    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text + "\n\n");
+    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text );
+    document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
     if ( text == "Je vous en pris" ) {
     questionMode = "audio";
     $("#micButton").trigger("click");
@@ -573,6 +634,11 @@ function audioState() {
 }); */
 
 /////////////////////////////////////////////////////   DATE @ TIME
+
+////
+function frenchMonthNamesForRegExp() {
+  return "janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre";
+}
 
 ////
 function chatToEvoDate(date) {
@@ -837,10 +903,12 @@ $("#questionButton").on("click", function(e) {
     questionAnalyse(question);
   }
 });
+
 $("#logButton").on("click", function(e) {
   $("#logTextarea").val("");
   newChat = true;
 });
+
 ///////////////////////////////////////////////  SHOW PAGES   /////
 
 /////                        open start page
