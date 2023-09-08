@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.05.2";
+var devaVersion = "v3.09.07.3";
 
 /*********************************************************************
 ************************************************************ class
@@ -50,7 +50,7 @@ function getDate(day, month,year) {
 }
 
 
-/*************************************** Tree Handling START */
+// ************************************** Tree Handling START
 ///////////////////////////////////////
 function findNodeByLabel(label, node) {
   var childs = node[1];
@@ -135,7 +135,7 @@ function importTree(inData) {
   return Array.from(outData);
 }
 //
-/*************************************** Tree Handling END */
+// ************************************** Tree Handling END
 
 /////       show page
 function showPage(pageID) {
@@ -235,7 +235,7 @@ function collectEvents() {
   let content = "";
   for ( let event of evoCalEvents ) {
     content = "Ajoutez un rendez-vous à mon agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
-    if ( event.name != "hundefined") {
+    if ( event.name ) {
       if ( event.name.match(/à/) ) content += " de " + event.name;
       else content += " à " + event.name;
     }
@@ -244,7 +244,7 @@ function collectEvents() {
     events.push({ role: "user", content: content});
 
     content = "Rendez-vous ajouté à l'agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
-    if ( event.name != "hundefined") {
+    if ( event.name ) {
       if ( event.name.match(/à/) ) content += " de " + event.name;
       else content += " à " + event.name;
     }
@@ -266,11 +266,14 @@ function addCalEvent(time, description, date) {
       type: "event",
       color: "#009099", // "#fe7f78",
     }]);
+
+    sortCalendarEvents( date );
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 ////
-function questionAnalyse(question) {   //*********************** Q U E S T I O N   A N A L Y S E *********
+function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
   let prevResponse;
   if ( response ) prevResponse = response.replace(/"/g, ' '); // quotes sup
@@ -385,16 +388,17 @@ function questionAnalyse(question) {   //*********************** Q U E S T I O N
     chatBuffer.push({ role: "user", content: question });
 
 
-    //********************************************************** ChatGPT
+    // ********************************************************** ChatGPT
     // Load globals before call
       chatGPTcall();
-    //******************************************************************
+    // ******************************************************************
   }
 }
 
 /////
-function chatGPTcall() {       /***** chatGPT call *****/
+function chatGPTcall() {       // **** chatGPT call ****
 
+  waitingForGPT = true;
   $.ajax({
     'url': 'chatGPT.php',
     'type': 'post',
@@ -407,6 +411,7 @@ function chatGPTcall() {       /***** chatGPT call *****/
               details: JSON.stringify(responseDetail),
             },
     'complete': function(xhr, result) {
+      waitingForGPT = false;
       if (result != 'success') {
         console.log("Fatal error API OpenAI!!!!");
       }
@@ -441,7 +446,7 @@ function chatGPTcall() {       /***** chatGPT call *****/
   });
 }
 
-///////////////////////////////////////////// R E S P O N S E analyse
+/////////////////////////////////////////////////////////////////////////// R E S P O N S E    a n a l y s e
 ////
 function handleResponse(rep) {
   let action = "";
@@ -456,8 +461,13 @@ function handleResponse(rep) {
     if ( !date ) return;
     let dateForEvo = chatToEvoDate(date);
 
-    let time = rep.match(/\s+à\s+(\d{1,2})/i);
-    if ( !time ) time = ""; else time = time[1] + "h";
+    let hours = rep.match(/\s+à\s+(\d{1,2})/i)[1];
+    if ( hours.length == 1 ) hours = "0" + hours;
+
+    let minutes = rep.match(/\s+à\s+(\d{1,2})h(\d{1,2})/i)[2];
+    if ( minutes.length == 1 ) minutes = "0" + hours;
+
+    let time = hours + "h" + minutes;
 
     let description = rep.match(/(motif\s+|motif:\s+|avec\s+)(.*)/);
     if ( !description ) description = ""; else description = description[2];
@@ -476,7 +486,6 @@ function handleResponse(rep) {
         }
       }
     }
-
   }
 }
 
@@ -497,7 +506,11 @@ function initRecognition() {
 
   // resetRecog();
   recognition.onend =  function (event) {
-    resetRecog();
+    if ( recogResult == "waitinggggg" ) {
+      recognition.start();
+      console.log("waitinggggg");
+    }
+    else resetRecog();
   };
   recognition.onresult = function (event) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -516,10 +529,10 @@ function initRecognition() {
 
 ////
 function startRecog() {
-  // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
+  if ( window.speechSynthesis.speaking ) return;
   $("#micButton img").attr("src", "icons/mic-fill.svg");
   $("#micButton").css("border", "3px solid #fa0039");
-  try { recognition.start(); } catch(e) {}
+  try { recognition.start(); recogResult = "waitinggggg"; } catch(e) {}
   recognizing = true;
   console.log("Écoute");
 }
@@ -532,6 +545,7 @@ function stopRecog() {
   recogResult = "";
 }
 
+/*
 ////
 function startStopRecog() { // and stop speech
   // if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
@@ -544,7 +558,7 @@ function startStopRecog() { // and stop speech
     recognizing = true;
     console.log("Écoute");
   }
-}
+} */
 
 ////
 function resetRecog() {
@@ -560,7 +574,7 @@ function resetRecog() {
   // }
 }
 
-////                                         ********  Speech SYTHESIS ********
+////                                                       ********  Speech SYTHESIS ********
 function doSpeechSynth (text) {
   if ( !window.speechSynthesis ) return;  // if android webview
   speechSynthesis.cancel(); // removes anything 'stuck'
@@ -769,8 +783,8 @@ function actualTime() {
 ///////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////
 
-//*********************************************************************
-//*********************************************************************
+// *********************************************************************
+// *********************************************************************
 // ********************************************************** R E A D Y
 $(document).ready(function () {
 
@@ -790,6 +804,7 @@ speechSynthesis.addEventListener("voiceschanged", () => {
 
 //                                                      toggle mic
 $("#micButton").on("click", function (ev) {
+  if ( window.speechSynthesis.speaking || waitingForGPT == true ) return;
 
   if ( !recognizing ) {
     questionMode = "text"; // bug fix
@@ -1097,6 +1112,10 @@ $("#newEventOK").on("click", function (ev) {
   let val = $("#sEventTime").val();
   let val2 = $("#sEventTime2").val();
 
+  if ( !val ) return;
+
+  if ( !title ) return;
+
   if ( val2  &&  val2 < val ) {
     $("#sEventTime2").val(val);
     return;
@@ -1131,6 +1150,7 @@ $("#newEventOK").on("click", function (ev) {
   }
 
   else {    // new event
+    if ( time == "hundefined" ) time = "";
     $("#evoCalendar").evoCalendar('addCalendarEvent', [
       {
         id: '' + Math.random(),
@@ -1193,13 +1213,14 @@ var recogResult = "";
 var response;
 var voices;
 var actualVoice;
-var speechFlag = true;
+var speechFlag = true; // init speech
 var speechRate = 1;
 var speechPitch = 1;
 
 //                              init ChatGPT
 var chatBuffer = [];
 var newChat = true;
+var waitingForGPT = false;
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-16k-0613'; // 'gpt-3.5-turbo-0613';  //'gpt-4'; //   'gpt-4-0613'; //
