@@ -37,7 +37,7 @@
 
   <div id="toolBar">
     <button id="startButton" class="btn toolbarButton" type="button">
-      <img src="icons/splash.png" width=55>
+      <img src="icons/splash.png" width=50>
     </button>
     <div id="dialogButtons">
       <button id="micButton" class="btn toolbarButton" type="button">
@@ -51,7 +51,9 @@
       </button>
     </div>
   </div>
+<!--                       -->
 <!--   toolbar offcanvas   -->
+<!--                       -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Préférences pour le dialogue</strong></h5>
@@ -125,6 +127,11 @@
 <!--    shedule     -->
 <!--                -->
   <div id="shedule" class="s-page">
+      <div id="voyage-title" class="container-fluid pt-3 pb-3 mb-0 text-white text-center">
+        <div id="voyage-content"> <!--  class="container-fluid" -->
+          <div class="s-page-title container-fluid"><h1>Agenda</h1></div>
+        </div>
+      </div>
     <div id="shedule-content"> <!--  class="container-fluid" -->
       <div id="evoCalendar"></div>
     </div>
@@ -141,23 +148,23 @@
       </div>
     </div>
     <div id="voyageText" class="container form-floating d-grid gap-2">
-      <div><strong>Vous avez la parole:</strong></div>
-      <textarea id="questionTextarea" class="form-control" autofocus></textarea>
-      <button id="questionButton" class="btn" type="button">
-        <img src="icons/forward.svg" width=36>
-      </button>
       <div><strong>Historique du dialogue:</strong></div>
       <textarea id="logTextarea" autofocus class="form-control"></textarea>
       <button id="logButton" class="btn" type="button">
         <img src="icons/trash.svg" width=30>
+      </button>
+      <div><strong>Vous avez la parole:</strong></div>
+      <textarea id="questionTextarea" class="form-control" autofocus></textarea>
+      <button id="questionButton" class="btn" type="button">
+        <img src="icons/forward.svg" width=36>
       </button>
     </div>
   </div>
 <!--               -->
 <!--     param     -->
 <!--               -->
-  <div id="param" class="s-page">
-    <div id="ontoTree-content" class="container">
+  <div id="paramPage" class="s-page">
+<!--    <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
         <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
           <h1 id="ontoTree-parent" class="mb-0"></h1>
@@ -173,13 +180,13 @@
         <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
         <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
       </div>
-    </div>
+    </div> -->
   </div>
 <!-- **************************************************************************************** -->
 <!-- *******************************************************************   M O D A L   ****** -->
 <!--                                             -->
 <!--   inputModal  choose label in ontoTree     -->
-<!--                                             -->
+<!--
   <div id="inputModal" class="modal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -200,7 +207,49 @@
         </div>
       </div>
     </div>
+  </div>   -->
+
+  <!--                                             -->
+  <!--   ontoTreeModal  choose label in ontoTree     -->
+  <!--                                             -->
+  <div id="ontoTreeModal" class="modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title"><b>Choisir une rubrique</b></h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="param">
+          <div id="ontoTree-content>"
+          <div class="d-grid gap-2">
+            <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
+              <h1 id="ontoTree-parent" class="mb-0"></h1>
+            </div>
+            <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+            <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          </div>
+          </div>
+          </div>
+        </div>
+  <!--      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button id="inputModalChooseLabelOK"  type="button" class="btn btn-primary">OK</button>
+        </div> -->
+      </div>
+    </div>
   </div>
+
+
+
   <!--                                     -->
   <!--    eventModal  create new event     -->
   <!--                                     -->

@@ -271,7 +271,7 @@ tr.calendar-body .calendar-day .day[disabled] {
     right: 0;
     width: 400px;
     height: 100%;
-    padding: 70px 30px 60px 30px;
+    padding: 20px 15px; // 70px 30px 60px 30px;      SEB+
     background-color: #fbfbfb;
     -webkit-transition: all .3s ease;
     -o-transition: all .3s ease;
@@ -548,7 +548,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     .calendar-events {
         width: 380px;
-        padding: 70px 20px 60px 20px;
+        padding: 20px 15px; // 70px 20px 60px 20px;     SEB+
     }
 }
 /* 1024 */
@@ -569,7 +569,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     .calendar-events {
         width: 300px;
-        padding: 70px 10px 60px 10px;
+        padding: 20px 15px; // 70px 10px 60px 10px;     SEB+
     }
     tr.calendar-body .calendar-day .day {
         padding: 10px;
@@ -655,7 +655,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     .calendar-events {
         width: 275px;
-        padding: 70px 10px 60px 10px;
+        padding: 20px 15px; //  70px 10px 60px 10px;      SEB+
     }
 }
 
@@ -691,7 +691,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     .calendar-events {
         width: 48%;
-        padding: 70px 20px 60px 20px;
+        padding: 20px 15px; // 70px 20px 60px 20px;          SEB+
         -webkit-box-shadow: -5px 0 18px -3px rgba(135, 115, 193, 0.5);
                 box-shadow: -5px 0 18px -3px rgba(135, 115, 193, 0.5);
         z-index: 1;

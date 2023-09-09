@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.07.3";
+var devaVersion = "v3.09.09.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -218,7 +218,7 @@ function sortCalendarEvents(date) { // date
 }
 
 ////
-function clearEventModal(ev) {                // clear fields
+function clearEventModal(ev) {                // clear cal fields
   $("#eventModal").find("#sEventTitle").val("");
   $("#eventModal").find("#sEventTime").val("");
   $("#eventModal").find("#sEventTime2").val("");
@@ -267,8 +267,8 @@ function addCalEvent(time, description, date) {
       color: "#009099", // "#fe7f78",
     }]);
 
-    sortCalendarEvents( date );
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    //sortCalendarEvents( date );
+    //localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -464,12 +464,20 @@ function handleResponse(rep) {
     let hours = rep.match(/\s+à\s+(\d{1,2})/i)[1];
     if ( hours.length == 1 ) hours = "0" + hours;
 
-    let minutes = rep.match(/\s+à\s+(\d{1,2})h(\d{1,2})/i)[2];
-    if ( minutes.length == 1 ) minutes = "0" + hours;
+    let time;
+    let minutes = rep.match(/\s+à\s+(\d{1,2})h(\d{1,2})/i);
+    if ( minutes ) {
+      minutes = minutes[2];
+      if ( minutes.length == 1 ) minutes = "0" + minutes;
+      time = hours + "h" + minutes;
+    }
+    else time = hours + "h";
 
-    let time = hours + "h" + minutes;
-
-    let description = rep.match(/(motif\s+|motif:\s+|avec\s+)(.*)/);
+    let description;
+    // let description = rep.match(/(motif\s+|motif:\s+|avec\s+|chez\s+|pour\s+)(.*)/i);
+    // if ( !description ) description = ""; else description = description[2];
+    // if ( description.match(date[0]) ) description = rep.match(/à \d{1,2}h\s+(.*)/)[1];
+    description = rep.match(/.*\d{1,2}h(motif:|motif|,|..)(.*)/);
     if ( !description ) description = ""; else description = description[2];
 
     console.log(time);
@@ -486,6 +494,9 @@ function handleResponse(rep) {
         }
       }
     }
+    sortCalendarEvents( date );
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
   }
 }
 
@@ -953,7 +964,7 @@ $("#voyageButton").on("click", function (ev) {
 
 /////       show param page
 $("#paramButton").on("click", function (ev) {
-  showPage("#param");
+  showPage("#paramPage");
   $("#toolBar").css("display", "block");
   initOntoTreeChoose(ontoTree[0]);
 });
