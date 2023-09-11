@@ -127,7 +127,7 @@
 <!--    shedule     -->
 <!--                -->
   <div id="shedule" class="s-page">
-      <div id="voyage-title" class="container-fluid pt-3 pb-3 mb-0 text-white text-center">
+      <div id="voyage-title" class="container-fluid pt-3 pb-0 mb-0 text-white text-center">
         <div id="voyage-content"> <!--  class="container-fluid" -->
           <div class="s-page-title container-fluid"><h1>Agenda</h1></div>
         </div>

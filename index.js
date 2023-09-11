@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.09.2";
+var devaVersion = "v3.09.10.3";
 
 /*********************************************************************
 ************************************************************ class
@@ -230,6 +230,7 @@ function clearEventModal(ev) {                // clear cal fields
 
 ////
 // time: name, description: description, date: date
+// Collecting agenda events the send to ChatGPT
 function collectEvents() {
   let events = [];
   let content = "";
@@ -243,7 +244,7 @@ function collectEvents() {
     else content += ".";
     events.push({ role: "user", content: content});
 
-    content = "Rendez-vous ajouté à l'agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+    content = "Rendez-vous ajouté pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
     if ( event.name ) {
       if ( event.name.match(/à/) ) content += " de " + event.name;
       else content += " à " + event.name;
@@ -275,6 +276,7 @@ function addCalEvent(time, description, date) {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
+  console.log("question: " + question);
   let prevResponse;
   if ( response ) prevResponse = response.replace(/"/g, ' '); // quotes sup
   response = ""; // global
@@ -288,30 +290,27 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
 
-  //...............................................................   D E V A    page change
+  //////////////////////////////////////////////////////////////////  Q U E S T I O N   a n a l y s e
   else  {
     let action = "";
-    if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà)/i) ) action = "show";
-  //  else if ( question.match(/(ajoute|rajoute|nouveau rendez-vous)/i) ) action = "add";
+    if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà).*agenda/i) ) action = "showAgenda";
 
-    if ( action == "show" ) {
-      if ( question.match(/agenda/i) ) {
-        $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
+    if ( action == "showAgenda" ) {
+      $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
 
-        let prevR = prevResponse;
-        // if ( prevR.match(/premier rendez-vous/i) ) prevR = prevR.replace(/premier rendez-vous/i, "");
-        if ( prevR.match(/Premier/i) ) prevR = prevR.replace(/Premier/i, "01");
-        if ( prevR.match(/1er/i) ) prevR = prevR.replace(/1er/i, "01");
+      let prevR = prevResponse;
+      if ( prevR.match(/Premier/i) ) prevR = prevR.replace(/Premier/i, "01");
+      if ( prevR.match(/1er/i) ) prevR = prevR.replace(/1er/i, "01");
 
-        let date = prevR.match(new RegExp("\\s+(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i'));
-        if ( date ) {
-          let dateForEvo = chatToEvoDate(date);
-          console.log(dateForEvo);
-          $('#evoCalendar').evoCalendar('selectDate', dateForEvo);
-        }
-        response = "OK";
+      let date = prevR.match(new RegExp("\\s+(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i'));
+      if ( date ) {
+        let dateForEvo = chatToEvoDate(date);
+        console.log(dateForEvo);
+        $('#evoCalendar').evoCalendar('selectDate', dateForEvo);
       }
+      response = "OK";
     }
+
 
     else if ( question.match(/paramètre/i) ) {
       $("#startButton").trigger("click"); $("#paramButton").trigger("click");
@@ -338,9 +337,10 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     fillLog("response", response);
   }
 
-  else {
+  else {                                   //            send question to ChatGPT
     questionAnswer = "chatGPT" ;
     console.log("Réponse chatGPT");
+    if ( question.match(/à (mon|l') agenda/) ) question.replace(/à (mon|l') agenda/, "");
     if ( newChat ) {
       chatBuffer = [];
       // Mon nom est " + userName + ".
@@ -349,32 +349,51 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
       // chatBuffer.push({ role: "assistant", content: "A Paris, le temps d'aujourd'hui devrait être ensoleillé avec une température maximale de 25 degrès." });
       // chatBuffer.push({ role: "user", content: "Et demain ?" });
       // chatBuffer.push({ role: "assistant", content: "Demain à Paris, le temps devrait être pluvieux avec une température moyenne de 19 degrès." });
-      //chatBuffer.push({ role: "user", content: "Quel jour sommes-nous ?" });
-      //chatBuffer.push({ role: "assistant", content: "Aujourd'hui nous sommes mardi" });
-      //chatBuffer.push({ role: "user", content: "Quel est la date d'aujourd'hui ?" });
-      //chatBuffer.push({ role: "assistant", content: "Nous sommes le 25 décembre 2022" });
-      chatBuffer.push({ role: "system", content: "La date actuelle est " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
       chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
-//      chatBuffer.push({ role: "system", content: "Ne mettez jamais de guillemets simples ni de guillemets double dans vos réponses" });
+
+      chatBuffer.push({ role: "system", content: "Aujourd'hui, nous sommes le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
+      chatBuffer.push({ role: "system", content: "Demain nous serons le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
+      chatBuffer.push({ role: "system", content: "Après-demain nous serons le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
+
 
       chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
+
       chatBuffer.push({ role: "user", content: "Supprimez tous les rendez-vous de mon agenda." });
       chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous de votre agenda ont été supprimés. Votre agenda est vide" });
 
       chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 9 heure, motif: Diane picine" });
       chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
+
       chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Diane" });
       chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
 
+      chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 9h, motif: dentiste" });
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h, motif: dentiste" });
 
-      // chatBuffer.push({ role: "system", content: "Voici le contenu de mon agenda. Répondez au questions que je vais vous poser" });
+      chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure"});
+      chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
+      chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
+
+      chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
+      chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
+      chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
 
       // ajout de l'agenda
       chatBuffer = chatBuffer.concat(collectEvents());
-      // chatBuffer.push({ role: "system", content: "Je viens de vous donner le contenu de mon agenda. Répondez au questions sur les rendez-vous contenus dans cet agenda" });
-      chatBuffer.push({ role: "system", content: "Vous gérez mon agenda qui contient les rendez-vous que je viens de vous donner." });
-      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif du rendez-vous " });
-      chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer un rendez-vous ou de lister les rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
+
+      //chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, suppimer les rendez-vous que je vous communique. Vous répondez aux question sur ces rendez-vous." });
+      chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
+      chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
+
+      chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en donnant le jour et la date d'aujourd'hui." });
+
+      chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour aujourd'hui à 9h, motif: cinéma avec Annick" });
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 9h, motif: cinéma avec Annick" });
+
+      chatBuffer.push({ role: "user", content: "Supprimez ce dernier rdv" });
+      chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " + actualDay((actualDate())) + " " + actualDate() + " à 9h, motif: Picine avec Diane" });
+
+
 
 
       newChat = false;
@@ -448,41 +467,61 @@ function chatGPTcall() {       // **** chatGPT call ****
 
 /////////////////////////////////////////////////////////////////////////// R E S P O N S E    a n a l y s e
 ////
-function handleResponse(rep) {
+function handleResponse(reponse) {
+  let rep = reponse;
   let action = "";
-  if ( rep.match(/(ajouté|rajouté|nouveau rendez-vous)/i) ) action = "add";
+  let time = "";
+  let description = "";
+  if ( rep.match(/(ajouté|ajouter|nouveau rendez-vous)/i) ) action = "add";
   else if ( rep.match(/(supprimé|enlevé)/i) ) action = "remove";
 
   if ( action ) {
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
 
-    let date = rep.match(new RegExp("\\s+(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i'));
-    if ( !date ) return;
-    let dateForEvo = chatToEvoDate(date);
-
-    let hours = rep.match(/\s+à\s+(\d{1,2})/i)[1];
-    if ( hours.length == 1 ) hours = "0" + hours;
-
-    let time;
-    let minutes = rep.match(/\s+à\s+(\d{1,2})h(\d{1,2})/i);
-    if ( minutes ) {
-      minutes = minutes[2];
-      if ( minutes.length == 1 ) minutes = "0" + minutes;
-      time = hours + "h" + minutes;
+    let dateForEvo;
+    let date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( date ) dateForEvo = chatToEvoDate(date);
+    else {
+      if ( rep.match(/aujourd'hui/) ) {
+        rep = rep.replace(/aujourd'hui/, actualDate());
+        date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+        if ( date ) dateForEvo = chatToEvoDate(date);
+        else return; // no date
+      }
     }
-    else time = hours + "h";
 
-    let description;
-    // let description = rep.match(/(motif\s+|motif:\s+|avec\s+|chez\s+|pour\s+)(.*)/i);
-    // if ( !description ) description = ""; else description = description[2];
-    // if ( description.match(date[0]) ) description = rep.match(/à \d{1,2}h\s+(.*)/)[1];
-    description = rep.match(/.*\d{1,2}h(motif:|motif|,|..)(.*)/);
-    if ( !description ) description = ""; else description = description[2];
+    if ( action == "add") {
+      let hours = rep.match(/(\d{1,2})h/i);
+      if ( !hours ) return;
+      hours = hours[1];
 
-    console.log(time);
-    console.log(dateForEvo);
+      if ( hours.length == 1 ) hours = "0" + hours;
+
+      let minutes = rep.match(/(\d{1,2})h(\d{1,2})/i);
+      if ( minutes ) {
+        minutes = minutes[2];
+        if ( minutes.length == 1 ) minutes = "0" + minutes;
+        time = hours + "h" + minutes;
+      }
+      else time = hours + "h";
+
+      console.log(time);
+    }
+    if ( rep.match(/ajouté à votre agenda/) ) rep = rep.replace(/ajouté à votre agenda/, "");
+
+    description = date[3];
+    if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
+    if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
+    if ( description.match(/\d{1,2}h\d{1,2}/i) ) description = description.replace(/\d{1,2}h\d{1,2}/i, "");
+    if ( description.match(/\d{1,2}h/i) ) description = description.replace(/\d{1,2}h/i, "");
+    if ( description.match(/,\s+/) ) description = description.replace(/,\s+/, "");
+    if ( description.match(/motif:\s+/) ) description = description.replace(/motif:\s+/i, "");
+    if ( description.match(/motif\s+/) ) description = description.replace(/motif\s+/, "");
+    if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+
     console.log(description);
+    console.log(dateForEvo);
 
     if ( action == "add" ) $('#evoCalendar').evoCalendar('addCalendarEvent', addCalEvent(time, description, dateForEvo));
 
@@ -494,7 +533,7 @@ function handleResponse(rep) {
         }
       }
     }
-    sortCalendarEvents( date );
+    sortCalendarEvents( dateForEvo );
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
   }
@@ -519,7 +558,7 @@ function initRecognition() {
   recognition.onend =  function (event) {
     if ( recogResult == "waitinggggg" ) {
       recognition.start();
-      console.log("waitinggggg");
+      // console.log("waitinggggg");
     }
     else resetRecog();
   };
@@ -528,7 +567,6 @@ function initRecognition() {
       if (event.results[i].isFinal) {
         recogResult = event.results[i][0].transcript;
         fillLog("question", recogResult);
-        console.log("question: " + recogResult);
         questionAnalyse(recogResult);
 
       }
@@ -666,6 +704,45 @@ function frenchMonthNamesForRegExp() {
 }
 
 ////
+function nextDayDate(dateStr) {
+  // Exemple d'utilisation
+  // const dateEntree = '10 septembre 2023';
+  // const dateLendemain = dateDuLendemain(dateEntree);
+  // console.log(dateLendemain); // Affiche '11 septembre 2023'
+
+  // Tableau des noms de mois pour la conversion
+  const mois = [
+    "janvier", "février", "mars", "avril", "mai", "juin",
+    "juillet", "août", "septembre", "octobre", "novembre", "décembre"
+  ];
+
+  // Divisez la date d'entrée en jour, mois et année
+  const dateParts = dateStr.split(' ');
+  const jour = parseInt(dateParts[0], 10);
+  const moisStr = dateParts[1];
+  const annee = parseInt(dateParts[2], 10);
+
+  // Trouvez l'index du mois dans le tableau des mois
+  const moisIndex = mois.indexOf(moisStr.toLowerCase());
+
+  // Créez un objet Date à partir des parties de la date
+  const date = new Date(annee, moisIndex, jour);
+
+  // Ajoutez un jour à la date
+  date.setDate(date.getDate() + 1);
+
+  // Obtenez le jour, le mois et l'année de la date du lendemain
+  const jourDuLendemain = date.getDate();
+  const moisDuLendemain = mois[date.getMonth()];
+  const anneeDuLendemain = date.getFullYear();
+
+  // Formatez la date du lendemain dans le même format
+  const dateLendemainStr = `${jourDuLendemain} ${moisDuLendemain} ${anneeDuLendemain}`;
+
+  return dateLendemainStr;
+}
+
+////
 function chatToEvoDate(date) {
   // date[0]  "30 août 2023"
   d = date;
@@ -675,7 +752,10 @@ function chatToEvoDate(date) {
   if ( d[1].length == 1 ) d[1] = "0" + d[1];
   if ( d[2].length == 1 ) d[2] = "0" + d[2];
 
-  let date2 = monthNum[d[2]] + "/" + d[1] + "/" + d[3];
+  let year = date[0].match(/(\d{4})/)[1];
+  if ( !year ) year = actualDate().match(/(\d{4})/)[1];
+
+  let date2 = monthNum[d[2]] + "/" + d[1] + "/" + year;
   return date2;
 }
 
@@ -700,7 +780,6 @@ function actualDate() {
   const dateFormatee = jour + " " + moisEnLettres + " " + annee;
 
   // Afficher la date formatée
-  console.log(dateFormatee);
   return dateFormatee;
 }
 
@@ -728,12 +807,12 @@ function dateFromDate(dateStr) {
 ////
 function actualDay(dateString) {
     const months = [
-        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        "janvier", "février", "mars", "avril", "mai", "juin",
+        "juillet", "août", "septembre", "octobre", "novembre", "décembre"
     ];
 
     const daysOfWeek = [
-        "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"
+        "dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"
     ];
 
     const parts = dateString.split(" ");
@@ -1065,6 +1144,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
 
   if ( flagEditTrash == "trash") {                          // trash event
     $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
     return;
   }
