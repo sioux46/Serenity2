@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.10.3";
+var devaVersion = "v3.09.11.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -1019,7 +1019,8 @@ $("#logButton").on("click", function(e) {
 /////                        open start page
 $("#startButton").on("click", function (ev) {
   if ( activePage ) {
-    $("#toolBar").css("display", "none");
+    $("#startButton").css("display", "none");
+    $("#toolBar").css("display", "block");
     $(activePage).css("display", "none");
     activePage = "";
     $("#start").css({"display": "block", "top": "-50rem"});

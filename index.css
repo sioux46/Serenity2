@@ -17,13 +17,14 @@ body {
   position: fixed;
   height: 4.2rem;
   width: 100%;
-  display: none;
+  display: block;
   z-index: 1000;
   background-color: #fff;
   border-bottom: 1px solid #ced4da;
 }
 
 #startButton {
+  display: none;
   position: absolute;
   padding-top: 2px;
   margin-left: 6px;
@@ -38,7 +39,7 @@ body {
 }
 
 .toolbarButton {
-  display: none;
+  display: inline-block;
   background-color: white;
   vertical-align: initial;
   border-radius: 50%;
