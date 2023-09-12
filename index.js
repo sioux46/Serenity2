@@ -1133,10 +1133,14 @@ $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("
   $(".event-trash, .event-edit").css("display", "none");
 });
 
- $(".month").on("click", function(e) {
- $('#evoCalendar').evoCalendar('toggleEventList', false);
- $('#evoCalendar').evoCalendar('toggleSidebar', false);
- });
+$(".calendar-year").find("p").on("click", function (e) {
+  $('#evoCalendar').evoCalendar('toggleSidebar');
+});
+
+$(".month").on("click", function(e) {
+  $('#evoCalendar').evoCalendar('toggleEventList', false);
+  $('#evoCalendar').evoCalendar('toggleSidebar', false);
+});
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
 $("#evoCalendar").on('selectEvent',function(activeEvent) {

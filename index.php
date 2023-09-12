@@ -56,12 +56,24 @@
 <!--                       -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Préférences pour le dialogue</strong></h5>
+      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Dialogue avec DEVA</strong></h5>
       <button id="chatParamButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
       <div>
         <div class="d-grid gap-2">
+          <div id="voyageText" class="container form-floating d-grid gap-2">
+            <div><strong>Historique du dialogue:</strong></div>
+            <textarea id="logTextarea" autofocus class="form-control"></textarea>
+            <button id="logButton" class="btn" type="button">
+              <img src="icons/trash.svg" width=30>
+            </button>
+            <div><strong>Vous avez la parole:</strong></div>
+            <textarea id="questionTextarea" class="form-control" autofocus></textarea>
+            <button id="questionButton" class="btn" type="button">
+              <img src="icons/forward.svg" width=36>
+            </button>
+          </div>
           <div class="mb-2">
             <label for="chatParamUserName" class="form-label">Nom du conducteur:</label>
             <input id="chatParamUserName" type="text" class="form-control"/>
@@ -147,6 +159,7 @@
         </div>
       </div>
     </div>
+<!--
     <div id="voyageText" class="container form-floating d-grid gap-2">
       <div><strong>Historique du dialogue:</strong></div>
       <textarea id="logTextarea" autofocus class="form-control"></textarea>
@@ -159,6 +172,7 @@
         <img src="icons/forward.svg" width=36>
       </button>
     </div>
+-->
   </div>
 <!--               -->
 <!--     param     -->
