@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.12.1";
+var devaVersion = "v3.09.13.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -375,8 +375,11 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Diane" });
     chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 9 heure, motif: Picine avec Diane" });
 
-    chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 9h, motif: dentiste" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h, motif: dentiste" });
+    chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 9h avec ma tante" });
+    chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h avec votre tante" });
+
+    chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec ma tante" });
+    chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9 heure avec votre tante" });
 
     chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure"});
     chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
@@ -470,9 +473,11 @@ function chatGPTcall() {       // **** chatGPT call ****
 ////
 function handleResponse(reponse) {
   let rep = reponse;
+  if ( rep.match(/ajouté à votre agenda/) ) rep = rep.replace(/ajouté à votre agenda/, "");
   let action = "";
   let time = "";
   let description = "";
+  let subDesc;
   if ( rep.match(/(ajouté|ajouter|nouveau rendez-vous)/i) ) action = "add";
   else if ( rep.match(/(supprimé|enlevé)/i) ) action = "remove";
 
@@ -505,27 +510,38 @@ function handleResponse(reponse) {
         if ( minutes.length == 1 ) minutes = "0" + minutes;
         time = hours + "h" + minutes;
       }
-      else time = hours + "h";
+      else time = hours + "h00";
 
       console.log(time);
     }
-    if ( rep.match(/ajouté à votre agenda/) ) rep = rep.replace(/ajouté à votre agenda/, "");
 
     description = date[3];
+
     if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
     if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
     if ( description.match(/\d{1,2}h\d{1,2}/i) ) description = description.replace(/\d{1,2}h\d{1,2}/i, "");
     if ( description.match(/\d{1,2}h/i) ) description = description.replace(/\d{1,2}h/i, "");
     if ( description.match(/,\s+/) ) description = description.replace(/,\s+/, "");
-    if ( description.match(/motif:\s+/) ) description = description.replace(/motif:\s+/i, "");
-    if ( description.match(/motif\s+/) ) description = description.replace(/motif\s+/, "");
+    if ( description.match(/motif:\s+/i) ) description = description.replace(/motif:\s+/i, "");
+    if ( description.match(/motif\s+/i) ) description = description.replace(/motif\s+/, "");
+    subDesc = description.match(/(.*)\.\s+/);
+    if ( subDesc ) description = subDesc[1];
     if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+
+    if ( !description ) {
+      subDesc = rep.match(/.*((avec\s+|chez\s+|dans\s+\pour\s+aller\s+).*)pour\s+le\s+.*/i);
+      if ( subDesc ) description= subDesc[1];
+    }
 
     console.log(description);
     console.log(dateForEvo);
 
-    if ( action == "add" ) $('#evoCalendar').evoCalendar('addCalendarEvent', addCalEvent(time, description, dateForEvo));
-
+    if ( action == "add" ) {
+      $('#evoCalendar').evoCalendar('addCalendarEvent', addCalEvent(time, description, dateForEvo));
+      sortCalendarEvents( dateForEvo );
+      calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+      calendar.selectDate( dateForEvo );
+    }
     else if (action == "remove") {
       for ( let event of evoCalEvents ) {
         if ( event.date != dateForEvo ) continue;
@@ -534,10 +550,7 @@ function handleResponse(reponse) {
         }
       }
     }
-    sortCalendarEvents( dateForEvo );
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-    // newChat = true;
-
   }
 }
 
