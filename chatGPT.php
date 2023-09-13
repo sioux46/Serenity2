@@ -10,16 +10,11 @@ $headers = array(
 
 $messages = json_decode($_POST['chatBuffer'], true);
 
-$newChat = json_decode($_POST['model'], true);
+// $newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
 $details = json_decode($_POST['details'], true);
-
-/*
-$meteo3 = array('role' => "user", 'content' => "Est-ce qu'il va pleuvoir demain ?");
-$meteo4 = array('role' => "assistant", 'content' =>  "Oui, il y a 40 % de chances de pluie demain.");
-*/
 
 /* echo "before";
 print_r($chatBuffer);
