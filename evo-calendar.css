@@ -187,7 +187,7 @@ input:focus, textarea:focus, button:focus {
 
 .calendar-inner .calendar-table {
   border-collapse: collapse;
-  font-size: 20px;
+  font-size: 24px;
   width: 100%;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -223,13 +223,9 @@ tr.calendar-header .calendar-header-day {
   color: #5a5a5a;
 }
 
-tr.calendar-body .calendar-day {
-  padding: 10px 0;
-}
-
 tr.calendar-body .calendar-day .day {
   position: relative;
-  padding: 15px;
+  padding-top: 10px;
   height: 60px;
   width: 60px;
   margin: 0 auto;
@@ -243,10 +239,6 @@ tr.calendar-body .calendar-day .day {
   transition: all 0.3s ease, transform 0.5s ease;
   transition: all 0.3s ease, transform 0.5s ease, -webkit-transform 0.5s ease;
   cursor: pointer;
-}
-
-tr.calendar-body .calendar-day .day:hover {
-  background-color: #dadada;
 }
 
 tr.calendar-body .calendar-day .day:active {
@@ -465,7 +457,7 @@ tr.calendar-body .calendar-day .day[disabled] {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
-  top: 100%;
+  top: 20%;
   left: 50%;
   -webkit-transform: translate(-50%, -100%);
   -ms-transform: translate(-50%, -100%);
@@ -579,10 +571,6 @@ button.icon-button > span.chevron-arrow-right {
   .sidebar-hide .calendar-inner {
     max-width: calc(100% - 380px);
   }
-  tr.calendar-header .calendar-header-day,
-  tr.calendar-body .calendar-day {
-    padding: 10px 5px;
-  }
   .calendar-events {
     width: 380px;
     padding: 20px 15px;
@@ -609,10 +597,8 @@ button.icon-button > span.chevron-arrow-right {
     padding: 20px 15px;
   }
   tr.calendar-body .calendar-day .day {
-    padding: 10px;
     height: 45px;
     width: 45px;
-    font-size: 16px;
   }
   .event-indicator > .type-bullet > div {
     width: 8px;
@@ -915,15 +901,6 @@ button.icon-button > span.chevron-arrow-right {
   tr.calendar-header .calendar-header-day {
     padding: 0;
   }
-  tr.calendar-body .calendar-day {
-    padding: 8px 0;
-  }
-  tr.calendar-body .calendar-day .day {
-    padding: 10px;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-  }
   .event-indicator {
     -webkit-transform: translate(-50%, calc(-100% - 3px));
     -ms-transform: translate(-50%, calc(-100% - 3px));
@@ -1014,15 +991,10 @@ button.icon-button > span.chevron-arrow-right {
   th[colspan="7"] {
     font-size: 20px;
     padding-bottom: 5px;
+    left: -1.8rem;
   }
   tr.calendar-header .calendar-header-day {
     font-size: 16px;
-  }
-  tr.calendar-body .calendar-day .day {
-    padding: 5px;
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
   }
 }
 p.event-desc {

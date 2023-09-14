@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.13.2";
+var devaVersion = "v3.09.14.1";
 
 /*********************************************************************
 ************************************************************ class
