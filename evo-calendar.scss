@@ -175,7 +175,7 @@ input:focus, textarea:focus, button:focus {
 }
 .calendar-inner .calendar-table {
     border-collapse: collapse;
-    font-size: 24px; //  20px;          //  SEB
+    font-size: 20px;
     width: 100%;
     -webkit-user-select: none;
        -moz-user-select: none;
@@ -215,16 +215,15 @@ tr.calendar-body {
 
 }
 tr.calendar-body .calendar-day {
-  //  padding: 10px 0;                  // SEB-
+    padding: 10px 0;
 }
 tr.calendar-body .calendar-day .day {
     position: relative;
-    // padding: 15px;                     //  SEB-
-    padding-top: 10px;                    //  SEB+
+    padding: 15px;
     height: 60px;
     width: 60px;
     margin: 0 auto;
-    border-radius: 50%;
+    // border-radius: 50%;      // SEB-
     text-align: center;
     color: #5a5a5a;
     border: 1px solid transparent;
@@ -252,7 +251,8 @@ tr.calendar-body .calendar-day .day.calendar-active:hover {
 
 tr.calendar-body .calendar-day .day.calendar-today {
     color: #fff;
-    background-color: $month-bg-color;
+    // background-color: $month-bg-color;       //    SEB-
+    background-color: #b5b4b4;                  //    SEB+
 }
 tr.calendar-body .calendar-day .day.calendar-today:hover {
     color: #fff;
@@ -436,7 +436,7 @@ tr.calendar-body .calendar-day .day[disabled] {
     width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
-     top: 20%;                      // SEB-
+     top: 100%;
     left: 50%;
     -webkit-transform: translate(-50%, calc(-100%)); //  SEB+ calc(-100% + -5px);
         -ms-transform: translate(-50%, calc(-100%));
@@ -447,8 +447,8 @@ tr.calendar-body .calendar-day .day[disabled] {
     padding: 2px;
 }
 .event-indicator > .type-bullet > div {
-    width: 10px;
-    height: 10px;
+    width: 15px;  // 10                       SEB+2
+    height: 15px; // 10
     border-radius: 50%;
 }
 .event-container > .event-icon > div {
@@ -545,7 +545,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     tr.calendar-header .calendar-header-day,
     tr.calendar-body .calendar-day {
-      //  padding: 10px 5px;             //   SEB-
+      padding: 10px 5px;
     }
     .calendar-events {
         width: 380px;
@@ -573,10 +573,10 @@ button.icon-button > span.chevron-arrow-right {
         padding: 20px 15px; // 70px 10px 60px 10px;     SEB+
     }
     tr.calendar-body .calendar-day .day {
-      //  padding: 10px;                        // SEB-6
+        padding: 10px;
         height: 45px;
         width: 45px;
-  //      font-size: 16px;
+        font-size: 16px;
     }
     .event-indicator > .type-bullet > div {
         width: 8px;
@@ -886,14 +886,14 @@ button.icon-button > span.chevron-arrow-right {
         padding: 0;
     }
     tr.calendar-body .calendar-day {
-      //  padding: 8px 0;                   // SEB-
+      padding: 8px 0;
     }
-//    tr.calendar-body .calendar-day .day {
-//        padding: 10px;
-//        width: 40px;                          // SEB-6
-//        height: 40px;
-//        font-size: 16px;
-//    }
+    tr.calendar-body .calendar-day .day {
+        padding: 10px;
+  //      width: 40px;                        // SEB-2
+  //      height: 40px;
+        font-size: 16px;
+    }
     .event-indicator {
         -webkit-transform: translate(-50%, calc(-100% + -3px));
             -ms-transform: translate(-50%, calc(-100% + -3px));
@@ -984,17 +984,17 @@ button.icon-button > span.chevron-arrow-right {
     th[colspan="7"] {
         font-size: 20px;
         padding-bottom: 5px;
-        left: -1.8rem;                    //   SEB+
+  //      left: -1.8rem;                    //   SEB+- (sup de l'ajout)
     }
     tr.calendar-header .calendar-header-day {
         font-size: 16px;
     }
-  //  tr.calendar-body .calendar-day .day {
-  //      padding: 5px;
-  //      width: 30px;                      // SEB-5
-  //      height: 30px;
-  //      font-size: 14px;
-  //  }
+    tr.calendar-body .calendar-day .day {
+        padding: 5px;
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
 }
 // ********************  DEVA ***********
 p.event-desc {
