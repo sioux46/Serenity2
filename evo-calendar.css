@@ -253,7 +253,7 @@ tr.calendar-body .calendar-day .day:active {
 tr.calendar-body .calendar-day .day.calendar-active,
 tr.calendar-body .calendar-day .day.calendar-active:hover {
   color: #5a5a5a;
-  border-color: rgb(0, 0, 0);
+  border-color: rgba(0, 0, 0, 0.5);
 }
 
 tr.calendar-body .calendar-day .day.calendar-today {
@@ -473,8 +473,8 @@ tr.calendar-body .calendar-day .day[disabled] {
 }
 
 .event-indicator > .type-bullet > div {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
@@ -915,6 +915,8 @@ button.icon-button > span.chevron-arrow-right {
   }
   tr.calendar-body .calendar-day .day {
     padding: 10px;
+    width: 40px;
+    height: 40px;
     font-size: 16px;
   }
   .event-indicator {

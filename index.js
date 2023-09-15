@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.14.1";
+var devaVersion = "v3.09.15.3";
 
 /*********************************************************************
 ************************************************************ class
@@ -473,13 +473,14 @@ function chatGPTcall() {       // **** chatGPT call ****
 ////
 function handleResponse(reponse) {
   let rep = reponse;
-  if ( rep.match(/ajouté à votre agenda/) ) rep = rep.replace(/ajouté à votre agenda/, "");
+  if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
   let action = "";
   let time = "";
   let description = "";
   let subDesc;
-  if ( rep.match(/(ajouté|ajouter|nouveau rendez-vous)/i) ) action = "add";
+  if ( rep.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( rep.match(/(supprimé|enlevé)/i) ) action = "remove";
+  else if ( rep.match(/(modifié|remplacé|changé|déplacé)/i) ) action = "modify";
 
   if ( action ) {
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
@@ -497,7 +498,7 @@ function handleResponse(reponse) {
       }
     }
 
-    if ( action == "add") {
+  if ( action == "add" || action == "modify" ) {
       let hours = rep.match(/(\d{1,2})h/i);
       if ( !hours ) return;
       hours = hours[1];
@@ -515,7 +516,12 @@ function handleResponse(reponse) {
       console.log(time);
     }
 
-    description = date[3];
+    if ( action == "modify" ) {
+      console.log(rep);
+
+    }
+
+description = date[3];
 
     if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
     if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
@@ -529,7 +535,7 @@ function handleResponse(reponse) {
     if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
     if ( !description ) {
-      subDesc = rep.match(/.*((avec\s+|chez\s+|dans\s+\pour\s+aller\s+).*)pour\s+le\s+.*/i);
+      subDesc = rep.match(/.*\s+((avec\s+|chez\s+|dans\s+|aller\s+|voir\s+|pour\s+les\s+).*)\s+pour\s+le\s+.*/i);
       if ( subDesc ) description= subDesc[1];
     }
 
@@ -542,14 +548,20 @@ function handleResponse(reponse) {
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       calendar.selectDate( dateForEvo );
     }
-    else if (action == "remove") {
+    else if ( action == "remove" ) {
       for ( let event of evoCalEvents ) {
         if ( event.date != dateForEvo ) continue;
-        if ( event.name == time || event.name.match(RegExp(time)) ) {
+        if ( event.name.match(RegExp(time)) ) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+          calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+          calendar.selectDate( dateForEvo );
         }
       }
     }
+    else if ( action == "modify" ) {
+
+    }
+
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   }
 }
@@ -1164,6 +1176,8 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
 
   if ( flagEditTrash == "trash") {                          // trash event
     $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
+    calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+    calendar.selectDate( event.date );
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
     return;
@@ -1257,6 +1271,7 @@ $("#newEventOK").on("click", function (ev) {
         event.name = time;   // name/time;
       }
     }
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
   }
 

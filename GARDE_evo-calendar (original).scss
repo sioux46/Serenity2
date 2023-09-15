@@ -223,7 +223,7 @@ tr.calendar-body .calendar-day .day {
     height: 60px;
     width: 60px;
     margin: 0 auto;
-    // border-radius: 50%;      // SEB-
+    border-radius: 50%;
     text-align: center;
     color: #5a5a5a;
     border: 1px solid transparent;
@@ -235,7 +235,7 @@ tr.calendar-body .calendar-day .day {
     cursor: pointer;
 }
 tr.calendar-body .calendar-day .day:hover {
-    // background-color: #dadada;             // SEB-
+    background-color: #dadada;
 }
 tr.calendar-body .calendar-day .day:active {
     -webkit-transform: scale(0.9);
@@ -246,13 +246,12 @@ tr.calendar-body .calendar-day .day:active {
 tr.calendar-body .calendar-day .day.calendar-active,
 tr.calendar-body .calendar-day .day.calendar-active:hover {
     color: #5a5a5a;
-    border-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 1); // 0.5);                SEB+
 }
 
 tr.calendar-body .calendar-day .day.calendar-today {
     color: #fff;
-    // background-color: $month-bg-color;       //    SEB-
-    background-color: #b5b4b4;                  //    SEB+
+    background-color: $month-bg-color;
 }
 tr.calendar-body .calendar-day .day.calendar-today:hover {
     color: #fff;
@@ -436,7 +435,7 @@ tr.calendar-body .calendar-day .day[disabled] {
     width: -webkit-fit-content;
     width: -moz-fit-content;
     width: fit-content;
-     top: 100%;
+    top: 100%;
     left: 50%;
     -webkit-transform: translate(-50%, calc(-100%)); //  SEB+ calc(-100% + -5px);
         -ms-transform: translate(-50%, calc(-100%));
@@ -447,8 +446,8 @@ tr.calendar-body .calendar-day .day[disabled] {
     padding: 2px;
 }
 .event-indicator > .type-bullet > div {
-    width: 10px;  // 10                       SEB+2
-    height: 10px; // 10
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 .event-container > .event-icon > div {
@@ -545,7 +544,7 @@ button.icon-button > span.chevron-arrow-right {
     }
     tr.calendar-header .calendar-header-day,
     tr.calendar-body .calendar-day {
-      padding: 10px 5px;
+        padding: 10px 5px;
     }
     .calendar-events {
         width: 380px;
@@ -886,7 +885,7 @@ button.icon-button > span.chevron-arrow-right {
         padding: 0;
     }
     tr.calendar-body .calendar-day {
-      padding: 8px 0;
+        padding: 8px 0;
     }
     tr.calendar-body .calendar-day .day {
         padding: 10px;
@@ -984,7 +983,6 @@ button.icon-button > span.chevron-arrow-right {
     th[colspan="7"] {
         font-size: 20px;
         padding-bottom: 5px;
-  //      left: -1.8rem;                    //   SEB+- (sup de l'ajout)
     }
     tr.calendar-header .calendar-header-day {
         font-size: 16px;

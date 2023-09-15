@@ -272,7 +272,7 @@
             }
             return newTitle.join(' ') + '...';
         }
-        if ( title == "hundefined") title = "  ";               // SEB+
+        // if ( title == "hundefined") title = "";               // SEB+
         return title;
     };
 
