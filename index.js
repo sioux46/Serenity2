@@ -225,42 +225,82 @@ function clearEventModal(ev) {                // clear cal fields
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
-                                                        //  chatGPT S E R V I C E   C A L L
+                                            //  chatGPT S E R V I C E   C A L L
 ////////////////////////////////////////////////////////////////////////////////////////////
-function chatGPTserviceCall() {
+function chatGPTserviceCall(serviceBuffer) {
 
   waitingForGPT = true;     //   ?????????
+
   $.ajax({
     'url': 'chatGPT.php',
     'type': 'post',
     'data': {
-              chatBuffer: JSON.stringify(globalChatBuffer),
-              // newChat: JSON.stringify(newChat),
+              chatBuffer: JSON.stringify(serviceBuffer),
               model: JSON.stringify(reponseModel),
-              temperature: JSON.stringify(parseFloat(reponseTemperature)),
-              style: JSON.stringify(responseStyle),
-              details: JSON.stringify(responseDetail),
+              temperature: JSON.stringify(0), // reponseTemperature
+              style: JSON.stringify(""), // responseStyle
+              details: JSON.stringify("de façon concise"), // responseDetail
             },
     'complete': function(xhr, result) {
+
       waitingForGPT = false;
+
       if (result != 'success') {
         console.log("Fatal error A P I Open A I !!!!");
       }
       else {
         var reponse = xhr.responseText;
-        fillLog("response", reponse);
-        console.log("Réponse: " + reponse);
+        //fillLog("response", reponse);
+        //console.log("Réponse: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
           console.log("Error A P I Open A I !");
         }
         else {
           console.log("serviceResponse:\n" + reponse);
-          handleServiceResponse(reponse);
+          newEventListFromServiceCall(reponse);
         }
       }
     }
   });
+}
+
+//////
+function newEventListFromServiceCall(reponse) {
+  let rep = reponse;
+  let eventList = [];
+  let lig = "";
+  let time = "";
+  let description = "";
+  let date ="";
+
+  evoCalEvents = [];
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+  rep = rep + "\n";
+  rep = rep.replace(/.*\n\n/, "");
+
+  do {
+    lig = rep.match(/.*\n+?/)[0];
+
+    time = lig.match(/\d{2}h\d{2}/)[0];
+    description = lig.match(/ - (.*)/)[1];
+
+    date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    date = date[2] + "/" + date[1] + "/" + date[3];
+
+
+
+    addCalEvent(time, description, date);
+
+    rep = rep.replace(/.*\n+?/, "");
+  } while ( rep );
+
+  // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+  // calendar.selectDate( calendar.getActiveDate() );
+
+
+
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -395,8 +435,7 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
       newChat = false;
     }
 
-
-    // chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
+    chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
     chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
 
     // date et heure
@@ -407,7 +446,7 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     chatBuffer.push({ role: "system", content: "Après-demain nous serons le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
     // consigne agenda
-    chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande." });
+    chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
 
     chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
     chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
@@ -454,7 +493,7 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
 
 ///////
 
-    postChatBuffer.push({ role: "user", content: question }); // real chat part
+    postChatBuffer.push({ role: "user", content: question });
 
     globalChatBuffer = chatBuffer.concat(postChatBuffer);  // send to GPT
 
@@ -482,7 +521,9 @@ function chatGPTcall() {       // **** chatGPT call ****
               details: JSON.stringify(responseDetail),
             },
     'complete': function(xhr, result) {
+
       waitingForGPT = false;
+
       if (result != 'success') {
         console.log("Fatal error A P I Open A I !!!!");
       }
@@ -574,7 +615,7 @@ function handleResponse(reponse) {
 
     }
 
-description = date[3];
+    description = date[3];
 
     if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
     if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
@@ -595,8 +636,9 @@ description = date[3];
     console.log(dateForEvo);
 
     if ( action == "add" ) {
-      $('#evoCalendar').evoCalendar('addCalendarEvent', addCalEvent(time, description, dateForEvo));
+      addCalEvent(time, description, dateForEvo);
       sortCalendarEvents( dateForEvo );
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       calendar.selectDate( dateForEvo );
     }
@@ -605,17 +647,22 @@ description = date[3];
         if ( event.date != dateForEvo ) continue;
         if ( event.name.match(RegExp(time)) ) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+          localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
           calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
           calendar.selectDate( dateForEvo );
           break;
         }
       }
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
     else if ( action == "modify" ) {
-
+      let serviceBuffer = [];
+      serviceBuffer = chatBuffer.concat(postChatBuffer);
+      serviceBuffer.push({ role: "user", content: "Lister tous les rdv que je vous ai demandé d'ajouter à mon agenda et qui n'ont pas été supprimés, par ordre de date au format <numéro du mois>/<numéro du jour dans le mois>/année et heure en ajoutant le motif. Répondez sans aucune autre précision."});
+      chatGPTserviceCall(serviceBuffer);
     }
-
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    postChatBuffer = [];
   }
 }
 
@@ -832,8 +879,9 @@ function chatToEvoDate(date) {
   if ( d[1].length == 1 ) d[1] = "0" + d[1];
   if ( d[2].length == 1 ) d[2] = "0" + d[2];
 
-  let year = date[0].match(/(\d{4})/)[1];
-  if ( !year ) year = actualDate().match(/(\d{4})/)[1];
+  let year = date[0].match(/(\d{4})/);
+  if ( year ) year = year[1];
+  else year = actualDate().match(/(\d{4})/)[1];
 
   let date2 = monthNum[d[2]] + "/" + d[1] + "/" + year;
   return date2;
