@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.16.2";
+var devaVersion = "v3.09.18.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -250,9 +250,6 @@ function chatGPTserviceCall(serviceBuffer) {
       }
       else {
         var reponse = xhr.responseText;
-        //fillLog("response", reponse);
-        //console.log("Réponse: " + reponse);
-
         if ( reponse.match(/^Error/) ) {
           console.log("Error A P I Open A I !");
         }
@@ -274,8 +271,9 @@ function newEventListFromServiceCall(reponse) {
   let description = "";
   let date ="";
 
-  evoCalEvents = [];
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  for ( let event of evoCalEvents ) {  // delete all events
+    $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+  }
 
   rep = rep + "\n";
   rep = rep.replace(/.*\n\n/, "");
@@ -292,6 +290,7 @@ function newEventListFromServiceCall(reponse) {
 
 
     addCalEvent(time, description, date);
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
     rep = rep.replace(/.*\n+?/, "");
   } while ( rep );
@@ -659,7 +658,7 @@ function handleResponse(reponse) {
     else if ( action == "modify" ) {
       let serviceBuffer = [];
       serviceBuffer = chatBuffer.concat(postChatBuffer);
-      serviceBuffer.push({ role: "user", content: "Lister tous les rdv que je vous ai demandé d'ajouter à mon agenda et qui n'ont pas été supprimés, par ordre de date au format <numéro du mois>/<numéro du jour dans le mois>/année et heure en ajoutant le motif. Répondez sans aucune autre précision."});
+      serviceBuffer.push({ role: "user", content: "Listez tous les rdv que je vous ai demandé d'ajouter à mon agenda et qui n'ont pas été supprimés, par ordre de date au format <numéro du mois>/<numéro du jour dans le mois>/année et heure en ajoutant le motif. Répondez sans aucune autre précision."});
       chatGPTserviceCall(serviceBuffer);
     }
     postChatBuffer = [];
