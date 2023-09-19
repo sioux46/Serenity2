@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.18.1";
+var devaVersion = "v3.09.19.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -271,29 +271,33 @@ function newEventListFromServiceCall(reponse) {
   let description = "";
   let date ="";
 
-  for ( let event of evoCalEvents ) {  // delete all events
-    $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+  try {
+
+    rep = rep + "\n";
+    rep = rep.replace(/.*\n\n/, "");
+
+    do {
+      lig = rep.match(/.*\n+?/)[0];
+
+      time = lig.match(/\d{2}h\d{2}/)[0];
+      description = lig.match(/ - (.*)/)[1];
+
+      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      date = date[2] + "/" + date[1] + "/" + date[3];
+
+      addCalEvent(time, description, date);
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+      rep = rep.replace(/.*\n+?/, "");
+    } while ( rep );
+
+    for ( let event of evoCalEvents ) {  // delete all events
+      $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
+    }
+
+  } catch(e) {
+    console.log("Mauvais format réponse serviceCall");
   }
-
-  rep = rep + "\n";
-  rep = rep.replace(/.*\n\n/, "");
-
-  do {
-    lig = rep.match(/.*\n+?/)[0];
-
-    time = lig.match(/\d{2}h\d{2}/)[0];
-    description = lig.match(/ - (.*)/)[1];
-
-    date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-    date = date[2] + "/" + date[1] + "/" + date[3];
-
-
-
-    addCalEvent(time, description, date);
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-
-    rep = rep.replace(/.*\n+?/, "");
-  } while ( rep );
 
   // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   // calendar.selectDate( calendar.getActiveDate() );
@@ -574,9 +578,10 @@ function handleResponse(reponse) {
   let time = "";
   let description = "";
   let subDesc;
+
   if ( rep.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( rep.match(/(supprimé|enlevé)/i) ) action = "remove";
-  else if ( rep.match(/(modifié|remplacé|changé|déplacé)/i) ) action = "modify";
+  else if ( rep.match(/(modifié|remplacé|changé|déplacé|reporté)/i) ) action = "modify";
 
   if ( action ) {
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
@@ -658,10 +663,10 @@ function handleResponse(reponse) {
     else if ( action == "modify" ) {
       let serviceBuffer = [];
       serviceBuffer = chatBuffer.concat(postChatBuffer);
-      serviceBuffer.push({ role: "user", content: "Listez tous les rdv que je vous ai demandé d'ajouter à mon agenda et qui n'ont pas été supprimés, par ordre de date au format <numéro du mois>/<numéro du jour dans le mois>/année et heure en ajoutant le motif. Répondez sans aucune autre précision."});
+      serviceBuffer.push({ role: "user", content: "Listez point par point tous les rdv non supprimés que je vous ai demandé d'ajouter ou de modifier, par ordre de date au format <numéro du mois>/<numéro du jour dans le mois>/<année> et <heure> en ajoutant le motif. Répondez sans aucune autre précision."});
       chatGPTserviceCall(serviceBuffer);
+      postChatBuffer = [];  // forget recent chat
     }
-    postChatBuffer = [];
   }
 }
 
