@@ -1082,7 +1082,7 @@
                     console.log("%c Event named: \""+data.name+"\" has invalid date ", "color:white;font-weight:bold;background-color:#e21d1d;");
 
                     //                                                SEB+
-                    fillLog("invalid date:\n" + data.name );
+                    fillLog("service", "invalid date:\n" + data.name );
                 }
                 return false;
             }

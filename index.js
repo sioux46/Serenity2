@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.21.1";
+var devaVersion = "v3.09.22.5";
 
 /*********************************************************************
 ************************************************************ class
@@ -341,7 +341,7 @@ function newEventListFromServiceCall(reponse) {
 
   } catch(e) {
     console.log("***** Mauvais format réponse serviceCall ******");
-    fillLog("Mauvais format réponse:\n" + rep );
+    fillLog("service", "Mauvais format réponse:\n" + rep );
     // erasing evoCalEvents
       while ( evoCalEvents.length ) {
         $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
@@ -419,6 +419,15 @@ function addCalEvent(time, description, date) {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
+  if ( question.match(/^gpt4$/i) ) {
+    forceGPT4 = true; return;
+  }
+  if ( question.match(/^nogpt4$/i) ) {
+    forceGPT4 = false; return;
+  }
+
+  clearPostChatTimeout();
+
   console.log("question: " + question);
   let prevResponse;
   if ( response ) prevResponse = response.replace(/"/g, ' '); // quotes sup
@@ -634,11 +643,15 @@ function handleResponse(reponse) {
 
   if ( reponse.match(/(modifié|remplacé| changé|déplacé|reporté|avancé|reculé|complété|ajouté au motif|désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
-  else if ( reponse.match(/(supprimé|enlevé)/i) ) action = "remove";
+  else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
+
+  if ( !action ) return;
 
   rep = reponse;
 
   if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
+
+  if ( forceGPT4 ) action = "modify";  // force gpt-4 for all 3 actions
 
   ////////////////////////////////////////////
   if ( action == "modify" ) {
@@ -734,6 +747,18 @@ function handleResponse(reponse) {
   }
 }
 
+/////
+function clearPostChatTimeout() {
+  clearTimeout(postChatTimeout);
+  postChatTimeout = setTimeout( function() {
+    postChatBuffer = [];  // forget recent chat
+    // $("#startButton").trigger("click");
+    fillLog("service", "Fin du chat");
+    // try { window.location = "http://localhost:8888/Serenity2/index.php"; }
+    // catch(e) { window.location = "https://sioux.univ-paris8.fr/deva/index.php"; }
+  }, 60000); // 10 = 600000,  5 = 300000, 1 = 60000
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 //                                          *** Speech RECOGNITION ***
@@ -778,6 +803,10 @@ function startRecog() {
   $("#micButton").css("border", "3px solid #fa0039");
   try { recognition.start(); recogResult = "waitinggggg"; } catch(e) {}
   recognizing = true;
+  clearTimeout(recogTimeout);
+  recogTimeout = setTimeout( function() {
+    if ( recognizing ) $("#micButton").trigger("click");
+  }, 45000);  // 15000 = 15 seconds, 60000 = 1 minute
   console.log("Écoute");
 }
 
@@ -860,15 +889,18 @@ function fillLog(who, text) {
   if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
   if ( who == "question" )
           $("#logTextarea").val( $("#logTextarea").val() + debText + userName + ": " + text + "\n");
-  else  {
+  else if ( who == "response")  {
     $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text );
     document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
     if ( text == "Je vous en pris" ) {
-    questionMode = "audio";
-    $("#micButton").trigger("click");
-    $("#micButton").trigger("click");
-    $("#micButton").trigger("click");
+      questionMode = "audio";
+      $("#micButton").trigger("click");
+      $("#micButton").trigger("click");
+      $("#micButton").trigger("click");
+    }
   }
+  else if ( who == "service" ) {
+    $("#logTextarea").val( $("#logTextarea").val() + "\n*** " + text + "\n");
   }
 }
 
@@ -1304,6 +1336,8 @@ $("#ontoTree-title").on("click", function (ev) {
 if ( localStorage.eventList ) {
   evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
 }
+if ( !evoCalEvents ) evoCalEvents = [];
+
 $('#evoCalendar').evoCalendar({
   calendarEvents: evoCalEvents,
   language:'fr',
@@ -1337,6 +1371,8 @@ $(".calendar-table th").on("click", function(e) {
 $("#sidebarToggler").css("display","none");
 $("#eventListToggler").css("display","none");
 
+$(".calendar-year").css({"padding-top": "15px", "padding-bottom": "5px"});
+
 $('#evoCalendar').evoCalendar('toggleEventList', true); // show eventList on startup
 
 ///////////  hide trash on unsel event
@@ -1350,7 +1386,8 @@ $(".calendar-year").find("p").on("click", function (e) {
 
 $(".month").on("click", function(e) {
   $('#evoCalendar').evoCalendar('toggleEventList', false);
-  $('#evoCalendar').evoCalendar('toggleSidebar', false);
+  // if portrait mode
+  if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
 });
 
 //////////////////////////////////////////////////   selectEvent + edit or trash event
@@ -1504,7 +1541,7 @@ ontoTree = importTree(importData);
 //                                      calendar
 
 var calendar;     // exemple: calendar.getActiveDate();
-var evoCalEvents;
+var evoCalEvents = [];
 var evoCalEvents_OLD =[];
 $(".calendar-sidebar > .calendar-year").css("padding", "20px");
 
@@ -1519,6 +1556,7 @@ var reponseMode = "text"; // audio v text
 var recognizing = false;
 var recognition = initRecognition();
 var recogResult = "";
+var recogTimeout;
 
 //                              init speechSynthesis
 var response;
@@ -1533,9 +1571,11 @@ var chatBuffer = [];
 var postChatBuffer = [];
 var globalChatBuffer = [];
 var lastQuestion = "";
+var forceGPT4 = false;
 
 var newChat = true;
 var waitingForGPT = false;
+var postChatTimeout;
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //

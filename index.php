@@ -56,7 +56,7 @@
 <!--                       -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Dialogue avec DEVA</strong></h5>
+      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Dialoguer avec DEVA</strong></h5>
       <button id="chatParamButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
