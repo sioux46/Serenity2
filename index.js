@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.22.5";
+var devaVersion = "v3.09.23.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -668,6 +668,7 @@ function handleResponse(reponse) {
   else if ( action ) {          // calendar is to be updated for add or remove
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
+
     // date
     let dateForEvo;
     let date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
@@ -680,6 +681,7 @@ function handleResponse(reponse) {
         else return; // no date
       }
     }
+
     // time
     let hours = rep.match(/(\d{1,2})h/i);
     if ( hours ) {
@@ -696,6 +698,7 @@ function handleResponse(reponse) {
       console.log(time);
     }
 
+    // description
     try { description = date[3]; } catch(e) {}
 
     if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
@@ -1384,8 +1387,22 @@ $(".calendar-year").find("p").on("click", function (e) {
   $('#evoCalendar').evoCalendar('toggleSidebar');
 });
 
+/*
+$('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
+  if ( event.isTrigger ) return;
+  let year = $(".calendar-year p").text();
+  let month = monthIndex + 1;
+  $('#evoCalendar').evoCalendar("selectDate", month + "/01/" + year );
+  // if portrait mode
+  if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
+});
+*/
+
 $(".month").on("click", function(e) {
-  $('#evoCalendar').evoCalendar('toggleEventList', false);
+  // $('#evoCalendar').evoCalendar('toggleEventList', false);
+  let year = $(".calendar-year p").text();
+  let month = (Number($(".calendar-months > li.active-month").attr("data-month-val")) + 1).toString();
+  $('#evoCalendar').evoCalendar("selectDate", month + "/01/" + year );
   // if portrait mode
   if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
 });
