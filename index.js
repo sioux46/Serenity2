@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.23.2";
+var devaVersion = "v3.09.23.3";
 
 /*********************************************************************
 ************************************************************ class
@@ -329,6 +329,7 @@ function newEventListFromServiceCall(reponse) {
       else time = hours + "h00";
 
       description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
+      if ( description.match(/: /) ) description = description.replace(/: /, "");
 
       date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
       // date = date[2] + "/" + date[1] + "/" + date[3];
