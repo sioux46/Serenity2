@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.23.1";
+var devaVersion = "v3.09.23.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -640,6 +640,9 @@ function handleResponse(reponse) {
   let time = "";
   let description = "";
   let subDesc;
+  let dateForEvo;
+  let date;
+  let serviceBuffer;
 
   if ( reponse.match(/(modifié|remplacé| changé|déplacé|reporté|avancé|reculé|complété|ajouté au motif|désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
@@ -655,7 +658,27 @@ function handleResponse(reponse) {
 
   ////////////////////////////////////////////
   if ( action == "modify" ) {
-    let serviceBuffer = [];
+
+    // date
+    date = rep.match(new RegExp("\\s+au\\s+\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( date ) dateForEvo = chatToEvoDate(date);
+    else {
+      date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+      if ( date ) dateForEvo = chatToEvoDate(date);
+      else {
+        if ( rep.match(/aujourd'hui/) ) {
+          rep = rep.replace(/aujourd'hui/, actualDate());
+          date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+          if ( date ) dateForEvo = chatToEvoDate(date);
+        }
+      }
+    }
+    if ( dateForEvo ) {
+      calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+      calendar.selectDate( dateForEvo );
+    }
+
+    serviceBuffer = [];
     serviceBuffer = chatBuffer.concat(postChatBuffer);
 
     serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du mois> suivit d'un slash, puis <2 chiffres pour le numéro du jour dans le mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
@@ -670,8 +693,7 @@ function handleResponse(reponse) {
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
 
     // date
-    let dateForEvo;
-    let date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
     if ( date ) dateForEvo = chatToEvoDate(date);
     else {
       if ( rep.match(/aujourd'hui/) ) {
@@ -932,6 +954,11 @@ function audioState() {
 ////
 function frenchMonthNamesForRegExp() {
   return "janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre";
+}
+
+////
+function frenchDayNamesForRegExp() {
+  return "lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche";
 }
 
 ////
