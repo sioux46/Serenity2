@@ -143,6 +143,7 @@ function showPage(pageID) {
       $("#start").css({"display": "none"});
       $(".toolbarButton").css("display", "inline-block");
       activePage = pageID;
+      if ( innerHeight < innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', true);
       $(pageID).css({"display": "block"});
   });
 }
@@ -181,6 +182,8 @@ function initOntoTreeChoose(label, move, labs) {
   }
 }
 
+////////////////////////    C A L E N D A R    Functions
+
 // click trash
 function trashClick() {
   flagEditTrash = "trash";
@@ -218,10 +221,17 @@ function sortCalendarEvents(date) { // date
 }
 
 ////
-function clearEventModal(ev) {                // clear cal fields
+function clearEventModal() {                // clear cal fields
   $("#eventModal").find("#sEventTitle").val("");
   $("#eventModal").find("#sEventTime").val("");
   $("#eventModal").find("#sEventTime2").val("");
+}
+
+////
+function clearCalendar() {
+  evoCalEvents = [];
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  window.location = window.location.href;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,14 +430,11 @@ function addCalEvent(time, description, date) {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  if ( question.match(/^gpt4$/i) ) {
-    forceGPT4 = true; return;
-  }
-  if ( question.match(/^nogpt4$/i) ) {
-    forceGPT4 = false; return;
-  }
+  if ( question.match(/^gpt4$/i) ) { forceGPT4 = true; return; }
+  if ( question.match(/^gpt3$/i) ) { forceGPT4 = false; return; }
+  if ( question.match(/^clear\s+calendar$/i) ) { clearCalendar(); return; }
 
-  clearPostChatTimeout();
+  clearPostChatTimeout(); // re-init timeout
 
   console.log("question: " + question);
   let prevResponse;
@@ -645,7 +652,7 @@ function handleResponse(reponse) {
   let date;
   let serviceBuffer;
 
-  if ( reponse.match(/(modifié|remplacé| changé|déplacé|reporté|avancé|reculé|complété|ajouté au motif|désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifié| remplacé| changé| déplacé| reporté| avancé| reculé| complété| ajouté au motif| annulé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
@@ -782,7 +789,7 @@ function clearPostChatTimeout() {
     fillLog("service", "Fin du chat");
     // try { window.location = "http://localhost:8888/Serenity2/index.php"; }
     // catch(e) { window.location = "https://sioux.univ-paris8.fr/deva/index.php"; }
-  }, 60000); // 10 = 600000,  5 = 300000, 1 = 60000
+  }, clearPostChatValue); // 10 = 600000,  5 = 300000, 1 = 60000
 }
 
 
@@ -832,7 +839,7 @@ function startRecog() {
   clearTimeout(recogTimeout);
   recogTimeout = setTimeout( function() {
     if ( recognizing ) $("#micButton").trigger("click");
-  }, 45000);  // 15000 = 15 seconds, 60000 = 1 minute
+  }, stopRecogValue);  // 15000 = 15 seconds, 60000 = 1 minute
   console.log("Écoute");
 }
 
@@ -1006,7 +1013,9 @@ function actualDateToEvoDate(day) {   // '21 septembre 2023'  --->  '09/21/2023'
   if ( day == "today")
     return chatToEvoDate(actualDate().match(new RegExp("(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i')));
   else if ( day == "tomorrow" )
-  return chatToEvoDate(nextDayDate(actualDate()).match(new RegExp("(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i')));
+    return chatToEvoDate(nextDayDate(actualDate()).match(new RegExp("(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i')));
+  else if ( day == "afterTomorrow" )
+    return chatToEvoDate(nextDayDate(nextDayDate(actualDate())).match(new RegExp("(\\d{1,2})\\s+(" + frenchMonthNamesForRegExp() + ")\\s+(\\d{4})", 'i')));
 }
 
 ////
@@ -1389,6 +1398,7 @@ if ( !evoCalEvents.length ) {
   addCalEvent("12h30", "Déjeuner chez ma tante", actualDateToEvoDate("today"));
   addCalEvent("21h00", "Concert Diane et Juliette", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
+  addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
@@ -1601,7 +1611,6 @@ var reponseMode = "text"; // audio v text
 var recognizing = false;
 var recognition = initRecognition();
 var recogResult = "";
-var recogTimeout;
 
 //                              init speechSynthesis
 var response;
@@ -1620,7 +1629,12 @@ var forceGPT4 = false;
 
 var newChat = true;
 var waitingForGPT = false;
+
 var postChatTimeout;
+var recogTimeout;
+var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
+var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //

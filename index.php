@@ -104,6 +104,7 @@
           <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
         </div>
       </div>
+<!--
       <div class="dropdown mt-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
           Dropdown button
@@ -114,6 +115,7 @@
           <li><a class="dropdown-item" href="#">Something else here</a></li>
         </ul>
       </div>
+-->
     </div>
   </div>
 <!--            -->
