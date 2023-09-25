@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.23.3";
+var devaVersion = "v3.09.25.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -247,7 +247,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
               model: JSON.stringify("gpt-4"), // JSON.stringify(reponseModel),
-              temperature: JSON.stringify(0), // reponseTemperature
+              temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
             },
@@ -430,8 +430,14 @@ function addCalEvent(time, description, date) {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  if ( question.match(/^gpt4$/i) ) { forceGPT4 = true; return; }
-  if ( question.match(/^gpt3$/i) ) { forceGPT4 = false; return; }
+  if ( question.match(/^gpt4$/i) ) { forceGPT4 = true; fillLog("service", "GPT-4 activé");
+    // window.location = window.location.href;
+    return;
+  }
+  if ( question.match(/^gpt3$/i) ) { forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
+    // window.location = window.location.href;
+    return;
+  }
   if ( question.match(/^clear\s+calendar$/i) ) { clearCalendar(); return; }
 
   clearPostChatTimeout(); // re-init timeout
@@ -787,8 +793,7 @@ function clearPostChatTimeout() {
     postChatBuffer = [];  // forget recent chat
     // $("#startButton").trigger("click");
     fillLog("service", "Fin du chat");
-    // try { window.location = "http://localhost:8888/Serenity2/index.php"; }
-    // catch(e) { window.location = "https://sioux.univ-paris8.fr/deva/index.php"; }
+    // window.location = window.location.href;
   }, clearPostChatValue); // 10 = 600000,  5 = 300000, 1 = 60000
 }
 
@@ -1399,6 +1404,7 @@ if ( !evoCalEvents.length ) {
   addCalEvent("21h00", "Concert Diane et Juliette", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("11h00", "Cinéma avec ma tante", actualDateToEvoDate("afterTomorrow"));
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));

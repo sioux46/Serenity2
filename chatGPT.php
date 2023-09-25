@@ -41,7 +41,7 @@ $response = file_get_contents($url, false, $context);
 
 // Process the response
 if ($response === false) {
-    echo 'Error reading response from API.';
+    echo 'Error reading response from open a i   A P I.';
 } else {
     $responseData = json_decode($response, true);
     // Access the assistant's reply
