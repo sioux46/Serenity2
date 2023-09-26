@@ -180,7 +180,9 @@
 <!--     param     -->
 <!--               -->
   <div id="paramPage" class="s-page">
-<!--    <div id="ontoTree-content" class="container">
+
+    <div id="param">
+    <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
         <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
           <h1 id="ontoTree-parent" class="mb-0"></h1>
@@ -196,7 +198,9 @@
         <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
         <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
       </div>
-    </div> -->
+    </div>
+    </div>
+
   </div>
 <!-- **************************************************************************************** -->
 <!-- *******************************************************************   M O D A L   ****** -->
@@ -237,7 +241,7 @@
         </div>
         <div class="modal-body">
           <div id="param">
-          <div id="ontoTree-content>"
+          <div id="ontoTree-content"  class="container">
           <div class="d-grid gap-2">
             <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
               <h1 id="ontoTree-parent" class="mb-0"></h1>

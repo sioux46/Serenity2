@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.25.1";
+var devaVersion = "v3.09.26.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -430,15 +430,15 @@ function addCalEvent(time, description, date) {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  if ( question.match(/^gpt4$/i) ) { forceGPT4 = true; fillLog("service", "GPT-4 activé");
+  if ( question.match(/^\s*gpt4\s*$/i) ) { forceGPT4 = true; fillLog("service", "GPT-4 activé");
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^gpt3$/i) ) { forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
+  if ( question.match(/^\s*gpt3\s*$/i) ) { forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^clear\s+calendar$/i) ) { clearCalendar(); return; }
+  if ( question.match(/^\s*clear\s*$/i) ) { clearCalendar(); return; }
 
   clearPostChatTimeout(); // re-init timeout
 
