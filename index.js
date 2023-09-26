@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.26.1";
+var devaVersion = "v3.09.26.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -204,20 +204,19 @@ function sortCalendarEvents(date) { // date
     if ( evoCalEvents[i].date == calendar.$active.date ) eventIndex[eventRank++] = i;
   }
   let eventNumber = eventIndex.length;
+  let rounds = eventNumber - 1;
 
-  if ( eventNumber == 0 || eventNumber == 1 ) return;
-  let sorted = true;
-  let newEvent;
+  for ( let r = rounds; r > 0; r-- ) {
+    if ( eventNumber == 0 || eventNumber == 1 ) return;
+    let newEvent;
 
-  for ( let i = eventNumber-1; i > 0 ; i-- ) {
-    if ( evoCalEvents[eventIndex[i]].name > evoCalEvents[eventIndex[i-1]].name ) return;
-
-    newEvent = evoCalEvents[eventIndex[i]];
-    evoCalEvents[eventIndex[i]] = evoCalEvents[eventIndex[i-1]];
-    evoCalEvents[eventIndex[i-1]] = newEvent;
-    // return;
+    for ( let i = eventNumber-1; i > 0 ; i-- ) {
+      if ( evoCalEvents[eventIndex[i]].name > evoCalEvents[eventIndex[i-1]].name ) continue;
+      newEvent = evoCalEvents[eventIndex[i]];
+      evoCalEvents[eventIndex[i]] = evoCalEvents[eventIndex[i-1]];
+      evoCalEvents[eventIndex[i-1]] = newEvent;
+    }
   }
-  // return newEventList; // ?
 }
 
 ////
@@ -273,7 +272,7 @@ function chatGPTserviceCall(serviceBuffer) {
   });
 }
 
-/////
+/////                 NOT USER
 function addModifiedEvent(reponse) {
   let rep = reponse;
   let time = "";
@@ -295,8 +294,8 @@ function addModifiedEvent(reponse) {
   }
 }
 
-/////////////////////////////////////////////////////////////////////
-function newEventListFromServiceCall(reponse) {
+///////////////////////////////////////////////////////////////////////////
+function newEventListFromServiceCall(reponse) {    // event list from GPT4
   let rep = reponse;
   let eventList = [];
   let lig = "";
@@ -344,7 +343,8 @@ function newEventListFromServiceCall(reponse) {
       date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
       // date = date[2] + "/" + date[1] + "/" + date[3];
 
-      addCalEvent(time, description, date);
+      console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
+      if ( !addCalEvent(time, description, date) ) continue;
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
       rep = rep.replace(/.*\n+?/, "");
@@ -360,6 +360,7 @@ function newEventListFromServiceCall(reponse) {
       }
     // restoring evoCalEvents
     for ( let event in evoCalEvents_OLD ) {
+      console.log("restore event bad format GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       addCalEvent(event.name, event.description, event.date);
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
@@ -412,6 +413,12 @@ function collectEvents() {
 ////
 // time: name, description: description, date: date
 function addCalEvent(time, description, date) {
+  if ( !time || !description || !date ) {
+    if ( !time ) console.log("No time !  ");
+    if ( !date ) console.log("No date !  ");
+    return false;
+  }
+  if ( !description ) console.log("No description !  ");
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
@@ -421,6 +428,7 @@ function addCalEvent(time, description, date) {
       type: "event",
       color: "#009099", // "#fe7f78",
     }]);
+    return true;
 
     //sortCalendarEvents( date );
     //localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
@@ -758,7 +766,8 @@ function handleResponse(reponse) {
 
     //////////////////////////////////////////////
     if ( action == "add" ) {
-      addCalEvent(time, description, dateForEvo);
+      console.log("Add event from GPT 3 > time: " + time + ", description: " + description + ", date: " + date);
+      if ( !addCalEvent(time, description, dateForEvo) ) return;
       sortCalendarEvents( dateForEvo );
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
@@ -1146,7 +1155,7 @@ function actualTime() {
   const minutes = heureParis.getMinutes().toString().padStart(2, '0');
   const secondes = heureParis.getSeconds().toString().padStart(2, '0');
 
-  console.log("Heure à Paris : " + `${heures}:${minutes}:${secondes}`);
+//  console.log("Heure à Paris : " + `${heures}:${minutes}:${secondes}`);
   return `${heures}:${minutes}:${secondes}`;
 }
 
@@ -1553,6 +1562,7 @@ $("#newEventOK").on("click", function (ev) {
         event.name = time;   // name/time;
       }
     }
+    // sortCalendarEvents(calendar.$active.date);
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
   }
@@ -1573,7 +1583,7 @@ $("#newEventOK").on("click", function (ev) {
 
   $("#eventModal").modal("hide");   // HIDE MODAL
 
-  let activeDate = calendar.$active.events[0].date;
+  let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
   sortCalendarEvents( activeDate );
   calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   calendar.selectDate( activeDate );
@@ -1669,7 +1679,7 @@ else userName = "Monsieur";
 if ( localStorage.assistantName ) {
   assistantName = JSON.parse(localStorage.getItem('assistantName'));
 }
-else assistantName = "Norbert";
+else assistantName = "Albert";
 
 if ( localStorage.reponseTemperature ) {
   reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
