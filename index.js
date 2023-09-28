@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.26.2";
+var devaVersion = "v3.09.28.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -195,13 +195,12 @@ function editClick() {
 }
 
 ////
-function sortCalendarEvents(date) { // date
-  // let test = evoCalEvents;
+function sortCalendarEvents(date) {
   let eventIndex = [];
   let eventRank = 0;
 
   for (let i = 0; i < evoCalEvents.length; i++) {
-    if ( evoCalEvents[i].date == calendar.$active.date ) eventIndex[eventRank++] = i;
+    if ( evoCalEvents[i].date == date ) eventIndex[eventRank++] = i;
   }
   let eventNumber = eventIndex.length;
   let rounds = eventNumber - 1;
@@ -245,7 +244,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4"), // JSON.stringify(reponseModel),
+              model: JSON.stringify("gpt-4"), // "gpt-3.5-turbo-0613" // JSON.stringify(reponseModel),
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -265,33 +264,10 @@ function chatGPTserviceCall(serviceBuffer) {
         else {
           console.log("serviceResponse:\n" + reponse);
           newEventListFromServiceCall(reponse);
-          // addModifiedEvent(reponse);
         }
       }
     }
   });
-}
-
-/////                 NOT USER
-function addModifiedEvent(reponse) {
-  let rep = reponse;
-  let time = "";
-  let description = "";
-  let date ="";
-
-  try {
-    date = rep.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
-    // date = date[2] + "/" + date[1] + "/" + date[3];
-
-    time = rep.match(/\d{2}h\d{2}/)[0];
-    description = rep.match(/ - (.*)/)[1];
-
-    addCalEvent(time, description, date);
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-
-  } catch(e) {
-    console.log("Mauvais format réponse serviceCall");
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -365,11 +341,35 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
   }
-
   // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   // calendar.selectDate( calendar.getActiveDate() );
 }
 
+
+
+/*   NOT USER NOT
+/////
+function addModifiedEvent(reponse) {
+  let rep = reponse;
+  let time = "";
+  let description = "";
+  let date ="";
+
+  try {
+    date = rep.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
+    // date = date[2] + "/" + date[1] + "/" + date[3];
+
+    time = rep.match(/\d{2}h\d{2}/)[0];
+    description = rep.match(/ - (.*)/)[1];
+
+    addCalEvent(time, description, date);
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+  } catch(e) {
+    console.log("Mauvais format réponse serviceCall");
+  }
+}
+*/
 
 ////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////  D I A L O G
@@ -526,11 +526,11 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
 
     // date et heure
-    chatBuffer.push({ role: "system", content: "Aujourd'hui, nous sommes le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
+    chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
     chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTime() + "." });
 
-    chatBuffer.push({ role: "system", content: "Demain nous serons le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
-    chatBuffer.push({ role: "system", content: "Après-demain nous serons le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
+    chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
+    chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
     // consigne agenda
     chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
@@ -567,11 +567,9 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     //chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, suppimer les rendez-vous que je vous communique. Vous répondez aux question sur ces rendez-vous." });
     chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
     chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
-/*
-    chatBuffer.push({ role: "user", content: "Quand vous listez mes rendez-vous, ne les numérotez pas" });
-    chatBuffer.push({ role: "assistant", content: "Bien compris. Quand je liste vos rendez-vous, je ne met pas de numéro d'ordre au début de chaque rendez-vous" });
-*/
     chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui." });
+
+    chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
 
     chatBuffer.push({ role: "system", content: "Je vous demande maintenant d'ajouter les rendez-vous suivant à mon agenda" });
 
@@ -602,7 +600,6 @@ function chatGPTcall() {       // **** chatGPT call ****
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
-              // newChat: JSON.stringify(newChat),
               model: JSON.stringify(reponseModel),
               temperature: JSON.stringify(parseFloat(reponseTemperature)),
               style: JSON.stringify(responseStyle),
@@ -666,7 +663,7 @@ function handleResponse(reponse) {
   let date;
   let serviceBuffer;
 
-  if ( reponse.match(/( modifié| remplacé| changé| déplacé| reporté| avancé| reculé| complété| ajouté au motif| annulé| désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifié| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
@@ -678,7 +675,7 @@ function handleResponse(reponse) {
 
   if ( forceGPT4 ) action = "modify";  // force gpt-4 for all 3 actions
 
-  ////////////////////////////////////////////
+  ////////////////////////////////////
   if ( action == "modify" ) {
 
     // date
@@ -746,12 +743,15 @@ function handleResponse(reponse) {
     try { description = date[3]; } catch(e) {}
 
     if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
+
     if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
     if ( description.match(/\d{1,2}h\d{1,2}/i) ) description = description.replace(/\d{1,2}h\d{1,2}/i, "");
     if ( description.match(/\d{1,2}h/i) ) description = description.replace(/\d{1,2}h/i, "");
     if ( description.match(/,\s+/) ) description = description.replace(/,\s+/, "");
     if ( description.match(/motif:\s+/i) ) description = description.replace(/motif:\s+/i, "");
     if ( description.match(/motif\s+/i) ) description = description.replace(/motif\s+/, "");
+    if ( description.match(/^à ,/) ) description = description.replace(/^à ,/, "");
+    if ( description.match(/^\s+/) ) description = description.replace(/^\s+/, "");
     subDesc = description.match(/(.*\.)\s+/);
     if ( subDesc ) description = subDesc[1];
     if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
@@ -764,9 +764,9 @@ function handleResponse(reponse) {
     console.log(description);
     console.log(dateForEvo);
 
-    //////////////////////////////////////////////
+    ///////////////////////////
     if ( action == "add" ) {
-      console.log("Add event from GPT 3 > time: " + time + ", description: " + description + ", date: " + date);
+      console.log("Add event from GPT 3 > time: " + time + ", description: " + description + ", date: " + dateForEvo);
       if ( !addCalEvent(time, description, dateForEvo) ) return;
       sortCalendarEvents( dateForEvo );
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
@@ -774,7 +774,7 @@ function handleResponse(reponse) {
       calendar.selectDate( dateForEvo );
     }
 
-    ////////////////////////////////////////////////
+    /////////////////////////////
     if ( action == "remove" ) {
       for ( let event of evoCalEvents ) {
         if ( event.date != dateForEvo ) continue;
@@ -795,7 +795,7 @@ function handleResponse(reponse) {
   }
 }
 
-/////
+////////////////////////////////////////////////////////
 function clearPostChatTimeout() {
   clearTimeout(postChatTimeout);
   postChatTimeout = setTimeout( function() {
@@ -1412,8 +1412,8 @@ if ( !evoCalEvents.length ) {
   addCalEvent("12h30", "Déjeuner chez ma tante", actualDateToEvoDate("today"));
   addCalEvent("21h00", "Concert Diane et Juliette", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-  addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("11h00", "Cinéma avec ma tante", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));

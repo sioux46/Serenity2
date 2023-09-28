@@ -10,7 +10,6 @@ $headers = array(
 
 $messages = json_decode($_POST['chatBuffer'], true);
 
-// $newChat = json_decode($_POST['model'], true);
 $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
