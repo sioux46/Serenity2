@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.28.2";
+var devaVersion = "v3.09.30.2";
 
 /*********************************************************************
 ************************************************************ class
@@ -219,6 +219,36 @@ function sortCalendarEvents(date) {
 }
 
 ////
+function date1CompareDate2(date1, date2) {
+
+  // let today = actualDateToEvoDate("today");
+
+  let month1 = date1.match(/^\d{2}/);
+  let day1 = date1.match(/\/(\d{2})/)[1];
+  let year1 = date1.match(/\d{4}/);
+  let dateNumber1 = year1 + month1 + day1;
+
+  let month2 = date2.match(/^\d{2}/);
+  let day2 = date2.match(/\/(\d{2})/)[1];
+  let year2 = date2.match(/\d{4}/);
+  let dateNumber2 = year2 + month2 + day2;
+
+  if( dateNumber1 < dateNumber2 ) return "before";
+  if( dateNumber1 > dateNumber2 ) return "after";
+  return "same";
+}
+
+////
+function removeBeforeCalEvents(events) {
+  let ids = [];
+  for ( let event of events ) {
+    if ( date1CompareDate2(event.date, actualDateToEvoDate("today")) == "before" )
+          ids.push(event.id);
+  }
+  $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
+}
+
+////
 function clearEventModal() {                // clear cal fields
   $("#eventModal").find("#sEventTitle").val("");
   $("#eventModal").find("#sEventTime").val("");
@@ -316,8 +346,10 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
       if ( description.match(/: /) ) description = description.replace(/: /, "");
 
-      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
-      // date = date[2] + "/" + date[1] + "/" + date[3];
+      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      // permuter jour et date
+      date = date[2] + "/" + date[1] + "/" + date[3];
+
 
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) continue;
@@ -329,14 +361,16 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
   } catch(e) {
     console.log("***** Mauvais format réponse serviceCall ******");
     fillLog("service", "Mauvais format réponse:\n" + rep );
+
     // erasing evoCalEvents
-      while ( evoCalEvents.length ) {
-        $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-        localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-      }
+    while ( evoCalEvents.length ) {
+      $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    }
+
     // restoring evoCalEvents
-    for ( let event in evoCalEvents_OLD ) {
-      console.log("restore event bad format GPT4 > time: " + time + ", description: " + description + ", date: " + date);
+    for ( let event of evoCalEvents_OLD ) {
+      console.log("restore event bad format GPT4 > time: " + event.time + ", description: " + event.description + ", date: " + event.date);
       addCalEvent(event.name, event.description, event.date);
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
@@ -434,9 +468,64 @@ function addCalEvent(time, description, date) {
     //localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+function collectPreChatBuffer() {
+  var chatBuffer = [];
+
+  chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
+  chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
+
+  // date et heure
+  chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
+  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTime() + "." });
+
+  chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
+  chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
+
+  // consigne agenda
+  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
+
+  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
+
+  chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Tatata" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 1h59 heure, motif: Tour du quartier avec Tatata" });
+
+  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 2h01 avec mon arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h avec votre arrière cousine Guendeline" });
+
+  chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9 heure avec votre arrière cousine Guendeline" });
+
+  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour aujourd'hui à 1h59, motif: tour de piste avec Tititi" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
+
+  chatBuffer.push({ role: "user", content: "Supprimez ce dernier rdv" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " + actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
+
+  chatBuffer.push({ role: "user", content: "Videz entièrement mon agenda. Supprimez tous mes rendez-vous." });
+  chatBuffer.push({ role: "assistant", content: "Tous vos rendez-vous ont été supprimés. Votre agenda est vide" });
+
+  chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure"});
+  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
+  chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
+
+  chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
+  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
+  chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
+
+  //chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, suppimer les rendez-vous que je vous communique. Vous répondez aux question sur ces rendez-vous." });
+  chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
+  chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
+  chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui." });
+
+  chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
+
+  return chatBuffer;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////
-function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
+function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
   if ( question.match(/^\s*gpt4\s*$/i) ) { forceGPT4 = true; fillLog("service", "GPT-4 activé");
     // window.location = window.location.href;
@@ -464,7 +553,7 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
 
-  //////////////////////////////////////////////////////////////////  Q U E S T I O N   a n a l y s e
+  //////////////////////////////////////////////////////////////////
   else  {
     let action = "";
     if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà).*agenda/i) ) action = "showAgenda";
@@ -516,67 +605,19 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     console.log("Réponse chatGPT");
     if ( question.match(/à (mon|l') agenda/) ) question.replace(/à (mon|l') agenda/, "");
 
-    chatBuffer = [];
     if ( newChat ) {
       postChatBuffer = [];
       newChat = false;
     }
 
-    chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
-    chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
+    // Load globals before ChatGPT call
 
-    // date et heure
-    chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
-    chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTime() + "." });
+    preChatBuffer = collectPreChatBuffer(); // consignes générales
+    calendarBuffer = collectEvents(); // Agenda
 
-    chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
-    chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
-
-    // consigne agenda
-    chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
-
-    chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
-
-    chatBuffer.push({ role: "user", content: "Supprimez mon rdv pour le premier janvier avec Tatata" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 1h59 heure, motif: Tour du quartier avec Tatata" });
-
-    chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 2h01 avec mon arrière cousine Guendeline" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h avec votre arrière cousine Guendeline" });
-
-    chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9 heure avec votre arrière cousine Guendeline" });
-
-    chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour aujourd'hui à 1h59, motif: tour de piste avec Tititi" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
-
-    chatBuffer.push({ role: "user", content: "Supprimez ce dernier rdv" });
-    chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " + actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
-
-    chatBuffer.push({ role: "user", content: "Videz entièrement mon agenda. Supprimez tous mes rendez-vous." });
-    chatBuffer.push({ role: "assistant", content: "Tous vos rendez-vous ont été supprimés. Votre agenda est vide" });
-
-    chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure"});
-    chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
-    chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
-
-    chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
-    chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
-    chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
-
-    //chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, suppimer les rendez-vous que je vous communique. Vous répondez aux question sur ces rendez-vous." });
-    chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
-    chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
-    chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui." });
-
-    chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
-
+    chatBuffer = preChatBuffer;
     chatBuffer.push({ role: "system", content: "Je vous demande maintenant d'ajouter les rendez-vous suivant à mon agenda" });
-
-  // ajout de l'agenda
-  chatBuffer = chatBuffer.concat(collectEvents());
-
-///////
+    chatBuffer = chatBuffer.concat(calendarBuffer);
 
     postChatBuffer.push({ role: "user", content: question });
     lastQuestion = question;
@@ -585,14 +626,13 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
 
 
     // ********************************************************** ChatGPT
-    // Load globals before call
-      chatGPTcall();
+      chatGPTcall(globalChatBuffer);
     // ******************************************************************
   }
 }
 
 /////
-function chatGPTcall() {       // **** chatGPT call ****
+function chatGPTcall(globalChatBuffer) {       // **** chatGPT call ****
 
   waitingForGPT = true;
   $.ajax({
@@ -663,7 +703,7 @@ function handleResponse(reponse) {
   let date;
   let serviceBuffer;
 
-  if ( reponse.match(/( modifié| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifié| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
@@ -698,9 +738,12 @@ function handleResponse(reponse) {
     }
 
     serviceBuffer = [];
-    serviceBuffer = chatBuffer.concat(postChatBuffer);
+    // serviceBuffer = preChatBuffer.concat(calendarBuffer.concat(postChatBuffer));
+     serviceBuffer = calendarBuffer.concat(postChatBuffer);
 
-    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du mois> suivit d'un slash, puis <2 chiffres pour le numéro du jour dans le mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous par ordre de date dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+
+    // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];  // forget recent chat
@@ -801,7 +844,7 @@ function clearPostChatTimeout() {
   postChatTimeout = setTimeout( function() {
     postChatBuffer = [];  // forget recent chat
     // $("#startButton").trigger("click");
-    fillLog("service", "Fin du chat");
+    fillLog("service", "Fin du dialogue");
     // window.location = window.location.href;
   }, clearPostChatValue); // 10 = 600000,  5 = 300000, 1 = 60000
 }
@@ -1407,6 +1450,8 @@ $('#evoCalendar').evoCalendar({
 
 calendar = $('#evoCalendar').get(0).evoCalendar;
 
+removeBeforeCalEvents(evoCalEvents);
+
 if ( !evoCalEvents.length ) {
   addCalEvent("09h00", "Piscine avec Annick", actualDateToEvoDate("today"));
   addCalEvent("12h30", "Déjeuner chez ma tante", actualDateToEvoDate("today"));
@@ -1638,6 +1683,8 @@ var speechPitch = 1;
 
 //                              init ChatGPT
 var chatBuffer = [];
+var preChatBuffer = [];
+var calendarBuffer = [];
 var postChatBuffer = [];
 var globalChatBuffer = [];
 var lastQuestion = "";
