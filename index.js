@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.02.3";
+var devaVersion = "v3.09.06.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -415,10 +415,18 @@ function addModifiedEvent(reponse) {
 function collectEvents(type) {
   let events = [];
   let content = "";
+  let flagRDV = true;
   for ( let event of evoCalEvents ) {
 
     // user
-    content = "Ajoutez un rendez-vous à mon agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+//    if ( flagRDV ) {
+      content = "Ajoutez un rendez-vous à mon agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+//      flagRDV = false;
+//    }
+//    else {
+//      content = "Ajoutez pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
+//    }
+
     if ( event.name ) {
       if ( event.name.match(/à/) ) content += " de " + event.name;
       else content += " à " + event.name;
@@ -606,7 +614,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   else {                                   //            send question to ChatGPT
     questionAnswer = "chatGPT" ;
     console.log("Réponse chatGPT");
-    if ( question.match(/à (mon|l') agenda/) ) question.replace(/à (mon|l') agenda/, "");
+    if ( question.match(/à (mon |l')agenda/) ) question.replace(/à (mon |l')agenda/, "");
 
     if ( newChat ) {
       postChatBuffer = [];
@@ -616,10 +624,10 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     // Load globals before ChatGPT call
 
     preChatBuffer = collectPreChatBuffer(); // consignes générales
-    calendarBuffer = collectEvents("normal"); // Agenda
 
     chatBuffer = preChatBuffer;
-    chatBuffer.push({ role: "system", content: "Je vous demande maintenant d'ajouter les rendez-vous suivant à mon agenda" });
+    chatBuffer.push({ role: "user", content: "Ajouter les rendez-vous suivant à mon agenda" });
+    calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
 
     postChatBuffer.push({ role: "user", content: question });
@@ -706,7 +714,7 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
-  if ( reponse.match(/( modifié| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
@@ -745,7 +753,7 @@ function handleResponse(reponse) {
     // serviceBuffer = calendarBuffer.concat(postChatBuffer);
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda without assistant message
 
-    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous par ordre de date dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
@@ -1457,11 +1465,11 @@ calendar = $('#evoCalendar').get(0).evoCalendar;
 removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
-  addCalEvent("09h00", "Piscine avec Annick", actualDateToEvoDate("today"));
-  addCalEvent("12h30", "Déjeuner chez ma tante", actualDateToEvoDate("today"));
-  addCalEvent("21h00", "Concert Diane et Juliette", actualDateToEvoDate("today"));
+  addCalEvent("18h00", "Piscine avec Annick", actualDateToEvoDate("today"));
+  addCalEvent("20h30", "Diner chez ma tante", actualDateToEvoDate("today"));
+  addCalEvent("22h15", "Concert Diane et Juliette", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-  addCalEvent("11h00", "Cinéma avec ma tante", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("11h00", "Cinéma avec Françis et Bernard", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
 }
 
