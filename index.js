@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.06.1";
+var devaVersion = "v3.09.07.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -538,24 +538,26 @@ function collectPreChatBuffer() {
 ////
 function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  if ( question.match(/^\s*gpt4\s*$/i) ) { forceGPT4 = true; fillLog("service", "GPT-4 activé");
+  if ( question.match(/^\s*gpt4\s*$/i) ) {
+    forceGPT4 = true; fillLog("service", "GPT-4 activé");
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^\s*gpt3\s*$/i) ) { forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
+  if ( question.match(/^\s*gpt3\s*$/i) ) {
+    forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^\s*clear\s*$/i) ) { clearCalendar(); return; }
+  if ( question.match(/^\s*clear\s*$/i) ) {
+    clearCalendar(); return; }
 
   clearPostChatTimeout(); // re-init timeout
 
   console.log("question: " + question);
   let prevResponse;
   if ( response ) prevResponse = response.replace(/"/g, ' '); // quotes sup
+
   response = ""; // global
-
-
 
   if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog handled in fillLog()
     response = "Je vous en pris";
@@ -596,8 +598,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     }
   }
 
-
-  //--------------------------------  if reponse
+  //--------------------------------  if response
   if ( response ) {
 
     if ( reponseMode != "text" ) {
@@ -611,10 +612,12 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     fillLog("response", response);
   }
 
+  // --------------------------------- if !response
   else {                                   //            send question to ChatGPT
     questionAnswer = "chatGPT" ;
     console.log("Réponse chatGPT");
-    if ( question.match(/à (mon |l')agenda/) ) question.replace(/à (mon |l')agenda/, "");
+
+  //  if ( question.match(/à (mon |l')agenda/) ) question.replace(/à (mon |l')agenda/, "");
 
     if ( newChat ) {
       postChatBuffer = [];

@@ -179,13 +179,13 @@ body {
 }
 
 #logTextarea {
-  height: 31rem;
+  height: 20rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
 }
 
 #questionTextarea {
-  height: 6rem;
+  height: 5rem;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;
 }
