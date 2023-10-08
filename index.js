@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.07.1";
+var devaVersion = "v3.09.08.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -274,7 +274,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4"), // "gpt-3.5-turbo-0613" // JSON.stringify(reponseModel),
+              model: JSON.stringify("gpt-4-0613"), // "gpt-3.5-turbo-0613"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -360,7 +360,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
 
   } catch(e) {
     console.log("***** Mauvais format réponse serviceCall ******");
-    fillLog("service", "Mauvais format réponse:\n" + rep );
+    // fillLog("service", "Mauvais format réponse:\n" + rep );
 
     // erasing evoCalEvents
     while ( evoCalEvents.length ) {
@@ -370,7 +370,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
 
     // restoring evoCalEvents
     for ( let event of evoCalEvents_OLD ) {
-      console.log("restore event bad format GPT4 > time: " + event.time + ", description: " + event.description + ", date: " + event.date);
+      console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
       addCalEvent(event.name, event.description, event.date);
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
@@ -538,6 +538,14 @@ function collectPreChatBuffer() {
 ////
 function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
+
+  if ( question.match(/^\s*gpt4\+\s*$/i) ) {
+    forceGPT4 = true; fillLog("service", "GPT-4 activé");
+    reponseModel = 'gpt-4-0613';
+    // window.location = window.location.href;
+    return;
+  }
+
   if ( question.match(/^\s*gpt4\s*$/i) ) {
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     // window.location = window.location.href;
@@ -717,7 +725,7 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
-  if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
@@ -761,7 +769,7 @@ function handleResponse(reponse) {
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
-    // postChatBuffer = [];  // forget recent chat
+    // postChatBuffer = [];             // forget recent chat
   }
   /////////////////////////////////////////////
 
@@ -1704,7 +1712,6 @@ var postChatBuffer = [];
 var globalChatBuffer = [];
 var serviceBuffer = [];
 var lastQuestion = "";
-var forceGPT4 = false;
 
 var newChat = true;
 var waitingForGPT = false;
@@ -1714,6 +1721,7 @@ var recogTimeout;
 var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
+var forceGPT4 = false;
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //
