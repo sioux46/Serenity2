@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.08.1";
+var devaVersion = "v3.09.09.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -595,7 +595,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
       response = "OK";
     }
 
-
+    /*
     else if ( question.match(/paramètre/i) ) {
       $("#startButton").trigger("click"); $("#paramButton").trigger("click");
       response = "OK";
@@ -604,6 +604,8 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
       $("#startButton").trigger("click"); $("#voyageButton").trigger("click");
       response = "OK";
     }
+    */
+
   }
 
   //--------------------------------  if response
