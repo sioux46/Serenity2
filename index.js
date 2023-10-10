@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.09.1";
+var devaVersion = "v3.09.10.1";
 
 /*********************************************************************
 ************************************************************ class
@@ -195,6 +195,14 @@ function editClick() {
 }
 
 ////
+function globalSortCalendarEvents() {
+  for ( let event of evoCalEvents ) {
+    sortCalendarEvents(event.date);
+  }
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+}
+
+////
 function sortCalendarEvents(date) {
   let eventIndex = [];
   let eventRank = 0;
@@ -216,6 +224,7 @@ function sortCalendarEvents(date) {
       evoCalEvents[eventIndex[i-1]] = newEvent;
     }
   }
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 }
 
 ////
@@ -377,9 +386,10 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
   }
   // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   // calendar.selectDate( calendar.getActiveDate() );
+  $(".calendar-events").css("opacity", 0.1);
+  setTimeout( function() { $(".calendar-events").animate({"opacity": 1}, 10); }, 350);
+
 }
-
-
 
 /*   NOT USER NOT
 /////
@@ -473,10 +483,10 @@ function addCalEvent(time, description, date) {
       type: "event",
       color: "#009099", // "#fe7f78",
     }]);
-    return true;
 
-    //sortCalendarEvents( date );
-    //localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    sortCalendarEvents( date );
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1478,11 +1488,11 @@ calendar = $('#evoCalendar').get(0).evoCalendar;
 removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
-  addCalEvent("18h00", "Piscine avec Annick", actualDateToEvoDate("today"));
+  addCalEvent("18h00", "Piscine avec Annie", actualDateToEvoDate("today"));
   addCalEvent("20h30", "Diner chez ma tante", actualDateToEvoDate("today"));
-  addCalEvent("22h15", "Concert Diane et Juliette", actualDateToEvoDate("today"));
+  addCalEvent("22h15", "Concert Diana et Julie", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-  addCalEvent("11h00", "Cinéma avec Françis et Bernard", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("11h00", "Cinéma avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
 }
 
@@ -1575,11 +1585,15 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
 ////////////////////////////////////////////////////////    on selectDate
 $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   //console.log(($('#evoCalendar').get(0).evoCalendar.$current.date));
-  console.log(calendar.$active.event_date);
+  let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
+
+  console.log(activeDate);
+  sortCalendarEvents( activeDate );
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   $("#evoCalendar").evoCalendar('toggleEventList',true);
 });
 
-//////////////////////////////////////////////////////    create new event
+/////////////////////////////////////////////////////////////////////    create new event
                                                     //  or update old event
 
 ///// show eventModal                     ADD NEW EVENT
@@ -1632,7 +1646,7 @@ $("#newEventOK").on("click", function (ev) {
         event.name = time;   // name/time;
       }
     }
-    // sortCalendarEvents(calendar.$active.date);
+    sortCalendarEvents(calendar.$active.date);
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
   }
@@ -1723,7 +1737,7 @@ var recogTimeout;
 var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
-var forceGPT4 = false;
+var forceGPT4 = false; // false --> modify, true --> + add and delete
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //

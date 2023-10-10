@@ -292,7 +292,7 @@
               </div>
               <div class="mb-2">
                 <label for="sEventTime2" class="form-label">Heure de fin:</label>
-                <input disabled id="sEventTime2" type="time" class="form-control"/>
+                <input id="sEventTime2" disabled type="time" class="form-control"/>
               </div>
             </div>
           </div>

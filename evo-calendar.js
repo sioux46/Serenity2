@@ -230,8 +230,8 @@
         if (!$(_.$elements.calendarEl).hasClass('calendar-initialized')) {
             $(_.$elements.calendarEl).addClass('evo-calendar calendar-initialized');
             if (_.windowW <= _.$breakpoints.tablet) { // tablet/mobile
-                _.toggleSidebar(false);
-              //  _.toggleEventList(false);                                       // SEB
+              //  _.toggleSidebar(false);                                               // SEB++
+              //  _.toggleEventList(false);                                              // SEB
             } else {
                 if (!_.options.sidebarDisplayDefault) _.toggleSidebar(false);
                 else _.toggleSidebar(true);
@@ -404,7 +404,7 @@
         _.windowW = $(window).width();
 
         if (_.windowW <= _.$breakpoints.tablet) { // tablet
-            _.toggleSidebar(false);
+          // _.toggleSidebar(true);    //  _.toggleSidebar(false); // original = false     // SEB++
           //  _.toggleEventList(false);                     // SEB
 
             if (_.windowW <= _.$breakpoints.mobile) { // mobile
@@ -415,7 +415,7 @@
                     .on('click.evocalendar.evo-' + _.instanceUid, $.proxy(_.toggleOutside, _));
             }
         } else {
-            if (!_.options.sidebarDisplayDefault) _.toggleSidebar(false);
+            if (!_.options.sidebarDisplayDefault) _.toggleSidebar(true);   // SEB -(false)
             else _.toggleSidebar(true);
 
             if (!_.options.eventDisplayDefault) _.toggleEventList(true);  // SEB -(false)
