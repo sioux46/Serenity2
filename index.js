@@ -484,7 +484,8 @@ function addCalEvent(time, description, date) {
       color: "#009099", // "#fe7f78",
     }]);
 
-    sortCalendarEvents( date );
+    // sortCalendarEvents( date );
+    globalSortCalendarEvents();
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     return true;
 }
@@ -846,7 +847,8 @@ function handleResponse(reponse) {
     if ( action == "add" ) {
       console.log("Add event from GPT 3 > time: " + time + ", description: " + description + ", date: " + dateForEvo);
       if ( !addCalEvent(time, description, dateForEvo) ) return;
-      sortCalendarEvents( dateForEvo );
+      // sortCalendarEvents( dateForEvo );
+      globalSortCalendarEvents();
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       calendar.selectDate( dateForEvo );
@@ -1588,7 +1590,8 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
 
   console.log(activeDate);
-  sortCalendarEvents( activeDate );
+  // sortCalendarEvents( activeDate );
+  globalSortCalendarEvents();
   localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   $("#evoCalendar").evoCalendar('toggleEventList',true);
 });
@@ -1646,7 +1649,8 @@ $("#newEventOK").on("click", function (ev) {
         event.name = time;   // name/time;
       }
     }
-    sortCalendarEvents(calendar.$active.date);
+    // sortCalendarEvents(calendar.$active.date);
+    globalSortCalendarEvents();
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
   }
@@ -1668,7 +1672,8 @@ $("#newEventOK").on("click", function (ev) {
   $("#eventModal").modal("hide");   // HIDE MODAL
 
   let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
-  sortCalendarEvents( activeDate );
+  // sortCalendarEvents( activeDate );
+  globalSortCalendarEvents();
   calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   calendar.selectDate( activeDate );
 
