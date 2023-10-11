@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.11.2";
+var devaVersion = "v3.09.11.4";
 /*********************************************************************
 ************************************************************ class
 **********************************************************************/
@@ -555,12 +555,13 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     // window.location = window.location.href;
     return;
   }
-
-  if ( question.match(/^\s*gpt4\s*$/i) ) {
+/*
+  if ( question.match(/^\s*gpt4\+\s*$/i) ) {
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     // window.location = window.location.href;
     return;
   }
+  */
   if ( question.match(/^\s*gpt3\s*$/i) ) {
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     // window.location = window.location.href;
@@ -781,7 +782,7 @@ function handleResponse(reponse) {
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
-    postChatBuffer = [];             // forget recent chat
+    // postChatBuffer = [];             // forget recent chat
   }
   /////////////////////////////////////////////
 
@@ -870,7 +871,7 @@ function handleResponse(reponse) {
     }
 
     ///////////////////////////////////////////////// FIN ACTION
-    postChatBuffer = [];  // forget recent chat
+    // postChatBuffer = [];  // forget recent chat
   }
 }
 
@@ -1742,7 +1743,7 @@ var recogTimeout;
 var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
-var forceGPT4 = false; // false --> modify, true --> + add and delete
+var forceGPT4 = true; // false --> modify, true --> + add and delete
 
 //                        Paramètres chatGPT
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //
