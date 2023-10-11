@@ -1,8 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.10.1";
-
+var devaVersion = "v3.09.11.2";
 /*********************************************************************
 ************************************************************ class
 **********************************************************************/
@@ -782,7 +781,7 @@ function handleResponse(reponse) {
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
-    // postChatBuffer = [];             // forget recent chat
+    postChatBuffer = [];             // forget recent chat
   }
   /////////////////////////////////////////////
 
@@ -871,7 +870,7 @@ function handleResponse(reponse) {
     }
 
     ///////////////////////////////////////////////// FIN ACTION
-    // postChatBuffer = [];  // forget recent chat
+    postChatBuffer = [];  // forget recent chat
   }
 }
 
@@ -1490,12 +1489,13 @@ calendar = $('#evoCalendar').get(0).evoCalendar;
 removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
-  addCalEvent("18h00", "Piscine avec Annie", actualDateToEvoDate("today"));
+  addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
   addCalEvent("20h30", "Diner chez ma tante", actualDateToEvoDate("today"));
   addCalEvent("22h15", "Concert Diana et Julie", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
   addCalEvent("11h00", "Cinéma avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
