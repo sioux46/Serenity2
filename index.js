@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.11.4";
+var devaVersion = "v3.09.12.3";
 /*********************************************************************
 ************************************************************ class
 **********************************************************************/
@@ -341,18 +341,22 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       lig = rep.match(/.*\n+?/)[0];
 
       hours = rep.match(/(\d{1,2})h/i);
-      hours = hours[1];
-      if ( hours.length == 1 ) hours = "0" + hours;
-      minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
-      if ( minutes ) {
-        minutes = minutes[2];
-        if ( minutes.length == 1 ) minutes = "0" + minutes;
-        time = hours + "h" + minutes;
+      if ( hours ) {
+        hours = hours[1];
+        if ( hours.length == 1 ) hours = "0" + hours;
+        minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
+        if ( minutes ) {
+          minutes = minutes[2];
+          if ( minutes.length == 1 ) minutes = "0" + minutes;
+          time = hours + "h" + minutes;
+        }
+        else time = hours + "h00";
       }
-      else time = hours + "h00";
+      else time = "12h00";
 
       description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
-      if ( description.match(/: /) ) description = description.replace(/: /, "");
+      if ( !description ) description = "Motif à préciser";
+      else if ( description.match(/: /) ) description = description.replace(/: /, "");
 
       date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
       // permuter jour et date
@@ -777,7 +781,7 @@ function handleResponse(reponse) {
     // serviceBuffer = calendarBuffer.concat(postChatBuffer);
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda without assistant message
 
-    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous de mon agenda dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
@@ -1459,10 +1463,6 @@ $("#ontoTree-title").on("click", function (ev) {
 
 
 
-////////////////////////////////////////// event modal
-
-
-
 ////////////////////////////////////////////////////////////////   EVO CALENDAR   /////
 
 /////////////////               init evoCalendar
@@ -1490,13 +1490,15 @@ calendar = $('#evoCalendar').get(0).evoCalendar;
 removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
-  addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
+  //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
   addCalEvent("20h30", "Diner chez ma tante", actualDateToEvoDate("today"));
+  /*
   addCalEvent("22h15", "Concert Diana et Julie", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-  addCalEvent("11h00", "Cinéma avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
+  addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
+  */
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
@@ -1743,9 +1745,8 @@ var recogTimeout;
 var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
-var forceGPT4 = true; // false --> modify, true --> + add and delete
-
 //                        Paramètres chatGPT
+var forceGPT4 = true; // false --> modify     true --> modify + add and delete
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //
 var reponseTemperature;
 var userName;
