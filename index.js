@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.12.3";
+var devaVersion = "v3.09.13.1";
 /*********************************************************************
 ************************************************************ class
 **********************************************************************/
@@ -365,10 +365,13 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
 
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) continue;
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
+    globalSortCalendarEvents();
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
 
   } catch(e) {
     console.log("***** Mauvais format réponse serviceCall ******");
@@ -781,6 +784,7 @@ function handleResponse(reponse) {
     // serviceBuffer = calendarBuffer.concat(postChatBuffer);
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda without assistant message
 
+    serviceBuffer.push({ role: "system", content: "Vous avez accès à mon agenda"});
     serviceBuffer.push({ role: "user", content: "Listez les rendez-vous de mon agenda dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
@@ -1491,7 +1495,7 @@ removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
   //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
-  addCalEvent("20h30", "Diner chez ma tante", actualDateToEvoDate("today"));
+  addCalEvent("21h30", "Diner chez mon oncle", actualDateToEvoDate("today"));
   /*
   addCalEvent("22h15", "Concert Diana et Julie", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
@@ -1523,6 +1527,11 @@ $(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("
 
 $(".calendar-year").find("p").on("click", function (e) {
   $('#evoCalendar').evoCalendar('toggleSidebar');
+});
+
+//////////   same as typing "clear" in prompt
+$("#devaVersion").on("click", function (e) {
+  clearCalendar();
 });
 
 /*
@@ -1560,6 +1569,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
   }
 
   if ( flagEditTrash == "edit" ) { //     SHOW eventModal     // edit event
+    $("#eventModal").find(".modal-title").text("Modification de l'évènement");
     $("#eventModal").attr("data-event-id", event.id); // save event ID in data attr
 
     clearEventModal();
@@ -1608,6 +1618,8 @@ $(".event-plus").on("click", function (ev) {
   let hours = new Date().getHours();
   let minutes = new Date().getMinutes();
 //  $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
+
+  $("#eventModal").find(".modal-title").text("Nouvel évènement");
   $("#eventModal").modal("show");
 });
 
@@ -1618,9 +1630,9 @@ $("#newEventOK").on("click", function (ev) {
   let val = $("#sEventTime").val();
   let val2 = $("#sEventTime2").val();
 
-  if ( !val ) return;
+  if ( !val ) val = "12:00";
 
-  if ( !title ) return;
+  if ( !title ) title = "Motif à déterminer";
 
   if ( val2  &&  val2 < val ) {
     $("#sEventTime2").val(val);
@@ -1632,11 +1644,15 @@ $("#newEventOK").on("click", function (ev) {
   }
   if ( !val && !val2 && !title ) return;
 
-  let time = $("#eventModal").find("#sEventTime").val();
+  // let time = $("#eventModal").find("#sEventTime").val();
+  let time = val;
+
   let splitTime = time.split(':');
   time = `${splitTime[0]}h${splitTime[1]}`;
 
-  let time2 = $("#eventModal").find("#sEventTime2").val();
+  // let time2 = $("#eventModal").find("#sEventTime2").val();
+  time2 = val2;
+
   if ( time2 ) {
     splitTime = time2.split(':');
     time2 = `${splitTime[0]}h${splitTime[1]}`;
