@@ -83,25 +83,26 @@
             <input id="chatParamAssistantName" type="text" class="form-control"/>
           </div>
           <div class="mb-2">
+            <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
+            <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
+          </div>
+          <div class="mb-2">
+            <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
+            <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
+          </div>
+          <!--  disabled -->
+          <div class="mb-2">
             <label for="chatParamStyle" class="form-label">Style des réponses:</label>
-            <input id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
+            <input disabled id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
           </div>
           <div class="mb-2">
             <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
-            <input id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
+            <input disabled id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
           </div>
           <div class="mb-2">
             <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
-            <input id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
+            <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
           </div>
-        </div>
-        <div class="mb-2">
-          <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
-          <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
-        </div>
-        <div class="mb-2">
-          <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
-          <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
         </div>
       </div>
 <!--

@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.13.1";
+var devaVersion = "v3.09.4.1";
 /*********************************************************************
 ************************************************************ class
 **********************************************************************/
@@ -330,65 +330,71 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   }
 
-  try {
+  if ( reponse != "Agenda vide" ) {
+    try {
+      rep = rep.replace(/.*\n\n/, "");
+      // rep = rep.replace(/\n\n.*/, "");
+      rep = rep + "\n";
 
-    rep = rep.replace(/.*\n\n/, "");
-    // rep = rep.replace(/\n\n.*/, "");
-    rep = rep + "\n";
 
+      do {
+        lig = rep.match(/.*\n+?/)[0];
 
-    do {
-      lig = rep.match(/.*\n+?/)[0];
-
-      hours = rep.match(/(\d{1,2})h/i);
-      if ( hours ) {
-        hours = hours[1];
-        if ( hours.length == 1 ) hours = "0" + hours;
-        minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
-        if ( minutes ) {
-          minutes = minutes[2];
-          if ( minutes.length == 1 ) minutes = "0" + minutes;
-          time = hours + "h" + minutes;
+        hours = rep.match(/(\d{1,2})h/i);
+        if ( hours ) {
+          hours = hours[1];
+          if ( hours.length == 1 ) hours = "0" + hours;
+          minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
+          if ( minutes ) {
+            minutes = minutes[2];
+            if ( minutes.length == 1 ) minutes = "0" + minutes;
+            time = hours + "h" + minutes;
+          }
+          else time = hours + "h00";
         }
-        else time = hours + "h00";
+        else time = "12h00";
+
+        description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
+        if ( !description ) description = "Motif à préciser";
+        else if ( description.match(/: /) ) description = description.replace(/: /, "");
+
+        date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+        // permuter jour et date
+        date = date[2] + "/" + date[1] + "/" + date[3];
+
+
+        console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
+        if ( !addCalEvent(time, description, date) ) continue;
+        // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+        rep = rep.replace(/.*\n+?/, "");
+      } while ( rep );
+      globalSortCalendarEvents();
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+
+    } catch(e) {
+      console.log("***** Mauvais format réponse serviceCall ******");
+      // fillLog("service", "Mauvais format réponse:\n" + rep );
+
+      // erasing evoCalEvents
+      while ( evoCalEvents.length ) {
+        $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
+        localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
       }
-      else time = "12h00";
 
-      description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
-      if ( !description ) description = "Motif à préciser";
-      else if ( description.match(/: /) ) description = description.replace(/: /, "");
-
-      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      // permuter jour et date
-      date = date[2] + "/" + date[1] + "/" + date[3];
-
-
-      console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
-      if ( !addCalEvent(time, description, date) ) continue;
-      // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-
-      rep = rep.replace(/.*\n+?/, "");
-    } while ( rep );
-    globalSortCalendarEvents();
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-
-
-  } catch(e) {
-    console.log("***** Mauvais format réponse serviceCall ******");
-    // fillLog("service", "Mauvais format réponse:\n" + rep );
-
-    // erasing evoCalEvents
-    while ( evoCalEvents.length ) {
-      $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      // restoring evoCalEvents
+      for ( let event of evoCalEvents_OLD ) {
+        console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
+        addCalEvent(event.name, event.description, event.date);
+        localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      }
     }
+  }
 
-    // restoring evoCalEvents
-    for ( let event of evoCalEvents_OLD ) {
-      console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
-      addCalEvent(event.name, event.description, event.date);
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-    }
+  else {  // Agenda vide
+    calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+    calendar.selectDate( calendar.getActiveDate() );
   }
   // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
   // calendar.selectDate( calendar.getActiveDate() );
@@ -782,10 +788,11 @@ function handleResponse(reponse) {
     serviceBuffer = [];
     // serviceBuffer = preChatBuffer.concat(calendarBuffer.concat(postChatBuffer));
     // serviceBuffer = calendarBuffer.concat(postChatBuffer);
-    serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda without assistant message
+    // serviceBuffer = collectEvents("service"); // Agenda - assistant message
+    serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-    serviceBuffer.push({ role: "system", content: "Vous avez accès à mon agenda"});
-    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous de mon agenda dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "system", content: "Vous avez accès à mon agenda"});
+    serviceBuffer.push({ role: "user", content: "Si vous n'avez ajouté aucun rendez-vous, répondez 'Agenda vide', sinon Listez les rendez-vous de mon agenda dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
