@@ -1,10 +1,10 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.4.1";
-/*********************************************************************
+var devaVersion = "v3.09.16.1";
+/* ********************************************************************
 ************************************************************ class
-**********************************************************************/
+********************************************************************* */
 
 class Person {
   constructor(firstName, lastName, phoneNumber) {
@@ -282,7 +282,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4-0613"), // "gpt-3.5-turbo-0613"
+              model: JSON.stringify("gpt-4-0613"), // "gpt-4-0613"  "gpt-3.5-turbo-0613"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -330,7 +330,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   }
 
-  if ( reponse != "Agenda vide" ) {
+  if ( !reponse.match(/^agenda vide\.?/i) ) {
     try {
       rep = rep.replace(/.*\n\n/, "");
       // rep = rep.replace(/\n\n.*/, "");
@@ -392,12 +392,9 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     }
   }
 
-  else {  // Agenda vide
-    calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-    calendar.selectDate( calendar.getActiveDate() );
-  }
-  // calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-  // calendar.selectDate( calendar.getActiveDate() );
+  let activeDate = calendar.getActiveDate();
+  calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+  calendar.selectDate( activeDate );
   $(".calendar-events").css("opacity", 0.1);
   setTimeout( function() { $(".calendar-events").animate({"opacity": 1}, 10); }, 350);
 
@@ -437,17 +434,11 @@ function addModifiedEvent(reponse) {
 function collectEvents(type) {
   let events = [];
   let content = "";
-  let flagRDV = true;
+
   for ( let event of evoCalEvents ) {
 
     // user
-//    if ( flagRDV ) {
       content = "Ajoutez un rendez-vous à mon agenda pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
-//      flagRDV = false;
-//    }
-//    else {
-//      content = "Ajoutez pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
-//    }
 
     if ( event.name ) {
       if ( event.name.match(/à/) ) content += " de " + event.name;
@@ -460,6 +451,7 @@ function collectEvents(type) {
 
     // assistant
     if ( type == "normal" ) {
+      flagFirstEvent = false;
       content = "Rendez-vous ajouté pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
       if ( event.name ) {
         if ( event.name.match(/à/) ) content += " de " + event.name;
@@ -752,7 +744,7 @@ function handleResponse(reponse) {
   // let serviceBuffer;
 
   if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/(ajouté|nouveau rendez-vous)/i) ) action = "add";
+  else if ( reponse.match(/( noté|ajouté|nouveau rendez-vous)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré)/i) ) action = "remove";
 
   if ( !action ) return;
@@ -780,7 +772,7 @@ function handleResponse(reponse) {
         }
       }
     }
-    if ( dateForEvo ) {
+    if ( dateForEvo ) { // select the agenda date of the modified event
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       calendar.selectDate( dateForEvo );
     }
@@ -791,8 +783,9 @@ function handleResponse(reponse) {
     // serviceBuffer = collectEvents("service"); // Agenda - assistant message
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-    // serviceBuffer.push({ role: "system", content: "Vous avez accès à mon agenda"});
-    serviceBuffer.push({ role: "user", content: "Si vous n'avez ajouté aucun rendez-vous, répondez 'Agenda vide', sinon Listez les rendez-vous de mon agenda dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "system", content: "Vous devez lister mes rendez-vous"});
+    // Si je n'ai aucun rendez-vous, répondez 'Agenda vide', sinon
+    serviceBuffer.push({ role: "user", content: " Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
@@ -1502,9 +1495,9 @@ removeBeforeCalEvents(evoCalEvents);
 
 if ( !evoCalEvents.length ) {
   //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
-  addCalEvent("21h30", "Diner chez mon oncle", actualDateToEvoDate("today"));
+  addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
+  addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
   /*
-  addCalEvent("22h15", "Concert Diana et Julie", actualDateToEvoDate("today"));
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
   addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
