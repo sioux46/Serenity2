@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.16.1";
+var devaVersion = "v3.09.17.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -330,7 +330,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   }
 
-  if ( !reponse.match(/^agenda vide\.?/i) ) {
+  if ( !reponse.match(/^agenda vide\.?/i) ) {  // agenda non vide
     try {
       rep = rep.replace(/.*\n\n/, "");
       // rep = rep.replace(/\n\n.*/, "");
@@ -400,7 +400,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
 
 }
 
-/*   NOT USER NOT
+/*   NOT USED
 /////
 function addModifiedEvent(reponse) {
   let rep = reponse;
@@ -434,6 +434,8 @@ function addModifiedEvent(reponse) {
 function collectEvents(type) {
   let events = [];
   let content = "";
+
+  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'"});
 
   for ( let event of evoCalEvents ) {
 
@@ -635,6 +637,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
       console.log("Réponse texte:");
     }
     console.log(response);
+    if ( response.match(/ puij /)) response = response.replace(/ puij /, " puis-je ");
     fillLog("response", response);
   }
 
@@ -785,7 +788,11 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "system", content: "Vous devez lister mes rendez-vous"});
     // Si je n'ai aucun rendez-vous, répondez 'Agenda vide', sinon
-    serviceBuffer.push({ role: "user", content: " Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+
+
+    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+
+
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
