@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.17.2";
+var devaVersion = "v3.09.17.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -435,7 +435,7 @@ function collectEvents(type) {
   let events = [];
   let content = "";
 
-  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'"});
+  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'. Sinon listez mes rendez-vous et voyages à la demande"});
 
   for ( let event of evoCalEvents ) {
 
@@ -781,20 +781,9 @@ function handleResponse(reponse) {
     }
 
     serviceBuffer = [];
-    // serviceBuffer = preChatBuffer.concat(calendarBuffer.concat(postChatBuffer));
-    // serviceBuffer = calendarBuffer.concat(postChatBuffer);
-    // serviceBuffer = collectEvents("service"); // Agenda - assistant message
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-    // serviceBuffer.push({ role: "system", content: "Vous devez lister mes rendez-vous"});
-    // Si je n'ai aucun rendez-vous, répondez 'Agenda vide', sinon
-
-
     serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
-
-
-
-    // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous en donnant le numéro du mois, le numéro du jour et l'année en utilisant le format suivant: XX/XX/XXXX. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
