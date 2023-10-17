@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.17.3";
+var devaVersion = "v3.09.17.4";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -354,14 +354,13 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
         }
         else time = "12h00";
 
-        description = lig.match(/\d{2}h\d{2},? (.*)/)[1];
+        description = lig.match(/\d{1,2}h\d{1,2},? (.*)/)[1];
         if ( !description ) description = "Motif à préciser";
         else if ( description.match(/: /) ) description = description.replace(/: /, "");
 
         date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
         // permuter jour et date
         date = date[2] + "/" + date[1] + "/" + date[3];
-
 
         console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
         if ( !addCalEvent(time, description, date) ) continue;
@@ -783,7 +782,9 @@ function handleResponse(reponse) {
     serviceBuffer = [];
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+//    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
