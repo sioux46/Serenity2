@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.18.1";
+var devaVersion = "v3.09.18.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1023,7 +1023,7 @@ function fillLog(who, text) {
           $("#logTextarea").val( $("#logTextarea").val() + debText + userName + ": " + text + "\n");
   else if ( who == "response")  {
     $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text );
-    document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
+    // document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
     if ( text == "Je vous en pris" ) {
       questionMode = "audio";
       $("#micButton").trigger("click");
@@ -1034,6 +1034,7 @@ function fillLog(who, text) {
   else if ( who == "service" ) {
     $("#logTextarea").val( $("#logTextarea").val() + "\n*** " + text + "\n");
   }
+  document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
 }
 
 ////                                audioState
