@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.17.4";
+var devaVersion = "v3.09.18.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -782,7 +782,7 @@ function handleResponse(reponse) {
     serviceBuffer = [];
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-//    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
@@ -1528,8 +1528,13 @@ $(".calendar-year").find("p").on("click", function (e) {
 
 //////////   same as typing "clear" in prompt
 $("#devaVersion").on("click", function (e) {
-  clearCalendar();
+  $("#start").css("opacity", 0.1);
+  $("#start").animate( {"opacity": 1 }, 2000);
+  setTimeout( function() {
+     clearCalendar();
+  }, 360);
 });
+//
 
 /*
 $('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
