@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.18.2";
+var devaVersion = "v3.09.20.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -696,13 +696,14 @@ function chatGPTcall(globalChatBuffer) {       // **** chatGPT call ****
       }
       else {
         var reponse = xhr.responseText;
-        fillLog("response", reponse);
+        // fillLog("response", reponse);
         console.log("Réponse: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
           console.log("Error A P I Open A I !");
         }
         else {
+          fillLog("response", reponse);
           let assistantMessage = { role: "assistant", content: reponse };
 
           // assistant response added to buffer, ready for nexte question
