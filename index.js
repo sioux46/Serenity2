@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.20.1";
+var devaVersion = "v3.09.20.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -340,7 +340,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       do {
         lig = rep.match(/.*\n+?/)[0];
 
-        hours = rep.match(/(\d{1,2})h/i);
+        hours = rep.match(/(\d{1,2})h/i);                     // hours
         if ( hours ) {
           hours = hours[1];
           if ( hours.length == 1 ) hours = "0" + hours;
@@ -352,15 +352,26 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
           }
           else time = hours + "h00";
         }
-        else time = "12h00";
+        else time = textTimeToNumTime(lig);  // "12h00";
 
-        description = lig.match(/\d{1,2}h\d{1,2},? (.*)/)[1];
-        if ( !description ) description = "Motif à préciser";
-        else if ( description.match(/: /) ) description = description.replace(/: /, "");
+        description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // description
+        if ( description ) {
+          description = description[1];
+          if ( description.match(/: /) ) description = description.replace(/: /, "");
+        }
+        else {
+          description = "Motif à préciser";
+        }
+        // if ( description.match(/^- /) ) description = description.replace(/^- /, "");
+        if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
-        date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-        // permuter jour et date
-        date = date[2] + "/" + date[1] + "/" + date[3];
+        date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);          // date
+        if ( date ) {    // permuter jour et date
+          date = date[2] + "/" + date[1] + "/" + date[3];
+        }
+        else date = textDateToNumDate(lig);
+
+        // if ( !date ) date =
 
         console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
         if ( !addCalEvent(time, description, date) ) continue;
@@ -368,6 +379,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
 
         rep = rep.replace(/.*\n+?/, "");
       } while ( rep );
+
       globalSortCalendarEvents();
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
@@ -696,14 +708,15 @@ function chatGPTcall(globalChatBuffer) {       // **** chatGPT call ****
       }
       else {
         var reponse = xhr.responseText;
-        // fillLog("response", reponse);
+        fillLog("response", reponse);
         console.log("Réponse: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
-          console.log("Error A P I Open A I !");
+          console.log("response");
+          postChatBuffer = [];  // forget recent chat
         }
         else {
-          fillLog("response", reponse);
+          // fillLog("response", reponse);
           let assistantMessage = { role: "assistant", content: reponse };
 
           // assistant response added to buffer, ready for nexte question
@@ -767,14 +780,9 @@ function handleResponse(reponse) {
     else {
       date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
       if ( date ) dateForEvo = chatToEvoDate(date);
-      else {
-        if ( rep.match(/aujourd'hui/) ) {
-          rep = rep.replace(/aujourd'hui/, actualDate());
-          date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
-          if ( date ) dateForEvo = chatToEvoDate(date);
-        }
-      }
+      else dateForEvo = textDateToNumDate(rep);
     }
+
     if ( dateForEvo ) { // select the agenda date of the modified event
       calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       calendar.selectDate( dateForEvo );
@@ -1244,6 +1252,55 @@ function actualTime() {
 
 //  console.log("Heure à Paris : " + `${heures}:${minutes}:${secondes}`);
   return `${heures}:${minutes}:${secondes}`;
+}
+
+////
+function textDateToNumDate(text) {
+  let rep = text;
+  let date = "";
+
+  if ( rep.match(/aujourd'hui/i) ) {                     //  aujourd'hui
+    rep = rep.replace(/aujourd'hui/i, actualDate());
+    date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( date ) date = chatToEvoDate(date);
+  }
+  else if ( rep.match(/après demain/i) ) {                // après demain
+    rep = rep.replace(/après demain/i, nextDayDate(nextDayDate(actualDate())));
+    date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( date ) date = chatToEvoDate(date);
+  }
+  else if ( rep.match(/demain/i) ) {                     //   demain
+    rep = rep.replace(/demain/i, nextDayDate(actualDate()));
+    date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( date ) date = chatToEvoDate(date);
+  }
+  return date;
+}
+
+////
+function textTimeToNumTime(text) {
+
+  if ( text.match(/début.* journée/i) ) return "09h00";
+  if ( text.match(/milieu.* journée/i) ) return "16h00";
+  if ( text.match(/fin.* journée/i) ) return "19h00";
+  if ( text.match(/journée/i) ) return "15h00";
+
+  if ( text.match(/début.* matin/i) ) return "08h00";
+  if ( text.match(/milieu.* matin/i) ) return "10h00";
+  if ( text.match(/fin.* matin/i) ) return "11h30";
+  if ( text.match(/matin/i) ) return "10h00";
+
+  if ( text.match(/début.* après midi/i) ) return "14h00";
+  if ( text.match(/milieu.* après midi/i) ) return "16h00";
+  if ( text.match(/fin.* après midi/i) ) return "18h00";
+  if ( text.match(/après midi/i) ) return "16h00";
+
+  if ( text.match(/début.* soir/i) ) return "19h00";
+  if ( text.match(/milieu.* soir/i) ) return "21h00";
+  if ( text.match(/fin.* soir/i) ) return "23h00";
+  if ( text.match(/soir/i) ) return "21h00";
+
+  return "12h00";
 }
 
 
