@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.20.3";
+var devaVersion = "v3.09.24.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -362,7 +362,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
         else {
           description = "Motif à préciser";
         }
-        // if ( description.match(/^- /) ) description = description.replace(/^- /, "");
+        if ( description.match(/^- /) ) description = description.replace(/^- /, "");
         if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
         date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);          // date
