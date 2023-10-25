@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.24.2";
+var devaVersion = "v3.09.25.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -705,24 +705,26 @@ function chatGPTcall(globalChatBuffer) {       // **** chatGPT call ****
 
       if (result != 'success') {
         console.log("Fatal error A P I Open A I !!!!");
+        fillLog("response", "Error A P I Open A I !!!!");
       }
       else {
         var reponse = xhr.responseText;
-        fillLog("response", reponse);
+        // fillLog("response", reponse);
         console.log("Réponse: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
-          console.log("response");
+          reponse = "Désolé mais je n'ai pas compris votre question. Pouvez-vous la reformuler ?";
           postChatBuffer = [];  // forget recent chat
         }
         else {
-          // fillLog("response", reponse);
           let assistantMessage = { role: "assistant", content: reponse };
 
           // assistant response added to buffer, ready for nexte question
           postChatBuffer.push(assistantMessage);
           handleResponse(reponse);
         }
+        fillLog("response", reponse);
+        console.log("response");
         response = reponse; // local to glob
 
         if ( reponseMode == "audio" ) {
@@ -793,7 +795,9 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez mon agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
