@@ -23,7 +23,8 @@ exit; */
       'model' => $model,
       'messages' => $messages,
       // 'max_tokens' => 100,
-      'temperature' => $temperature
+      'temperature' => $temperature,
+      // 'top_p' => 0.5
   );
 // }
 

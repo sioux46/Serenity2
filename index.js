@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.09.25.3";
+var devaVersion = "v3.10.26.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -282,7 +282,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4-0613"), // "gpt-4-0613"  "gpt-3.5-turbo-0613"
+              model: JSON.stringify("gpt-3.5-turbo-0613"), // "gpt-4-0613"  "gpt-3.5-turbo-0613"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -330,76 +330,77 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   }
 
-  if ( !reponse.match(/^agenda vide\.?/i) ) {  // agenda non vide
-    try {
-      rep = rep.replace(/.*\n\n/, "");
-      // rep = rep.replace(/\n\n.*/, "");
-      rep = rep + "\n";
+  // agenda non vide
+  if ( reponse.match(/^agenda vide\.?/i) ) rep = response;  // reSponse is a globlal
+
+  try {
+    rep = rep.replace(/.*\n\n/, "");
+    // rep = rep.replace(/\n\n.*/, "");
+    rep = rep + "\n";
 
 
-      do {
-        lig = rep.match(/.*\n+?/)[0];
+    do {
+      lig = rep.match(/.*\n+?/)[0];
 
-        hours = rep.match(/(\d{1,2})h/i);                     // hours
-        if ( hours ) {
-          hours = hours[1];
-          if ( hours.length == 1 ) hours = "0" + hours;
-          minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
-          if ( minutes ) {
-            minutes = minutes[2];
-            if ( minutes.length == 1 ) minutes = "0" + minutes;
-            time = hours + "h" + minutes;
-          }
-          else time = hours + "h00";
+      hours = rep.match(/(\d{1,2})h/i);                     // HOURS
+      if ( hours ) {
+        hours = hours[1];
+        if ( hours.length == 1 ) hours = "0" + hours;
+        minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
+        if ( minutes ) {
+          minutes = minutes[2];
+          if ( minutes.length == 1 ) minutes = "0" + minutes;
+          time = hours + "h" + minutes;
         }
-        else time = textTimeToNumTime(lig);  // "12h00";
+        else time = hours + "h00";
+      }
+      else time = textTimeToNumTime(lig);  // "12h00" if not found;
 
-        description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // description
-        if ( description ) {
-          description = description[1];
-          if ( description.match(/: /) ) description = description.replace(/: /, "");
-        }
-        else {
-          description = lig.match(/( - |motif: |motif |, )(.*)/i);
-          if ( description ) description = description[2];
-          else description = "Motif à préciser";
-        }
-        if ( description.match(/^- /) ) description = description.replace(/^- /, "");
-        if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+      description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // DESCRIPTION
+      if ( description ) {
+        description = description[1];
+        if ( description.match(/: /) ) description = description.replace(/: /, "");
+      }
+      else {
+        description = lig.match(/( - |: |motif |, )(.*)/i);
+        if ( description ) description = description[2];
+        else description = "Motif à préciser";
+      }
+      if ( description.match(/^- /) ) description = description.replace(/^- /, "");
+      if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
-        date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);          // date
-        if ( date ) {    // permuter jour et date
-          date = date[2] + "/" + date[1] + "/" + date[3];
-        }
-        else date = textDateToNumDate(lig);
+      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);          // DATE
+      if ( date ) {    // permuter jour et date
+        date = date[2] + "/" + date[1] + "/" + date[3];
+      }
+      else date = textDateToNumDate(lig);
 
-        console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
-        if ( !addCalEvent(time, description, date) ) continue;
-        // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
+      if ( !addCalEvent(time, description, date) ) continue;
+      // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
-        rep = rep.replace(/.*\n+?/, "");
-      } while ( rep );
+      rep = rep.replace(/.*\n+?/, "");
+    } while ( rep );
 
-      globalSortCalendarEvents();
+    globalSortCalendarEvents();
+    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+
+
+  } catch(e) {
+    console.log("***** Mauvais format réponse serviceCall ******");
+    // fillLog("service", "Mauvais format réponse:\n" + rep );
+
+    // erasing evoCalEvents
+    while ( evoCalEvents.length ) {
+      $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    }
 
-
-    } catch(e) {
-      console.log("***** Mauvais format réponse serviceCall ******");
-      // fillLog("service", "Mauvais format réponse:\n" + rep );
-
-      // erasing evoCalEvents
-      while ( evoCalEvents.length ) {
-        $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-        localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-      }
-
-      // restoring evoCalEvents
-      for ( let event of evoCalEvents_OLD ) {
-        console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
-        addCalEvent(event.name, event.description, event.date);
-        localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-      }
+    // restoring evoCalEvents
+    for ( let event of evoCalEvents_OLD ) {
+      console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
+      addCalEvent(event.name, event.description, event.date);
+      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     }
   }
 
@@ -446,7 +447,7 @@ function collectEvents(type) {
   let events = [];
   let content = "";
 
-  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'. Sinon listez mes rendez-vous et voyages à la demande"});
+  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'. Sinon listez mes rendez-vous et voyages à la demande."});
 
   for ( let event of evoCalEvents ) {
 
@@ -522,7 +523,9 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
+  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Faites des réponses courtes"});
+
+  // Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
 
   chatBuffer.push({ role: "user", content: "Ajoutez un rdv à mon agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
@@ -557,7 +560,7 @@ function collectPreChatBuffer() {
   //chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
   chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et apprès demain" });
 
-  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> quand vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda." });
+  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Faites une réponse courte." });
 
   // chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
 
@@ -799,7 +802,7 @@ function handleResponse(reponse) {
     // serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // "Listez mon agenda
-    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous et mes voyages au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous et mes voyages au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -1270,8 +1273,8 @@ function textDateToNumDate(text) {
     date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
     if ( date ) date = chatToEvoDate(date);
   }
-  else if ( rep.match(/après demain/i) ) {                // après demain
-    rep = rep.replace(/après demain/i, nextDayDate(nextDayDate(actualDate())));
+  else if ( rep.match(/après(-| )demain/i) ) {                // après demain
+    rep = rep.replace(/après(-| )demain/i, nextDayDate(nextDayDate(actualDate())));
     date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
     if ( date ) date = chatToEvoDate(date);
   }
@@ -1296,14 +1299,16 @@ function textTimeToNumTime(text) {
   if ( text.match(/fin.* matin/i) ) return "11h30";
   if ( text.match(/matin/i) ) return "10h00";
 
-  if ( text.match(/début.* après midi/i) ) return "14h00";
-  if ( text.match(/milieu.* après midi/i) ) return "16h00";
-  if ( text.match(/fin.* après midi/i) ) return "18h00";
-  if ( text.match(/après midi/i) ) return "16h00";
+  if ( text.match(/début.* après(-| )midi/i) ) return "14h00";
+  if ( text.match(/milieu.* après(-| )midi/i) ) return "16h00";
+  if ( text.match(/fin.* après(-| )midi/i) ) return "18h00";
+  if ( text.match(/après(-| )midi/i) ) return "16h00";
 
   if ( text.match(/début.* soir/i) ) return "19h00";
   if ( text.match(/milieu.* soir/i) ) return "21h00";
   if ( text.match(/fin.* soir/i) ) return "23h00";
+  if ( text.match(/ tardive/i) ) return "23h00";
+  if ( text.match(/ tard /i) ) return "23h00";
   if ( text.match(/soir/i) ) return "21h00";
 
   return "12h00";
