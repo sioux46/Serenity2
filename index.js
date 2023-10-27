@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.10.27.2";
+var devaVersion = "v3.10.27.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1079,7 +1079,7 @@ function audioState() {
 
 ////
 function frenchMonthNamesForRegExp() {
-  return "janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre";
+  return "\\bjanvier\\b|\\bfévrier\\b|\\bmars\\b|\\bavril\\b|\\bmai\\b|\\bjuin\\b|\\bjuillet\\b|\\baoût\\b|\\bseptembre\\b|\\boctobre\\b|\\bnovembre\\b|\\bdécembre\\b";
 }
 
 ////
@@ -1564,12 +1564,10 @@ if ( !evoCalEvents.length ) {
   //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
   addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
   addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
-  /*
   addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
   addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
   addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
-  */
 }
 
 localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
