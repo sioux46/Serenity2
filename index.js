@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.10.27.1";
+var devaVersion = "v3.10.27.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -376,7 +376,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       else date = textDateToNumDate(lig);
 
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
-      if ( !addCalEvent(time, description, date) ) continue;
+      if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
       // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
       rep = rep.replace(/.*\n+?/, "");
