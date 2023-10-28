@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.10.27.3";
+var devaVersion = "v3.10.28.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -186,11 +186,13 @@ function initOntoTreeChoose(label, move, labs) {
 // click trash
 function trashClick() {
   flagEditTrash = "trash";
+  postChatBuffer = [];  // forget recent chat
 }
 
 // click edit
 function editClick() {
   flagEditTrash = "edit";
+  postChatBuffer = [];  // forget recent chat
 }
 
 ////
@@ -405,8 +407,10 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
   }
 
   let activeDate = calendar.getActiveDate();
-  calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-  calendar.selectDate( activeDate );
+  //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+  //calendar.selectDate( activeDate );
+  refreshDateDisplay(activeDate);
+
   $(".calendar-events").css("opacity", 0.1);
   setTimeout( function() { $(".calendar-events").animate({"opacity": 1}, 10); }, 350);
 
@@ -790,8 +794,9 @@ function handleResponse(reponse) {
     }
 
     if ( dateForEvo ) { // select the agenda date of the modified event
-      calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-      calendar.selectDate( dateForEvo );
+      //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+      //calendar.selectDate( dateForEvo );
+      refreshDateDisplay(dateForEvo);
     }
 
     serviceBuffer = [];
@@ -873,8 +878,9 @@ function handleResponse(reponse) {
       // sortCalendarEvents( dateForEvo );
       globalSortCalendarEvents();
       localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
-      calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-      calendar.selectDate( dateForEvo );
+      //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+      //calendar.selectDate( dateForEvo );
+      refreshDateDisplay(dateForEvo);
     }
 
     /////////////////////////////
@@ -885,8 +891,9 @@ function handleResponse(reponse) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
           localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
-          calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-          calendar.selectDate( dateForEvo );
+          //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+          //calendar.selectDate( dateForEvo );
+          refreshDateDisplay(dateForEvo);
           break;
         }
       }
@@ -1124,6 +1131,12 @@ function nextDayDate(dateStr) {
   const dateLendemainStr = `${jourDuLendemain} ${moisDuLendemain} ${anneeDuLendemain}`;
 
   return dateLendemainStr;
+}
+
+function refreshDateDisplay(targetDate) { // change selected date to refresh date display
+  calendar.selectDate(actualDateToEvoDate("tomorrow"));
+  calendar.selectDate(actualDateToEvoDate("today"));
+  calendar.selectDate(targetDate);
 }
 
 ////
@@ -1631,7 +1644,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
 
   if ( flagEditTrash == "trash") {                          // trash event
     $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
-    calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+    calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
     calendar.selectDate( event.date );
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
@@ -1742,6 +1755,7 @@ $("#newEventOK").on("click", function (ev) {
     globalSortCalendarEvents();
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
     flagEditTrash = "";
+    postChatBuffer = [];  // forget recent chat
   }
 
   else {    // new event
@@ -1756,6 +1770,7 @@ $("#newEventOK").on("click", function (ev) {
         color: "#009099", // "#fe7f78",
       }
     ]);
+    postChatBuffer = [];  // forget recent chat
   }
 
   $("#eventModal").modal("hide");   // HIDE MODAL
@@ -1763,8 +1778,9 @@ $("#newEventOK").on("click", function (ev) {
   let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
   // sortCalendarEvents( activeDate );
   globalSortCalendarEvents();
-  calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-  calendar.selectDate( activeDate );
+  //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
+  //calendar.selectDate( activeDate );
+  refreshDateDisplay(activeDate);
 
   localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 });
