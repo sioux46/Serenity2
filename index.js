@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.10.28.2";
+var devaVersion = "v3.10.28.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -284,7 +284,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-3.5-turbo-0613"), // "gpt-4-0613"  "gpt-3.5-turbo-0613"
+              model: JSON.stringify("gpt-4-0613"), // "gpt-4-0613"  "gpt-3.5-turbo-0613"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
