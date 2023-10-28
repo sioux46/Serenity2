@@ -371,8 +371,10 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       if ( description.match(/^- /) ) description = description.replace(/^- /, "");
       if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
-      date = lig.match(/(\d{2})\/(\d{2})\/(\d{4})/);          // DATE
+      date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
       if ( date ) {    // permuter jour et date
+        if ( date[1].length == 1 ) date[1] = "0" + date[1];
+        if ( date[2].length == 1 ) date[2] = "0" + date[2];
         date = date[2] + "/" + date[1] + "/" + date[3];
       }
       else date = textDateToNumDate(lig);
