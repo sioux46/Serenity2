@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.10.28.3";
+var devaVersion = "v3.11.01.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -564,7 +564,7 @@ function collectPreChatBuffer() {
 
   //chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
   //chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
-  chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et apprès demain" });
+  chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Faites une réponse courte." });
 
@@ -684,6 +684,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     chatBuffer = chatBuffer.concat(calendarBuffer);
 
     postChatBuffer.push({ role: "user", content: question });
+    question = replace3dateWordByTextDate(question); // out demain etc...
     lastQuestion = question;
 
     globalChatBuffer = chatBuffer.concat(postChatBuffer);  // send to GPT
@@ -1299,6 +1300,22 @@ function textDateToNumDate(text) {
     if ( date ) date = chatToEvoDate(date);
   }
   return date;
+}
+
+////
+function replace3dateWordByTextDate(text) {
+  let rep = text;
+
+  if ( rep.match(/aujourd'hui/i) ) {                     //  aujourd'hui
+    rep = rep.replace(/aujourd'hui/i, "aujourd'hui le " + actualDate());
+  }
+  else if ( rep.match(/après(-| )demain/i) ) {                // après demain
+    rep = rep.replace(/après(-| )demain/i, "après-demain le " + nextDayDate(nextDayDate(actualDate())));
+  }
+  else if ( rep.match(/demain/i) ) {                     //   demain
+    rep = rep.replace(/demain/i, "demain le " + nextDayDate(actualDate()));
+  }
+  return rep;
 }
 
 ////
