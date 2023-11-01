@@ -577,21 +577,16 @@ function collectPreChatBuffer() {
 function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
 
-  if ( question.match(/^\s*gpt4\+\s*$/i) ) {
+  if ( question.match(/^\s*gpt4\s*$/i) ) {
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-0613';
     // window.location = window.location.href;
     return;
   }
-/*
-  if ( question.match(/^\s*gpt4\+\s*$/i) ) {
-    forceGPT4 = true; fillLog("service", "GPT-4 activé");
-    // window.location = window.location.href;
-    return;
-  }
-  */
+
   if ( question.match(/^\s*gpt3\s*$/i) ) {
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
+    reponseModel = 'gpt-3.5-turbo-0613';
     // window.location = window.location.href;
     return;
   }
@@ -782,7 +777,7 @@ function handleResponse(reponse) {
 
   if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
 
-  if ( forceGPT4 ) action = "modify";  // force gpt-4 for all 3 actions
+  /* if ( forceGPT4 ) */ action = "modify";  // force gpt-4 for all 3 actions
 
   ////////////////////////////////////
   if ( action == "modify" ) {
@@ -1867,7 +1862,7 @@ var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
-var forceGPT4 = true; // false --> modify     true --> modify + add and delete
+var forceGPT4 = false; // gpt4 allways
 var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; //
 var reponseTemperature;
 var userName;
