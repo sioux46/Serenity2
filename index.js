@@ -1642,6 +1642,16 @@ $('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
 });
 */
 
+// $('#evoCalendar').on('selectYear', function(event, activeYear) {
+$("button[data-year-val]").on("click", function(e) {
+  let month;
+  if ( $(this).attr("data-year-val") == "next" ) month = 0; // janvier
+  else month = 11; // décembre
+  $('#evoCalendar').evoCalendar('toggleEventList', false);
+  $('#evoCalendar').evoCalendar('selectMonth', month);
+  // $('#evoCalendar').evoCalendar('toggleEventList', true);
+});
+
 $(".month").on("click", function(e) {
   // $('#evoCalendar').evoCalendar('toggleEventList', false);
   let year = $(".calendar-year p").text();
