@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.01.3";
+var devaVersion = "v3.11.03.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1424,7 +1424,14 @@ $("#speakerButton").on("click", function (ev) {
   setTimeout( function() { console.log(audioState()); }, 500);
 });
 
-///////////////////////////////////////////////  DIALOG OFFCANVAS /////
+///////////////////////////////////////////////  ontoTree OFFCANVAS /////
+
+$("#ontoTreeButton").on("click", function(e) {
+  initOntoTreeChoose(ontoTree[0]);
+});
+
+
+///////////////////////////////////////////////  chatParam OFFCANVAS /////
 
 $("#chatParamButton").on("click", function(e) {
   $("#chatParamUserName").val(userName);

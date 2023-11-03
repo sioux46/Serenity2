@@ -176,12 +176,18 @@
       </button>
     </div>
 -->
+    <button id="ontoTreeButton" class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#ontoTreeOffcanvas">
+      <img src="icons/list.svg" width=40>
+    </button>
+
   </div>
+
+
 <!--               -->
 <!--     param     -->
 <!--               -->
   <div id="paramPage" class="s-page">
-
+<!--
     <div id="param">
     <div id="ontoTree-content" class="container">
       <div  class="d-grid gap-2">
@@ -201,11 +207,45 @@
       </div>
     </div>
     </div>
-
+-->
   </div>
 <!-- **************************************************************************************** -->
-<!-- *******************************************************************   M O D A L   ****** -->
-<!--                                             -->
+<!-- ************************************************* C A N V A S    &    M O D A L   ****** -->
+
+<!--                       -->
+<!--   ontoTree offcanvas  -->
+<!--                       -->
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="ontoTreeOffcanvas" tabindex="-1">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="ontoTreeOffcanvasLabel"><strong>Dialoguer avec DEVA</strong></h5>
+      <button id="ontoTreeButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div id="param">
+        <div class="d-grid">
+          <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
+            <h1 id="ontoTree-parent" class="mb-0"></h1>
+          </div>
+          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+          <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+<!--                                                     EXEMPLE DE MODAL        -->
 <!--   inputModal  choose label in ontoTree     -->
 <!--
   <div id="inputModal" class="modal" tabindex="-1">
@@ -230,44 +270,6 @@
     </div>
   </div>   -->
 
-  <!--                                             -->
-  <!--   ontoTreeModal  choose label in ontoTree     -->
-  <!--                                             -->
-  <div id="ontoTreeModal" class="modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title"><b>Choisir une rubrique</b></h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div id="param">
-          <div id="ontoTree-content"  class="container">
-          <div class="d-grid gap-2">
-            <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
-              <h1 id="ontoTree-parent" class="mb-0"></h1>
-            </div>
-            <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-            <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          </div>
-          </div>
-          </div>
-        </div>
-  <!--      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button id="inputModalChooseLabelOK"  type="button" class="btn btn-primary">OK</button>
-        </div> -->
-      </div>
-    </div>
-  </div>
 
 
 

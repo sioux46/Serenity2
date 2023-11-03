@@ -130,7 +130,7 @@ body {
 
 #ontoTree-parent {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 #ontoTree-parent:hover {
@@ -139,13 +139,12 @@ body {
 
 .ontoTree-btn {
   position: relative;
-  top: 32px;
   border-radius: 0;
   border-top-width: 0.2rem;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   background-color: white;
 }
 .ontoTree-btn:hover {
