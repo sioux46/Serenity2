@@ -147,13 +147,14 @@ body {
 
 #paramPage div {
   // for all div inside
-  position: relative;
-  top: 32px;
+  //position: relative;
+  //top: 32px;
 }
 
 #ontoTree-content,
 #shedule-content {
   width: 100%;
+  position: relative;
 }
 
 #ontoTree-title {
@@ -174,13 +175,13 @@ body {
   position: relative;
   // top: 32px;
   border-radius: 0;
-  border-top-width: 0.2rem;
+  border-top-width: 0.1rem;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
   // padding: 0.7rem !important;
   font-size: 1.1rem; // 1.5    1.7rem;
-  // font-weight: 900;
+  // font-weight: 600;
   background-color: white;
 
   &:hover {

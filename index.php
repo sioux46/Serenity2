@@ -34,7 +34,6 @@
 <!--           -->
 <!--  TOOLBAR  -->
 <!--           -->
-
   <div id="toolBar">
     <button id="startButton" class="btn toolbarButton" type="button">
       <img src="icons/splash.png" width=50>
@@ -162,67 +161,35 @@
         </div>
       </div>
     </div>
-<!--
-    <div id="voyageText" class="container form-floating d-grid gap-2">
-      <div><strong>Historique du dialogue:</strong></div>
-      <textarea id="logTextarea" autofocus class="form-control"></textarea>
-      <button id="logButton" class="btn" type="button">
-        <img src="icons/trash.svg" width=30>
-      </button>
-      <div><strong>Vous avez la parole:</strong></div>
-      <textarea id="questionTextarea" class="form-control" autofocus></textarea>
-      <button id="questionButton" class="btn" type="button">
-        <img src="icons/forward.svg" width=36>
-      </button>
-    </div>
--->
-    <button id="ontoTreeButton" class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#ontoTreeOffcanvas">
-      <img src="icons/list.svg" width=40>
-    </button>
-
   </div>
-
-
 <!--               -->
 <!--     param     -->
 <!--               -->
   <div id="paramPage" class="s-page">
-<!--
-    <div id="param">
-    <div id="ontoTree-content" class="container">
-      <div  class="d-grid gap-2">
-        <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
-          <h1 id="ontoTree-parent" class="mb-0"></h1>
+    <div class="d-grid gap-2">
+      <div id="param-title" class="container-fluid mb-2 text-white text-center">
+        <div id="param-content">
+          <div class="s-page-title container-fluid"><h1>Paramètres</h1></div>
         </div>
-        <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-        <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
       </div>
     </div>
-    </div>
--->
+    <button id="ontoTreeButton" class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#ontoTreeOffcanvas">
+      <img src="icons/list.svg" width=40>
+    </button>
   </div>
 <!-- **************************************************************************************** -->
 <!-- ************************************************* C A N V A S    &    M O D A L   ****** -->
-
 <!--                       -->
 <!--   ontoTree offcanvas  -->
 <!--                       -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="ontoTreeOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="ontoTreeOffcanvasLabel"><strong>Dialoguer avec DEVA</strong></h5>
+      <h5 class="offcanvas-title" id="ontoTreeOffcanvasLabel"><strong>Titre ici</strong></h5>
       <button id="ontoTreeButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
       <div id="param">
-        <div class="d-grid">
+        <div id="ontoTree-content" class="d-grid">
           <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
             <h1 id="ontoTree-parent" class="mb-0"></h1>
           </div>
@@ -240,11 +207,6 @@
       </div>
     </div>
   </div>
-
-
-
-
-
 <!--                                                     EXEMPLE DE MODAL        -->
 <!--   inputModal  choose label in ontoTree     -->
 <!--
@@ -269,10 +231,6 @@
       </div>
     </div>
   </div>   -->
-
-
-
-
   <!--                                     -->
   <!--    eventModal  create new event     -->
   <!--                                     -->

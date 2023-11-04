@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.03.1";
+var devaVersion = "v3.11.04.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -169,8 +169,8 @@ function initOntoTreeChoose(label, move, labs) {
     $("#param").find(item).css({"display": "inline-block"});
     $("#param").find(item).text(labels[i]);
   }
-  // animate
 
+  // animate
   if ( move ) {
     if ( move == "up" )
         $("#ontoTree-content").css({"top": "50em"});
@@ -678,8 +678,11 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
 
+    //------------------------------------------------------------------
+    question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
+    //-------------------------------------------------------------------
+    console.log("envoyé à ChatGPT: " + question);
     postChatBuffer.push({ role: "user", content: question });
-    question = replace3dateWordByTextDate(question); // out demain etc...
     lastQuestion = question;
 
     globalChatBuffer = chatBuffer.concat(postChatBuffer);  // send to GPT
@@ -1298,17 +1301,31 @@ function textDateToNumDate(text) {
 }
 
 ////
-function replace3dateWordByTextDate(text) {
+function replaceDateWordsByTrueDateText(text) {
   let rep = text;
 
-  if ( rep.match(/aujourd'hui/i) ) {                     //  aujourd'hui
-    rep = rep.replace(/aujourd'hui/i, "aujourd'hui le " + actualDate());
+  if ( rep.match(/\baujourd'hui\b/i) ) {                     //  aujourd'hui
+    rep = rep.replace(/\baujourd'hui\b/i, "aujourd'hui le " + actualDate());
   }
-  else if ( rep.match(/après(-| )demain/i) ) {                // après demain
-    rep = rep.replace(/après(-| )demain/i, "après-demain le " + nextDayDate(nextDayDate(actualDate())));
+
+  if ( rep.match(/\bce matin\b/i) ) {                         //  ce matin
+    rep = rep.replace(/\bce matin\b/i, "ce matin le " + actualDate());
   }
-  else if ( rep.match(/demain/i) ) {                     //   demain
-    rep = rep.replace(/demain/i, "demain le " + nextDayDate(actualDate()));
+
+  if ( rep.match(/\bce soir\b/i) ) {                         //  ce soir
+    rep = rep.replace(/\bce soir\b/i, "ce soir le " + actualDate());
+  }
+
+  if ( rep.match(/\bcet après(-| )midi\b/i) ) {              //  cet après-midi
+    rep = rep.replace(/\bcet après(-| )midi\b/i, "cet après-midi le " + actualDate());
+  }
+
+
+  else if ( rep.match(/\baprès(-| )demain\b/i) ) {            // après demain
+    rep = rep.replace(/\baprès(-| )demain\b/i, "après-demain le " + nextDayDate(nextDayDate(actualDate())));
+  }
+  else if ( rep.match(/\bdemain\b/i) ) {                     //   demain
+    rep = rep.replace(/\bdemain\b/i, "demain le " + nextDayDate(actualDate()));
   }
   return rep;
 }
@@ -1512,21 +1529,21 @@ $("#startButton").on("click", function (ev) {
 $("#sheduleButton").on("click", function (ev) {
   showPage("#shedule");
   $("#toolBar").css("display", "block");
-  initOntoTreeChoose(ontoTree[0]);
+  //initOntoTreeChoose(ontoTree[0]);
 });
 
 /////       show voyage page
 $("#voyageButton").on("click", function (ev) {
   showPage("#voyage");
   $("#toolBar").css("display", "block");
-  initOntoTreeChoose(ontoTree[0]);
+  //initOntoTreeChoose(ontoTree[0]);
 });
 
 /////       show param page
 $("#paramButton").on("click", function (ev) {
   showPage("#paramPage");
   $("#toolBar").css("display", "block");
-  initOntoTreeChoose(ontoTree[0]);
+  //initOntoTreeChoose(ontoTree[0]);
 });
 
 /////        change ontoTree-parent within param WITH DIALOG

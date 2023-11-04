@@ -118,14 +118,10 @@ body {
   z-index: 400;
 }
 
-#paramPage div {
-  position: relative;
-  top: 32px;
-}
-
 #ontoTree-content,
 #shedule-content {
   width: 100%;
+  position: relative;
 }
 
 #ontoTree-parent {
@@ -140,7 +136,7 @@ body {
 .ontoTree-btn {
   position: relative;
   border-radius: 0;
-  border-top-width: 0.2rem;
+  border-top-width: 0.1rem;
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
