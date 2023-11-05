@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.04.1";
+var devaVersion = "v3.11.05.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -529,7 +529,7 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous dans mon agenda quand je vous le demande. Faites des réponses courtes"});
+  // chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage, des réservations d'hôtel, de restaurant, de train, d'avion, de taxi dans mon agenda. Vous notez ces réservations dans mon agenda. Faites des réponses courtes"});
 
   // Quand je vous demande de modifer un rendez-vous, vous prenez en compte ces modifications pour mettre à jour les rendez-vous que je vous ai donnés précédemment"});
 
@@ -565,6 +565,9 @@ function collectPreChatBuffer() {
   //chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
   //chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
   chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
+
+  // consigne agenda
+  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda. Faites des réponses courtes"});
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Faites une réponse courte." });
 
