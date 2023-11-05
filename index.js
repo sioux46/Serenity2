@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.05.2";
+var devaVersion = "v3.11.05.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -814,7 +814,7 @@ function handleResponse(reponse) {
     serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous et mes voyages au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
-    postChatBuffer = [];             // forget recent chat
+    // postChatBuffer = [];             // forget recent chat
   }
   /////////////////////////////////////////////
 
