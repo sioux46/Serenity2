@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.07.2";
+var devaVersion = "v3.11.07.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -284,7 +284,7 @@ function chatGPTserviceCall(serviceBuffer) {
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-1106-preview" "gpt-4-061"  "gpt-3.5-turbo-0613"
+              model: JSON.stringify("gpt-4-0613"), // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -567,7 +567,9 @@ function collectPreChatBuffer() {
   //chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda. Faites des réponses courtes"});
+  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda.  Faites des réponses courtes"});
+
+  chatBuffer.push({ role: "system", content: "Quand je vous demande de réserver une chambre ou un vol, notez-le dans l'agenda sans faire de réservation."});
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Faites une réponse courte." });
 
@@ -774,7 +776,7 @@ function handleResponse(reponse) {
   // let serviceBuffer;
 
   if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/( noté|ajouté|nouveau rendez-vous|nouveau rdv)/i) ) action = "add";
+  else if ( reponse.match(/( noté|ajouté|nouveau rendez-vous|nouveau rdv|réservation|réservé)/i) ) action = "add";
   else if ( reponse.match(/(supprimé|enlevé|retiré|effacé|ôté)/i) ) action = "remove";
 
   if ( !action ) return;
@@ -1900,7 +1902,7 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-3.5-turbo-1106';  // 'gpt-4'; //   'gpt-3.5-turbo-16k-0613'; //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview"
+var reponseModel = 'gpt-3.5-turbo-1106';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview"
 var reponseTemperature;
 var userName;
 var assistantName;
