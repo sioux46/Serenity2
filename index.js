@@ -443,7 +443,7 @@ function addModifiedEvent(reponse) {
 */
 
 ////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////  D I A L O G
+/////////////////////////////////////////////////////////  E V E N T   STUFF
 ///////////////////////////////////////////////////
 
 ////
@@ -514,7 +514,8 @@ function addCalEvent(time, description, date) {
     return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////
+//                                                          P R E C H A T    BUFFER
 function collectPreChatBuffer() {
   var chatBuffer = [];
 
@@ -523,7 +524,7 @@ function collectPreChatBuffer() {
 
   // date et heure
   chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
-  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTime() + "." });
+  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
 
   chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
   chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
@@ -699,8 +700,8 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   }
 }
 
-/////
-function chatGPTcall(globalChatBuffer) {       // **** chatGPT call ****
+///////////////////////////////////////////////////////////////////////////////////
+function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call ****
 
   waitingForGPT = true;
   $.ajax({
@@ -1263,6 +1264,16 @@ function dayFromDate(dateStr) {
   return jourSemaine;
 }
 
+////
+function actualTrueTime() {
+  const now = new Date();
+  // const day = now.getDay(); // returns a number representing the day of the week, starting with 0 for Sunday
+  var hours = now.getHours();
+  if ( hours.length == 1 ) hours = "0" + hours;
+  var minutes = now.getMinutes();
+  if ( minutes.length == 1 ) minutes = "0" + hours;
+  return hours + ":" + minutes; // + ":" + seconds;
+}
 
 ////
 function actualTime() {
@@ -1902,7 +1913,7 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-3.5-turbo-1106';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview"
+var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview" 'gpt-3.5-turbo-0613'
 var reponseTemperature;
 var userName;
 var assistantName;
