@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.08.1";
+var devaVersion = "v3.11.09.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -777,16 +777,16 @@ function handleResponse(reponse) {
   // let serviceBuffer;
 
   if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/( noté|ajouté|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver)/i) ) action = "add";
-  else if ( reponse.match(/(supprimé|enlevé|retiré|effacé|ôté)/i) ) action = "remove";
-
+  else if ( reponse.match(/( noté| noter|ajouté|ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver| retenu| retenir)/i) ) action = "modify"; // "add";
+  else if ( reponse.match(/(rechercher| supprimé| enlevé| retiré| effacé|ôté)/i) ) action = "modify"; // "remove";
+  else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
+  else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
   if ( !action ) return;
 
   rep = reponse;
 
   if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
 
-  /* if ( forceGPT4 ) */ action = "modify";  // force gpt-4 for all 3 actions
 
   ////////////////////////////////////
   if ( action == "modify" ) {
