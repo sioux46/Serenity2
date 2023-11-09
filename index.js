@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.09.2";
+var devaVersion = "v3.11.09.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -358,7 +358,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       }
       else time = textTimeToNumTime(lig);  // "12h00" if not found;
 
-      description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // DESCRIPTION
+      description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // MOTIF (description)
       if ( description ) {
         description = description[1];
         if ( description.match(/: /) ) description = description.replace(/: /, "");
@@ -370,6 +370,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
       }
       if ( description.match(/^- /) ) description = description.replace(/^- /, "");
       if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+      if ( description.match(/motif/i) ) description = description.replace(/motif/i, "");
 
       date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
       if ( date ) {    // permuter jour et date
