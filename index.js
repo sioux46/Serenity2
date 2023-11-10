@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.10.4";
+var devaVersion = "v3.11.10.6";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -765,7 +765,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
   });
 }
 
-/////////////////////////////////////////////////////////////////////////// R E S P O N S E    a n a l y s e
+//////////////////////////////////////////////////////// R E S P O N S E    a n a l y s e
 ////
 function handleResponse(reponse) {
   let rep;
@@ -781,7 +781,7 @@ function handleResponse(reponse) {
   else if ( reponse.match(/( noté| noter|ajouté|ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver| retenu| retenir)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/(rechercher| supprimé| enlevé| retiré| effacé|ôté)/i) ) action = "modify"; // "remove";
   else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
-  else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
+  // else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
   if ( !action ) return;
 
   rep = reponse;
