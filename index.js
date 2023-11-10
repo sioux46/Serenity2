@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.09.3";
+var devaVersion = "v3.11.10.4";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -777,7 +777,7 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
-  if ( reponse.match(/( modifié| enlevé| remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| ajouté au motif| annulé| inchangé| désormais)/i) ) action = "modify";
+  if ( reponse.match(/( modifier| modifié| enlever| enlevé| remplacer| remplacé| changer| changé| déplacer| déplacé| décaler| décalé| repousser| repoussé| reporter| reporté| avancer| avancé| reculé| reculer| complété| compléter| ajouter au motif| ajouté au motif| annuler| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/( noté| noter|ajouté|ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver| retenu| retenir)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/(rechercher| supprimé| enlevé| retiré| effacé|ôté)/i) ) action = "modify"; // "remove";
   else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
@@ -1750,8 +1750,7 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
   //console.log(($('#evoCalendar').get(0).evoCalendar.$current.date));
   let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
 
-  console.log(activeDate);
-  // sortCalendarEvents( activeDate );
+  // console.log(activeDate);
   globalSortCalendarEvents();
   localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
   $("#evoCalendar").evoCalendar('toggleEventList',true);
