@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.10.6";
+var devaVersion = "v3.11.10.7";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -569,9 +569,11 @@ function collectPreChatBuffer() {
   //chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda.  Faites des réponses courtes"});
+  chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda."});
 
   chatBuffer.push({ role: "system", content: "Notez mes demandes de résevation de vol dans l'agenda."});
+
+  chatBuffer.push({ role: "system", content: "faite une réponse courte."});
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
@@ -777,11 +779,12 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
+  if ( reponse.match(/Voici la liste/i) ) return;
   if ( reponse.match(/( modifier| modifié| enlever| enlevé| remplacer| remplacé| changer| changé| déplacer| déplacé| décaler| décalé| repousser| repoussé| reporter| reporté| avancer| avancé| reculé| reculer| complété| compléter| ajouter au motif| ajouté au motif| annuler| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/( noté| noter|ajouté|ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver| retenu| retenir)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/(rechercher| supprimé| enlevé| retiré| effacé|ôté)/i) ) action = "modify"; // "remove";
   else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
-  // else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
+  else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
   if ( !action ) return;
 
   rep = reponse;
