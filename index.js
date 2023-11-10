@@ -344,7 +344,7 @@ function newEventListFromServiceCall(reponse) {    // event list from GPT4
     do {
       lig = rep.match(/.*\n+?/)[0];
 
-      hours = rep.match(/(\d{1,2})h/i);                     // HOURS
+      hours = lig.match(/(\d{1,2})h/i);                     // HOURS
       if ( hours ) {
         hours = hours[1];
         if ( hours.length == 1 ) hours = "0" + hours;
