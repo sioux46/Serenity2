@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.12.1";
+var devaVersion = "v3.11.12.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -598,7 +598,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
 
   if ( question.match(/^\s*gpt3\s*$/i) ) {
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
-    reponseModel = 'gpt-3.5-turbo-0613';
+    reponseModel = 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
@@ -1917,7 +1917,7 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-3.5-turbo-0613';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview" 'gpt-3.5-turbo-0613'
+var reponseModel = 'gpt-4-1106-preview';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview" 'gpt-3.5-turbo-0613'
 var reponseTemperature;
 var userName;
 var assistantName;
