@@ -312,7 +312,7 @@ function chatGPTserviceCall(serviceBuffer) {
 }
 
 ///////////////////////////////////////////////////////////////////////////
-function newEventListFromServiceCall(reponse) {    // event list from GPT4
+function newEventListFromServiceCall(reponse) {    // event list response from GPT4
   let rep = reponse;
   let eventList = [];
   let lig = "";
@@ -799,7 +799,7 @@ function handleResponse(reponse) {
   if ( action == "modify" ) {
 
     // date
-    date = rep.match(new RegExp("\\s+au\\s+\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    date = rep.match(new RegExp("\\ble\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
     if ( date ) dateForEvo = chatToEvoDate(date);
     else {
       date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
@@ -808,8 +808,6 @@ function handleResponse(reponse) {
     }
 
     if ( dateForEvo ) { // select the agenda date of the modified event
-      //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-      //calendar.selectDate( dateForEvo );
       refreshDateDisplay(dateForEvo);
     }
 
