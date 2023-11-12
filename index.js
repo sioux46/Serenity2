@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.10.7";
+var devaVersion = "v3.11.12.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -269,6 +269,7 @@ function clearEventModal() {                // clear cal fields
 function clearCalendar() {
   evoCalEvents = [];
   localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
   window.location = window.location.href;
 }
 
@@ -575,6 +576,8 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "faite une réponse courte."});
 
+  chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
+
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
   // chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
@@ -588,7 +591,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
 
   if ( question.match(/^\s*gpt4\s*$/i) ) {
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
-    reponseModel = 'gpt-4-0613';
+    reponseModel = 'gpt-4-1106-preview';
     // window.location = window.location.href;
     return;
   }
@@ -779,7 +782,7 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
-  if ( reponse.match(/Voici la liste/i) ) return;
+  if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
   if ( reponse.match(/( modifier| modifié| enlever| enlevé| remplacer| remplacé| changer| changé| déplacer| déplacé| décaler| décalé| repousser| repoussé| reporter| reporté| avancer| avancé| reculé| reculer| complété| compléter| ajouter au motif| ajouté au motif| annuler| annulé| inchangé| désormais)/i) ) action = "modify";
   else if ( reponse.match(/( noté| noter|ajouté|ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé|réserver| retenu| retenir)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/(rechercher| supprimé| enlevé| retiré| effacé|ôté)/i) ) action = "modify"; // "remove";
