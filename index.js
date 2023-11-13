@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.12.3";
+var devaVersion = "v3.11.13.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -798,8 +798,9 @@ function handleResponse(reponse) {
   ////////////////////////////////////
   if ( action == "modify" ) {
 
-    // date
-    date = rep.match(new RegExp("\\ble\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    // date  "le" ou "au"
+    date = rep.match(new RegExp("\\bau\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( !date ) date = rep.match(new RegExp("\\ble\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
     if ( date ) dateForEvo = chatToEvoDate(date);
     else {
       date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
