@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.13.1";
+var devaVersion = "v3.11.13.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -303,7 +303,7 @@ function chatGPTserviceCall(serviceBuffer) {
           console.log("Error A P I Open A I !");
         }
         else {
-          console.log("serviceResponse:\n" + reponse);
+          console.log("Response gpt-4-1106-preview serviceCall: " + reponse);
           newEventListFromServiceCall(reponse);
         }
       }
@@ -731,7 +731,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
       else {
         var reponse = xhr.responseText;
         // fillLog("response", reponse);
-        console.log("Réponse: " + reponse);
+        console.log("Response " + reponseModel + " for user: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
           reponse = "Désolé mais je n'ai pas compris votre question. Pouvez-vous la reformuler ?";
@@ -798,15 +798,14 @@ function handleResponse(reponse) {
   ////////////////////////////////////
   if ( action == "modify" ) {
 
-    // date  "le" ou "au"
-    date = rep.match(new RegExp("\\bau\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
-    if ( !date ) date = rep.match(new RegExp("\\ble\\b\\D*(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    // date
+
+    date = rep.match(new RegExp("\\bau\\b.*\\b(\\d{1,2})\\b.*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( !date ) date = rep.match(new RegExp("\\ble\\b.*\\b(\\d{1,2})\\b.*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+    if ( !date ) date = rep.match(new RegExp("\\b(\\d{1,2})\\b.*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+
     if ( date ) dateForEvo = chatToEvoDate(date);
-    else {
-      date = rep.match(new RegExp("(\\d{1,2}).*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
-      if ( date ) dateForEvo = chatToEvoDate(date);
-      else dateForEvo = textDateToNumDate(rep);
-    }
+    else dateForEvo = textDateToNumDate(rep);
 
     if ( dateForEvo ) { // select the agenda date of the modified event
       refreshDateDisplay(dateForEvo);
@@ -1104,7 +1103,7 @@ function frenchMonthNamesForRegExp() {
 
 ////
 function frenchDayNamesForRegExp() {
-  return "lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche";
+  return "\\blundi\\b|\\bmardi\\b|\\bmercredi\\b|\\bjeudi\\b|\\bvendredi\\b|\\bsamedi\\b|\\bdimanche\\b";
 }
 
 ////
@@ -1168,6 +1167,25 @@ function chatToEvoDate(date) {
   d = date;
   const monthNum = {
     "janvier": "01", "février": "02", "mars": "03", "avril": "04", "mai": "05", "juin": "06", "juillet": "07", "août": "08", "septembre": "09", "octobre": "10", "novembre": "11", "décembre": "12" };
+
+  if ( d[1].length == 1 ) d[1] = "0" + d[1];
+  if ( d[2].length == 1 ) d[2] = "0" + d[2];
+
+  let year = date[0].match(/(\d{4})/);
+  if ( year ) year = year[1];
+  else year = actualDate().match(/(\d{4})/)[1];
+
+  let date2 = monthNum[d[2]] + "/" + d[1] + "/" + year;
+  return date2;
+}
+
+////
+function chatToEvoDate2(rep) {  // not used
+  const monthNum = {
+    "janvier": "01", "février": "02", "mars": "03", "avril": "04", "mai": "05", "juin": "06", "juillet": "07", "août": "08", "septembre": "09", "octobre": "10", "novembre": "11", "décembre": "12" };
+
+  let d = rep.match(new RegExp("(" + frenchDayNamesForRegExp() + ").*\\b(\\d{1,2})\\b.*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
+
 
   if ( d[1].length == 1 ) d[1] = "0" + d[1];
   if ( d[2].length == 1 ) d[2] = "0" + d[2];
@@ -1918,7 +1936,7 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-4-1106-preview';  // 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  "gpt-4-1106-preview" 'gpt-3.5-turbo-0613'
+var reponseModel = 'gpt-4-1106-preview';  // "gpt-4-1106-preview" 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  'gpt-3.5-turbo-0613'
 var reponseTemperature;
 var userName;
 var assistantName;
