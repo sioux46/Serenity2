@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.13.2";
+var devaVersion = "v3.11.14.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -569,6 +569,8 @@ function collectPreChatBuffer() {
   //chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
   //chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
 
+  chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur, vous notez dans l'agenda les dates ou vous devez venir me chercher pour me conduire où je vais."});
+
   // consigne agenda
   chatBuffer.push({ role: "system", content: "Vous gérez mon agenda. Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans mon agenda. Vous notez ces réservations dans mon agenda."});
 
@@ -745,7 +747,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
           handleResponse(reponse);
         }
         fillLog("response", reponse);
-        console.log("response");
+        // console.log("response");
         response = reponse; // local to glob
 
         if ( reponseMode == "audio" ) {
@@ -1936,7 +1938,7 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-4-1106-preview';  // "gpt-4-1106-preview" 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  'gpt-3.5-turbo-0613'
+var reponseModel = 'gpt-3.5-turbo-1106';  // "gpt-4-1106-preview" 'gpt-4';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  'gpt-3.5-turbo-0613'
 var reponseTemperature;
 var userName;
 var assistantName;
