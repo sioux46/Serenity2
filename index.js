@@ -359,19 +359,25 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       }
       else time = textTimeToNumTime(lig);  // "12h00" if not found;
 
-      description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // MOTIF (description)
+      description = lig.match(/\d{2}h\d{2}: (.*)/);   // MOTIF (description)
       if ( description ) {
         description = description[1];
-        if ( description.match(/: /) ) description = description.replace(/: /, "");
       }
       else {
-        description = lig.match(/( - |: |motif |, )(.*)/i);
-        if ( description ) description = description[2];
-        else description = "Motif à préciser";
+        description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // MOTIF (description)
+        if ( description ) {
+          description = description[1];
+          if ( description.match(/: /) ) description = description.replace(/: /, "");
+        }
+        else {
+          description = lig.match(/( - |: |motif |, )(.*)/i);
+          if ( description ) description = description[2];
+          else description = "Motif à préciser";
+        }
+        if ( description.match(/^- /) ) description = description.replace(/^- /, "");
+        if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+        if ( description.match(/motif/i) ) description = description.replace(/motif/i, "");
       }
-      if ( description.match(/^- /) ) description = description.replace(/^- /, "");
-      if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
-      if ( description.match(/motif/i) ) description = description.replace(/motif/i, "");
 
       date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
       if ( date ) {    // permuter jour et date
