@@ -30,7 +30,7 @@
   <script src="index.js"></script>
   <script src="speech.js"></script>
 <!-- ************************************************************************** -->
-  <div id="DIVA">
+  <div id="DEVA">
 <!--           -->
 <!--  TOOLBAR  -->
 <!--           -->
@@ -293,6 +293,6 @@
       </div>
     </div>
 -->
-  </DIVA>
+</DEVA>
   </body>
 </html>

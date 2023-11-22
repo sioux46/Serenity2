@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.16.1";
+var devaVersion = "v3.11.22.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -14,7 +14,7 @@ class Person {
   }
 
   getInfo() {
-    return `${this.firstName} ${this.lastName} (Tel: ${this.model})`;
+    return `${this.firstName} ${this.lastName} (Tel: ${this.phoneNumber})`;
   }
 }
 /*
@@ -29,6 +29,20 @@ console.error(car1.getInfo()); // "This car is a 2019 Honda Civic."
 ////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
+
+function getDevaPass() {
+  let truePass = "ziva";
+
+  let pass = JSON.parse(localStorage.getItem('devaPass'));
+  if ( pass == truePass ) return true;
+
+  pass = window.prompt("Enter pass for Deva:");
+  if ( pass == truePass ) {
+    localStorage.setItem('devaPass', JSON.stringify(pass));
+    return true;
+  }
+  else window.location = window.location.href;
+}
 
 ///////////////////////////////////////
 function getDateNow() {
@@ -532,7 +546,6 @@ function collectPreChatBuffer() {
 
   // date et heure
   chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
-  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
 
   chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
   chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
@@ -587,6 +600,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événements dans mon agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+
+  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
 
   // chatBuffer.push({ role: "system", content: "Répondez en utilisant le même format que pour aujourd'hui si le rendez-vous est pour demain ou après-demain." });
 
@@ -1417,8 +1432,8 @@ function textTimeToNumTime(text) {
 $(document).ready(function () {
 
 $("#devaVersion").text(devaVersion);
+getDevaPass();
 //////////////////////////////////////////////////////////////////////
-
 
 /////       show start page
 $("#start").css({"display": "block"});
