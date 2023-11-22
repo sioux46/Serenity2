@@ -34,12 +34,12 @@ function getDevaPass() {
   let truePass = "ziva";
 
   let pass = JSON.parse(localStorage.getItem('devaPass'));
-  if ( pass == truePass ) return true;
+  if ( pass && pass.match(new RegExp("^" + truePass + "$", 'i')) ) return;
 
   pass = window.prompt("Enter pass for Deva:");
-  if ( pass == truePass ) {
+  if (  pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
     localStorage.setItem('devaPass', JSON.stringify(pass));
-    return true;
+    return;
   }
   else window.location = window.location.href;
 }
