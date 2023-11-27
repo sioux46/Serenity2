@@ -475,7 +475,7 @@ function collectEvents(type) {
   let events = [];
   let content = "";
 
-  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'. Sinon listez mes rendez-vous et voyages à la demande."});
+  if ( type == "service" ) events.push({ role: "system", content: "Vous êtes mon assistant. Vous gérez mes rdv et mes dates de voyage. Si je n'ai aucun rendez-vous, répondez 'Agenda vide'. Sinon listez mes rendez-vous et voyages."});
 
   for ( let event of evoCalEvents ) {
 
@@ -578,10 +578,6 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
   chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
-
-  //chatBuffer.push({ role: "system", content: "Quand vous répondez au sujet d'un rendez-vous, donnez toujour le jour, le mois, l'année, l'heure et le motif."});
-  //chatBuffer.push({ role: "system", content: "Quand je vous demande d'ajouter, de supprimer, ou de lister des rendez-vous, répondez toujour en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous." });
-  //chatBuffer.push({ role: "system", content: "Si le rendez-vous est pour aujourd'hui, répondez en précisant le jour, le mois, l'année, l'heure et le motif du rendez-vous d'aujourd'hui. Même chose pour demain et après demain" });
 
   chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous notez dans l'agenda les dates ou vous devez venir me chercher pour me conduire où je vais."});
 
@@ -688,7 +684,6 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   // --------------------------------- if !response
   else {                                   //            send question to ChatGPT
     questionAnswer = "chatGPT" ;
-    console.log("Réponse chatGPT");
 
   //  if ( question.match(/à (mon |l')agenda/) ) question.replace(/à (mon |l')agenda/, "");
 
@@ -833,7 +828,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
-    // Listez mon agenda
+    // Listez mon agenda pour serviceCall
     serviceBuffer.push({ role: "user", content: "Listez tous l'agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
