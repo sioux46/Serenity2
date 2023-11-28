@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.27.1";
+var devaVersion = "v3.11.28.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -408,6 +408,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
 
+    refreshDateDisplay(date); // select the agenda date of the modified event
     globalSortCalendarEvents();
     localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
@@ -832,7 +833,9 @@ function handleResponse(reponse) {
     // serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
 
     // Listez mon agenda pour serviceCall
-    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
+    //serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en placant le dernier rendez-vous dont on a parlé à la fin de la liste. Répondez sans ajouter d'autre remarque"});
+
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -916,8 +919,6 @@ function handleResponse(reponse) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
           localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
-          //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-          //calendar.selectDate( dateForEvo );
           refreshDateDisplay(dateForEvo);
           break;
         }
