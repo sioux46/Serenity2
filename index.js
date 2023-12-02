@@ -992,6 +992,8 @@ function initRecognition() {
 ////
 function startRecog() {
   if ( window.speechSynthesis.speaking ) return;
+  if ( !activePage ) return; // No audio in startPage
+
   $("#micButton img").attr("src", "icons/mic-fill.svg");
   $("#micButton").css("border", "3px solid #fa0039");
   try { recognition.start(); recogResult = "waitinggggg"; } catch(e) {}
@@ -1043,6 +1045,7 @@ function resetRecog() {
 ////                                                       ********  Speech SYTHESIS ********
 function doSpeechSynth (text) {
   if ( !window.speechSynthesis ) return;  // if android webview
+  if ( !activePage ) return; // No audio in #start page
   speechSynthesis.cancel(); // removes anything 'stuck'
 
   if ( !voices ) {
@@ -1583,7 +1586,7 @@ $("#logButton").on("click", function(e) {
 $("#startButton").on("click", function (ev) {
   if ( activePage ) {
     $("#startButton").css("display", "none");
-    $("#toolBar").css("display", "block");
+    $("#toolBar").css("display", "none");
     $(activePage).css("display", "none");
     activePage = "";
     $("#start").css({"display": "block", "top": "-50rem"});

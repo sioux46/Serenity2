@@ -17,7 +17,7 @@ body {
   position: fixed;
   height: 4.2rem;
   width: 100%;
-  display: block;
+  display: none;
   z-index: 1000;
   background-color: #fff;
   border-bottom: 1px solid #ced4da;
