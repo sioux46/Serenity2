@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.11.28.1";
+var devaVersion = "v3.12.02.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -12,18 +12,28 @@ class Person {
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
   }
-
   getInfo() {
     return `${this.firstName} ${this.lastName} (Tel: ${this.phoneNumber})`;
   }
 }
+
+class Car {
+  constructor(brand, type, year) {
+    this.brand = brand;
+    this.type = type;
+    this.year = year;
+  }
+  getInfo() {
+    return `${this.brand} ${this.type} ${this.year}`;
+  }
+}
+
+
 /*
-const person1 = new Person("Pierre", "Durand", 0673232630);
-const car2 = new Car("Toyota", "Corolla", 2020);
-console.error(car1); // Car { make: 'Honda', model: 'Civic', year: 2019 }
-console.error(car2); // Car { make: 'Toyota', model: 'Corolla', year: 2020 }
-car = new Car("Honda", "Civic", 2019);
-console.error(car1.getInfo()); // "This car is a 2019 Honda Civic."
+person1 = new Person("Pierre", "Durand", 0673232630);
+car2 = new Car("Toyota", "Corolla", 2020);
+car2.getInfo();  // 'Toyota Corolla 2020'
+JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 */
 
 ////////////////////////////////////////////////////////////////////
@@ -602,20 +612,20 @@ function collectPreChatBuffer() {
 function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
 
-  if ( question.match(/^\s*gpt4\s*$/i) ) {
+  if ( question.match(/^\s*gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-1106-preview';
     // window.location = window.location.href;
     return;
   }
 
-  if ( question.match(/^\s*gpt3\s*$/i) ) {
+  if ( question.match(/^\s*gpt3\s*$/i) ) {  // force gpt3
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     reponseModel = 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^\s*clear\s*$/i) ) {
+  if ( question.match(/^\s*clear\s*$/i) ) {  // clear the calendar
     clearCalendar(); return; }
 
   clearPostChatTimeout(); // re-init timeout
@@ -629,7 +639,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog handled in fillLog()
     response = "Je vous en pris";
   }
-  else if ( question.match(new RegExp("^Bonjour " + assistantName, 'i'))) {
+  else if ( question.match(new RegExp("^Coucou " + assistantName, 'i'))) {
     response = "Bonjour " + userName + ". Que puij faire pour vous ?";
   }
 
@@ -939,7 +949,7 @@ function clearPostChatTimeout() {
     // $("#startButton").trigger("click");
     fillLog("service", "Fin du dialogue");
     // window.location = window.location.href;
-  }, clearPostChatValue); // 10 = 600000,  5 = 300000, 1 = 60000
+  }, clearPostChatValue); // 10 min = 600000,  5 min = 300000, 1 min = 60000
 }
 
 
@@ -1039,6 +1049,8 @@ function doSpeechSynth (text) {
     voices = speechSynthesis.getVoices();
     // actualVoice = voices[0]; // Rocko
   }
+
+  if ( text.match(/\bD(e|i)va\b/i)) text = text.replaceAll(/\bD(e|i)va\b/gi, "Diva"); // prononce 'Diva'
 
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
@@ -1976,7 +1988,7 @@ else userName = "Monsieur";
 if ( localStorage.assistantName ) {
   assistantName = JSON.parse(localStorage.getItem('assistantName'));
 }
-else assistantName = "Albert";
+else assistantName = "Deva";
 
 if ( localStorage.reponseTemperature ) {
   reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
@@ -1986,9 +1998,9 @@ else reponseTemperature = 0;
 if ( localStorage.speechRate ) {
   speechRate = JSON.parse(localStorage.getItem('speechRate'));
 }
-else speechRate = 1;
+else speechRate = 1.1;
 
 if ( localStorage.speechPitch ) {
   speechPitch = JSON.parse(localStorage.getItem('speechPitch'));
 }
-else speechPitch = 1;
+else speechPitch = 2;
