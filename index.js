@@ -612,6 +612,9 @@ function collectPreChatBuffer() {
 function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
 
+  if ( question.match(/\bD(e|i)va\b/i)) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
+  fillLog("question", question);
+
   if ( question.match(/^\s*gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-1106-preview';
@@ -979,7 +982,9 @@ function initRecognition() {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         recogResult = event.results[i][0].transcript;
-        fillLog("question", recogResult);
+
+        // if ( recogResult.match(/\bD(e|i)va\b/i)) recogResult = recogResult.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
+        // fillLog("question", recogResult);
         questionAnalyse(recogResult);
 
       }
@@ -1442,6 +1447,7 @@ getDevaPass();
 //////////////////////////////////////////////////////////////////////
 
 /////       show start page
+$("#toolBar").css({"display": "none"});
 $("#start").css({"display": "block"});
 /////        get voices
 if ( window.speechSynthesis ) { // if not android webview
@@ -1569,7 +1575,7 @@ $("#chatParamSpeechPitch").on("change", function (e) {
 $("#questionButton").on("click", function(e) {
   let question = $("#questionTextarea").val();
   if ( question ) {
-    fillLog("question", question);
+    // fillLog("question", question);
     $("#questionTextarea").val("");
     questionAnalyse(question);
   }
