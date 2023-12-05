@@ -179,7 +179,7 @@
     <button id="ontoTreeButton" class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#ontoTreeOffcanvas">
       <img src="icons/list.svg" width=40>
     </button>
-<!-- 
+<!--
     <div class="container">
     <div class="row align-items-center">
         <div class="col-md-6">

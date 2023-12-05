@@ -24,7 +24,7 @@ exit; */
       'messages' => $messages,
       // 'max_tokens' => 100,
       'temperature' => $temperature,
-      'seed' => 12321 // any integer
+      // 'seed' => 12321 // any integer
       // 'top_p' => 0.5
   );
 // }
