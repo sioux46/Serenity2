@@ -1432,6 +1432,30 @@ function textTimeToNumTime(text) {
   return "12h00";
 }
 
+/////////////////////////////////  N E T W O R K I N G
+
+/////
+// new connection
+$(window).on("load", function() {
+  var agent;
+  try {
+    agent = window.navigator.platform + ' ' + window.navigator.userAgent;
+    if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
+    agent = agent.replace(/Mozilla\/5\.0 /,"");
+    agent = agent.replace(/(KHTML, like Gecko)/,"");
+    agent = agent.replace(/; Win64; x64/,"");
+    agent = agent.replace(/Macintosh; Intel Mac /,"");
+
+    if ( !agent ) agent = window.navigator.vendor;
+  } catch (e) {}
+
+  $.ajax({
+    url: 'connection_count.php',
+    type:'post',
+    data: {'userAgent':agent, 'userName':"anonyme"}
+  });
+});
+
 
 /////////////////////////////////////////////////////////////////////  Fin F U N C T I O N S
 ////////////////////////////////////////////////////////////////////////////////////////////
