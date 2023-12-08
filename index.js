@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.05.1";
+var devaVersion = "v3.12.07.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1441,6 +1441,7 @@ $(window).on("load", function() {
   try {
     agent = window.navigator.platform + ' ' + window.navigator.userAgent;
     if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
+    // if ( agent.lastIndexOf("Linux") != -1 ) return;
     agent = agent.replace(/Mozilla\/5\.0 /,"");
     agent = agent.replace(/(KHTML, like Gecko)/,"");
     agent = agent.replace(/; Win64; x64/,"");
@@ -1452,7 +1453,7 @@ $(window).on("load", function() {
   $.ajax({
     url: 'connection_count.php',
     type:'post',
-    data: {'userAgent':agent, 'userName':"anonyme"}
+    data: {'userAgent':agent, 'userName':"anonyme", 'devaVersion': devaVersion}
   });
 });
 

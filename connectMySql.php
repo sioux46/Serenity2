@@ -6,10 +6,9 @@ ini_set("display_errors", 1);
 
 function connect()
 {
-
 	define("MYHOST","localhost");
-	define("MYUSER","root"); // sioux
-	define("MYPASS","root");// sioux
+	define("MYUSER","sioux"); // sioux
+	define("MYPASS","sioux");// sioux
 	define("MYBASE","deva");
 
 	// echo MYHOST,MYUSER,MYPASS,MYBASE;
