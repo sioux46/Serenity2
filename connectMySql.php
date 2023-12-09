@@ -26,10 +26,6 @@ if ($idcomW->connect_errno) {
 		exit();
 	}
 	$idcomW->query("SET sql_mode = 'ONLY_FULL_GROUP_BY'");
-	echo 'query ok';
-//	$isa_base->query("SET NAMES 'utf8'");
 	return $idcomW;
 }
-
-echo "Connection OK<hr>";
 ?>

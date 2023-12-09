@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.08.1";
+var devaVersion = "v3.12.09.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -40,13 +40,14 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
+/////
 function getDevaPass() {
   let truePass = "ziva";
 
   let pass = JSON.parse(localStorage.getItem('devaPass'));
   if ( pass && pass.match(new RegExp("^" + truePass + "$", 'i')) ) return;
 
-  pass = window.prompt("Enter pass for Deva:");
+  pass = window.prompt("Entez le mot de passe pour Deva:");
   if (  pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
     localStorage.setItem('devaPass', JSON.stringify(pass));
     return;
@@ -54,7 +55,39 @@ function getDevaPass() {
   else window.location = window.location.href;
 }
 
-///////////////////////////////////////
+/////
+function getBaseUserName() {
+
+
+  let baseUserName = JSON.parse(localStorage.getItem('baseUserName'));
+  if ( !baseUserName ) baseUserName = window.prompt("Enter votre identifiant:");
+  if ( !baseUserName ) window.location = window.location.href;
+
+  $.ajax({
+    url: 'get_user_name.php',
+    type: 'post',
+    data: { 'baseUserName': baseUserName },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        window.alert("Erreur réseau. Fermez l'appli et essayez à nouveau.");
+      }
+      else {
+        if ( xhr.responseText == "OK" ) {
+          localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
+        }
+        else {
+          if ( xhr.responseText.match(/refused/) ) return;
+          // window.location = window.location.href;
+          getBaseUserName();
+        }
+      }
+    }
+  });
+
+
+}
+
+/////
 function getDateNow() {
   // Créer une nouvelle instance de l'objet Date
   let date = new Date();
@@ -63,8 +96,7 @@ function getDateNow() {
   return date.toLocaleDateString();
 }
 
-///////////////////////////////////////
-
+/////
 function getDate(day, month,year) {
 
   // Create a new date
@@ -74,7 +106,7 @@ function getDate(day, month,year) {
 
 
 // ************************************** Tree Handling START
-///////////////////////////////////////
+/////
 function findNodeByLabel(label, node) {
   var childs = node[1];
   if ( !childs ) return;
@@ -85,7 +117,7 @@ function findNodeByLabel(label, node) {
 }
 //
 
-///////////////////////////////////////////
+/////
 function deepFindNodeByLabel(label, node) {
 
   function deepFindNode(label, node) {
@@ -104,7 +136,7 @@ function deepFindNodeByLabel(label, node) {
 }
 //
 
-/////////////////////////////
+/////
 function deepFindChildsLabels(label) {
   let node = deepFindNodeByLabel(label, ontoTree);
   let subLabels = findChildsLabels(node);
@@ -122,7 +154,7 @@ function findChildsLabels(node) {
 }
 //
 
-/////////////////////////////
+/////
 function importTree(inData) {
 // let test = importTree(importData)
 
@@ -1469,6 +1501,7 @@ $(document).ready(function () {
 
 $("#devaVersion").text(devaVersion);
 getDevaPass();
+if ( !window.location.origin.match(/paris8/) ) getBaseUserName();
 //////////////////////////////////////////////////////////////////////
 
 /////       show start page
