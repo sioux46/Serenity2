@@ -1470,13 +1470,14 @@ function textTimeToNumTime(text) {
 $(window).on("load", function() {
   var agent;
   try {
-    agent = window.navigator.platform + ' ' + window.navigator.userAgent;
+    agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
     if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
     // if ( agent.lastIndexOf("Linux") != -1 ) return;
     agent = agent.replace(/Mozilla\/5\.0 /,"");
-    agent = agent.replace(/(KHTML, like Gecko)/,"");
+    agent = agent.replace(/\(KHTML, like Gecko\)/,"");
     agent = agent.replace(/; Win64; x64/,"");
     agent = agent.replace(/Macintosh; Intel Mac /,"");
+    agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
 
     if ( !agent ) agent = window.navigator.vendor;
   } catch (e) {}
@@ -1484,7 +1485,7 @@ $(window).on("load", function() {
   $.ajax({
     url: 'connection_count.php',
     type:'post',
-    data: {'userAgent':agent, 'userName':"anonyme", 'devaVersion': devaVersion}
+    data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
   });
 });
 
@@ -1500,7 +1501,7 @@ $(document).ready(function () {
 
 $("#devaVersion").text(devaVersion);
 getDevaPass();
-if ( !window.location.origin.match(/paris8/) ) getBaseUserName();
+/* if ( !window.location.origin.match(/paris8/) ) */ getBaseUserName();
 //////////////////////////////////////////////////////////////////////
 
 /////       show start page
