@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.09.1";
+var devaVersion = "v3.12.09.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -76,8 +76,7 @@ function getBaseUserName() {
           localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
         }
         else {
-          if ( xhr.responseText.match(/refused/) ) return;
-          // window.location = window.location.href;
+          // if ( xhr.responseText.match(/refused/) ) return;
           getBaseUserName();
         }
       }
@@ -1517,6 +1516,7 @@ speechSynthesis.addEventListener("voiceschanged", () => {
 
 //                                                      toggle mic
 $("#micButton").on("click", function (ev) {
+  if ( !window.speechSynthesis ) return; // if android webview
   if ( window.speechSynthesis.speaking || waitingForGPT == true ) return;
 
   if ( !recognizing ) {
@@ -1548,6 +1548,8 @@ $("#speakerButton").on("click", function (ev) {
   // init speech
   // let ut = new SpeechSynthesisUtterance("");
   // window.speechSynthesis.speak(ut);
+
+  if ( !window.speechSynthesis ) return; // if android webview
 
   if ( speechFlag ) {
     speechFlag = false;
