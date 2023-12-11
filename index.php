@@ -1,4 +1,3 @@
-
 <?php
 ?>
 <!DOCTYPE html>
@@ -76,49 +75,8 @@
               <img src="icons/forward.svg" width=36>
             </button>
           </div>
-          <div class="mb-2">
-            <label for="chatParamUserName" class="form-label">Nom du conducteur:</label>
-            <input id="chatParamUserName" type="text" class="form-control"/>
-          </div>
-          <div class="mb-2">
-            <label for="chatParamAssistantName" class="form-label">Nom de l'assistant:</label>
-            <input id="chatParamAssistantName" type="text" class="form-control"/>
-          </div>
-          <div class="mb-2">
-            <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
-            <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
-          </div>
-          <div class="mb-2">
-            <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
-            <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
-          </div>
-          <!--  disabled -->
-          <div class="mb-2">
-            <label for="chatParamStyle" class="form-label">Style des réponses:</label>
-            <input disabled id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
-          </div>
-          <div class="mb-2">
-            <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
-            <input disabled id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
-          </div>
-          <div class="mb-2">
-            <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
-            <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
-          </div>
         </div>
       </div>
-<!--
-      <div class="dropdown mt-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          Dropdown button
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Action</a></li>
-          <li><a class="dropdown-item" href="#">Another action</a></li>
-          <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-      </div>
--->
     </div>
   </div>
 <!--            -->
@@ -176,10 +134,10 @@
         </div>
       </div>
     </div>
-    <button id="ontoTreeButton" class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#ontoTreeOffcanvas">
+    <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
       <img src="icons/list.svg" width=40>
     </button>
-<!--
+<!-- -->
     <div class="container">
     <div class="row align-items-center">
         <div class="col-md-6">
@@ -224,14 +182,14 @@
                     <div class="d-flex align-items-center">
                         <div><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" class="avatar-md rounded-circle img-thumbnail" /></div>
                         <div class="flex-1 ms-3">
-                            <h5 class="font-size-16 mb-1"><a href="#" class="text-dark">Phyllis Gatlin</a></h5>
+                            <h5 class="font-size-16 mb-1"><a href="#" class="text-dark">Charles Durant (dit Jim)</a></h5>
                             <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
                         </div>
                     </div>
                     <div class="mt-3 pt-1">
-                        <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 070 2860 5375</p>
-                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> PhyllisGatlin@spy.com</p>
-                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 52 Ilchester MYBSTER 9WX</p>
+                        <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 98 76 54 32 10</p>
+                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
+                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
                     </div>
                     <div class="d-flex gap-2 pt-4">
                         <button type="button" class="btn btn-soft-primary btn-sm w-50"><i class="bx bx-user me-1"></i> Profile</button>
@@ -250,14 +208,14 @@
                     <div class="d-flex align-items-center">
                         <div><img src="" alt="" class="avatar-md rounded-circle img-thumbnail" /></div>
                         <div class="flex-1 ms-3">
-                            <h5 class="font-size-16 mb-1"><a href="#" class="text-dark">James Nix</a></h5>
+                            <h5 class="font-size-16 mb-1"><a href="#" class="text-dark">Jolanta Durant</a></h5>
                             <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
                         </div>
                     </div>
                     <div class="mt-3 pt-1">
                         <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 046 5685 6969</p>
-                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> JamesNix@spy.com</p>
-                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 5 Boar Lane SELLING 2LG</p>
+                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
+                        <p class="text-muted mb-0 mt-2"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
                     </div>
                     <div class="d-flex gap-2 pt-4">
                         <button type="button" class="btn btn-soft-primary btn-sm w-50"><i class="bx bx-user me-1"></i> Profile</button>
@@ -450,66 +408,74 @@
         </div>
     </div>
 </div>
--->
+<!-- -->
   </div>
 <!-- **************************************************************************************** -->
 <!-- ************************************************* C A N V A S    &    M O D A L   ****** -->
-<!--                       -->
-<!--   ontoTree offcanvas  -->
-<!--                       -->
-  <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="ontoTreeOffcanvas" tabindex="-1">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="ontoTreeOffcanvasLabel"><strong>Titre ici</strong></h5>
-      <button id="ontoTreeButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-      <div id="param">
-        <div id="ontoTree-content" class="d-grid">
-          <div id="ontoTree-title" class="container-fluid pt-3 pb-3 mb-2 bg-success text-white">
-            <h1 id="ontoTree-parent" class="mb-0"></h1>
+  <!--                       -->
+  <!--   param offcanvas     -->
+  <!--                       -->
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" id="paramOffcanvas" tabindex="-1">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="paramOffcanvasLabel"><strong>Titre ici</strong></h5>
+        <button id="paramOffcanvasButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+      </div>
+      <div class="offcanvas-body">
+          <div>
+            <div class="d-grid gap-2">
+              <div class="mb-2">
+                <label for="chatParamUserName" class="form-label">Nom du conducteur:</label>
+                <input id="chatParamUserName" type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="chatParamAssistantName" class="form-label">Nom de l'assistant:</label>
+                <input id="chatParamAssistantName" type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
+                <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
+                <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
+              </div>
+              <!--  disabled -->
+              <div class="mb-2">
+                <label for="chatParamStyle" class="form-label">Style des réponses:</label>
+                <input disabled id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
+                <input disabled id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
+                <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
+                <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
+              </div>
+              <div class="mt-4">
+                <button id="chatParamChangeUserButton" type="button" class="btn btn-light" >Changer d'identifiant</button>
+              </div>
+            </div>
           </div>
-          <button id="ontoTree-item0" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item1" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item2" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item3" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item4" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item5" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item6" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item7" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item8" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
-          <button id="ontoTree-item9" type="button" class="ontoTree-btn btn btn-outline-success overflow-hidden"></button>
+        <!--
+          <div class="dropdown mt-3">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Dropdown button
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+        -->
         </div>
       </div>
     </div>
-  </div>
-<!--                                                     EXEMPLE DE MODAL        -->
-<!--   inputModal  choose label in ontoTree     -->
-<!--
-  <div id="inputModal" class="modal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title"><b>Choisir une rubrique</b></h3>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="d-grid gap-2">
-            <button id="buttonParentModalChooseLabel" type="button" class="btn btn-lg btn-success inputModalChooseLabelOK" data-bs-dismiss="modal">Rubrique parente</button>
-            <h5 class="modal-title">Ou taper un nom de rubrique</h5>
-            <input type="text" class="form-control" aria-label="Username" aria-describedby="addon-wrapping">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-          <button id="inputModalChooseLabelOK"  type="button" class="btn btn-primary">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>   -->
   <!--                                     -->
   <!--    eventModal  create new event     -->
   <!--                                     -->
-    <div id="eventModal" data-event-id= "" class="modal" tabindex="-1">
+    <div id="eventModal" data-event-id= "" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -539,35 +505,25 @@
         </div>
       </div>
     </div>
-<!--
-    <div  class="row justify-content-evenly mt-5">
-      <div class="col-sm-5 border border-2 m-3">
-        <h5>coucou</h5>
-      </div>
-      <div class="col-sm-5 border border-2 m-3">
-        <p>cici</p>
-      </div>
-    </div>
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-sm-4">
-          <h3>Column 1</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-        </div>
-        <div class="col-sm-4">
-          <h3>Column 2</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-        </div>
-        <div class="col-sm-4">
-          <h3>Column 3</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+  <!--                       -->
+  <!--   singleInputModal    -->
+  <!--                       -->
+    <div id="singleInputModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Entrez votre identifiant:</h5>
+            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> -->
+          </div>
+          <div class="modal-body">
+            <p><input type="text" class="form-control"/></p>
+          </div>
+          <div class="modal-footer">
+            <button id="singleInputModalOK" type="button" class="btn btn-success">OK</button>
+          </div>
         </div>
       </div>
     </div>
--->
 </DEVA>
   </body>
 </html>

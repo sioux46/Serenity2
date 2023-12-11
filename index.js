@@ -7,10 +7,14 @@ var devaVersion = "v3.12.09.2";
 ********************************************************************* */
 
 class Voyager {
-  constructor(lastName, firstName, nickname) {
+  constructor(lastName, firstName, nickname, phone, address, driver, equipment) {
     this.lastName = lastName;
     this.firstName = firstName;
     this.nickname = nickname;
+    this.phone = phone;
+    this.address = address;
+    this.driver = driver;
+    this.equipment = equipment;
   }
   getInfo() {
     return `${this.lastName} ${this.firstName} (Tel: ${this.nickname})`;
@@ -50,40 +54,9 @@ function getDevaPass() {
   pass = window.prompt("Entez le mot de passe pour Deva:");
   if (  pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
     localStorage.setItem('devaPass', JSON.stringify(pass));
-    return;
+    $("#start").css({"display": "block"});  // show start page
   }
   else window.location = window.location.href;
-}
-
-/////
-function getBaseUserName() {
-
-
-  let baseUserName = JSON.parse(localStorage.getItem('baseUserName'));
-  if ( !baseUserName ) baseUserName = window.prompt("Enter votre identifiant:");
-  if ( !baseUserName ) window.location = window.location.href;
-
-  $.ajax({
-    url: 'get_user_name.php',
-    type: 'post',
-    data: { 'baseUserName': baseUserName },
-    complete: function(xhr, result) {
-      if (result != 'success') {
-        window.alert("Erreur réseau. Fermez l'appli et essayez à nouveau.");
-      }
-      else {
-        if ( xhr.responseText == "OK" ) {
-          localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
-        }
-        else {
-          // if ( xhr.responseText.match(/refused/) ) return;
-          getBaseUserName();
-        }
-      }
-    }
-  });
-
-
 }
 
 /////
@@ -1463,6 +1436,17 @@ function textTimeToNumTime(text) {
   return "12h00";
 }
 
+
+
+/////////////////////////////////////////////////////////////////////  Fin F U N C T I O N S
+////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// **************************************************************************************
+// **********************************************************************
+// ************************************************************************** R E A D Y
+$(document).ready(function () {
+
 /////////////////////////////////  N E T W O R K I N G
 
 /////
@@ -1472,7 +1456,6 @@ $(window).on("load", function() {
   try {
     agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
     if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
-    // if ( agent.lastIndexOf("Linux") != -1 ) return;
     agent = agent.replace(/Mozilla\/5\.0 /,"");
     agent = agent.replace(/\(KHTML, like Gecko\)/,"");
     agent = agent.replace(/; Win64; x64/,"");
@@ -1489,25 +1472,43 @@ $(window).on("load", function() {
   });
 });
 
-
-/////////////////////////////////////////////////////////////////////  Fin F U N C T I O N S
-////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
-
-// **************************************************************************************
-// **********************************************************************
-// ************************************************************************** R E A D Y
-$(document).ready(function () {
-
 $("#devaVersion").text(devaVersion);
-getDevaPass();
-/* if ( !window.location.origin.match(/paris8/) ) */ getBaseUserName();
-//////////////////////////////////////////////////////////////////////
+if ( window.location.origin.match(/paris8/) ) getDevaPass();
 
-/////       show start page
-$("#toolBar").css({"display": "none"});
-$("#start").css({"display": "block"});
-/////        get voices
+//////////////////   handle baseUserName
+if (!window.location.origin.match(/paris8/) ) {
+  let baseUserName = JSON.parse(localStorage.getItem('baseUserName'));
+  if ( !baseUserName ) {
+    $("#singleInputModal input").val("");
+    $("#singleInputModal").modal("show");
+  }
+  else $("#start").css({"display": "block"});  // show start page
+}
+
+$("#singleInputModalOK").on("click", function(e) {
+  let baseUserName = $("#singleInputModal input").val();
+  if ( baseUserName ) {
+    $.ajax({
+      url: 'get_user_name.php',
+      type: 'post',
+      data: { 'baseUserName': baseUserName },
+      complete: function(xhr, result) {
+        if (result != 'success') {
+          window.alert("Erreur réseau. Fermez l'appli et essayez à nouveau.");
+        }
+        else {
+          if ( xhr.responseText == "OK" ) {
+            localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
+            $("#singleInputModal input").val("");
+            $("#singleInputModal").modal("hide");
+            $("#start").css({"display": "block"}); // show start page
+          }
+        }
+      }
+    });
+  }
+});
+
 if ( window.speechSynthesis ) { // if not android webview
 speechSynthesis.addEventListener("voiceschanged", () => {
   voices = speechSynthesis.getVoices();
@@ -1586,7 +1587,7 @@ $("#ontoTreeButton").on("click", function(e) {
 
 ///////////////////////////////////////////////  chatParam OFFCANVAS /////
 
-$("#chatParamButton").on("click", function(e) {
+$("#paramOffcanvasButton").on("click", function(e) {
   $("#chatParamUserName").val(userName);
   $("#chatParamAssistantName").val(assistantName);
   $("#chatParamStyle").val(responseStyle);
@@ -1596,6 +1597,11 @@ $("#chatParamButton").on("click", function(e) {
   $("#chatParamSpeechPitch").val(speechPitch);
 });
 
+$("#chatParamChangeUserButton").on("click", function(e) {
+  localStorage.setItem('baseUserName', JSON.stringify(""));
+  window.location = "";
+});
+
 $("#chatParamUserName").on("change", function (e) {
   if ( userName != $("#chatParamUserName").val() ) {
     $("#logButton").trigger("click");
@@ -1603,21 +1609,25 @@ $("#chatParamUserName").on("change", function (e) {
   userName = $("#chatParamUserName").val();
   localStorage.setItem('userName', JSON.stringify(userName));
 });
+
 $("#chatParamAssistantName").on("change", function (e) {
   if ( assistantName != $("#chatParamAssitantName").val() ) {
     $("#logButton").trigger("click");
   }
   assistantName = $("#chatParamAssistantName").val();
   localStorage.setItem('assistantName', JSON.stringify(assistantName));
-  });
+});
+
 $("#chatParamStyle").on("change", function (e) {
   responseStyle = $("#chatParamStyle").val();
   localStorage.setItem('responseStyle', JSON.stringify(responseStyle));
 });
+
 $("#chatParamDetail").on("change", function (e) {
   responseDetail = $("#chatParamDetail").val();
   localStorage.setItem('responseDetail', JSON.stringify(responseDetail));
 });
+
 $("#chatParamTemperature").on("change", function (e) {
   reponseTemperature = $("#chatParamTemperature").val();
   localStorage.setItem('reponseTemperature', JSON.stringify(reponseTemperature));
@@ -1718,6 +1728,8 @@ $("#ontoTree-title").on("click", function (ev) {
   let node = deepFindNodeByLabel($("#ontoTree-parent").text(), ontoTree);
   initOntoTreeChoose(node[2], "down");
 });
+
+/////////////////////////////////////////////////////////   CONTACT BOOK
 
 
 
@@ -1986,7 +1998,11 @@ var ontoTree = [];
 
 ontoTree = importTree(importData);
 
-//                                      calendar
+/////////////////////               CONTACTBOOK
+
+var contactBook = [];
+
+/////////////////////              CALENDAR
 
 var calendar;     // exemple: calendar.getActiveDate();
 var evoCalEvents = [];

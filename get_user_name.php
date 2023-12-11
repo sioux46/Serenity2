@@ -7,8 +7,8 @@ $query = "SELECT `userName` FROM `user` WHERE `userName` = '$userName'";
 $result = $base->query($query);
 if ( $base->errno == 0 ) {
   $row = $result->fetch_assoc();
-  if ($row['userName'] != $userName)  echo "Nom d'utilisateur inconnu !";
-  else echo "OK";
+  if ( $row && $row['userName'] == $userName ) echo "OK";
+  else echo "Nom d'utilisateur inconnu !";
   exit(0);
 }
 else {
