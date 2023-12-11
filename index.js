@@ -6,7 +6,7 @@ var devaVersion = "v3.12.09.2";
 ************************************************************ class
 ********************************************************************* */
 
-class Voyager {
+class traveller {
   constructor(lastName, firstName, nickname, phone, address, driver, equipment) {
     this.lastName = lastName;
     this.firstName = firstName;
@@ -34,7 +34,7 @@ class Car {
 
 
 /*
-person1 = new Voyager("Pierre", "Durand", 0673232630);
+person1 = new traveller("Pierre", "Durand", 0673232630);
 car2 = new Car("Toyota", "Corolla", 2020);
 car2.getInfo();  // 'Toyota Corolla 2020'
 JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
@@ -166,6 +166,10 @@ function importTree(inData) {
 
 /////       show page
 function showPage(pageID) {
+  // ajust toolbar buttons borders
+  $("#speakerButton").trigger("click");
+  $("#speakerButton").trigger("click");
+
   $("#start").animate({"top": "-50rem"}, 400, function() {
       $("#start").css({"display": "none"});
       $(".toolbarButton").css("display", "inline-block");
@@ -1510,10 +1514,10 @@ $("#singleInputModalOK").on("click", function(e) {
 });
 
 if ( window.speechSynthesis ) { // if not android webview
-speechSynthesis.addEventListener("voiceschanged", () => {
-  voices = speechSynthesis.getVoices();
-});
+  speechSynthesis.addEventListener("voiceschanged", () => { voices = speechSynthesis.getVoices(); });
 }
+
+
 ////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
 //                                                      toggle mic
@@ -1577,6 +1581,28 @@ $("#speakerButton").on("click", function (ev) {
   }
   setTimeout( function() { console.log(audioState()); }, 500);
 });
+
+//----------------------------------------------------  toggle param buttons
+//
+$("#showCarButton").on("click", function (e) {  // car button
+  if ( activeParamDisplay == "car" ) return;
+  $(".param-button").css("border", "3px solid white");
+  $("#showCarButton").css("border", "3px solid #fa0039");
+  activeParamDisplay = "car";
+  $(".param-subpage").css("display", "none");
+  $("#carSubpage").css("display", "block");
+});
+
+$("#showTravellerButton").on("click", function (e) {  // Traveller button
+  if ( activeParamDisplay == "traveller" ) return;
+  $(".param-button").css("border", "3px solid white");
+  $("#showTravellerButton").css("border", "3px solid #fa0039");
+  activeParamDisplay = "Traveller";
+  $(".param-subpage").css("display", "none");
+  $("#travellerSubpage").css("display", "block");
+});
+
+$("#showTravellerButton").trigger("click");  // show traveller display on start
 
 ///////////////////////////////////////////////  ontoTree OFFCANVAS /////
 
@@ -2015,6 +2041,8 @@ var questionAnswer = "chatGPT"; // chatGPT v DEVA
 
 var questionMode = "text"; // audio v text
 var reponseMode = "text"; // audio v text
+
+var activeParamDisplay = ""; // to toogle between car and traveller
 
 //                              init SpeechRecognition
 var recognizing = false;

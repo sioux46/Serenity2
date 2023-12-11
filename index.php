@@ -134,17 +134,26 @@
         </div>
       </div>
     </div>
-    <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
-      <img src="icons/list.svg" width=40>
+
+    <button id="showCarButton" class="btn mt-3 ms-2 param-button" type="button">
+      <img src="icons/carBlue.svg" width="40">
     </button>
+
+    <button id="showTravellerButton" class="btn mt-3 ms-2 param-button" type="button">
+      <img src="icons/people-fill-blue.svg" width="40">
+    </button>
+
+    <div id="paramButtonVrap">
+      <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
+        <img src="icons/list.svg" width=40>
+      </button>
+    </div>
 <!-- -->
-    <div class="container">
+    <div id="carSubpage" class="container param-subpage">
+    </div>
+<!-- -->
+    <div id="travellerSubpage" class="container param-subpage">
     <div class="row align-items-center">
-        <div class="col-md-6">
-            <div class="mb-3">
-                <h5 class="card-title">Contact List <span class="text-muted fw-normal ms-2">(834)</span></h5>
-            </div>
-        </div>
         <div class="col-md-6">
             <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                 <div>

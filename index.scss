@@ -23,6 +23,16 @@ body {
   user-select: none;
 }
 
+#paramButtonVrap {
+  display: inline-block;
+  float: right;
+  margin-right: 0.6rem;
+}
+
+.param-button {
+  border: 3px solid white;
+}
+
 //                        TOOLBAR
 #toolBar {
   position: fixed;
