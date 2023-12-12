@@ -38,14 +38,14 @@
 <!--           -->
   <div id="toolBar">
     <button id="startButton" class="btn toolbarButton" type="button">
-      <img src="icons/splash.png" width=50>
+      <img src="icons/splash.png" width=40>
     </button>
     <div id="dialogButtons">
       <button id="micButton" class="btn toolbarButton" type="button">
-        <img src="icons/mic-mute-fill.svg" width=40>
+        <img src="icons/mic-mute-fill.svg" width=30>
       </button>
       <button id="speakerButton" class="btn toolbarButton" type="button">
-        <img src="icons/volume-mute-fill.svg" width=40>
+        <img src="icons/volume-mute-fill.svg" width=30>
       </button>
       <button id="chatParamButton" class="btn toolbarButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
         <img src="icons/list.svg" width=40>
@@ -135,12 +135,12 @@
       </div>
     </div>
 
-    <button id="showCarButton" class="btn mt-3 ms-2 param-button" type="button">
-      <img src="icons/carBlue.svg" width="40">
+    <button id="showCarButton" class="btn mt-4 ms-2 param-button" type="button">
+      <img src="icons/carBlue.svg" width="30">
     </button>
 
-    <button id="showTravellerButton" class="btn mt-3 ms-2 param-button" type="button">
-      <img src="icons/people-fill-blue.svg" width="40">
+    <button id="showTravellerButton" class="btn mt-4 ms-2 param-button" type="button">
+      <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
     <div id="paramButtonVrap">
@@ -153,6 +153,7 @@
     </div>
 <!-- -->
     <div id="travellerSubpage" class="container param-subpage">
+<!--
     <div class="row align-items-center">
         <div class="col-md-6">
             <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
@@ -180,7 +181,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
+-->
+    <div class="row mt-2">
         <div class="col-xl-3 col-sm-6">
             <div class="card">
                 <div class="card-body">

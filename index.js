@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.09.2";
+var devaVersion = "v3.12.12.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -49,8 +49,10 @@ function getDevaPass() {
   let truePass = "ziva";
 
   let pass = JSON.parse(localStorage.getItem('devaPass'));
-  if ( pass && pass.match(new RegExp("^" + truePass + "$", 'i')) ) return;
-
+  if ( pass && pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
+    $("#start").css({"display": "block"});  // show start page
+    return;
+  }
   pass = window.prompt("Entez le mot de passe pour Deva:");
   if (  pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
     localStorage.setItem('devaPass', JSON.stringify(pass));
@@ -1717,6 +1719,8 @@ $("#paramButton").on("click", function (ev) {
   $("#toolBar").css("display", "block");
   //initOntoTreeChoose(ontoTree[0]);
 });
+
+/////////////////////////////////////////////////////////////////////
 
 /////        change ontoTree-parent within param WITH DIALOG
 $("#ontoTree-parent").on("click", function (ev) {
