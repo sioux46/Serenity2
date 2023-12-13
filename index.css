@@ -14,13 +14,16 @@ body {
 }
 
 #paramButtonVrap {
-  display: inline-block;
   float: right;
   margin-right: 0.6rem;
 }
 
 .param-button {
   border: 3px solid white;
+}
+
+.trash-edit-box {
+  float: right;
 }
 
 #toolBar {

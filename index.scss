@@ -24,13 +24,19 @@ body {
 }
 
 #paramButtonVrap {
-  display: inline-block;
+  // display: inline-block;
   float: right;
   margin-right: 0.6rem;
 }
 
 .param-button {
   border: 3px solid white;
+}
+
+//      C A R D
+
+.trash-edit-box {
+  float: right;
 }
 
 //                        TOOLBAR

@@ -233,6 +233,7 @@ tr.calendar-body .calendar-day .day {
   height: 60px;
   width: 60px;
   margin: 0 auto;
+  border-radius: 13%;
   text-align: center;
   color: #5a5a5a;
   border: 1px solid transparent;

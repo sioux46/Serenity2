@@ -19,8 +19,8 @@ body {
     border-radius: 1rem;
 }
 .avatar-md {
-    height: 4rem;
-    width: 4rem;
+    height: 3rem;
+    width: 3rem;
 }
 .rounded-circle {
     border-radius: 50%!important;

@@ -1,17 +1,18 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.12.1";
+var devaVersion = "v3.12.13.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
 
 class traveller {
-  constructor(lastName, firstName, nickname, phone, address, driver, equipment) {
+  constructor(lastName, firstName, nickname, phone, email, address, driver, equipment) {
     this.lastName = lastName;
     this.firstName = firstName;
     this.nickname = nickname;
     this.phone = phone;
+    this.email = email;
     this.address = address;
     this.driver = driver;
     this.equipment = equipment;
@@ -1585,6 +1586,7 @@ $("#speakerButton").on("click", function (ev) {
 });
 
 //----------------------------------------------------  toggle param buttons
+// Toggle between multiple subpages of param page with class .param-subpage
 //
 $("#showCarButton").on("click", function (e) {  // car button
   if ( activeParamDisplay == "car" ) return;
