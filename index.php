@@ -446,19 +446,19 @@
                 </div>
                 <div class="mb-2">
                   <label for="nickName" class="form-label">Surnom:</label>
-                  <input id="nickName" disabled type="text" class="form-control"/>
+                  <input id="nickName" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
                   <label for="phone" class="form-label">Téléphone:</label>
-                  <input id="phone" disabled type="tel" class="form-control"/>
+                  <input id="phone" type="tel" class="form-control"/>
                 </div>
                 <div class="mb-2">
                   <label for="email" class="form-label">Courriel:</label>
-                  <input id="email" disabled type="email" class="form-control"/>
+                  <input id="email" type="email" class="form-control"/>
                 </div>
                 <div class="mb-2">
                   <label for="address" class="form-label">Adresse:</label>
-                  <input id="address" disabled type="text" class="form-control"/>
+                  <input id="address" type="text" class="form-control"/>
                 </div>
               </div>
             </div>
