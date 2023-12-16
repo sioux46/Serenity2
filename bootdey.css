@@ -51,17 +51,17 @@ a {
     color: #f56e6e !important;
     background-color: rgba(245,110,110,.1);
 }
-.badge-soft-success {
+.badgee-soft-success {
     color: #63ad6f !important;
     background-color: rgba(99,173,111,.1);
 }
 .mb-0 {
     margin-bottom: 0!important;
 }
-.badge {
+.badgee {
     display: inline-block;
     padding: 0.25em 0.6em;
-    font-size: 75%;
+    font-size: 80%;
     font-weight: 500;
     line-height: 1;
     color: #fff;
@@ -69,4 +69,6 @@ a {
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: 0.75rem;
+    color: #63ad6f !important;
+    background-color: rgba(99,173,111,.1);
 }

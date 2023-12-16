@@ -145,18 +145,21 @@
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
-    <div id="paramButtonVrap">
       <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
         <img src="icons/list.svg" width=40>
       </button>
-    </div>
 <!-- -->
     <div id="carSubpage" class="container param-subpage">
     </div>
 <!-- -->
-  <div id="travellerSubpage" class="container param-subpage">
+    <div id="travellerSubpage" class="container param-subpage">
+      <button id="voyagerPlus" class="btn" type="button">
+        <img src="icons/plus-circle-fill.svg" width="40">
+      </button>
     <div class=".travellerCards row mt-2">
-      <!-- card -->
+      <!-- card
+      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:22px;  color:#518f97;">place</i><span style="position:relative; top:-6px; left:8px;">Durant@spy.com</span></p>
+      -->
       <div class="col-xl-3 col-sm-6 mb-1">
           <div class="card">
               <div class="card-body pb-2">
@@ -164,26 +167,29 @@
                       <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
                       <div class="flex-1 ms-3">
                           <h5 class="mb-1">
-                            <div class="text-dark">Charles Durant</div>
-                            <div class="text-dark">(dit "Jim")</div>
+                            <div class="text-dark"><strong>Charles Durant</strong></div>
+                            <div class="text-dark">"Jim"</div>
                           </h5>
+                      <div class="driver"><strong>Passager</strong></div>
                       </div>
                   </div>
                   <div class="mt-3 pt-1">
-                      <p class="text-muted mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-4px;"> 98 76 54 32 10</span></p>
-                      <p class="text-muted mb-0 mt-1"><i class="material-icons" style="font-size:22px;  color:#518f97;">mail</i><span style="position:relative; top:-6px;"> Durant@spy.com</span></p>
-                      <p class="text-muted mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">place</i><span style="position:relative; top:-7px; left:-2px;"> 42 place de la gare, Lyon, 54321</span></p>
+                      <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
+                      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
+                      <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
                   </div>
                   <div class="d-flex gap-1 pt-2 trash-edit-box">
-                    <div class="event-edit" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/pencil.svg" width="30">
-                      </button>
-                    </div>
-                    <div class="event-trash" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/trash.svg" width="30">
-                      </button>
+                    <div class="edit-trash" style="display:none">
+                      <div class="event-edit" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/pencil.svg" width="26">
+                        </button>
+                      </div>
+                      <div class="event-trash" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/trash.svg" width="26">
+                        </button>
+                      </div>
                     </div>
                   </div>
               </div>
@@ -197,129 +203,29 @@
                       <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
                       <div class="flex-1 ms-3">
                           <h5 class="mb-1">
-                            <div class="text-dark">Charles Durant</div>
-                            <div class="text-dark">(dit "Jim")</div>
+                            <div class="text-dark"><strong>Charles Durant</strong></div>
+                            <div class="text-dark">"Jim"</div>
                           </h5>
-                          <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
+                      <div class="driver"><strong>Passager</strong></div>
                       </div>
                   </div>
                   <div class="mt-3 pt-1">
-                      <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 98 76 54 32 10</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
+                      <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
+                      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
+                      <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
                   </div>
                   <div class="d-flex gap-1 pt-2 trash-edit-box">
-                    <div class="event-edit" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/pencil.svg" width="30">
-                      </button>
-                    </div>
-                    <div class="event-trash" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/trash.svg" width="30">
-                      </button>
-                    </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- card -->
-      <div class="col-xl-3 col-sm-6 mb-1">
-          <div class="card">
-              <div class="card-body pb-2">
-                  <div class="d-flex align-items-center">
-                      <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
-                      <div class="flex-1 ms-3">
-                          <h5 class="mb-1">
-                            <div class="text-dark">Charles Durant</div>
-                            <div class="text-dark">(dit "Jim")</div>
-                          </h5>
-                          <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
+                    <div class="edit-trash" style="display:none">
+                      <div class="event-edit" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/pencil.svg" width="26">
+                        </button>
                       </div>
-                  </div>
-                  <div class="mt-3 pt-1">
-                      <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 98 76 54 32 10</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
-                  </div>
-                  <div class="d-flex gap-1 pt-2 trash-edit-box">
-                    <div class="event-edit" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/pencil.svg" width="30">
-                      </button>
-                    </div>
-                    <div class="event-trash" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/trash.svg" width="30">
-                      </button>
-                    </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- card -->
-      <div class="col-xl-3 col-sm-6 mb-1">
-          <div class="card">
-              <div class="card-body pb-2">
-                  <div class="d-flex align-items-center">
-                      <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
-                      <div class="flex-1 ms-3">
-                          <h5 class="mb-1">
-                            <div class="text-dark">Charles Durant</div>
-                            <div class="text-dark">(dit "Jim")</div>
-                          </h5>
-                          <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
+                      <div class="event-trash" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/trash.svg" width="26">
+                        </button>
                       </div>
-                  </div>
-                  <div class="mt-3 pt-1">
-                      <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 98 76 54 32 10</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
-                  </div>
-                  <div class="d-flex gap-1 pt-2 trash-edit-box">
-                    <div class="event-edit" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/pencil.svg" width="30">
-                      </button>
-                    </div>
-                    <div class="event-trash" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/trash.svg" width="30">
-                      </button>
-                    </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- card -->
-      <div class="col-xl-3 col-sm-6 mb-1">
-          <div class="card">
-              <div class="card-body pb-2">
-                  <div class="d-flex align-items-center">
-                      <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
-                      <div class="flex-1 ms-3">
-                          <h5 class="mb-1">
-                            <div class="text-dark">Charles Durant</div>
-                            <div class="text-dark">(dit "Jim")</div>
-                          </h5>
-                          <span class="badge badge-soft-success mb-0">Full Stack Developer</span>
-                      </div>
-                  </div>
-                  <div class="mt-3 pt-1">
-                      <p class="text-muted mb-0"><i class="mdi mdi-phone font-size-15 align-middle pe-2 text-primary"></i> 98 76 54 32 10</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-email font-size-15 align-middle pe-2 text-primary"></i> Durant@spy.com</p>
-                      <p class="text-muted mb-0 mt-1"><i class="mdi mdi-google-maps font-size-15 align-middle pe-2 text-primary"></i> 42 place de la gare, Lyon, 54321</p>
-                  </div>
-                  <div class="d-flex gap-1 pt-2 trash-edit-box">
-                    <div class="event-edit" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/pencil.svg" width="30">
-                      </button>
-                    </div>
-                    <div class="event-trash" style="display: block;">
-                      <button class="btn" type="button" onclick="">
-                        <img src="icons/trash.svg" width="30">
-                      </button>
                     </div>
                   </div>
               </div>
@@ -334,7 +240,7 @@
   <!--                       -->
   <!--   param offcanvas     -->
   <!--                       -->
-    <div class="offcanvas offcanvas-end" data-bs-scroll="true" id="paramOffcanvas" tabindex="-1">
+    <div id="paramOffcanvas" class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="paramOffcanvasLabel"><strong>Titre ici</strong></h5>
         <button id="paramOffcanvasButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
@@ -424,9 +330,9 @@
         </div>
       </div>
     </div>
-    <!--                                        -->
+    <!--                                             -->
     <!--    travellerModal  create new traveller     -->
-    <!--                                        -->
+    <!--                                             -->
       <div id="travellerModal" data-traveller-id= "" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -448,17 +354,28 @@
                   <label for="nickName" class="form-label">Surnom:</label>
                   <input id="nickName" type="text" class="form-control"/>
                 </div>
+
+                <div class="input-group mb-3">
+                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Type de voyageur</button>
+                  <ul class="dropdown-menu">
+                    <li><a id="driverInput" class="dropdown-item" href="javascript:$('#voyagerType').val('Conducteur attitré');">Conducteur attitré</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#voyagerType').val('Conducteur additonnel');">Conducteur additonnel</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#voyagerType').val('Passager');">Passager</a></li>
+                  </ul>
+                  <input id="voyagerType" type="text" disabled class="form-control">
+                </div>
+
                 <div class="mb-2">
                   <label for="phone" class="form-label">Téléphone:</label>
                   <input id="phone" type="tel" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="email" class="form-label">Courriel:</label>
-                  <input id="email" type="email" class="form-control"/>
-                </div>
-                <div class="mb-2">
                   <label for="address" class="form-label">Adresse:</label>
                   <input id="address" type="text" class="form-control"/>
+                </div>
+                <div class="mb-2">
+                  <label for="email" class="form-label">Équipement:</label>
+                  <input id="equipement" type="text" class="form-control"/>
                 </div>
               </div>
             </div>

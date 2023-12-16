@@ -22,6 +22,18 @@ body {
   border: 3px solid white;
 }
 
+#voyagerPlus {
+  position: relative;
+  top: 6px;
+}
+
+.card:hover {
+  background-color: #fff;
+  -webkit-box-shadow: 0 3px 12px -4px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 3px 12px -4px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+}
+
 .trash-edit-box {
   float: right;
 }

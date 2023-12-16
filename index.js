@@ -1,20 +1,20 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.13.1";
+var devaVersion = "v3.12.16.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
 
 class traveller {
-  constructor(lastName, firstName, nickname, phone, email, address, driver, equipment) {
+  constructor(lastName, firstName, nickname, phone, address, driver, equipment) {
+    this.id = '' + Math.random();
     this.lastName = lastName;
     this.firstName = firstName;
     this.nickname = nickname;
     this.phone = phone;
-    this.email = email;
     this.address = address;
-    this.driver = driver;
+    this.driver = driver; // (Conducteur attitré, Conducteur additonnel, Passager)
     this.equipment = equipment;
   }
   getInfo() {
@@ -1585,6 +1585,7 @@ $("#speakerButton").on("click", function (ev) {
   setTimeout( function() { console.log(audioState()); }, 500);
 });
 
+///////////////////////////////////////////////////////////////////// P A R A M   C A R
 //----------------------------------------------------  toggle param buttons
 // Toggle between multiple subpages of param page with class .param-subpage
 //
@@ -1604,9 +1605,25 @@ $("#showTravellerButton").on("click", function (e) {  // Traveller button
   activeParamDisplay = "Traveller";
   $(".param-subpage").css("display", "none");
   $("#travellerSubpage").css("display", "block");
+  $(".edit-trash").css("display", "none");
 });
 
-$("#showTravellerButton").trigger("click");  // show traveller display on start
+$("#showTravellerButton").trigger("click");  // show traveller display on startup
+
+$(".card").on("click", function (e) {
+  $(".edit-trash").css("display", "none");
+  $(this).find(".edit-trash").css("display", "block");
+});
+
+$("#voyagerPlus").on("click", function(e) {
+  $("#travellerModal").modal("show");
+});
+
+
+
+
+
+
 
 ///////////////////////////////////////////////  ontoTree OFFCANVAS /////
 

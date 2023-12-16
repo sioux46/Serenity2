@@ -35,6 +35,23 @@ body {
 
 //      C A R D
 
+#voyagerPlus {
+  position: relative;
+  top: 6px;
+}
+
+.card:hover {
+  background-color: #fff;
+  -webkit-box-shadow: 0 3px 12px -4px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 3px 12px -4px rgba(0, 0, 0, 0.65);
+  cursor: pointer;
+}
+
+.driverType {
+  // font-size: 85%;
+  // color: #518f97;
+}
+
 .trash-edit-box {
   float: right;
 }
@@ -233,10 +250,7 @@ body {
 .event-trash,
 .event-edit {
   display: none;
-  position: relative; // absolute
-  // left: 13rem;
-  // top: 0.5rem;
-  // z-index: 1000;
+  position: relative;
   float: right;
 }
 
