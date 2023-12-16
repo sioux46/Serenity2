@@ -1611,8 +1611,13 @@ $("#showTravellerButton").on("click", function (e) {  // Traveller button
 $("#showTravellerButton").trigger("click");  // show traveller display on startup
 
 $(".card").on("click", function (e) {
-  $(".edit-trash").css("display", "none");
-  $(this).find(".edit-trash").css("display", "block");
+  if ( $(this).find(".edit-trash").css("display") == "block" ) {
+    $(this).find(".edit-trash").css("display", "none");
+  }
+  else {
+    $(".edit-trash").css("display", "none");
+    $(this).find(".edit-trash").css("display", "block");
+  }
 });
 
 $("#voyagerPlus").on("click", function(e) {

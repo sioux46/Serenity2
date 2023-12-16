@@ -140,7 +140,7 @@
     <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
       <img src="icons/list.svg" width=40>
     </button>
-    
+
     <button id="showCarButton" class="btn mt-4 ms-2 param-button" type="button">
       <img src="icons/carBlue.svg" width="30">
     </button>
@@ -158,14 +158,15 @@
         <img src="icons/plus-circle-fill.svg" width="40">
       </button>
     <div class=".travellerCards row mt-2">
-      <!-- card
+      <!--
       <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:22px;  color:#518f97;">place</i><span style="position:relative; top:-6px; left:8px;">Durant@spy.com</span></p>
       -->
-      <div class="col-xl-3 col-sm-6 mb-1">
+      <!-- card -->
+      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
           <div class="card">
               <div class="card-body pb-2">
                   <div class="d-flex align-items-center">
-                      <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
+                      <div><img src="icons/femmeGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
                       <div class="flex-1 ms-3">
                           <h5 class="mb-1">
                             <div class="text-dark"><strong>Charles Durant</strong></div>
@@ -197,11 +198,83 @@
           </div>
       </div>
       <!-- card -->
-      <div class="col-xl-3 col-sm-6 mb-1">
+      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
           <div class="card">
               <div class="card-body pb-2">
                   <div class="d-flex align-items-center">
-                      <div><img src="icons/charles.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
+                      <div><img src="icons/hommeGrec1.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
+                      <div class="flex-1 ms-3">
+                          <h5 class="mb-1">
+                            <div class="text-dark"><strong>Charles Durant</strong></div>
+                            <div class="text-dark">"Jim"</div>
+                          </h5>
+                      <div class="driver"><strong>Passager</strong></div>
+                      </div>
+                  </div>
+                  <div class="mt-3 pt-1">
+                      <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
+                      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
+                      <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
+                  </div>
+                  <div class="d-flex gap-1 pt-2 trash-edit-box">
+                    <div class="edit-trash" style="display:none">
+                      <div class="event-edit" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/pencil.svg" width="26">
+                        </button>
+                      </div>
+                      <div class="event-trash" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/trash.svg" width="26">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- card -->
+      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
+          <div class="card">
+              <div class="card-body pb-2">
+                  <div class="d-flex align-items-center">
+                      <div><img src="icons/enfantGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
+                      <div class="flex-1 ms-3">
+                          <h5 class="mb-1">
+                            <div class="text-dark"><strong>Charles Durant</strong></div>
+                            <div class="text-dark">"Jim"</div>
+                          </h5>
+                      <div class="driver"><strong>Passager</strong></div>
+                      </div>
+                  </div>
+                  <div class="mt-3 pt-1">
+                      <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
+                      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
+                      <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
+                  </div>
+                  <div class="d-flex gap-1 pt-2 trash-edit-box">
+                    <div class="edit-trash" style="display:none">
+                      <div class="event-edit" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/pencil.svg" width="26">
+                        </button>
+                      </div>
+                      <div class="event-trash" style="display: block;">
+                        <button class="btn" type="button" onclick="">
+                          <img src="icons/trash.svg" width="26">
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- card -->
+      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
+          <div class="card">
+              <div class="card-body pb-2">
+                  <div class="d-flex align-items-center">
+                      <div><img src="icons/hommeGrecNoir.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
                       <div class="flex-1 ms-3">
                           <h5 class="mb-1">
                             <div class="text-dark"><strong>Charles Durant</strong></div>
