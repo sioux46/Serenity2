@@ -9,6 +9,10 @@ body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
+#devaVersion:hover {
+  cursor: pointer;
+}
+
 .calendar-events {
   user-select: none;
 }
@@ -22,9 +26,9 @@ body {
   border: 3px solid white;
 }
 
-#voyagerPlus {
+#travellerPlus {
   position: relative;
-  top: 6px;
+  left: -4px;
 }
 
 .card:hover {

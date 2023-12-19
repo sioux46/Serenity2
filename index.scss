@@ -19,6 +19,10 @@ body {
   // background-color: $colorBeige;
 }
 
+#devaVersion:hover {
+  cursor: pointer;
+}
+
 .calendar-events {
   user-select: none;
 }
@@ -35,9 +39,10 @@ body {
 
 //      C A R D
 
-#voyagerPlus {
+#travellerPlus {
   position: relative;
-  top: 6px;
+  // top: 6px;
+  left: -4px;
 }
 
 .card:hover {

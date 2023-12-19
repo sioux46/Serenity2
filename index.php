@@ -141,44 +141,45 @@
       <img src="icons/list.svg" width=40>
     </button>
 
-    <button id="showCarButton" class="btn mt-4 ms-2 param-button" type="button">
+    <button id="showCarButton" class="btn mt-3 ms-2 param-button" type="button">
       <img src="icons/carBlue.svg" width="30">
     </button>
 
-    <button id="showTravellerButton" class="btn mt-4 ms-2 param-button" type="button">
+    <button id="showTravellerButton" class="btn mt-3 ms-2 param-button" type="button">
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
 <!-- -->
-    <div id="carSubpage" class="container param-subpage">
+    <div id="carSubpage" class="container-fluid param-subpage">
     </div>
 <!-- -->
-    <div id="travellerSubpage" class="container param-subpage">
-      <button id="voyagerPlus" class="btn" type="button">
+    <div id="travellerSubpage" class="container-fluid param-subpage">
+      <button id="travellerPlus" class="btn" type="button">
         <img src="icons/plus-circle-fill.svg" width="40">
       </button>
-    <div class=".travellerCards row mt-2">
+    <div id="travellerCards" class="row mt-2">
       <!--
       <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:22px;  color:#518f97;">place</i><span style="position:relative; top:-6px; left:8px;">Durant@spy.com</span></p>
       -->
       <!-- card -->
-      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
-          <div class="card">
+      <div class="col-sm-6 col-md-4 col-lg-3 cmb-1">
+          <div class="card mb-3">
               <div class="card-body pb-2">
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-top">
                       <div><img src="icons/femmeGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
                       <div class="flex-1 ms-3">
                           <h5 class="mb-1">
-                            <div class="text-dark"><strong>Charles Durant</strong></div>
+                            <div class="text-dark"><strong>Sébatien</strong></div>
+                            <div class="text-dark"><strong>Durant</strong></div>
                             <div class="text-dark">"Jim"</div>
                           </h5>
-                      <div class="driver"><strong>Passager</strong></div>
                       </div>
                   </div>
                   <div class="mt-3 pt-1">
-                      <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
-                      <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
-                      <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
+                    <p class="travellertype"><strong>Conducteur attitré</strong></p>
+                    <p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>
+                    <p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">42 place de la gare, Lyon, 54321</span></p>
+                    <p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">Siège enfant</span></p>
                   </div>
                   <div class="d-flex gap-1 pt-2 trash-edit-box">
                     <div class="edit-trash" style="display:none">
@@ -198,8 +199,8 @@
           </div>
       </div>
       <!-- card -->
-      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
-          <div class="card">
+      <div class="col-sm-6 col-md-4 col-lg-3 cmb-1">
+          <div class="card mb-3">
               <div class="card-body pb-2">
                   <div class="d-flex align-items-center">
                       <div><img src="icons/hommeGrec1.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
@@ -234,8 +235,8 @@
           </div>
       </div>
       <!-- card -->
-      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
-          <div class="card">
+      <div class="col-sm-6 col-md-4 col-lg-3 cmb-1">
+          <div class="card mb-3">
               <div class="card-body pb-2">
                   <div class="d-flex align-items-center">
                       <div><img src="icons/enfantGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
@@ -270,8 +271,8 @@
           </div>
       </div>
       <!-- card -->
-      <div class="col-xl-3 col-md-4 col-sm-6 mb-1">
-          <div class="card">
+      <div class="col-sm-6 col-md-4 col-lg-3 cmb-1">
+          <div class="card mb-3">
               <div class="card-body pb-2">
                   <div class="d-flex align-items-center">
                       <div><img src="icons/hommeGrecNoir.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>
@@ -316,39 +317,39 @@
   <!--                       -->
     <div id="paramOffcanvas" class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="paramOffcanvasLabel"><strong>Titre ici</strong></h5>
+        <h5 class="offcanvas-title" id="paramOffcanvasLabel"><strong>Préférences</strong></h5>
         <button id="paramOffcanvasButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
       </div>
       <div class="offcanvas-body">
           <div>
             <div class="d-grid gap-2">
               <div class="mb-2">
-                <label for="chatParamUserName" class="form-label">Nom du conducteur:</label>
+                <label for="chatParamUserName" class="form-label">Nom du conducteur</label>
                 <input id="chatParamUserName" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="chatParamAssistantName" class="form-label">Nom de l'assistant:</label>
+                <label for="chatParamAssistantName" class="form-label">Nom de l'assistant</label>
                 <input id="chatParamAssistantName" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix:</label>
+                <label for="chatParamSpeechRate" class="form-label">Vitesse de la voix</label>
                 <input id="chatParamSpeechRate" placeholder="De 0.8 à 1.2" type="number" min="0.8" max="1.2" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix:</label>
+                <label for="chatParamSpeechPitch" class="form-label">Hauteur de la voix</label>
                 <input id="chatParamSpeechPitch" placeholder="De 0.2 à 2" type="number" min="0.2" max="2" class="form-control"/>
               </div>
               <!--  disabled -->
               <div class="mb-2">
-                <label for="chatParamStyle" class="form-label">Style des réponses:</label>
+                <label for="chatParamStyle" class="form-label">Style des réponses</label>
                 <input disabled id="chatParamStyle" placeholder="Exemple: dans le style de..." type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="chatParamDetail" class="form-label">Détails des réponses:</label>
+                <label for="chatParamDetail" class="form-label">Détails des réponses</label>
                 <input disabled id="chatParamDetail" placeholder="Exemple: de façon concise" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="chatParamTemperature" class="form-label">Variabilité des réponses:</label>
+                <label for="chatParamTemperature" class="form-label">Variabilité des réponses</label>
                 <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
               </div>
               <div class="mt-4">
@@ -384,22 +385,22 @@
           <div class="modal-body">
             <div class="d-grid gap-2">
               <div class="mb-2">
-                <label for="sEventTitle" class="form-label">Motif:</label>
+                <label for="sEventTitle" class="form-label">Motif</label>
                 <input id="sEventTitle" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="sEventTime" class="form-label">Heure de début:</label>
+                <label for="sEventTime" class="form-label">Heure de début</label>
                 <input id="sEventTime" type="time" class="form-control"/>
               </div>
               <div class="mb-2">
-                <label for="sEventTime2" class="form-label">Heure de fin:</label>
+                <label for="sEventTime2" class="form-label">Heure de fin</label>
                 <input id="sEventTime2" disabled type="time" class="form-control"/>
               </div>
             </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-            <button id="newEventOK"  type="button" class="btn btn-primary">OK</button>
+            <button id="newEventOK"  type="button" class="btn btn-success">OK</button>
           </div>
         </div>
       </div>
@@ -417,45 +418,45 @@
             <div class="modal-body">
               <div class="d-grid gap-2">
                 <div class="mb-2">
-                  <label for="lastName" class="form-label">Nom:</label>
-                  <input id="lastName" type="text" class="form-control"/>
+                  <label for="lastname" class="form-label">Nom</label>
+                  <input id="lastname" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="firstName" class="form-label">Prénom:</label>
-                  <input id="firstName" type="text" class="form-control"/>
+                  <label for="firstname" class="form-label">Prénom</label>
+                  <input id="firstname" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="nickName" class="form-label">Surnom:</label>
-                  <input id="nickName" type="text" class="form-control"/>
+                  <label for="nickname" class="form-label">Surnom</label>
+                  <input id="nickname" type="text" class="form-control"/>
                 </div>
 
                 <div class="input-group mb-3">
-                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Type de voyageur</button>
+                  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Type de voyageur</button>
                   <ul class="dropdown-menu">
-                    <li><a id="driverInput" class="dropdown-item" href="javascript:$('#voyagerType').val('Conducteur attitré');">Conducteur attitré</a></li>
-                    <li><a class="dropdown-item" href="javascript:$('#voyagerType').val('Conducteur additonnel');">Conducteur additonnel</a></li>
-                    <li><a class="dropdown-item" href="javascript:$('#voyagerType').val('Passager');">Passager</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur attitré');">Conducteur attitré</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur additonnel');">Conducteur additonnel</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Passager');">Passager</a></li>
                   </ul>
-                  <input id="voyagerType" type="text" disabled class="form-control">
+                  <input id="travellertype" type="text" disabled class="form-control">
                 </div>
 
                 <div class="mb-2">
-                  <label for="phone" class="form-label">Téléphone:</label>
+                  <label for="phone" class="form-label">Téléphone</label>
                   <input id="phone" type="tel" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="address" class="form-label">Adresse:</label>
+                  <label for="address" class="form-label">Adresse</label>
                   <input id="address" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="email" class="form-label">Équipement:</label>
-                  <input id="equipement" type="text" class="form-control"/>
+                  <label for="equipment" class="form-label">Équipement</label>
+                  <input id="equipment" type="text" class="form-control"/>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-              <button id="newEventOK"  type="button" class="btn btn-primary">OK</button>
+              <button id="newTravellerOK"  type="button" class="btn btn-success">OK</button>
             </div>
           </div>
         </div>
@@ -464,7 +465,7 @@
   <!--   singleInputModal    -->
   <!--                       -->
     <div id="singleInputModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Entrez votre identifiant:</h5>

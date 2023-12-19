@@ -7,18 +7,18 @@ var devaVersion = "v3.12.16.1";
 ********************************************************************* */
 
 class traveller {
-  constructor(lastName, firstName, nickname, phone, address, driver, equipment) {
-    this.id = '' + Math.random();
-    this.lastName = lastName;
-    this.firstName = firstName;
+  constructor(lastname, firstname, nickname, travellertype ,phone, address, equipment) {
+    this.clientid = '' + Math.random();
+    this.lastname = lastname;
+    this.firstname = firstname;
     this.nickname = nickname;
     this.phone = phone;
     this.address = address;
-    this.driver = driver; // (Conducteur attitré, Conducteur additonnel, Passager)
+    this.travellertype = travellertype; // (Conducteur attitré, Conducteur additonnel, Passager)
     this.equipment = equipment;
   }
   getInfo() {
-    return `${this.lastName} ${this.firstName} (Tel: ${this.nickname})`;
+    return `${this.lastname} ${this.firstname} (Tel: ${this.nickname})`;
   }
 }
 
@@ -44,6 +44,127 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 ////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////  traveller
+
+/////
+function iniContactBook() {
+  $.ajax({
+    url: "travellerReadAll.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading traveller from database");
+      }
+      else {
+        console.log("Success reading taveller from database");
+        var reponse = xhr.responseText;
+        var jr = JSON.parse(reponse);
+        contactBook = jr;
+        //contactBook.push(jr[0]);
+        //contactBook.push(jr[1]);
+      }
+    }
+  });
+}
+
+/////  clear traveller modal
+function clearTravellerModal() {
+  $("#travellerModal").find("#lastname").val("");
+  $("#travellerModal").find("#firstname").val("");
+  $("#travellerModal").find("#nickname").val("");
+  $("#travellerModal").find("#travellertype").val("");
+  $("#travellerModal").find("#phone").val("");
+  $("#travellerModal").find("#address").val("");
+  $("#travellerModal").find("#equipment").val("");
+}
+
+///// build traveller from modal and send to database
+function buildTravellerFromModal() {
+  let newTraveller = new traveller(
+      $("#travellerModal").find("#lastname").val(),
+      $("#travellerModal").find("#firstname").val(),
+      $("#travellerModal").find("#nickname").val(),
+      $("#travellerModal").find("#travellertype").val(),
+      $("#travellerModal").find("#phone").val(),
+      $("#travellerModal").find("#address").val(),
+      $("#travellerModal").find("#equipment").val()
+  );
+
+  $.ajax({
+    url: "traveller_write.php",
+    type: "post",
+    data: {
+      "clientid": newTraveller.clientid,
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "lastname": newTraveller.lastname,
+      "firstname": newTraveller.firstname,
+      "nickname": newTraveller.nickname,
+      "phone": newTraveller.phone,
+      "address": newTraveller.address,
+      "travellertype": newTraveller.travellertype,
+      "equipment": newTraveller.equipment
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error writing traveller to databas");
+      }
+      else {
+        console.log("Success writing taveller to database");
+        contactBook.push(newTraveller);
+      }
+    }
+  });
+}
+
+/////                     Build card html
+function buildCardHtml(card) {
+  let html;
+
+  html = '<div class="col-sm-6 col-md-4 col-lg-3 cmb-1">' +
+    '<div class="card mb-3">' +
+      '<div class="card-body pb-2">' +
+        '<div class="d-flex align-items-top">' +
+          '<div><img src="icons/femmeGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>' +
+          '<div class="flex-1 ms-3">' +
+            '<h5 class="mb-1">' +
+              '<div class="text-dark"><strong>' + card.lastname + '</strong></div>' +
+              '<div class="text-dark"><strong>' + card.firstname + '</strong></div>' +
+              '<div class="text-dark">' + '(' + card.nickname + ')' + '</div>' +
+            '</h5>' +
+          '</div>' +
+        '</div>' +
+        '<div class="mt-3 pt-1">' +
+          '<p class="travellertype"><strong>' + card.travellertype + '</strong></p>' +
+          '<p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>' +
+          '<p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">' + card.address + '</span></p>' +
+          '<p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">' + card.equipment + '</span></p>' +
+        '</div>' +
+        '<div class="d-flex gap-1 pt-2 trash-edit-box">' +
+          '<div class="edit-trash" style="display:none">' +
+            '<div class="event-edit" style="display: block;">' +
+              '<button class="btn" type="button" onclick="">' +
+                '<img src="icons/pencil.svg" width="26">' +
+              '</button>' +
+            '</div>' +
+            '<div class="event-trash" style="display: block;">' +
+              '<button class="btn" type="button" onclick="">' +
+                '<img src="icons/trash.svg" width="26">' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  return html;
+}
+
+///////////////////////////////////////  END traveller
 
 /////
 function getDevaPass() {
@@ -1454,31 +1575,7 @@ function textTimeToNumTime(text) {
 // ************************************************************************** R E A D Y
 $(document).ready(function () {
 
-/////////////////////////////////  N E T W O R K I N G
-
-/////
-// new connection
-$(window).on("load", function() {
-  var agent;
-  try {
-    agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
-    if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
-    agent = agent.replace(/Mozilla\/5\.0 /,"");
-    agent = agent.replace(/\(KHTML, like Gecko\)/,"");
-    agent = agent.replace(/; Win64; x64/,"");
-    agent = agent.replace(/Macintosh; Intel Mac /,"");
-    agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
-
-    if ( !agent ) agent = window.navigator.vendor;
-  } catch (e) {}
-
-  $.ajax({
-    url: 'connection_count.php',
-    type:'post',
-    data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
-  });
-});
-
+//////////////////
 $("#devaVersion").text(devaVersion);
 if ( window.location.origin.match(/paris8/) ) getDevaPass();
 
@@ -1489,9 +1586,13 @@ if (!window.location.origin.match(/paris8/) ) {
     $("#singleInputModal input").val("");
     $("#singleInputModal").modal("show");
   }
-  else $("#start").css({"display": "block"});  // show start page
+  else {
+    $("#start").css({"display": "block"});  // show start page
+    iniContactBook();
+  }
 }
 
+////// V E R I F I C A T I O N  baseUserName
 $("#singleInputModalOK").on("click", function(e) {
   let baseUserName = $("#singleInputModal input").val();
   if ( baseUserName ) {
@@ -1509,6 +1610,28 @@ $("#singleInputModalOK").on("click", function(e) {
             $("#singleInputModal input").val("");
             $("#singleInputModal").modal("hide");
             $("#start").css({"display": "block"}); // show start page
+            iniContactBook();
+
+            /////       C O N N E C T I O N  count
+            var agent;
+            try {
+              agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
+              if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
+              agent = agent.replace(/Mozilla\/5\.0 /,"");
+              agent = agent.replace(/\(KHTML, like Gecko\)/,"");
+              agent = agent.replace(/; Win64; x64/,"");
+              agent = agent.replace(/Macintosh; Intel Mac /,"");
+              agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
+
+              if ( !agent ) agent = window.navigator.vendor;
+            } catch (e) {}
+
+            $.ajax({
+              url: 'connection_count.php',
+              type:'post',
+              data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
+            });
+            /////
           }
         }
       }
@@ -1516,6 +1639,8 @@ $("#singleInputModalOK").on("click", function(e) {
   }
 });
 
+
+/////////////////////////////////////////////////////////
 if ( window.speechSynthesis ) { // if not android webview
   speechSynthesis.addEventListener("voiceschanged", () => { voices = speechSynthesis.getVoices(); });
 }
@@ -1620,12 +1745,16 @@ $(".card").on("click", function (e) {
   }
 });
 
-$("#voyagerPlus").on("click", function(e) {
+///////////////////////////////////////////// create new traveller
+$("#travellerPlus").on("click", function(e) {
+  clearTravellerModal();
   $("#travellerModal").modal("show");
 });
 
-
-
+$("#newTravellerOK").on("click", function(e) {
+  buildTravellerFromModal();
+  $("#travellerModal").modal("hide");
+});
 
 
 
@@ -1784,11 +1913,10 @@ $("#ontoTree-title").on("click", function (ev) {
 });
 
 /////////////////////////////////////////////////////////   CONTACT BOOK
-
+/////////////////              init contactBook
 
 
 ////////////////////////////////////////////////////////////////   EVO CALENDAR   /////
-
 /////////////////               init evoCalendar
 
 if ( localStorage.eventList ) {
