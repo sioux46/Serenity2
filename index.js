@@ -62,13 +62,27 @@ function iniContactBook() {
       else {
         console.log("Success reading taveller from database");
         var reponse = xhr.responseText;
-        var jr = JSON.parse(reponse);
-        contactBook = jr;
-        //contactBook.push(jr[0]);
-        //contactBook.push(jr[1]);
+        var jRep = JSON.parse(reponse);
+        contactBook = bluidTravellersOjectTable(jRep);
+        let html = "";
+        for ( let contact of contactBook ) {
+          html += buildCardHtml(contact);
+        }
+        $("#travellerCards").html(html);
       }
     }
   });
+}
+
+///// build traveller objects array from arrays array
+function bluidTravellersOjectTable(tabsTable) {
+  let objsTable = [];
+  for ( let tab of tabsTable ) {
+    let obj = new traveller( tab[2], tab[3], tab[4], tab[5], tab[6], tab[7], tab[8] );
+    obj.clientid = tab[1];
+    objsTable.push(obj);
+  }
+  return objsTable;
 }
 
 /////  clear traveller modal
@@ -82,8 +96,26 @@ function clearTravellerModal() {
   $("#travellerModal").find("#equipment").val("");
 }
 
+function editTravellerModal(clientid) {
+  let traveller;
+  for ( let trav of contactBook ) {
+    if ( trav.clientid == clientid ) {
+      traveller = trav;
+      break;
+    }
+  }
+  $("#travellerModal").find("#lastname").val(traveller.lastname);
+  $("#travellerModal").find("#firstname").val(traveller.firstname);
+  $("#travellerModal").find("#nickname").val(traveller.nickname);
+  $("#travellerModal").find("#travellertype").val(traveller.travellertype);
+  $("#travellerModal").find("#phone").val(traveller.phone);
+  $("#travellerModal").find("#address").val(traveller.address);
+  $("#travellerModal").find("#equipment").val(traveller.equipment);
+}
+
 ///// build traveller from modal and send to database
 function buildTravellerFromModal() {
+
   let newTraveller = new traveller(
       $("#travellerModal").find("#lastname").val(),
       $("#travellerModal").find("#firstname").val(),
@@ -146,12 +178,12 @@ function buildCardHtml(card) {
         '<div class="d-flex gap-1 pt-2 trash-edit-box">' +
           '<div class="edit-trash" style="display:none">' +
             '<div class="event-edit" style="display: block;">' +
-              '<button class="btn" type="button" onclick="">' +
+              '<button class="btn edit" data-clientid="' + card.clientid + '" type="button">' +
                 '<img src="icons/pencil.svg" width="26">' +
               '</button>' +
             '</div>' +
             '<div class="event-trash" style="display: block;">' +
-              '<button class="btn" type="button" onclick="">' +
+              '<button class="btn trash" data-clientid="' + card.clientid + '" type="button">' +
                 '<img src="icons/trash.svg" width="26">' +
               '</button>' +
             '</div>' +
@@ -1639,7 +1671,6 @@ $("#singleInputModalOK").on("click", function(e) {
   }
 });
 
-
 /////////////////////////////////////////////////////////
 if ( window.speechSynthesis ) { // if not android webview
   speechSynthesis.addEventListener("voiceschanged", () => { voices = speechSynthesis.getVoices(); });
@@ -1735,13 +1766,38 @@ $("#showTravellerButton").on("click", function (e) {  // Traveller button
 
 $("#showTravellerButton").trigger("click");  // show traveller display on startup
 
-$(".card").on("click", function (e) {
-  if ( $(this).find(".edit-trash").css("display") == "block" ) {
-    $(this).find(".edit-trash").css("display", "none");
+///// card edit-trash show-hide, trash record, edit record
+$("#travellerCards").on("click", function(e) {
+
+  //  trash click
+  let trashClick = $(e.target).closest(".trash");
+  if ( trashClick.get(0) ) { // trash click
+    console.log("trash");
+    $.ajax({
+      url: 'traveller_delete.php',
+      type:'post',
+      data: {'clientid': trashClick.attr("data-clientid")}
+    });
+    return;
+  }
+
+  //    edit click
+  let editClick = $(e.target).closest(".edit");
+  if ( editClick.get(0) ) { // edit click
+    console.log("edit");
+    editTravellerModal(editClick.attr("data-clientid"));
+    $("#travellerModal").modal("show");
+    return;
+  }
+
+  //    edit-trash show-hide
+  let card = $(e.target).closest(".card-body").find(".edit-trash");
+  if ( card.css("display") == "block" ) {
+    card.css("display", "none");
   }
   else {
     $(".edit-trash").css("display", "none");
-    $(this).find(".edit-trash").css("display", "block");
+    card.css("display", "block");
   }
 });
 
