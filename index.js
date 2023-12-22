@@ -1,13 +1,13 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.22.1";
+var devaVersion = "v3.12.22.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
 
 class traveller {
-  constructor(lastname, firstname, nickname, travellertype ,phone, address, equipment) {
+  constructor(lastname, firstname, nickname, travellertype ,phone, address, equipment, imgsrc) {
     this.clientid = '' + Math.random();
     this.lastname = lastname;
     this.firstname = firstname;
@@ -16,6 +16,7 @@ class traveller {
     this.address = address;
     this.travellertype = travellertype; // (Conducteur attitré, Conducteur additonnel, Passager)
     this.equipment = equipment;
+    this.imgsrc = imgsrc;
   }
   getInfo() {
     return `${this.lastname} ${this.firstname} (Tel: ${this.nickname})`;
@@ -83,7 +84,7 @@ function iniContactBook() {
 function bluidTravellersOjectTable(tabsTable) {
   let objsTable = [];
   for ( let tab of tabsTable ) {
-    let obj = new traveller( tab[3], tab[4], tab[5], tab[6], tab[7], tab[8], tab[9] );
+    let obj = new traveller( tab[3], tab[4], tab[5], tab[6], tab[7], tab[8], tab[9], tab[10] );
     obj.clientid = tab[1];
     objsTable.push(obj);
   }
@@ -100,6 +101,7 @@ function clearTravellerModal() {
   $("#travellerModal").find("#phone").val("");
   $("#travellerModal").find("#address").val("");
   $("#travellerModal").find("#equipment").val("");
+  $("#travellerModal").find("#imgFromDisk").attr("src", "icons/person-fill.svg");
 }
 
 function editTravellerModalLoad(clientid) {
@@ -118,6 +120,7 @@ function editTravellerModalLoad(clientid) {
   $("#travellerModal").find("#phone").val(traveller.phone);
   $("#travellerModal").find("#address").val(traveller.address);
   $("#travellerModal").find("#equipment").val(traveller.equipment);
+  $("#travellerModal").find("#imgFromDisk").attr("src", traveller.imgsrc);
 }
 
 ///// build traveller from modal and send to database
@@ -130,7 +133,8 @@ function buildEditTravellerFromModal(clientid) {
       $("#travellerModal").find("#travellertype").val(),
       $("#travellerModal").find("#phone").val(),
       $("#travellerModal").find("#address").val(),
-      $("#travellerModal").find("#equipment").val()
+      $("#travellerModal").find("#equipment").val(),
+      $("#travellerModal").find("#imgFromDisk").attr("src")
   );
   if ( clientid ) newTraveller.clientid = clientid; // traveller allready exist (edit)
 
@@ -146,7 +150,8 @@ function buildEditTravellerFromModal(clientid) {
       "phone": newTraveller.phone,
       "address": newTraveller.address,
       "travellertype": newTraveller.travellertype,
-      "equipment": newTraveller.equipment
+      "equipment": newTraveller.equipment,
+      "imgsrc": newTraveller.imgsrc
     },
     complete: function(xhr, result) {
       if (result != 'success') {
@@ -169,7 +174,12 @@ function buildCardHtml(card) {
     '<div class="card mb-3">' +
       '<div class="card-body pb-2">' +
         '<div class="d-flex align-items-top">' +
-          '<div><img src="icons/femmeGrec2.png" width="90" class="avatar-md rounded-circle img-thumbnail" /></div>' +
+          '<div>';
+            if ( card.imgsrc ) html += '<img src="' + card.imgsrc + '"';
+            else html += '<img src="icons/person-fill.svg"';
+            html += '" width="90" class="avatar-md rounded-circle img-thumbnail" />';
+
+          html += '</div>' +
           '<div class="flex-1 ms-3">' +
             '<h5 class="mb-1">' +
               '<div class="text-dark"><strong>' + card.lastname + '</strong></div>' +
@@ -1754,7 +1764,7 @@ $("#speakerButton").on("click", function (ev) {
   setTimeout( function() { console.log(audioState()); }, 500);
 });
 
-///////////////////////////////////////////////////////////////////// P A R A M   C A R
+///////////////////////////////////////////////////////////////////// P A R A M   P A G E
 //----------------------------------------------------  toggle param buttons
 // Toggle between multiple subpages of param page with class .param-subpage
 //
@@ -1834,7 +1844,17 @@ $("#newTravellerOK").on("click", function(e) {
   $("#travellerModal").modal("hide");
 });
 
+/////   edit photo
+$("#travellerModal").find("#imgFromDiskInput").on("change", function (e) {
+  let file = e.target.files[0];
+  if ( !file || (!file.type.match(/image.*/)) ) return;
 
+  const reader = new FileReader();
+  reader.addEventListener('loadend', () => {
+    $("#imgFromDisk").attr("src", reader.result);
+  });
+  reader.readAsDataURL(event.target.files[0]);
+});
 
 
 ///////////////////////////////////////////////  ontoTree OFFCANVAS /////

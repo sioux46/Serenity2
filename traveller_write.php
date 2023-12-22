@@ -11,11 +11,12 @@ $phone = $_POST["phone"];
 $address = $_POST["address"];
 $travellertype = $_POST["travellertype"];
 $equipment = $_POST["equipment"];
+$imgsrc = $_POST["imgsrc"];
 //
 $query = "DELETE FROM traveller WHERE `clientid` = '$clientid'";
 $result = $base->query($query);
 //
-$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`) VALUES ( '$clientid', '$username', '$lastname', '$firstname', '$nickname', '$travellertype', '$phone', '$address',  '$equipment')";
+$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`) VALUES ( '$clientid', '$username', '$lastname', '$firstname', '$nickname', '$travellertype', '$phone', '$address', '$equipment', '$imgsrc')";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) $reponse = "ok";

@@ -265,9 +265,16 @@
           <div class="modal-content">
             <div class="modal-header">
               <h3 class="modal-title">Voyageur</h3>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              <!--<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
             </div>
             <div class="modal-body">
+              <div>
+                <label for="imgFromDiskInput" class="form-label">
+                  <img id="imgFromDisk" src="icons/person-fill.svg" width="90" class="avatar-md rounded-circle img-thumbnail">
+                </label>
+                <input id="imgFromDiskInput" type="file" style="opacity:0">
+
+              </div>
               <div class="d-grid gap-2">
                 <div class="mb-2">
                   <label for="lastname" class="form-label">Nom</label>
