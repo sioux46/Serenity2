@@ -257,10 +257,10 @@
         </div>
       </div>
     </div>
-    <!--                                             -->
-    <!--    travellerModal  create new traveller     -->
-    <!--                                             -->
-      <div id="travellerModal" data-traveller-id= "" class="modal fade" tabindex="-1">
+    <!--                                                     -->
+    <!--    travellerModal  create or edit traveller         -->
+    <!--                                                     -->
+      <div id="travellerModal" data-client-id= "" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">

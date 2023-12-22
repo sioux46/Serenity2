@@ -7,6 +7,10 @@ $query = "SELECT * FROM traveller WHERE `username` = '$username' ORDER BY `lastn
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) {
+  if ( !$result->num_rows ) {
+    echo "empty";
+    exit(0);
+  }
   $array = arrayResult($result, 0);  // sans les noms de col.
   // $reponse = $array;  // = "ok";
   $json = json_encode($array);

@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.21.1";
+var devaVersion = "v3.12.22.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -53,8 +53,7 @@ function iniContactBook() {
     url: "travellerReadAll.php",
     type: "post",
     data: {
-      "username": JSON.parse(localStorage.getItem('baseUserName')),
-    },
+      "username": JSON.parse(localStorage.getItem('baseUserName'))},
     complete: function(xhr, result) {
       if (result != 'success') {
         console.log("Error reading traveller from database");
@@ -62,13 +61,19 @@ function iniContactBook() {
       else {
         console.log("Success reading taveller from database");
         var reponse = xhr.responseText;
-        var jRep = JSON.parse(reponse);
-        contactBook = bluidTravellersOjectTable(jRep);
-        let html = "";
-        for ( let contact of contactBook ) {
-          html += buildCardHtml(contact);
+        if ( reponse == "empty" ) {
+          contactBook = [];
+          $("#travellerCards").html("");
         }
-        $("#travellerCards").html(html);
+        else {
+          var jRep = JSON.parse(reponse);
+          contactBook = bluidTravellersOjectTable(jRep);
+          let html = "";
+          for ( let contact of contactBook ) {
+            html += buildCardHtml(contact);
+          }
+          $("#travellerCards").html(html);
+        }
       }
     }
   });
@@ -78,7 +83,7 @@ function iniContactBook() {
 function bluidTravellersOjectTable(tabsTable) {
   let objsTable = [];
   for ( let tab of tabsTable ) {
-    let obj = new traveller( tab[2], tab[3], tab[4], tab[5], tab[6], tab[7], tab[8] );
+    let obj = new traveller( tab[3], tab[4], tab[5], tab[6], tab[7], tab[8], tab[9] );
     obj.clientid = tab[1];
     objsTable.push(obj);
   }
@@ -87,6 +92,7 @@ function bluidTravellersOjectTable(tabsTable) {
 
 /////  clear traveller modal
 function clearTravellerModal() {
+  $("#travellerModal").attr("data-client-id", "");
   $("#travellerModal").find("#lastname").val("");
   $("#travellerModal").find("#firstname").val("");
   $("#travellerModal").find("#nickname").val("");
@@ -96,7 +102,7 @@ function clearTravellerModal() {
   $("#travellerModal").find("#equipment").val("");
 }
 
-function editTravellerModal(clientid) {
+function editTravellerModalLoad(clientid) {
   let traveller;
   for ( let trav of contactBook ) {
     if ( trav.clientid == clientid ) {
@@ -104,6 +110,7 @@ function editTravellerModal(clientid) {
       break;
     }
   }
+  $("#travellerModal").attr("data-client-id", clientid);
   $("#travellerModal").find("#lastname").val(traveller.lastname);
   $("#travellerModal").find("#firstname").val(traveller.firstname);
   $("#travellerModal").find("#nickname").val(traveller.nickname);
@@ -114,7 +121,7 @@ function editTravellerModal(clientid) {
 }
 
 ///// build traveller from modal and send to database
-function buildTravellerFromModal() {
+function buildEditTravellerFromModal(clientid) {
 
   let newTraveller = new traveller(
       $("#travellerModal").find("#lastname").val(),
@@ -125,6 +132,7 @@ function buildTravellerFromModal() {
       $("#travellerModal").find("#address").val(),
       $("#travellerModal").find("#equipment").val()
   );
+  if ( clientid ) newTraveller.clientid = clientid; // traveller allready exist (edit)
 
   $.ajax({
     url: "traveller_write.php",
@@ -146,7 +154,8 @@ function buildTravellerFromModal() {
       }
       else {
         console.log("Success writing taveller to database");
-        contactBook.push(newTraveller);
+        // contactBook.push(newTraveller);
+        iniContactBook();
       }
     }
   });
@@ -164,17 +173,21 @@ function buildCardHtml(card) {
           '<div class="flex-1 ms-3">' +
             '<h5 class="mb-1">' +
               '<div class="text-dark"><strong>' + card.lastname + '</strong></div>' +
-              '<div class="text-dark"><strong>' + card.firstname + '</strong></div>' +
-              '<div class="text-dark">' + '(' + card.nickname + ')' + '</div>' +
-            '</h5>' +
+              '<div class="text-dark"><strong>' + card.firstname + '</strong></div>';
+              if ( card.nickname ) html += '<div class="text-dark">' + `"` + card.nickname + `"` + '</div>';
+            html += '</h5>' +
           '</div>' +
         '</div>' +
-        '<div class="mt-3 pt-1">' +
-          '<p class="travellertype"><strong>' + card.travellertype + '</strong></p>' +
-          '<p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">98 76 54 32 10</span></p>' +
-          '<p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">' + card.address + '</span></p>' +
-          '<p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">' + card.equipment + '</span></p>' +
-        '</div>' +
+        '<div class="mt-3 pt-1">';
+          if ( card.travellertype ) html +=
+              '<p class="travellertype"><strong>' + card.travellertype + '</strong></p>';
+          if ( card.phone ) html +=
+              '<p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">' + card.phone + '</span></p>';
+          if ( card.address ) html +=
+              '<p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">' + card.address + '</span></p>';
+          if ( card.equipment ) html +=
+              '<p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">' + card.equipment + '</span></p>';
+        html += '</div>' +
         '<div class="d-flex gap-1 pt-2 trash-edit-box">' +
           '<div class="edit-trash" style="display:none">' +
             '<div class="event-edit" style="display: block;">' +
@@ -1766,7 +1779,7 @@ $("#showTravellerButton").on("click", function (e) {  // Traveller button
 
 $("#showTravellerButton").trigger("click");  // show traveller display on startup
 
-///// card edit-trash show-hide, trash record, edit record
+//////////// card edit-trash show-hide, trash record, edit record ////////////////
 $("#travellerCards").on("click", function(e) {
 
   //  trash click
@@ -1776,7 +1789,16 @@ $("#travellerCards").on("click", function(e) {
     $.ajax({
       url: 'traveller_delete.php',
       type:'post',
-      data: {'clientid': trashClick.attr("data-clientid")}
+      data: {'clientid': trashClick.attr("data-clientid")},
+      complete: function(xhr, result) {
+        if (result != 'success') {
+          console.log("Error deleting traveller from database");
+        }
+        else {
+          console.log("Success deleting taveller from database");
+          iniContactBook();
+        }
+      }
     });
     return;
   }
@@ -1785,7 +1807,7 @@ $("#travellerCards").on("click", function(e) {
   let editClick = $(e.target).closest(".edit");
   if ( editClick.get(0) ) { // edit click
     console.log("edit");
-    editTravellerModal(editClick.attr("data-clientid"));
+    editTravellerModalLoad(editClick.attr("data-clientid"));
     $("#travellerModal").modal("show");
     return;
   }
@@ -1801,14 +1823,14 @@ $("#travellerCards").on("click", function(e) {
   }
 });
 
-///////////////////////////////////////////// create new traveller
+///////////////////////////////////////////// create or edit new traveller
 $("#travellerPlus").on("click", function(e) {
   clearTravellerModal();
   $("#travellerModal").modal("show");
 });
 
 $("#newTravellerOK").on("click", function(e) {
-  buildTravellerFromModal();
+  buildEditTravellerFromModal($("#travellerModal").attr("data-client-id"));
   $("#travellerModal").modal("hide");
 });
 
