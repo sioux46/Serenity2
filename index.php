@@ -29,6 +29,9 @@
   <script src="https://kit.fontawesome.com/22ad4831d8.js" crossorigin="anonymous"></script>
   <!-- google icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- resizeImg -->
+  <script src="jquery.resizeImg.js"></script>
+  <script src="mobileBUGFix.js"></script>
   <!-- -->
   <script src="data.js"></script>
   <script src="index.js"></script>
@@ -260,7 +263,7 @@
     <!--                                                     -->
     <!--    travellerModal  create or edit traveller         -->
     <!--                                                     -->
-      <div id="travellerModal" data-client-id= "" class="modal fade" tabindex="-1">
+      <div id="travellerModal" data-client-id= "" class="modal fade" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -270,7 +273,7 @@
             <div class="modal-body">
               <div>
                 <label for="imgFromDiskInput" class="form-label">
-                  <img id="imgFromDisk" src="icons/person-fill.svg" width="90" class="avatar-md rounded-circle img-thumbnail">
+                  <img id="imgFromDisk" src="icons/person-fill.svg" width="90" class="avatar-md style="border-radius:0!important" img-thumbnail">
                 </label>
                 <input id="imgFromDiskInput" type="file" style="opacity:0">
 

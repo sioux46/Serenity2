@@ -166,18 +166,29 @@ function buildEditTravellerFromModal(clientid) {
   });
 }
 
-/////                     Build card html
+/////                                   rezise image
+function resizeImage(img, width, height) {
+    var canvas = document.createElement('canvas');
+    var context = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+    context.drawImage(img, 0, 0, width, height);
+    img.src = canvas.toDataURL('image/png');
+}
+
+/////                                  Build card html
 function buildCardHtml(card) {
   let html;
 
-  html = '<div class="col-sm-6 col-md-4 col-lg-3 cmb-1">' +
+  html = '<div class="col-sm-6 col-md-4 col-xl-3 cmb-1">' +
     '<div class="card mb-3">' +
       '<div class="card-body pb-2">' +
         '<div class="d-flex align-items-top">' +
+  //        '<div>' +
           '<div>';
             if ( card.imgsrc ) html += '<img src="' + card.imgsrc + '"';
             else html += '<img src="icons/person-fill.svg"';
-            html += '" width="90" class="avatar-md rounded-circle img-thumbnail" />';
+            html += '" width="160" class="avatar-md img-thumbnail" style="border-radius:0!important" />';
 
           html += '</div>' +
           '<div class="flex-1 ms-3">' +
@@ -1764,7 +1775,7 @@ $("#speakerButton").on("click", function (ev) {
   setTimeout( function() { console.log(audioState()); }, 500);
 });
 
-///////////////////////////////////////////////////////////////////// P A R A M   P A G E
+/////////////////////////////////////////////////////////////////////         P A R A M   P A G E
 //----------------------------------------------------  toggle param buttons
 // Toggle between multiple subpages of param page with class .param-subpage
 //
@@ -1838,23 +1849,54 @@ $("#travellerPlus").on("click", function(e) {
   clearTravellerModal();
   $("#travellerModal").modal("show");
 });
-
+/////////////////////////////////////////////   OK travellerModal
 $("#newTravellerOK").on("click", function(e) {
   buildEditTravellerFromModal($("#travellerModal").attr("data-client-id"));
   $("#travellerModal").modal("hide");
 });
 
-/////   edit photo
-$("#travellerModal").find("#imgFromDiskInput").on("change", function (e) {
-  let file = e.target.files[0];
-  if ( !file || (!file.type.match(/image.*/)) ) return;
+////////////////////////////////////////////
 
-  const reader = new FileReader();
-  reader.addEventListener('loadend', () => {
-    $("#imgFromDisk").attr("src", reader.result);
-  });
-  reader.readAsDataURL(event.target.files[0]);
+//$("#travellerModal").find("#imgFromDiskInput").on("change", function (e) {
+//  let file = e.target.files[0];
+//  if ( !file || (!file.type.match(/image.*/)) ) return;
+
+//  const reader = new FileReader();
+//  reader.addEventListener('loadend', () => {
+//    $("#imgFromDisk").attr("src", reader.result);
+//  });
+//  reader.readAsDataURL(event.target.files[0]);
+//});
+
+////////////////////////////////////////// choose photo & resize
+$("#imgFromDiskInput").resizeImg({
+  mode: 1,
+  val: 400, // px
 });
+
+$("#imgFromDiskInput").resizeImg({
+  type:"image/png"
+});
+
+$("#imgFromDiskInput").resizeImg({
+  capture:true
+});
+
+$("#imgFromDiskInput").resizeImg({
+quality: 0.8// 80%
+});
+
+$("#imgFromDiskInput").resizeImg({
+  before:function(file) {
+    console.log("kiki");
+  },
+  callback:function(result) {
+    console.log("coucou");
+    $("#imgFromDisk").attr("src", result);
+  }
+});
+
+
 
 
 ///////////////////////////////////////////////  ontoTree OFFCANVAS /////
