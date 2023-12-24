@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.23.1";
+var devaVersion = "v3.12.24.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -180,11 +180,10 @@ function resizeImage(img, width, height) {
 function buildCardHtml(card) {
   let html;
 
-  html = '<div class="col-sm-6 col-md-4 col-xl-3 cmb-1">' +
+  html = '<div class="col-sm-6 col-md-4 col-lg-3 cmb-1">' +
     '<div class="card mb-3">' +
       '<div class="card-body pb-2">' +
         '<div class="d-flex align-items-top">' +
-  //        '<div>' +
           '<div>';
             if ( card.imgsrc ) html += '<img src="' + card.imgsrc + '"';
             else html += '<img src="icons/person-fill.svg"';
@@ -211,14 +210,14 @@ function buildCardHtml(card) {
         html += '</div>' +
         '<div class="d-flex gap-1 pt-2 trash-edit-box">' +
           '<div class="edit-trash" style="display:none">' +
-            '<div class="event-edit" style="display: block;">' +
-              '<button class="btn edit" data-clientid="' + card.clientid + '" type="button">' +
-                '<img src="icons/pencil.svg" width="26">' +
-              '</button>' +
-            '</div>' +
             '<div class="event-trash" style="display: block;">' +
               '<button class="btn trash" data-clientid="' + card.clientid + '" type="button">' +
                 '<img src="icons/trash.svg" width="26">' +
+              '</button>' +
+            '</div>' +
+            '<div class="event-edit" style="display: block;">' +
+              '<button class="btn edit" data-clientid="' + card.clientid + '" type="button">' +
+                '<img src="icons/pencil.svg" width="26">' +
               '</button>' +
             '</div>' +
           '</div>' +
@@ -403,15 +402,63 @@ function initOntoTreeChoose(label, move, labs) {
   }
 }
 
-////////////////////////    C A L E N D A R    Functions
+//////////////////////////////////////////////    C A L E N D A R    Functions
 
-// click trash
+/////     save evoCalEvents to local storage and to database
+function saveEvoCalEvents() {
+  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  writeCalToDatabase();
+}
+
+/////     write evoCalEvents to database
+function writeCalToDatabase() {
+  $.ajax({
+    url: "calendar_write.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "evoCalEvents": localStorage.getItem('eventList')
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error writing evoCalEvents to database");
+      }
+      else {
+        console.log("Success writing evoCalEvents to database");
+        var reponse = xhr.responseText;
+        //reponse = JSON.parse(reponse);
+      }
+    }
+  });
+}
+
+/////     read evoCalEvents from database
+function readCalFromDatabase() {
+  $.ajax({
+    url: "calendar_read.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading evoCalEvents from database");
+      }
+      else {
+        console.log("Success reading evoCalEvents from database");
+        evoCalEvents = JSON.parse(JSON.parse(xhr.responseText));
+      }
+    }
+  });
+}
+
+///// click trash
 function trashClick() {
   flagEditTrash = "trash";
   postChatBuffer = [];  // forget recent chat
 }
 
-// click edit
+///// click edit
 function editClick() {
   flagEditTrash = "edit";
   postChatBuffer = [];  // forget recent chat
@@ -422,10 +469,10 @@ function globalSortCalendarEvents() {
   for ( let event of evoCalEvents ) {
     sortCalendarEvents(event.date);
   }
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  saveEvoCalEvents();
 }
 
-////
+/////
 function sortCalendarEvents(date) {
   let eventIndex = [];
   let eventRank = 0;
@@ -447,10 +494,10 @@ function sortCalendarEvents(date) {
       evoCalEvents[eventIndex[i-1]] = newEvent;
     }
   }
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  saveEvoCalEvents();
 }
 
-////
+/////
 function date1CompareDate2(date1, date2) {
 
   // let today = actualDateToEvoDate("today");
@@ -490,7 +537,7 @@ function clearEventModal() {                // clear cal fields
 ////
 function clearCalendar() {
   evoCalEvents = [];
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  saveEvoCalEvents();
   evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
   window.location = window.location.href;
 }
@@ -552,7 +599,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
   // erasing evoCalEvents
   while ( evoCalEvents.length ) {
     $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
   }
 
   // agenda non vide
@@ -611,14 +658,13 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
 
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
-      // localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
 
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
 
     refreshDateDisplay(date); // select the agenda date of the modified event
     globalSortCalendarEvents();
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
 
 
   } catch(e) {
@@ -628,14 +674,14 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
     // erasing evoCalEvents
     while ( evoCalEvents.length ) {
       $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      saveEvoCalEvents();
     }
 
     // restoring evoCalEvents
     for ( let event of evoCalEvents_OLD ) {
       console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
       addCalEvent(event.name, event.description, event.date);
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      saveEvoCalEvents();
     }
   }
 
@@ -663,7 +709,7 @@ function addModifiedEvent(reponse) {
     description = rep.match(/ - (.*)/)[1];
 
     addCalEvent(time, description, date);
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
 
   } catch(e) {
     console.log("Mauvais format réponse serviceCall");
@@ -739,7 +785,7 @@ function addCalEvent(time, description, date) {
 
     // sortCalendarEvents( date );
     globalSortCalendarEvents();
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
     return true;
 }
 
@@ -1116,7 +1162,7 @@ function handleResponse(reponse) {
       if ( !addCalEvent(time, description, dateForEvo) ) return;
       // sortCalendarEvents( dateForEvo );
       globalSortCalendarEvents();
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      saveEvoCalEvents();
       //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       //calendar.selectDate( dateForEvo );
       refreshDateDisplay(dateForEvo);
@@ -1128,13 +1174,13 @@ function handleResponse(reponse) {
         if ( event.date != dateForEvo ) continue;
         if ( event.name.match(RegExp(time)) ) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
-          localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+          saveEvoCalEvents();
 
           refreshDateDisplay(dateForEvo);
           break;
         }
       }
-      localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+      saveEvoCalEvents();
     }
 
     ///////////////////////////////////////////////// FIN ACTION
@@ -1879,7 +1925,7 @@ $("#imgFromDiskInput").resizeImg({
 });
 
 $("#imgFromDiskInput").resizeImg({
-  capture:true
+  capture:false
 });
 
 $("#imgFromDiskInput").resizeImg({
@@ -2091,7 +2137,7 @@ if ( !evoCalEvents.length ) {
   addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
 }
 
-localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+saveEvoCalEvents();
 
 ///////////// manage/hide togglers
 $(".calendar-table th").on("click", function(e) {
@@ -2164,7 +2210,7 @@ $("#evoCalendar").on('selectEvent',function(activeEvent) {
     $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
     calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
     calendar.selectDate( event.date );
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
     flagEditTrash = "";
     return;
   }
@@ -2205,7 +2251,7 @@ $("#evoCalendar").on('selectDate',function(newDate, oldDate) {
 
   // console.log(activeDate);
   globalSortCalendarEvents();
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  saveEvoCalEvents();
   $("#evoCalendar").evoCalendar('toggleEventList',true);
 });
 
@@ -2270,7 +2316,7 @@ $("#newEventOK").on("click", function (ev) {
     }
     // sortCalendarEvents(calendar.$active.date);
     globalSortCalendarEvents();
-    localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+    saveEvoCalEvents();
     flagEditTrash = "";
     postChatBuffer = [];  // forget recent chat
   }
@@ -2299,7 +2345,7 @@ $("#newEventOK").on("click", function (ev) {
   //calendar.selectDate( activeDate );
   refreshDateDisplay(activeDate);
 
-  localStorage.setItem('eventList', JSON.stringify(evoCalEvents));
+  saveEvoCalEvents();
 });
 
 /////

@@ -3,7 +3,7 @@ require_once("connectMySql.php");
 $base=connect();
 //
 $username = $_POST['username'];
-$query = "SELECT * FROM traveller WHERE `username` = '$username' ORDER BY `lastname`";
+$query = "SELECT `calendar` FROM evoCalEvents WHERE `username` = '$username'";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) {
@@ -14,6 +14,7 @@ if ( $base->errno == 0 ) {
   $array = arrayResult($result, 0);  // sans les noms de col.
   $json = json_encode($array);
   echo $json;
+  //echo $array;
 }
 else {
   $reponse = $base->errno . ' '. $base->error . ' erreur!!! ' . $query;
@@ -48,22 +49,3 @@ function arrayResult($result, $colTitles) {
 	}
 	return($tab);
 }
-//*********************************************************************************************
-function arrayToCsvFile($tab, $fileName) {
-	if ($f = @fopen($fileName, 'w')) {
-		flock($f, LOCK_SH);
-		for ($i = 0; $i < count($tab); $i++) {
-			fputcsv($f, $tab[$i]);  // à rétablir à la place du patch
-			// patch pour STROOP
-			//if ( $i == 9 ) fputcsv($f, strtoupper($tab[$i]));
-			//else fputcsv($f, $tab[$i]);
-		}
-		flock($f, LOCK_UN);
-		fclose($f);
-	}
-	else {
-		echo "Impossible d'acc&eacute;der au fichier" . $fileName . ".";
-	}
-}
-
-?>
