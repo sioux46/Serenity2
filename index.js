@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.24.1";
+var devaVersion = "v3.12.24.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -187,20 +187,20 @@ function buildCardHtml(card) {
           '<div>';
             if ( card.imgsrc ) html += '<img src="' + card.imgsrc + '"';
             else html += '<img src="icons/person-fill.svg"';
-            html += '" width="160" class="avatar-md img-thumbnail" style="border-radius:0!important" />';
+            html += '" width="200" class="avatar-md img-thumbnail" style="border-radius:0!important" />';
 
           html += '</div>' +
           '<div class="flex-1 ms-3">' +
-            '<h5 class="mb-1">' +
-              '<div class="text-dark"><strong>' + card.lastname + '</strong></div>' +
-              '<div class="text-dark"><strong>' + card.firstname + '</strong></div>';
-              if ( card.nickname ) html += '<div class="text-dark">' + `"` + card.nickname + `"` + '</div>';
-            html += '</h5>' +
+            '<h6 class="mb-1">' +
+              '<div class="text-dark mb-1"><strong>' + card.lastname + '</strong></div>' +
+              '<div class="text-dark mb-3">' + card.firstname + '</div>';
+              if ( card.nickname ) html += '<div style="color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
+            html += '</h6>' +
           '</div>' +
         '</div>' +
         '<div class="mt-3 pt-1">';
           if ( card.travellertype ) html +=
-              '<p class="travellertype"><strong>' + card.travellertype + '</strong></p>';
+              '<h6 class="travellertype"  style="color:#518f97;"><strong>' + card.travellertype + '</strong></h6>';
           if ( card.phone ) html +=
               '<p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">' + card.phone + '</span></p>';
           if ( card.address ) html +=
