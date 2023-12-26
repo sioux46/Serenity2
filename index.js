@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.25.1";
+var devaVersion = "v3.12.26.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -34,7 +34,6 @@ class Car {
   }
 }
 
-
 /*
 person1 = new traveller("Pierre", "Durand", 0673232630);
 car2 = new Car("Toyota", "Corolla", 2020);
@@ -46,10 +45,113 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////  traveller
+/////  V E R I F I C A T I O N  baseUserName
+function verifBaseUserName(baseUserName) {
+  if ( baseUserName ) {
+    $.ajax({
+      url: 'get_user_name.php',
+      type: 'post',
+      data: { 'baseUserName': baseUserName },
+      complete: function(xhr, result) {
+        if (result != 'success') {
+          window.alert("Erreur réseau. Fermez l'appli et essayez à nouveau.");
+        }
+        else {
+          if ( xhr.responseText == "OK" ) {
+            localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
 
+            initContactBook();
+            readCalFromDatabase();
+            readSettingListFromDatabase();
+
+            $("#singleInputModal input").val("");
+            $("#singleInputModal").modal("hide");
+            $("#start").css({"display": "block"}); // show start page
+
+
+            /////       C O N N E C T I O N  count
+            var agent;
+            try {
+              agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
+              if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
+              agent = agent.replace(/Mozilla\/5\.0 /,"");
+              agent = agent.replace(/\(KHTML, like Gecko\)/,"");
+              agent = agent.replace(/; Win64; x64/,"");
+              agent = agent.replace(/Macintosh; Intel Mac /,"");
+              agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
+
+              if ( !agent ) agent = window.navigator.vendor;
+            } catch (e) {}
+
+            $.ajax({
+              url: 'connection_count.php',
+              type:'post',
+              data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
+            });
+            /////
+          }
+          else {
+            localStorage.removeItem("baseUserName");
+            window.location = window.location.href;
+          }
+        }
+      }
+    });
+  }
+  else window.location = window.location.href;
+}
+
+///////////////////////////////////////  settings
+
+/////     write settinglist to database
+function writeSettingListToDatabase() {
+  $.ajax({
+    url: "setting_write.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "setting": JSON.stringify(settinglist)
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error writing settinglist to database");
+      }
+      else {
+        console.log("Success writing settinglist to database");
+        var reponse = xhr.responseText;
+        //reponse = JSON.parse(reponse);
+      }
+    }
+  });
+}
+
+/////     read settinglist from database
+function readSettingListFromDatabase() {
+  $.ajax({
+    url: "setting_read.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading settinglist from database");
+      }
+      else {
+        console.log("Success reading settinglist from database");
+        if ( xhr.responseText != "empty" )
+              settinglist = JSON.parse(JSON.parse(xhr.responseText));
+        initSettingList();
+      }
+    }
+  });
+}
+
+
+
+///////////////////////////////////////  traveller
 /////
-function iniContactBook() {
+function initContactBook() {
   $.ajax({
     url: "travellerReadAll.php",
     type: "post",
@@ -187,14 +289,14 @@ function buildCardHtml(card) {
           '<div>';
             if ( card.imgsrc ) html += '<img src="' + card.imgsrc + '"';
             else html += '<img src="icons/person-fill.svg"';
-            html += '" width="200" class="avatar-md img-thumbnail" style="border-radius:0!important" />';
+            html += '" width="100" class="avatar-md img-thumbnail" style="border-radius:0!important" />';
 
           html += '</div>' +
           '<div class="flex-1 ms-3">' +
             '<h6 class="mb-1">' +
               '<div class="text-dark mb-1"><strong>' + card.lastname + '</strong></div>' +
-              '<div class="text-dark mb-3">' + card.firstname + '</div>';
-              if ( card.nickname ) html += '<div style="color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
+              '<div class="text-dark mb-2">' + card.firstname + '</div>';
+              if ( card.nickname ) html += '<div style="font-size:1.2rem; color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
             html += '</h6>' +
           '</div>' +
         '</div>' +
@@ -404,7 +506,7 @@ function initOntoTreeChoose(label, move, labs) {
 
 //////////////////////////////////////////////    C A L E N D A R    Functions ////
 
-/////                             initCalendar
+/////                      DEB   INITCALENDAR()
 function initCalendar() {
 
   $('#evoCalendar').evoCalendar({
@@ -603,6 +705,8 @@ function initCalendar() {
     saveEvoCalEvents();
   });
 }
+///////////////////////////////////////////////  FIN  INITCALENDAR()
+/////////////////////////////////////////////////////////////////////
 
 /////     save evoCalEvents to database
 function saveEvoCalEvents() {
@@ -616,7 +720,6 @@ function writeCalToDatabase() {
     type: "post",
     data: {
       "username": JSON.parse(localStorage.getItem('baseUserName')),
-      // "evoCalEvents": localStorage.getItem('eventList')
       "evoCalEvents": JSON.stringify(evoCalEvents)
     },
     complete: function(xhr, result) {
@@ -897,30 +1000,6 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
 
 }
 
-/*   NOT USED
-/////
-function addModifiedEvent(reponse) {
-  let rep = reponse;
-  let time = "";
-  let description = "";
-  let date ="";
-
-  try {
-    date = rep.match(/(\d{2})\/(\d{2})\/(\d{4})/)[0];
-    // date = date[2] + "/" + date[1] + "/" + date[3];
-
-    time = rep.match(/\d{2}h\d{2}/)[0];
-    description = rep.match(/ - (.*)/)[1];
-
-    addCalEvent(time, description, date);
-    saveEvoCalEvents();
-
-  } catch(e) {
-    console.log("Mauvais format réponse serviceCall");
-  }
-}
-*/
-
 ////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////  E V E N T   STUFF
 ///////////////////////////////////////////////////
@@ -1114,18 +1193,6 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
       }
       response = "OK";
     }
-
-    /*
-    else if ( question.match(/paramètre/i) ) {
-      $("#startButton").trigger("click"); $("#paramButton").trigger("click");
-      response = "OK";
-    }
-    else if ( question.match(/voyage/i) ) {
-      $("#startButton").trigger("click"); $("#voyageButton").trigger("click");
-      response = "OK";
-    }
-    */
-
   }
 
   //--------------------------------  if response
@@ -1886,9 +1953,10 @@ function textTimeToNumTime(text) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// **************************************************************************************
-// **********************************************************************
-// ************************************************************************** R E A D Y
+// ****************************************************************************************
+// ****************************************************************************************
+// **************************************************************************     R E A D Y
+
 $(document).ready(function () {
 
 //////////////////
@@ -1903,62 +1971,20 @@ if (!window.location.origin.match(/paris8/) ) {
     $("#singleInputModal").modal("show");
   }
   else {
-    $("#start").css({"display": "block"});  // show start page
 
-    iniContactBook();
-    readCalFromDatabase();
+  //  $("#start").css({"display": "block"});  // show start page
+
+  //  initContactBook();
+  //  readCalFromDatabase();
+
+    verifBaseUserName(baseUserName);
   }
 }
 
 ////// V E R I F I C A T I O N  baseUserName
 $("#singleInputModalOK").on("click", function(e) {
   let baseUserName = $("#singleInputModal input").val();
-  if ( baseUserName ) {
-    $.ajax({
-      url: 'get_user_name.php',
-      type: 'post',
-      data: { 'baseUserName': baseUserName },
-      complete: function(xhr, result) {
-        if (result != 'success') {
-          window.alert("Erreur réseau. Fermez l'appli et essayez à nouveau.");
-        }
-        else {
-          if ( xhr.responseText == "OK" ) {
-            localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
-
-            iniContactBook();
-            readCalFromDatabase();
-
-            $("#singleInputModal input").val("");
-            $("#singleInputModal").modal("hide");
-            $("#start").css({"display": "block"}); // show start page
-
-
-            /////       C O N N E C T I O N  count
-            var agent;
-            try {
-              agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
-              if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
-              agent = agent.replace(/Mozilla\/5\.0 /,"");
-              agent = agent.replace(/\(KHTML, like Gecko\)/,"");
-              agent = agent.replace(/; Win64; x64/,"");
-              agent = agent.replace(/Macintosh; Intel Mac /,"");
-              agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
-
-              if ( !agent ) agent = window.navigator.vendor;
-            } catch (e) {}
-
-            $.ajax({
-              url: 'connection_count.php',
-              type:'post',
-              data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
-            });
-            /////
-          }
-        }
-      }
-    });
-  }
+  verifBaseUserName(baseUserName);
 });
 
 /////////////////////////////////////////////////////////
@@ -2073,7 +2099,7 @@ $("#travellerCards").on("click", function(e) {
         }
         else {
           console.log("Success deleting taveller from database");
-          iniContactBook();
+          initContactBook();
         }
       }
     });
@@ -2111,8 +2137,7 @@ $("#newTravellerOK").on("click", function(e) {
   $("#travellerModal").modal("hide");
 });
 
-////////////////////////////////////////////
-
+////////////////////////////////////////////       READER without plugin
 //$("#travellerModal").find("#imgFromDiskInput").on("change", function (e) {
 //  let file = e.target.files[0];
 //  if ( !file || (!file.type.match(/image.*/)) ) return;
@@ -2162,7 +2187,7 @@ $("#ontoTreeButton").on("click", function(e) {
 });
 
 
-///////////////////////////////////////////////  chatParam OFFCANVAS /////
+///////////////////////////////////////////////  chatParam OFFCANVAS  (settinglist) /////
 
 $("#paramOffcanvasButton").on("click", function(e) {
   $("#chatParamUserName").val(userName);
@@ -2308,80 +2333,6 @@ $("#ontoTree-title").on("click", function (ev) {
   initOntoTreeChoose(node[2], "down");
 });
 
-/////////////////////////////////////////////////////////   CONTACT BOOK
-/////////////////              init contactBook
-
-
-////////////////////////////////////////////////////////////////   EVO CALENDAR   /////
-/////////////////               init evoCalendar
-
-// if ( localStorage.eventList ) {
-//  evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
-// }
-
-//if ( !evoCalEvents ) evoCalEvents = [];
-/*
-$('#evoCalendar').evoCalendar({
-  calendarEvents: evoCalEvents,
-  language:'fr',
-  todayHighlight: true,
-  firstDayOfWeek: 1, // Monday
-  sidebarToggler:false,
-  sidebarDisplayDefault: false,
-  eventListToggler: false,
-  eventDisplayDefault: true,
-  titleFormat:"MM yyyy",
-  eventHeaderFormat:"d MM yyyy",
-});
-
-calendar = $('#evoCalendar').get(0).evoCalendar;
-*/
-
-// readCalFromDatabase();
-
-
-
-
-// removeBeforeCalEvents(evoCalEvents);
-
-/*
-if ( !evoCalEvents.length ) {
-  //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
-  addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
-  addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
-  addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-  addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
-  addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
-  addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
-}
-
-saveEvoCalEvents();
-*/
-
-/*
-///////////// manage/hide togglers
-$(".calendar-table th").on("click", function(e) {
-  $("#evoCalendar").evoCalendar('toggleSidebar');
-});
-
-// disable toggler buttons
-$("#sidebarToggler").css("display","none");
-$("#eventListToggler").css("display","none");
-
-$(".calendar-year").css({"padding-top": "15px", "padding-bottom": "5px"});
-
-$('#evoCalendar').evoCalendar('toggleEventList', true); // show eventList on startup
-
-///////////  hide trash on unsel event
-$(".calendar-inner, .calendar-sidebar, #sidebarToggler, #eventListToggler").on("click", function (ev) {
-  $(".event-trash, .event-edit").css("display", "none");
-});
-
-$(".calendar-year").find("p").on("click", function (e) {
-  $('#evoCalendar').evoCalendar('toggleSidebar');
-});
-*/
-
 //////////   same as typing "clear" in prompt
 $("#devaVersion").on("click", function (e) {
   $("#start").css("opacity", 0.1);
@@ -2421,159 +2372,6 @@ $(".month").on("click", function(e) {
   // if portrait mode
   if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
 });
-
-/*
-//////////////////////////////////////////////////   selectEvent + edit or trash event
-$("#evoCalendar").on('selectEvent',function(activeEvent) {
-
-  let event = activeEvent.handleObj.handler.arguments[1];
-
-  if ( flagEditTrash == "trash") {                          // trash event
-    $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
-    calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
-    calendar.selectDate( event.date );
-    saveEvoCalEvents();
-    flagEditTrash = "";
-    return;
-  }
-
-  if ( flagEditTrash == "edit" ) { //     SHOW eventModal     // edit event
-    $("#eventModal").find(".modal-title").text("Modification de l'évènement");
-    $("#eventModal").attr("data-event-id", event.id); // save event ID in data attr
-
-    clearEventModal();
-
-    //        feel modal with event description
-    $("#eventModal").find("#sEventTitle").val(event.description); // title/description
-
-    let splitTime12 = event.name.split(' à ');   // time/name
-
-    let splitTime1 = splitTime12[0].split('h');
-    let time = `${splitTime1[0]}:${splitTime1[1]}`;
-    $("#eventModal").find("#sEventTime").val(time);
-
-    if ( splitTime12[1] ) {
-      let splitTime2 = splitTime12[1].split('h');
-      let time = `${splitTime2[0]}:${splitTime2[1]}`;
-      $("#eventModal").find("#sEventTime2").val(time);
-    }
-
-    $("#eventModal").modal("show");
-  }
-
-  $(".event-container").children(".event-info").children(".event-trash, .event-edit").css("display", "none");
-  $(".event-container:hover").children(".event-info").children(".event-trash, .event-edit").css("display", "block");
-
-});
-*/
-
-/*
-////////////////////////////////////////////////////////    on selectDate
-$("#evoCalendar").on('selectDate',function(newDate, oldDate) {
-  //console.log(($('#evoCalendar').get(0).evoCalendar.$current.date));
-  let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
-
-  // console.log(activeDate);
-  globalSortCalendarEvents();
-  saveEvoCalEvents();
-  $("#evoCalendar").evoCalendar('toggleEventList',true);
-});
-*/
-
-/*
-/////////////////////////////////////////////////////////////////////    create new event
-                                                    //  or update old event
-
-///// show eventModal                     ADD NEW EVENT
-$(".event-plus").on("click", function (ev) {
-  clearEventModal();
-  let hours = new Date().getHours();
-  let minutes = new Date().getMinutes();
-//  $("#eventModal").find("#sEventTime").val(`${hours}:${minutes}`);
-
-  $("#eventModal").find(".modal-title").text("Nouvel évènement");
-  $("#eventModal").modal("show");
-});
-
-/////                                                READ eventModal
-$("#newEventOK").on("click", function (ev) {
-
-  let title = $("#eventModal").find("#sEventTitle").val(); // title/description
-  let val = $("#sEventTime").val();
-  let val2 = $("#sEventTime2").val();
-
-  if ( !val ) val = "12:00";
-
-  if ( !title ) title = "Motif à déterminer";
-
-  if ( val2  &&  val2 < val ) {
-    $("#sEventTime2").val(val);
-    return;
-  }
-  if ( !val && val2 ) {
-    $("#sEventTime").val(val2);
-    return;
-  }
-  if ( !val && !val2 && !title ) return;
-
-  // let time = $("#eventModal").find("#sEventTime").val();
-  let time = val;
-
-  let splitTime = time.split(':');
-  time = `${splitTime[0]}h${splitTime[1]}`;
-
-  // let time2 = $("#eventModal").find("#sEventTime2").val();
-  time2 = val2;
-
-  if ( time2 ) {
-    splitTime = time2.split(':');
-    time2 = `${splitTime[0]}h${splitTime[1]}`;
-    time += ` à ${time2}`;
-  }
-
-  if ( flagEditTrash == "edit") {  // update event
-    let eventId = $("#eventModal").attr("data-event-id");
-
-    for ( let event of evoCalEvents ) {
-      if ( event.id == eventId ) {
-        event.description = title;   // title/description;
-        event.name = time;   // name/time;
-      }
-    }
-    // sortCalendarEvents(calendar.$active.date);
-    globalSortCalendarEvents();
-    saveEvoCalEvents();
-    flagEditTrash = "";
-    postChatBuffer = [];  // forget recent chat
-  }
-
-  else {    // new event
-    if ( time == "hundefined" ) time = "";
-    $("#evoCalendar").evoCalendar('addCalendarEvent', [
-      {
-        id: '' + Math.random(),
-        name: time,                 // time/name
-        description: title,
-        date: calendar.$active.event_date,
-        type: "event",
-        color: "#009099", // "#fe7f78",
-      }
-    ]);
-    postChatBuffer = [];  // forget recent chat
-  }
-
-  $("#eventModal").modal("hide");   // HIDE MODAL
-
-  let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
-  // sortCalendarEvents( activeDate );
-  globalSortCalendarEvents();
-  //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-  //calendar.selectDate( activeDate );
-  refreshDateDisplay(activeDate);
-
-  saveEvoCalEvents();
-});
-*/
 
 /////
 $("#sEventTime, #sEventTime2").on("click", function (ev) {
@@ -2652,6 +2450,8 @@ var assistantName;
 var responseStyle;
 // var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars"
 var responseDetail;
+//                        Settings list
+var settinglist = [];
 
 if ( localStorage.responseStyle ) {
   responseStyle = JSON.parse(localStorage.getItem('responseStyle'));
