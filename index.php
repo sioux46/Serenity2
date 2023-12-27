@@ -71,7 +71,7 @@
           <div id="voyageText" class="container form-floating d-grid gap-2">
             <div><strong>Historique du dialogue:</strong></div>
             <textarea id="logTextarea" autofocus class="form-control"></textarea>
-            <button id="logButton" class="btn" type="button">
+            <button id="clearLogButton" class="btn" type="button">
               <img src="icons/trash.svg" width=30>
             </button>
             <div><strong>Vous avez la parole:</strong></div>
@@ -208,7 +208,7 @@
                 <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
               </div>
               <div class="mt-4">
-                <button id="chatParamChangeUserButton" type="button" class="btn btn-light" >Changer d'identifiant</button>
+                <button id="chatParamChangeUserButton" type="button" class="btn btn-light" style="float:right;" >Changer d'identifiant</button>
               </div>
             </div>
           </div>

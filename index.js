@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.26.1";
+var devaVersion = "v3.12.27.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -103,6 +103,19 @@ function verifBaseUserName(baseUserName) {
 
 ///////////////////////////////////////  settings
 
+/////     init settinglist
+function initSettingList() {
+  console.log("initSettinglist");
+
+  settinglist.responseStyle = " ";
+  settinglist.responseDetail = " de façon concise ";
+  settinglist.userName = "Monsieur";
+  settinglist.assistantName = "Deva";
+  settinglist.reponseTemperature = 0.7;
+  settinglist.speechRate = 1.2;
+  settinglist.speechPitch = 2;
+}
+
 /////     write settinglist to database
 function writeSettingListToDatabase() {
   $.ajax({
@@ -141,7 +154,7 @@ function readSettingListFromDatabase() {
         console.log("Success reading settinglist from database");
         if ( xhr.responseText != "empty" )
               settinglist = JSON.parse(JSON.parse(xhr.responseText));
-        initSettingList();
+        else  initSettingList();
       }
     }
   });
@@ -262,7 +275,7 @@ function buildEditTravellerFromModal(clientid) {
       else {
         console.log("Success writing taveller to database");
         // contactBook.push(newTraveller);
-        iniContactBook();
+        initContactBook();
       }
     }
   });
@@ -293,14 +306,14 @@ function buildCardHtml(card) {
 
           html += '</div>' +
           '<div class="flex-1 ms-3">' +
-            '<h6 class="mb-1">' +
-              '<div class="text-dark mb-1"><strong>' + card.lastname + '</strong></div>' +
-              '<div class="text-dark mb-2">' + card.firstname + '</div>';
-              if ( card.nickname ) html += '<div style="font-size:1.2rem; color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
+            '<h6 class="mb-1">';
+              if ( card.nickname ) html += '<div class="mb-1" style="font-size:1.3rem; color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
+              html += '<div class="text-dark mb-1"><strong>' + card.lastname + '</strong></div>' +
+              '<div class="text-dark">' + card.firstname + '</div>';
             html += '</h6>' +
           '</div>' +
         '</div>' +
-        '<div class="mt-3 pt-1">';
+        '<div class="mt-1 pt-1">';
           if ( card.travellertype ) html +=
               '<h6 class="travellertype"  style="color:#518f97;"><strong>' + card.travellertype + '</strong></h6>';
           if ( card.phone ) html +=
@@ -2189,14 +2202,18 @@ $("#ontoTreeButton").on("click", function(e) {
 
 ///////////////////////////////////////////////  chatParam OFFCANVAS  (settinglist) /////
 
-$("#paramOffcanvasButton").on("click", function(e) {
-  $("#chatParamUserName").val(userName);
-  $("#chatParamAssistantName").val(assistantName);
-  $("#chatParamStyle").val(responseStyle);
-  $("#chatParamDetail").val(responseDetail);
-  $("#chatParamTemperature").val(reponseTemperature);
-  $("#chatParamSpeechRate").val(speechRate);
-  $("#chatParamSpeechPitch").val(speechPitch);
+$("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas modal
+  $("#chatParamUserName").val(settinglist.userName);
+  $("#chatParamAssistantName").val(settinglist.assistantName);
+  $("#chatParamStyle").val(settinglist.responseStyle);
+  $("#chatParamDetail").val(settinglist.responseDetail);
+  $("#chatParamTemperature").val(settinglist.reponseTemperature);
+  $("#chatParamSpeechRate").val(settinglist.speechRate);
+  $("#chatParamSpeechPitch").val(settinglist.speechPitch);
+});
+
+$("#paramOffcanvas").on("hidden.bs.offcanvas", function(e) {
+  writeSettingListToDatabase();
 });
 
 $("#chatParamChangeUserButton").on("click", function(e) {
@@ -2206,55 +2223,47 @@ $("#chatParamChangeUserButton").on("click", function(e) {
 
 $("#chatParamUserName").on("change", function (e) {
   if ( userName != $("#chatParamUserName").val() ) {
-    $("#logButton").trigger("click");
+    $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
-  userName = $("#chatParamUserName").val();
-  localStorage.setItem('userName', JSON.stringify(userName));
+  settinglist.userName = $("#chatParamUserName").val();
 });
 
 $("#chatParamAssistantName").on("change", function (e) {
   if ( assistantName != $("#chatParamAssitantName").val() ) {
-    $("#logButton").trigger("click");
+    $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
-  assistantName = $("#chatParamAssistantName").val();
-  localStorage.setItem('assistantName', JSON.stringify(assistantName));
+  settinglist.assistantName = $("#chatParamAssistantName").val();
 });
 
 $("#chatParamStyle").on("change", function (e) {
-  responseStyle = $("#chatParamStyle").val();
-  localStorage.setItem('responseStyle', JSON.stringify(responseStyle));
+  settinglist.responseStyle = $("#chatParamStyle").val();
 });
 
 $("#chatParamDetail").on("change", function (e) {
-  responseDetail = $("#chatParamDetail").val();
-  localStorage.setItem('responseDetail', JSON.stringify(responseDetail));
+  settinglist.responseDetail = $("#chatParamDetail").val();
 });
 
 $("#chatParamTemperature").on("change", function (e) {
-  reponseTemperature = $("#chatParamTemperature").val();
-  localStorage.setItem('reponseTemperature', JSON.stringify(reponseTemperature));
+  settinglist.reponseTemperature = $("#chatParamTemperature").val();
 });
 
 $("#chatParamSpeechRate").on("change", function (e) {
-  speechRate = $("#chatParamSpeechRate").val();
-  localStorage.setItem('speechRate', JSON.stringify(speechRate));
+  settinglist.speechRate = $("#chatParamSpeechRate").val();
 });
 
 $("#chatParamSpeechPitch").on("change", function (e) {
-  speechPitch = $("#chatParamSpeechPitch").val();
-  localStorage.setItem('speechPitch', JSON.stringify(speechPitch));
+  settinglist.speechPitch = $("#chatParamSpeechPitch").val();
 });
 
 $("#questionButton").on("click", function(e) {
   let question = $("#questionTextarea").val();
   if ( question ) {
-    // fillLog("question", question);
     $("#questionTextarea").val("");
     questionAnalyse(question);
   }
 });
 
-$("#logButton").on("click", function(e) {
+$("#clearLogButton").on("click", function(e) { // clear textarea + newChat
   $("#logTextarea").val("");
   newChat = true;
 });
@@ -2451,39 +2460,4 @@ var responseStyle;
 // var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars"
 var responseDetail;
 //                        Settings list
-var settinglist = [];
-
-if ( localStorage.responseStyle ) {
-  responseStyle = JSON.parse(localStorage.getItem('responseStyle'));
-}
-else responseStyle = " ";
-
-if ( localStorage.responseDetail ) {
-  responseDetail = JSON.parse(localStorage.getItem('responseDetail'));
-}
-else responseDetail = " de façon concise ";
-
-if ( localStorage.userName ) {
-  userName = JSON.parse(localStorage.getItem('userName'));
-}
-else userName = "Monsieur";
-
-if ( localStorage.assistantName ) {
-  assistantName = JSON.parse(localStorage.getItem('assistantName'));
-}
-else assistantName = "Deva";
-
-if ( localStorage.reponseTemperature ) {
-  reponseTemperature = JSON.parse(localStorage.getItem('reponseTemperature'));
-}
-else reponseTemperature = 0.7;
-
-if ( localStorage.speechRate ) {
-  speechRate = JSON.parse(localStorage.getItem('speechRate'));
-}
-else speechRate = 1.1;
-
-if ( localStorage.speechPitch ) {
-  speechPitch = JSON.parse(localStorage.getItem('speechPitch'));
-}
-else speechPitch = 2;
+var settinglist = {};
