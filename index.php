@@ -140,15 +140,15 @@
       </div>
     </div>
 
-    <button id="paramOffcanvasButton" class="btn mt-3 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
+    <button id="paramOffcanvasButton" class="btn mt-4 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
       <img src="icons/list.svg" width=40>
     </button>
 
-    <button id="showCarButton" class="btn mt-3 ms-2 param-button" type="button">
+    <button id="showCarButton" class="btn mt-4 ms-2 param-button" type="button">
       <img src="icons/carBlue.svg" width="30">
     </button>
 
-    <button id="showTravellerButton" class="btn mt-3 ms-2 param-button" type="button">
+    <button id="showTravellerButton" class="btn mt-4 ms-2 param-button" type="button">
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
