@@ -323,25 +323,45 @@
           </div>
         </div>
       </div>
-  <!--                       -->
-  <!--   singleInputModal    -->
-  <!--                       -->
-    <div id="singleInputModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
-      <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Entrez votre identifiant:</h5>
-            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> -->
-          </div>
-          <div class="modal-body">
-            <p><input type="text" class="form-control"/></p>
-          </div>
-          <div class="modal-footer">
-            <button id="singleInputModalOK" type="button" class="btn btn-success">OK</button>
+      <!--                       -->
+      <!--   singleInputModal    -->
+      <!--                       -->
+      <div id="singleInputModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Entrez votre identifiant:</h5>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> -->
+            </div>
+            <div class="modal-body">
+              <p><input type="text" class="form-control"/></p>
+            </div>
+            <div class="modal-footer">
+              <button id="singleInputModalOK" type="button" class="btn btn-success">OK</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <!--                   -->
+      <!--   confirmModal    -->
+      <!--                   -->
+      <div id="confirmModal" class="modal fade" data-bs-backdrop="static"  tabindex="-1">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <!-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> -->
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button id="confirmModalOK" type="button" class="btn btn-primary">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </DEVA>
-  </body>
+</body>
 </html>

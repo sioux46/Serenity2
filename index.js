@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.27.1";
+var devaVersion = "v3.12.27.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -577,11 +577,13 @@ function initCalendar() {
     let event = activeEvent.handleObj.handler.arguments[1];
 
     if ( flagEditTrash == "trash") {                          // trash event
-      $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
-      calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
-      calendar.selectDate( event.date );
-      saveEvoCalEvents();
-      flagEditTrash = "";
+      if ( window.confirm("Supprimer l'élènement ?") ) {
+        $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
+        calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
+        calendar.selectDate( event.date );
+        saveEvoCalEvents();
+        flagEditTrash = "";
+      }
       return;
     }
 
@@ -2101,21 +2103,23 @@ $("#travellerCards").on("click", function(e) {
   //  trash click
   let trashClick = $(e.target).closest(".trash");
   if ( trashClick.get(0) ) { // trash click
-    console.log("trash");
-    $.ajax({
-      url: 'traveller_delete.php',
-      type:'post',
-      data: {'clientid': trashClick.attr("data-clientid")},
-      complete: function(xhr, result) {
-        if (result != 'success') {
-          console.log("Error deleting traveller from database");
+    if ( window.confirm("Supprimer le voyageur ?") ) {
+      console.log("trash");
+      $.ajax({
+        url: 'traveller_delete.php',
+        type:'post',
+        data: {'clientid': trashClick.attr("data-clientid")},
+        complete: function(xhr, result) {
+          if (result != 'success') {
+            console.log("Error deleting traveller from database");
+          }
+          else {
+            console.log("Success deleting taveller from database");
+            initContactBook();
+          }
         }
-        else {
-          console.log("Success deleting taveller from database");
-          initContactBook();
-        }
-      }
-    });
+      });
+    }
     return;
   }
 
