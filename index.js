@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.28.1";
+var devaVersion = "v3.12.28.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -166,10 +166,45 @@ function readSettingListFromDatabase() {
 /////
 function initContactBook() {
   $.ajax({
-    url: "travellerReadAll.php",
+    url: "traveller_read_all.php",
     type: "post",
     data: {
       "username": JSON.parse(localStorage.getItem('baseUserName'))},
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading traveller from database");
+      }
+      else {
+        console.log("Success reading taveller from database");
+        var reponse = xhr.responseText;
+        if ( reponse == "empty" ) {
+          contactBook = [];
+          $("#travellerCards").html("");
+        }
+        else {
+          var jRep = JSON.parse(reponse);
+          contactBook = bluidTravellersOjectTable(jRep);
+          let html = "";
+          for ( let contact of contactBook ) {
+            html += buildCardHtml(contact);
+          }
+          $("#travellerCards").html(html);
+        }
+      }
+    }
+  });
+}
+
+function travellerRead(select, where, orderby) {
+  $.ajax({
+    url: "traveller_read.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "select": select,
+      "where": where,
+      "orderby": orderby
+    },
     complete: function(xhr, result) {
       if (result != 'success') {
         console.log("Error reading traveller from database");
@@ -295,7 +330,7 @@ function resizeImage(img, width, height) {
 function buildCardHtml(card) {
   let html;
 
-  html = '<div class="col-sm-6 col-md-4 col-lg-3 cmb-1">' +
+  html = '<div class="col-sm-4 col-md-4 col-lg-3 cmb-1">' +
     '<div class="card mb-3">' +
       '<div class="card-body pb-2">' +
         '<div class="d-flex align-items-top">' +
@@ -307,7 +342,7 @@ function buildCardHtml(card) {
           html += '</div>' +
           '<div class="flex-1 ms-3">' +
             '<h6 class="mb-1">';
-              if ( card.nickname ) html += '<div class="mb-1" style="font-size:1.3rem; color: hsla(235, 100%, 30%, 1);">' + `"` + card.nickname + `"` + '</div>';
+              if ( card.nickname ) html += '<div class="mb-1" style="font-size:1.3rem; color: hsla(235, 100%, 35%, 1);">' + `"` + card.nickname + `"` + '</div>';
               html += '<div class="text-dark mb-1"><strong>' + card.lastname + '</strong></div>' +
               '<div class="text-dark">' + card.firstname + '</div>';
             html += '</h6>' +
