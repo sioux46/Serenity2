@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.27.3";
+var devaVersion = "v3.12.28.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -112,7 +112,7 @@ function initSettingList() {
   settinglist.userName = "Monsieur";
   settinglist.assistantName = "Deva";
   settinglist.reponseTemperature = 0.7;
-  settinglist.speechRate = 1.2;
+  settinglist.speechRate = 1.1;
   settinglist.speechPitch = 2;
 }
 
@@ -1092,8 +1092,8 @@ function addCalEvent(time, description, date) {
 function collectPreChatBuffer() {
   var chatBuffer = [];
 
-  chatBuffer.push({ role: "system", content: "Vous êtes " + assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + userName + ".  Vous devez répondre à mes questions." });
-  chatBuffer.push({ role: "system", content: "Répondez " +  responseStyle + " " + responseDetail + "." });
+  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ".  Vous devez répondre à mes questions." });
+  chatBuffer.push({ role: "system", content: "Répondez " +  settinglist.responseStyle + " " + settinglist.responseDetail + "." });
 
   // date
   chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
@@ -1181,11 +1181,11 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
 
   response = ""; // global
 
-  if ( question.match(new RegExp("^Merci " + assistantName, 'i'))) { // stopRecog handled in fillLog()
+  if ( question.match(new RegExp("^Merci " + settinglist.assistantName, 'i'))) { // stopRecog handled in fillLog()
     response = "Je vous en pris";
   }
-  else if ( question.match(new RegExp("^Coucou " + assistantName, 'i'))) {
-    response = "Bonjour " + userName + ". Que puij faire pour vous ?";
+  else if ( question.match(new RegExp("^Coucou " + settinglist.assistantName, 'i'))) {
+    response = "Bonjour " + settinglist.userName + ". Que puij faire pour vous ?";
   }
 
   //////////////////////////////////////////////////////////////////
@@ -1246,7 +1246,7 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     chatBuffer = chatBuffer.concat(calendarBuffer);
 
     //------------------------------------------------------------------
-    question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
+    // question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
     //-------------------------------------------------------------------
     console.log("envoyé à ChatGPT: " + question);
     postChatBuffer.push({ role: "user", content: question });
@@ -1271,9 +1271,9 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
               model: JSON.stringify(reponseModel),
-              temperature: JSON.stringify(parseFloat(reponseTemperature)),
-              style: JSON.stringify(responseStyle),
-              details: JSON.stringify(responseDetail),
+              temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
+              style: JSON.stringify(settinglist.responseStyle),
+              details: JSON.stringify(settinglist.responseDetail),
             },
     'complete': function(xhr, result) {
 
@@ -1593,8 +1593,8 @@ function doSpeechSynth (text) {
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
   ut.lang = 'fr-FR';
-  ut.rate = parseFloat(speechRate);
-  ut.pitch = parseFloat(speechPitch); // girl = 2
+  ut.rate = parseFloat(settinglist.speechRate);
+  ut.pitch = parseFloat(settinglist.speechPitch); // girl = 2
   // ut.voiceURI = 'native';
   ut.volume = 1;
   // Thomas, Amélie, Google UK English, Grandma (Français (Canada)), Flo (Français (Canada))
@@ -1621,9 +1621,9 @@ function fillLog(who, text) {
   let debText = "> ";
   if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
   if ( who == "question" )
-          $("#logTextarea").val( $("#logTextarea").val() + debText + userName + ": " + text + "\n");
+          $("#logTextarea").val( $("#logTextarea").val() + debText + settinglist.userName + ": " + text + "\n");
   else if ( who == "response")  {
-    $("#logTextarea").val( $("#logTextarea").val() + "> " + assistantName + ": " + text );
+    $("#logTextarea").val( $("#logTextarea").val() + "> " + settinglist.assistantName + ": " + text );
     // document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
     if ( text == "Je vous en pris" ) {
       questionMode = "audio";
@@ -2226,14 +2226,14 @@ $("#chatParamChangeUserButton").on("click", function(e) {
 });
 
 $("#chatParamUserName").on("change", function (e) {
-  if ( userName != $("#chatParamUserName").val() ) {
+  if ( settinglist.userName != $("#chatParamUserName").val() ) {
     $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
   settinglist.userName = $("#chatParamUserName").val();
 });
 
 $("#chatParamAssistantName").on("change", function (e) {
-  if ( assistantName != $("#chatParamAssitantName").val() ) {
+  if ( settinglist.assistantName != $("#chatParamAssitantName").val() ) {
     $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
   settinglist.assistantName = $("#chatParamAssistantName").val();
@@ -2434,8 +2434,8 @@ var response;
 var voices;
 var actualVoice;
 var speechFlag = true; // init speech
-var speechRate = 1;
-var speechPitch = 1;
+// var speechRate = 1;
+// var speechPitch = 1;
 
 //                              init ChatGPT
 var chatBuffer = [];
@@ -2457,11 +2457,11 @@ var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
 var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  'gpt-3.5-turbo-0613'
-var reponseTemperature;
-var userName;
-var assistantName;
-var responseStyle;
-// var responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars"
-var responseDetail;
+// var reponseTemperature;
+// var userName;
+// var assistantName;
+// var responseStyle;
+///// responseStyle = " dans le style de C3PO, le robot maitre d'hotel de Star Wars"
+//var responseDetail;
 //                        Settings list
 var settinglist = {};
