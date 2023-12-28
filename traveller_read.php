@@ -8,8 +8,9 @@ $where = $_POST['where'];
 $orderby = $_POST['orderby'];
 
 if ( $where != "" ) $and = "and"; else $and = "";
+if ( $orderby != "" ) $order = "order by"; else $order = "";
 
-$query = "SELECT $select FROM traveller WHERE `username` = '$username' $and $where ORDER BY $orderby";
+$query = "SELECT $select FROM traveller WHERE `username` = '$username' $and $where $order $orderby";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) {

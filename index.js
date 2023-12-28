@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.28.2";
+var devaVersion = "v3.12.28.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1207,6 +1207,14 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   }
   if ( question.match(/^\s*clear\s*$/i) ) {  // clear the calendar
     clearCalendar(); return; }
+
+  if ( question.match(/^sql:/) ) {  // process sql request
+    let sql = question.match(/^sql:(.*),(.*)/);
+    let sqlWhere = sql[1];
+    let sqlOrderBy = sql[2];
+    travellerRead("*", sqlWhere, sqlOrderBy);
+    return;
+  }
 
   clearPostChatTimeout(); // re-init timeout
 
