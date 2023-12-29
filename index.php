@@ -152,14 +152,18 @@
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
+    <button id="travellerPlus" class="btn" type="button">
+      <img src="icons/plus-circle-fill.svg" width="40">
+    </button>
+
 <!-- -->
     <div id="carSubpage" class="container-fluid param-subpage">
     </div>
 <!-- -->
     <div id="travellerSubpage" class="container-fluid param-subpage">
-      <button id="travellerPlus" class="btn" type="button">
+<!--      <button id="travellerPlus" class="btn" type="button">
         <img src="icons/plus-circle-fill.svg" width="40">
-      </button>
+      </button> -->
     <div id="travellerCards" class="row mt-2">
     </div>
   </div>
