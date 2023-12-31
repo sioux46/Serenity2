@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.29.1";
+var devaVersion = "v3.12.31.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -60,6 +60,7 @@ function verifBaseUserName(baseUserName) {
           if ( xhr.responseText == "OK" ) {
             localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
 
+            // read database
             initContactBook();
             readCalFromDatabase();
             readSettingListFromDatabase();
@@ -2020,6 +2021,16 @@ $(document).ready(function () {
 //////////////////
 $("#devaVersion").text(devaVersion);
 if ( window.location.origin.match(/paris8/) ) getDevaPass();
+
+//////////////////
+$(window).focus( function() {
+  console.log("Window focus start");
+  // read database
+  initContactBook();
+  readCalFromDatabase();
+  readSettingListFromDatabase();
+  console.log("Window focus end");
+});
 
 //////////////////   handle baseUserName
 if (!window.location.origin.match(/paris8/) ) {

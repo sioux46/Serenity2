@@ -53,7 +53,7 @@
         <img src="icons/volume-mute-fill.svg" width=30>
       </button>
       <button id="chatParamButton" class="btn toolbarButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
-        <img src="icons/list.svg" width=40>
+        <img src="icons/chat-left-text.svg" width=30>
       </button>
     </div>
   </div>
@@ -140,11 +140,11 @@
       </div>
     </div>
 
-    <button id="paramOffcanvasButton" class="btn mt-4 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
-      <img src="icons/list.svg" width=40>
+    <button id="paramOffcanvasButton" class="btn mt-4 ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
+      <img src="icons/gear.svg" width=30>
     </button>
 
-    <button id="showCarButton" class="btn mt-4 ms-2 param-button" type="button">
+    <button id="showCarButton" class="btn mt-4 ms-0 param-button" type="button">
       <img src="icons/carBlue.svg" width="30">
     </button>
 

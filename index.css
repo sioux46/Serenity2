@@ -79,6 +79,10 @@ body {
   border-color: #fff;
 }
 
+#chatParamButton {
+  background-color: unset;
+}
+
 #micButton {
   background-color: yellow !important;
 }
