@@ -231,6 +231,15 @@ function travellerRead(select, where, orderby) {
   });
 }
 
+///// find any keyword in traveller table
+function travellerReadAnyKeyword(keyword) {
+  //let wordlist = 
+}
+
+
+
+//travellerRead('*', "(firstname = 'Dianos' or nickname = 'Dianos' or lastname = 'Dianos')", "firstname")
+
 ///// build traveller objects array from arrays array
 function bluidTravellersOjectTable(tabsTable) {
   let objsTable = [];
