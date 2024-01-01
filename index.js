@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.12.31.1";
+var devaVersion = "v3.01.01.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -233,7 +233,7 @@ function travellerRead(select, where, orderby) {
 
 ///// find any keyword in traveller table
 function travellerReadAnyKeyword(keyword) {
-  //let wordlist = 
+  //let wordlist =
 }
 
 
@@ -340,7 +340,7 @@ function resizeImage(img, width, height) {
 function buildCardHtml(card) {
   let html;
 
-  html = '<div class="col-sm-4 col-md-4 col-lg-3 cmb-1">' +
+  html = '<div class="col-sm-4 col-md-4 col-lg-3 col-xxl-2 cmb-1">' +
     '<div class="card mb-3">' +
       '<div class="card-body pb-2">' +
         '<div class="d-flex align-items-top">' +
@@ -811,6 +811,7 @@ function readCalFromDatabase() {
         console.log("Success reading evoCalEvents from database");
         if ( xhr.responseText != "empty" )
               evoCalEvents = JSON.parse(JSON.parse(xhr.responseText));
+        // try { $('#evoCalendar').evoCalendar('destroy'); } catch(e) {}
         initCalendar();
       }
     }
@@ -2034,9 +2035,11 @@ if ( window.location.origin.match(/paris8/) ) getDevaPass();
 //////////////////
 $(window).focus( function() {
   console.log("Window focus start");
-  // read database
+
+  // if shedule on display, resart app
+  if ( $("#shedule").css("display") == "block") window.location = "";
+
   initContactBook();
-  readCalFromDatabase();
   readSettingListFromDatabase();
   console.log("Window focus end");
 });
@@ -2280,7 +2283,7 @@ $("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas moda
 });
 
 $("#paramOffcanvas").on("hidden.bs.offcanvas", function(e) {
-  writeSettingListToDatabase();
+  // writeSettingListToDatabase(); // better bellow
 });
 
 $("#chatParamChangeUserButton").on("click", function(e) {
@@ -2288,11 +2291,13 @@ $("#chatParamChangeUserButton").on("click", function(e) {
   window.location = "";
 });
 
+////  save editing from chatParam modal
 $("#chatParamUserName").on("change", function (e) {
   if ( settinglist.userName != $("#chatParamUserName").val() ) {
     $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
   settinglist.userName = $("#chatParamUserName").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamAssistantName").on("change", function (e) {
@@ -2300,28 +2305,35 @@ $("#chatParamAssistantName").on("change", function (e) {
     $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
   settinglist.assistantName = $("#chatParamAssistantName").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamStyle").on("change", function (e) {
   settinglist.responseStyle = $("#chatParamStyle").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamDetail").on("change", function (e) {
   settinglist.responseDetail = $("#chatParamDetail").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamTemperature").on("change", function (e) {
   settinglist.reponseTemperature = $("#chatParamTemperature").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamSpeechRate").on("change", function (e) {
   settinglist.speechRate = $("#chatParamSpeechRate").val();
+  writeSettingListToDatabase();
 });
 
 $("#chatParamSpeechPitch").on("change", function (e) {
   settinglist.speechPitch = $("#chatParamSpeechPitch").val();
+  writeSettingListToDatabase();
 });
 
+//////
 $("#questionButton").on("click", function(e) {
   let question = $("#questionTextarea").val();
   if ( question ) {

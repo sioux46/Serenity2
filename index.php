@@ -212,7 +212,7 @@
                 <input disabled id="chatParamTemperature" placeholder="De 0 à O.9" type="number" min="0" class="form-control"/>
               </div>
               <div class="mt-4">
-                <button id="chatParamChangeUserButton" type="button" class="btn btn-light" style="float:right;" >Changer d'identifiant</button>
+                <button id="chatParamChangeUserButton" type="button" class="btn btn-light" style="float:right;" >Fermer la session</button>
               </div>
             </div>
           </div>

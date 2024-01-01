@@ -22,7 +22,7 @@ exit; */
   $data = array(
       'model' => $model,
       'messages' => $messages,
-      // 'max_tokens' => 100,
+      'max_tokens' => 3000,
       'temperature' => $temperature,
       // 'seed' => 12321 // any integer
       // 'top_p' => 0.5
