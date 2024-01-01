@@ -214,14 +214,14 @@ function travellerRead(select, where, orderby) {
         console.log("Success reading taveller from database");
         var reponse = xhr.responseText;
         if ( reponse == "empty" ) {
-          contactBook = [];
+          lastContacts = [];
           $("#travellerCards").html("");
         }
         else {
           var jRep = JSON.parse(reponse);
-          contactBook = bluidTravellersOjectTable(jRep);
+          lastContacts = bluidTravellersOjectTable(jRep);
           let html = "";
-          for ( let contact of contactBook ) {
+          for ( let contact of lastContacts ) {
             html += buildCardHtml(contact);
           }
           $("#travellerCards").html(html);
@@ -232,13 +232,23 @@ function travellerRead(select, where, orderby) {
 }
 
 ///// find any keyword in traveller table
-function travellerReadAnyKeyword(keyword) {
-  //let wordlist =
+function travellerReadAnyKeyword(keywords) {
+  let kw = keywords.split(" ");
+  let where = "(";
+  let first = true;
+  for ( let keyword of kw ) {
+    if ( !first ) where += " or ";
+    first = false;
+    where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
+      "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "'";
+  }
+  where += ")";
+  travellerRead("*", where, "lastname");
+
+  // travellerRead("*", "(firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
+  //    "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "')", "lastname");
 }
 
-
-
-//travellerRead('*', "(firstname = 'Dianos' or nickname = 'Dianos' or lastname = 'Dianos')", "firstname")
 
 ///// build traveller objects array from arrays array
 function bluidTravellersOjectTable(tabsTable) {
@@ -1220,10 +1230,9 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     clearCalendar(); return; }
 
   if ( question.match(/^sql:/) ) {  // process sql request
-    let sql = question.match(/^sql:(.*),(.*)/);
+    let sql = question.match(/^sql:(.*)/);
     let sqlWhere = sql[1];
-    let sqlOrderBy = sql[2];
-    travellerRead("*", sqlWhere, sqlOrderBy);
+    travellerReadAnyKeyword(sqlWhere);
     return;
   }
 
@@ -2035,7 +2044,7 @@ if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
 //////////////////
 $(window).focus( function() {
   console.log("Window focus start");
-  window.location = "";
+  if ( window.location.host != "localhost:8888" )  window.location = "";
 
   // if shedule on display, resart app
   //if ( $("#shedule").css("display") == "block") window.location = "";
@@ -2484,6 +2493,7 @@ ontoTree = importTree(importData);
 /////////////////////               CONTACTBOOK
 
 var contactBook = [];
+var lastContacts = [];
 
 /////////////////////              CALENDAR
 
