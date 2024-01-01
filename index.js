@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.01.2";
+var devaVersion = "v3.01.01.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -93,13 +93,13 @@ function verifBaseUserName(baseUserName) {
           }
           else {
             localStorage.removeItem("baseUserName");
-            window.location = window.location.href;
+            window.location = "";
           }
         }
       }
     });
   }
-  else window.location = window.location.href;
+  else window.location = "";
 }
 
 ///////////////////////////////////////  settings
@@ -405,7 +405,7 @@ function getDevaPass() {
     localStorage.setItem('devaPass', JSON.stringify(pass));
     $("#start").css({"display": "block"});  // show start page
   }
-  else window.location = window.location.href;
+  else window.location = "";
 }
 
 /////
@@ -905,7 +905,7 @@ function clearCalendar() {
   evoCalEvents = [];
   saveEvoCalEvents();
   // evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
-  setTimeout( function() { window.location = window.location.href; }, 800);
+  setTimeout( function() { window.location = ""; }, 800);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
