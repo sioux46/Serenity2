@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.01.4";
+var devaVersion = "v3.01.01.5";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -823,6 +823,35 @@ function readCalFromDatabase() {
               evoCalEvents = JSON.parse(JSON.parse(xhr.responseText));
         // try { $('#evoCalendar').evoCalendar('destroy'); } catch(e) {}
         initCalendar();
+      }
+    }
+  });
+}
+
+/////     update evoCalEvents from database
+function updateCalFromDatabase() {
+  $.ajax({
+    url: "calendar_read.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading evoCalEvents from database");
+      }
+      else {
+        console.log("Success reading evoCalEvents from database");
+        let updateCal, oldCalIds = [];
+        if ( xhr.responseText != "empty" ) {
+          updateCal = JSON.parse(JSON.parse(xhr.responseText)); // read base
+
+          for ( let event of evoCalEvents ) { // collect IDs
+            oldCalIds.push(event.id);
+          }
+          $("#evoCalendar").evoCalendar('removeCalendarEvent', oldCalIds);
+          $("#evoCalendar").evoCalendar('addCalendarEvent', updateCal);
+        }
       }
     }
   });
@@ -2044,15 +2073,9 @@ if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
 //////////////////
 $(window).focus( function() {
   console.log("Window focus start");
-  // if ( window.location.host != "localhost:8888" )  window.location = "";
-
-  // if shedule on display, resart app
-  //if ( $("#shedule").css("display") == "block") window.location = "";
-  // window.location = window.location.href;
-
+  updateCalFromDatabase();
   initContactBook();
   readSettingListFromDatabase();
-  // console.log("Window focus end");
 });
 
 //////////////////   handle baseUserName
