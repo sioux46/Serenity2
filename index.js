@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.01.1";
+var devaVersion = "v3.01.01.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -905,7 +905,7 @@ function clearCalendar() {
   evoCalEvents = [];
   saveEvoCalEvents();
   // evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
-  window.location = window.location.href;
+  setTimeout( function() { window.location = window.location.href; }, 800);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -2030,18 +2030,20 @@ $(document).ready(function () {
 
 //////////////////
 $("#devaVersion").text(devaVersion);
-if ( window.location.origin.match(/paris8/) ) getDevaPass();
+if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
 
 //////////////////
 $(window).focus( function() {
   console.log("Window focus start");
+  window.location = "";
 
   // if shedule on display, resart app
-  if ( $("#shedule").css("display") == "block") window.location = "";
+  //if ( $("#shedule").css("display") == "block") window.location = "";
+  // window.location = window.location.href;
 
-  initContactBook();
-  readSettingListFromDatabase();
-  console.log("Window focus end");
+  // initContactBook();
+  // readSettingListFromDatabase();
+  // console.log("Window focus end");
 });
 
 //////////////////   handle baseUserName
