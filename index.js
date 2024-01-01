@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.01.3";
+var devaVersion = "v3.01.01.4";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2044,14 +2044,14 @@ if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
 //////////////////
 $(window).focus( function() {
   console.log("Window focus start");
-  if ( window.location.host != "localhost:8888" )  window.location = "";
+  // if ( window.location.host != "localhost:8888" )  window.location = "";
 
   // if shedule on display, resart app
   //if ( $("#shedule").css("display") == "block") window.location = "";
   // window.location = window.location.href;
 
-  // initContactBook();
-  // readSettingListFromDatabase();
+  initContactBook();
+  readSettingListFromDatabase();
   // console.log("Window focus end");
 });
 
