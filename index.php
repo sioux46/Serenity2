@@ -148,7 +148,7 @@
       <img src="icons/carBlue.svg" width="30">
     </button>
 
-    <button id="showTravellerButton" class="btn mt-4 ms-2 param-button" type="button">
+    <button id="showTravellerButton" class="btn mt-4 ms-1 param-button" type="button">
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 

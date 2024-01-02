@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.02.1";
+var devaVersion = "v3.01.02.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -233,7 +233,9 @@ function travellerRead(select, where, orderby) {
 
 ///// find any keyword in traveller table
 function travellerReadAnyKeyword(keywords) {
-  let kw = keywords.split(" ");
+  let kw;
+  if ( Array.isArray(keywords) ) kw = keywords;
+  else kw = keywords.split(" ");
   let where = "(";
   let first = true;
   for ( let keyword of kw ) {
@@ -249,6 +251,36 @@ function travellerReadAnyKeyword(keywords) {
   //    "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "')", "lastname");
 }
 
+/////
+function travellerKeywordArray(question) {  // collect all names in traveller base
+  let valSet = new Set();
+  for ( let traveller of contactBook ) {
+    if ( traveller.lastname ) valSet.add(traveller.lastname);
+    if ( traveller.firstname ) valSet.add(traveller.firstname);
+    if ( traveller.nickname ) valSet.add(traveller.nickname);
+    if ( traveller.phone ) valSet.add(traveller.phone);
+    if ( traveller.address ) valSet.add(traveller.address);
+    if ( traveller.travellertype ) valSet.add(traveller.travellertype);
+    if ( traveller.equipment ) valSet.add(traveller.equipment);
+  }
+
+  let repArray = [];
+  let repArray2 = [];
+  let valArray = Array.from(valSet);
+  let valArray2 = [];
+
+  for ( let val of valArray ) {
+    valArray2 = val.split(" ").concat(valArray2);
+  }
+  for ( let keyword of valArray2 ) {
+    if ( question.match(new RegExp("\\b" + keyword + "\\b", "i")) ) repArray.push(keyword);
+  }
+  for ( let val of repArray ) {
+    if ( val ) repArray2.push(val);
+  }
+
+  return repArray2;
+}
 
 ///// build traveller objects array from arrays array
 function bluidTravellersOjectTable(tabsTable) {
@@ -1236,7 +1268,7 @@ function collectPreChatBuffer() {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////
-function questionAnalyse(question) {   // ************************** Q U E S T I O N   A N A L Y S E *********
+function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
 
   if ( question.match(/\bD(e|i)va\b/i)) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
@@ -1262,6 +1294,11 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
     let sql = question.match(/^:(.*)/);
     let sqlWhere = sql[1];
     travellerReadAnyKeyword(sqlWhere);
+    return;
+  }
+
+  if ( $("#paramPage").css("display") == "block" ) {
+    travellerReadAnyKeyword(travellerKeywordArray(question));
     return;
   }
 
