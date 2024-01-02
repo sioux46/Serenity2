@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.01.5";
+var devaVersion = "v3.01.02.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1258,8 +1258,8 @@ function questionAnalyse(question) {   // ************************** Q U E S T I
   if ( question.match(/^\s*clear\s*$/i) ) {  // clear the calendar
     clearCalendar(); return; }
 
-  if ( question.match(/^sql:/) ) {  // process sql request
-    let sql = question.match(/^sql:(.*)/);
+  if ( question.match(/^:/) ) {  // process sql request
+    let sql = question.match(/^:(.*)/);
     let sqlWhere = sql[1];
     travellerReadAnyKeyword(sqlWhere);
     return;

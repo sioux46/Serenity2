@@ -303,7 +303,7 @@
                     <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur additonnel');">Conducteur additonnel</a></li>
                     <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Passager');">Passager</a></li>
                   </ul>
-                  <input id="travellertype" type="text" disabled class="form-control">
+                  <input id="travellertype" type="text" class="form-control">
                 </div>
 
                 <div class="mb-2">
