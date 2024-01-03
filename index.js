@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.03.2";
+var devaVersion = "v3.01.03.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -203,7 +203,7 @@ function travellerRead(select, where, orderby) {
     doResponseAnyMode("Contacts non trouvés");
     return;
   }
-  
+
   $.ajax({
     url: "traveller_read.php",
     type: "post",
@@ -2238,6 +2238,7 @@ $("#showCarButton").on("click", function (e) {  // car button
 });
 
 $("#showTravellerButton").on("click", function (e) {  // Traveller button
+  initContactBook();
   if ( activeParamDisplay == "traveller" ) return;
   $(".param-button").css("border", "3px solid white");
   $("#showTravellerButton").css("border", "3px solid #fa0039");
