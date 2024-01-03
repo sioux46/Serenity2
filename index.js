@@ -197,13 +197,13 @@ function initContactBook() {
 }
 
 function travellerRead(select, where, orderby) {
-  /*
+
   if ( !where ) {
     fillLog("response", "Contacts non trouvés");
     doResponseAnyMode("Contacts non trouvés");
     return;
   }
-  */
+  
   $.ajax({
     url: "traveller_read.php",
     type: "post",
