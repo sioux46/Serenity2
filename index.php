@@ -300,7 +300,7 @@
                   <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">Type de voyageur</button>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur attitré');">Conducteur attitré</a></li>
-                    <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur additonnel');">Conducteur additonnel</a></li>
+                    <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Conducteur additionnel');">Conducteur additionnel</a></li>
                     <li><a class="dropdown-item" href="javascript:$('#travellertype').val('Passager');">Passager</a></li>
                   </ul>
                   <input id="travellertype" type="text" class="form-control">

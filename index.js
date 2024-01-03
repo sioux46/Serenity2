@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.02.2";
+var devaVersion = "v3.01.03.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -197,6 +197,11 @@ function initContactBook() {
 }
 
 function travellerRead(select, where, orderby) {
+  if ( !where ) {
+    fillLog("response", "Contacts non trouvés");
+    doResponseAnyMode(response);
+    return;
+  }
   $.ajax({
     url: "traveller_read.php",
     type: "post",
@@ -214,8 +219,10 @@ function travellerRead(select, where, orderby) {
         console.log("Success reading taveller from database");
         var reponse = xhr.responseText;
         if ( reponse == "empty" ) {
-          lastContacts = [];
-          $("#travellerCards").html("");
+          fillLog("response", "Contacts non trouvés");
+          doResponseAnyMode("Contacts non trouvés");
+          // lastContacts = [];
+          // $("#travellerCards").html("");
         }
         else {
           var jRep = JSON.parse(reponse);
@@ -225,6 +232,8 @@ function travellerRead(select, where, orderby) {
             html += buildCardHtml(contact);
           }
           $("#travellerCards").html(html);
+          fillLog("response", "Ok");
+          doResponseAnyMode("Ok");
         }
       }
     }
@@ -245,10 +254,8 @@ function travellerReadAnyKeyword(keywords) {
       "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "'";
   }
   where += ")";
+  if ( where == "()" ) where = "";
   travellerRead("*", where, "lastname");
-
-  // travellerRead("*", "(firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
-  //    "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "')", "lastname");
 }
 
 /////
@@ -276,9 +283,10 @@ function travellerKeywordArray(question) {  // collect all names in traveller ba
     if ( question.match(new RegExp("\\b" + keyword + "\\b", "i")) ) repArray.push(keyword);
   }
   for ( let val of repArray ) {
-    if ( val ) repArray2.push(val);
+    if ( val ) repArray2.push(val.toUpperCase());
   }
-
+  valSet = new Set(repArray2);
+  repArray2 = Array.from(valSet);
   return repArray2;
 }
 
@@ -329,13 +337,13 @@ function editTravellerModalLoad(clientid) {
 function buildEditTravellerFromModal(clientid) {
 
   let newTraveller = new traveller(
-      $("#travellerModal").find("#lastname").val(),
-      $("#travellerModal").find("#firstname").val(),
-      $("#travellerModal").find("#nickname").val(),
-      $("#travellerModal").find("#travellertype").val(),
-      $("#travellerModal").find("#phone").val(),
-      $("#travellerModal").find("#address").val(),
-      $("#travellerModal").find("#equipment").val(),
+      $("#travellerModal").find("#lastname").val().trim(),
+      $("#travellerModal").find("#firstname").val().trim(),
+      $("#travellerModal").find("#nickname").val().trim(),
+      $("#travellerModal").find("#travellertype").val().trim(),
+      $("#travellerModal").find("#phone").val().trim(),
+      $("#travellerModal").find("#address").val().trim(),
+      $("#travellerModal").find("#equipment").val().trim(),
       $("#travellerModal").find("#imgFromDisk").attr("src")
   );
   if ( clientid ) newTraveller.clientid = clientid; // traveller allready exist (edit)
@@ -1341,15 +1349,7 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
 
   //--------------------------------  if response
   if ( response ) {
-
-    if ( reponseMode != "text" ) {
-      console.log("Réponse audio:");
-      doSpeechSynth(response);
-    }
-    else {
-      console.log("Réponse texte:");
-    }
-    console.log(response);
+    doResponseAnyMode(response);
     if ( response.match(/ puij /)) response = response.replace(/ puij /, " puis-je ");
     fillLog("response", response);
   }
@@ -1751,9 +1751,9 @@ function fillLog(who, text) {
   if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
   if ( who == "question" )
           $("#logTextarea").val( $("#logTextarea").val() + debText + settinglist.userName + ": " + text + "\n");
+
   else if ( who == "response")  {
     $("#logTextarea").val( $("#logTextarea").val() + "> " + settinglist.assistantName + ": " + text );
-    // document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
     if ( text == "Je vous en pris" ) {
       questionMode = "audio";
       $("#micButton").trigger("click");
@@ -1761,13 +1761,14 @@ function fillLog(who, text) {
       $("#micButton").trigger("click");
     }
   }
+
   else if ( who == "service" ) {
     $("#logTextarea").val( $("#logTextarea").val() + "\n*** " + text + "\n");
   }
   document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
 }
 
-////                                audioState
+/////                                audioState
 function audioState() {
   let state = {};
   state.questionMode = questionMode;
@@ -1775,6 +1776,18 @@ function audioState() {
   state.reponseMode = reponseMode;
   state.speaking = window.speechSynthesis.speaking;
   return state;
+}
+
+/////                               do response audio OR text
+function doResponseAnyMode( response ) {
+  if ( reponseMode != "text" ) {
+    console.log("Réponse audio:");
+    doSpeechSynth(response);
+  }
+  else {
+    console.log("Réponse texte:");
+  }
+  console.log(response);
 }
 
 ////                            KEYBOARD EVENTS
