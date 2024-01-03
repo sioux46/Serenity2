@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.03.1";
+var devaVersion = "v3.01.03.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -197,11 +197,13 @@ function initContactBook() {
 }
 
 function travellerRead(select, where, orderby) {
+  /*
   if ( !where ) {
     fillLog("response", "Contacts non trouvés");
-    doResponseAnyMode(response);
+    doResponseAnyMode("Contacts non trouvés");
     return;
   }
+  */
   $.ajax({
     url: "traveller_read.php",
     type: "post",
