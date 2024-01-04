@@ -62,14 +62,14 @@
 <!--                       -->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
     <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Dialoguer avec DEVA</strong></h5>
+      <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Converser avec DEVA</strong></h5>
       <button id="chatParamButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
       <div>
         <div class="d-grid gap-2">
           <div id="voyageText" class="container form-floating d-grid gap-2">
-            <div><strong>Historique du dialogue:</strong></div>
+            <div><strong>Historique des conversations:</strong></div>
             <textarea id="logTextarea" autofocus class="form-control"></textarea>
             <button id="clearLogButton" class="btn" type="button">
               <img src="icons/trash.svg" width=30>

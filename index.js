@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.03.3";
+var devaVersion = "v3.01.04.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -199,8 +199,8 @@ function initContactBook() {
 function travellerRead(select, where, orderby) {
 
   if ( !where ) {
-    fillLog("response", "Contacts non trouvés");
-    doResponseAnyMode("Contacts non trouvés");
+    fillLog("response", "Voyageur inconnu");
+    doResponseAnyMode("Voyageur inconnu");
     return;
   }
 
@@ -221,8 +221,8 @@ function travellerRead(select, where, orderby) {
         console.log("Success reading taveller from database");
         var reponse = xhr.responseText;
         if ( reponse == "empty" ) {
-          fillLog("response", "Contacts non trouvés");
-          doResponseAnyMode("Contacts non trouvés");
+          fillLog("response", "Voyageur inconnu");
+          doResponseAnyMode("Voyageur inconnu");
           // lastContacts = [];
           // $("#travellerCards").html("");
         }
@@ -636,7 +636,6 @@ function initCalendar() {
   removeBeforeCalEvents(evoCalEvents);
 
   if ( !evoCalEvents.length ) {
-    //addCalEvent("18h00", "Piscine avec Anna", actualDateToEvoDate("today"));
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
     addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
@@ -674,7 +673,7 @@ function initCalendar() {
     let event = activeEvent.handleObj.handler.arguments[1];
 
     if ( flagEditTrash == "trash") {                          // trash event
-      if ( true ) { // ( window.confirm("Supprimer l'élènement ?") ) {
+      if ( true ) {
         $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
         calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
         calendar.selectDate( event.date );
@@ -972,6 +971,7 @@ function removeBeforeCalEvents(events) {
           ids.push(event.id);
   }
   $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
+  saveEvoCalEvents();
 }
 
 ////
@@ -1046,9 +1046,8 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
   // erasing evoCalEvents
   while ( evoCalEvents.length ) {
     $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-//    saveEvoCalEvents();
   }
-  saveEvoCalEvents();
+  // saveEvoCalEvents();
 
   // agenda non vide
   if ( reponse.match(/^agenda vide\.?/i) ) rep = response;  // reSponse is a globlal
@@ -1112,7 +1111,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
 
     refreshDateDisplay(date); // select the agenda date of the modified event
     globalSortCalendarEvents();
-//    saveEvoCalEvents();
+    saveEvoCalEvents();
 
 
   } catch(e) {
@@ -1122,14 +1121,12 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
     // erasing evoCalEvents
     while ( evoCalEvents.length ) {
       $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
-//      saveEvoCalEvents();
     }
 
     // restoring evoCalEvents
     for ( let event of evoCalEvents_OLD ) {
       console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
       addCalEvent(event.name, event.description, event.date);
-//      saveEvoCalEvents();
     }
     saveEvoCalEvents();
   }
@@ -1206,12 +1203,12 @@ function addCalEvent(time, description, date) {
       date: date, // calendar.$active.event_date,
       type: "event",
       color: "#009099", // "#fe7f78",
-    }]);
+    }
+  ]);
 
-    // sortCalendarEvents( date );
-    globalSortCalendarEvents();
-//    saveEvoCalEvents();
-    return true;
+  globalSortCalendarEvents();
+  // saveEvoCalEvents();
+  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1579,10 +1576,11 @@ function handleResponse(reponse) {
       if ( !addCalEvent(time, description, dateForEvo) ) return;
       // sortCalendarEvents( dateForEvo );
       globalSortCalendarEvents();
-//      saveEvoCalEvents();
       //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
       //calendar.selectDate( dateForEvo );
       refreshDateDisplay(dateForEvo);
+      saveEvoCalEvents();
+
     }
 
     /////////////////////////////
@@ -1591,13 +1589,11 @@ function handleResponse(reponse) {
         if ( event.date != dateForEvo ) continue;
         if ( event.name.match(RegExp(time)) ) {
           $('#evoCalendar').evoCalendar('removeCalendarEvent', event.id);
-//          saveEvoCalEvents();
-
           refreshDateDisplay(dateForEvo);
+          saveEvoCalEvents();
           break;
         }
       }
-      saveEvoCalEvents();
     }
 
     ///////////////////////////////////////////////// FIN ACTION
@@ -1611,7 +1607,7 @@ function clearPostChatTimeout() {
   postChatTimeout = setTimeout( function() {
     postChatBuffer = [];  // forget recent chat
     // $("#startButton").trigger("click");
-    fillLog("service", "Fin du dialogue");
+    fillLog("service", "Fin de conversation");
     // window.location = window.location.href;
   }, clearPostChatValue); // 10 min = 600000,  5 min = 300000, 1 min = 60000
 }
@@ -2124,7 +2120,7 @@ if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
 
 //////////////////
 $(window).focus( function() {
-  console.log("Window focus start");
+  console.log("Window focus");
   updateCalFromDatabase();
   initContactBook();
   readSettingListFromDatabase();
