@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.04.1";
+var devaVersion = "v3.01.04.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -155,7 +155,10 @@ function readSettingListFromDatabase() {
         console.log("Success reading settinglist from database");
         if ( xhr.responseText != "empty" )
               settinglist = JSON.parse(JSON.parse(xhr.responseText));
-        else  initSettingList();
+        else  {
+          initSettingList();
+          writeSettingListToDatabase();
+        }
       }
     }
   });
@@ -971,7 +974,7 @@ function removeBeforeCalEvents(events) {
           ids.push(event.id);
   }
   $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
-  saveEvoCalEvents();
+  // saveEvoCalEvents();
 }
 
 ////
