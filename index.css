@@ -23,7 +23,12 @@ body {
 }
 
 .param-button {
-  border: 3px solid white;
+  padding: 5px;
+}
+
+#showTravellerButton {
+  position: relative;
+  left: 5px;
 }
 
 #travellerPlus {
@@ -55,10 +60,10 @@ body {
 }
 
 #startButton {
-  display: none;
-  position: absolute;
-  margin-left: 13px;
-  margin-top: 7px;
+  float: right;
+  position: relative;
+  left: -8px;
+  top: -3px;
 }
 
 #dialogButtons {
@@ -76,6 +81,7 @@ body {
   border-radius: 50%;
   margin: 3px;
   border: 3px;
+  padding: 6px;
   border-color: #fff;
 }
 
@@ -83,11 +89,13 @@ body {
   background-color: unset;
 }
 
-#micButton {
+#micButton,
+#micButtonOffcanvas {
   background-color: yellow !important;
 }
 
-#speakerButton {
+#speakerButton,
+#speakerButtonOffcanvas {
   background-color: yellow !important;
 }
 

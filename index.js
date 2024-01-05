@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v3.01.04.2";
+var devaVersion = "v4.01.05.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -570,6 +570,7 @@ function importTree(inData) {
 
 /////       show page
 function showPage(pageID) {
+
   // ajust toolbar buttons borders
   $("#speakerButton").trigger("click");
   $("#speakerButton").trigger("click");
@@ -1210,7 +1211,6 @@ function addCalEvent(time, description, date) {
   ]);
 
   globalSortCalendarEvents();
-  // saveEvoCalEvents();
   return true;
 }
 
@@ -1516,7 +1516,7 @@ function handleResponse(reponse) {
   }
   /////////////////////////////////////////////
 
-  else if ( action ) {          // calendar is to be updated for add or remove
+  else if ( action ) {  // NON ATTEINGNABLE        // calendar is to be updated for add or remove
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
 
@@ -1659,8 +1659,8 @@ function startRecog() {
   if ( window.speechSynthesis.speaking ) return;
   if ( !activePage ) return; // No audio in startPage
 
-  $("#micButton img").attr("src", "icons/mic-fill.svg");
-  $("#micButton").css("border", "3px solid #fa0039");
+  $("#micButton, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
+  $("#micButton, #micButtonOffcanvas").css("border", "3px solid #fa0039");
   try { recognition.start(); recogResult = "waitinggggg"; } catch(e) {}
   recognizing = true;
   clearTimeout(recogTimeout);
@@ -1698,8 +1698,8 @@ function resetRecog() {
   recognizing = false;
   recogResult = "";
   console.log("Fin d'écoute");
-  $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-  $("#micButton").css("border", "3px solid white");
+  $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-mute-fill.svg");
+  $("#micButton img, #micButtonOffcanvas").css("border", "3px solid white");
 
   // else {
     // questionMode = "text";
@@ -2161,6 +2161,15 @@ if ( window.speechSynthesis ) { // if not android webview
 
 ////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
+                                //  offcanvas mic & speaker
+$("#micButtonOffcanvas").on("click", function (e) {
+  $("#micButton").trigger("click");
+});
+
+$("#speakerButtonOffcanvas").on("click", function (e) {
+  $("#speakerButton").trigger("click");
+});
+
 //                                                      toggle mic
 $("#micButton").on("click", function (ev) {
   if ( !window.speechSynthesis ) return; // if android webview
@@ -2172,8 +2181,8 @@ $("#micButton").on("click", function (ev) {
 
   if ( questionMode == "text" ) {
     questionMode = "audio";
-    $("#micButton img").attr("src", "icons/mic-fill.svg");
-    $("#micButton").css("border", "3px solid #fa0039");
+    $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
+    $("#micButton, #micButtonOffcanvas").css("border", "3px solid #fa0039");
 
     //                    force audio to true
     //reponseMode = "audio";
@@ -2183,8 +2192,8 @@ $("#micButton").on("click", function (ev) {
   }
   else {
     questionMode = "text";
-    $("#micButton img").attr("src", "icons/mic-mute-fill.svg");
-    $("#micButton").css("border", "3px solid white");
+    $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-mute-fill.svg");
+    $("#micButton, #micButtonOffcanvas").css("border", "3px solid white");
     stopRecog();
   }
   setTimeout( function() { console.log(audioState()); }, 500);
@@ -2210,14 +2219,14 @@ $("#speakerButton").on("click", function (ev) {
 
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
-    $("#speakerButton img").attr("src", "icons/volume-up-fill.svg");
-    $("#speakerButton").css("border", "3px solid #fa0039");
+    $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-up-fill.svg");
+    $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid #fa0039");
 
   }
   else {
     reponseMode = "text";
-    $("#speakerButton img").attr("src", "icons/volume-mute-fill.svg");
-    $("#speakerButton").css("border", "3px solid white");
+    $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-mute-fill.svg");
+    $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid white");
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   }
   setTimeout( function() { console.log(audioState()); }, 500);
@@ -2354,9 +2363,16 @@ $("#imgFromDiskInput").resizeImg({
 $("#ontoTreeButton").on("click", function(e) {
   initOntoTreeChoose(ontoTree[0]);
 });
-
-
 ///////////////////////////////////////////////  chatParam OFFCANVAS  (settinglist) /////
+/*
+$("#chatParamButton").on("click", function(e) {
+  $("#toolBar").css("display", "none");
+});
+
+$("#chatParamOffcanvas").on("blur", function(e) {
+  $("#toolBar").css("display", "block");
+});
+*/
 
 $("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas modal
   $("#chatParamUserName").val(settinglist.userName);

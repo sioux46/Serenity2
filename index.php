@@ -42,29 +42,44 @@
 <!--  TOOLBAR  -->
 <!--           -->
   <div id="toolBar">
-    <button id="startButton" class="btn toolbarButton" type="button">
-      <img src="icons/splash.png" width=40>
-    </button>
-    <div id="dialogButtons">
+    <div id="dialogButtons d-flex" class="mt-2">
+      <button id="chatParamButton" class="btn toolbarButton ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
+        <img src="icons/chat-left-text.svg" width=30>
+      </button>
       <button id="micButton" class="btn toolbarButton" type="button">
         <img src="icons/mic-mute-fill.svg" width=30>
       </button>
       <button id="speakerButton" class="btn toolbarButton" type="button">
         <img src="icons/volume-mute-fill.svg" width=30>
       </button>
-      <button id="chatParamButton" class="btn toolbarButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
-        <img src="icons/chat-left-text.svg" width=30>
+
+      <button id="startButton" class="btn toolbarButton ms-auto" type="button">
+        <img src="icons/splash.png" width=40>
       </button>
     </div>
   </div>
 <!--                       -->
 <!--   toolbar offcanvas   -->
 <!--                       -->
-  <div class="offcanvas offcanvas-start" data-bs-scroll="true" id="chatParamOffcanvas" tabindex="-1">
+  <div id="chatParamOffcanvas" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1">
+
+    <div id="dialogButtonsOffcanvas" class="d-flex flex-row mt-2">
+      <button id="chatParamButton" class="btn toolbarButton ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
+        <img src="icons/chat-left-text.svg" width=30>
+      </button>
+      <button id="micButtonOffcanvas" class="btn toolbarButton" type="button">
+        <img src="icons/mic-mute-fill.svg" width=30>
+      </button>
+      <button id="speakerButtonOffcanvas" class="btn toolbarButton" type="button">
+        <img src="icons/volume-mute-fill.svg" width=30>
+      </button>
+    </div>
+    <!--
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Converser avec DEVA</strong></h5>
       <button id="chatParamButton" type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
+    -->
     <div class="offcanvas-body">
       <div>
         <div class="d-grid gap-2">
@@ -140,7 +155,7 @@
       </div>
     </div>
 
-    <button id="paramOffcanvasButton" class="btn mt-4 ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
+    <button id="paramOffcanvasButton" class="btn mt-4 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
       <img src="icons/gear.svg" width=30>
     </button>
 
@@ -148,7 +163,7 @@
       <img src="icons/carBlue.svg" width="30">
     </button>
 
-    <button id="showTravellerButton" class="btn mt-4 ms-1 param-button" type="button">
+    <button id="showTravellerButton" class="btn mt-4 ms-0 param-button" type="button">
       <img src="icons/people-fill-blue.svg" width="30">
     </button>
 
