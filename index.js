@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.05.2";
+var devaVersion = "v4.01.06.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -45,7 +45,7 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
-/////  V E R I F I C A T I O N  baseUserName
+////////////////////  V E R I F I C A T I O N  baseUserName
 function verifBaseUserName(baseUserName) {
   if ( baseUserName ) {
     $.ajax({
@@ -71,23 +71,16 @@ function verifBaseUserName(baseUserName) {
 
 
             /////       C O N N E C T I O N  count
-            var agent;
-            try {
-              agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
-              if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
-              agent = agent.replace(/Mozilla\/5\.0 /,"");
-              agent = agent.replace(/\(KHTML, like Gecko\)/,"");
-              agent = agent.replace(/; Win64; x64/,"");
-              agent = agent.replace(/Macintosh; Intel Mac /,"");
-              agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
 
-              if ( !agent ) agent = window.navigator.vendor;
-            } catch (e) {}
-
+            let agent = userAgent();
             $.ajax({
               url: 'connection_count.php',
               type:'post',
-              data: {'userAgent':agent, 'userName': JSON.parse(localStorage.getItem('baseUserName')), 'devaVersion': devaVersion}
+              data: {
+                'userAgent':agent,
+                'userName': JSON.parse(localStorage.getItem('baseUserName')),
+                'devaVersion': devaVersion
+              }
             });
             /////
           }
@@ -102,7 +95,7 @@ function verifBaseUserName(baseUserName) {
   else window.location = "";
 }
 
-///////////////////////////////////////  settings
+////////////////////////////////////////////////////////  settings
 
 /////     init settinglist
 function initSettingList() {
@@ -133,7 +126,6 @@ function writeSettingListToDatabase() {
       else {
         console.log("Success writing settinglist to database");
         var reponse = xhr.responseText;
-        //reponse = JSON.parse(reponse);
       }
     }
   });
@@ -166,7 +158,7 @@ function readSettingListFromDatabase() {
 
 
 
-///////////////////////////////////////  traveller
+/////////////////////////////////////////////////  traveller
 /////
 function initContactBook() {
   $.ajax({
@@ -444,9 +436,106 @@ function buildCardHtml(card) {
   return html;
 }
 
-///////////////////////////////////////  END traveller
+///////////////////////////////////////////////////////  END traveller
 
 /////
+function userAgent() {
+  var agent = "";
+  try {
+    agent = /* window.navigator.platform + ' ' + */ window.navigator.userAgent;
+    if ( agent.lastIndexOf("HeadlessChrome") != -1 ) return;
+    agent = agent.replace(/Mozilla\/5\.0 /,"");
+    agent = agent.replace(/\(KHTML, like Gecko\)/,"");
+    agent = agent.replace(/; Win64; x64/,"");
+    agent = agent.replace(/Macintosh; Intel Mac /,"");
+    agent = agent.replace(/AppleWebKit\/\d*\.\d*/,"");
+
+    if ( !agent ) agent = window.navigator.vendor;
+  } catch (e) {}
+
+  return agent;
+}
+
+
+
+/////////////////////////////////////////////////////////  START   proto
+
+/////   Ecriture fichier texte sur disque
+function writeFileToDisk(data, filename, type) {
+  var file;
+  if (data instanceof Blob) {
+    file = data;
+  } else {
+    file = new Blob([data], {type: type});
+  }
+  var a = document.createElement("a");
+  var url = URL.createObjectURL(file);
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function() {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url); // free memory
+  }, 10);
+}
+
+/////
+function writeProtoToDatabase(proto) {
+  $.ajax({
+    url: 'proto_write.php',
+    type:'post',
+    data: {
+      'userAgent':userAgent(),
+      'userName': JSON.parse(localStorage.getItem('baseUserName')),
+      'devaVersion': devaVersion,
+      'prototext': proto
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error writing proto to database");
+      }
+      else {
+        console.log("Success writing proto to database");
+        var reponse = xhr.responseText;
+      }
+    }
+  });
+}
+
+/////
+function readProtoFromDatabase(whichproto) {
+  $.ajax({
+    url: "proto_read.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "whichproto": whichproto
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading protocole from database");
+      }
+      else {
+        console.log("Success reading protocole from database");
+        var reponse = xhr.responseText;
+        if ( reponse == "empty" ) {
+          fillLog("response", "Erreur lecture protocole");
+          doResponseAnyMode("Voyageur inconnu");
+        }
+        else {
+          let jRep = JSON.parse(reponse);
+          fillLog("response", "Ok");
+          doResponseAnyMode("Ok");
+        }
+      }
+    }
+  });
+}
+
+///////////////////////////   END  proto
+
+/*
 function getDevaPass() {
   let truePass = "ziva";
 
@@ -462,6 +551,7 @@ function getDevaPass() {
   }
   else window.location = "";
 }
+*/
 
 /////
 function getDateNow() {
@@ -1284,21 +1374,27 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
   if ( question.match(/\bD(e|i)va\b/i)) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
   fillLog("question", question);
 
-  if ( question.match(/^\s*gpt4\s*$/i) ) {  // force gpt4
+  if ( question.match(/^\s*:gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-1106-preview';
     // window.location = window.location.href;
     return;
   }
 
-  if ( question.match(/^\s*gpt3\s*$/i) ) {  // force gpt3
+  if ( question.match(/^\s*:gpt3\s*$/i) ) {  // force gpt3
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     reponseModel = 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^\s*clear\s*$/i) ) {  // clear the calendar
-    clearCalendar(); return; }
+  if ( question.match(/^\s*:clear\s*$/i) ) {  // clear the calendar
+    clearCalendar();
+    return;
+  }
+
+  if ( question.match(/^\s*:proto\s*$/i) ) {  // protocole
+
+  }
 
   if ( question.match(/^:/) ) {  // process sql request
     let sql = question.match(/^:(.*)/);

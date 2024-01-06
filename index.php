@@ -32,7 +32,7 @@
   <!-- resizeImg -->
   <script src="jquery.resizeImg.js"></script>
   <script src="mobileBUGFix.js"></script>
-  <!-- -->
+  <!--  -->
   <script src="data.js"></script>
   <script src="index.js"></script>
   <script src="speech.js"></script>
