@@ -6,7 +6,7 @@ $username = $_POST['username'];
 $whichproto = $_POST['whichproto']; // all, my, last
 //
 if ( $whichproto == "all" ) {
-  $query = "SELECT userName, participant, date, time, devaVersion, prototext FROM proto";
+  $query = "SELECT userName, tester, participant, date, time, devaVersion, prototext FROM proto";
   $result = $base->query($query);
 }
 //

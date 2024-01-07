@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.06.1";
+var devaVersion = "v4.01.07.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -247,8 +247,9 @@ function travellerReadAnyKeyword(keywords) {
   for ( let keyword of kw ) {
     if ( !first ) where += " or ";
     first = false;
-    where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
-      "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "'";
+//    where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
+//      "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "'";
+    where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword + "'";
   }
   where += ")";
   if ( where == "()" ) where = "";
@@ -481,7 +482,7 @@ function writeFileToDisk(data, filename, type) {
 }
 
 /////
-function writeProtoToDatabase(proto) {
+function writeProtoToDatabase(proto, tester, participant) {
   $.ajax({
     url: 'proto_write.php',
     type:'post',
@@ -489,6 +490,8 @@ function writeProtoToDatabase(proto) {
       'userAgent':userAgent(),
       'userName': JSON.parse(localStorage.getItem('baseUserName')),
       'devaVersion': devaVersion,
+      'tester': tester,
+      'participant': participant,
       'prototext': proto
     },
     complete: function(xhr, result) {
@@ -524,13 +527,28 @@ function readProtoFromDatabase(whichproto) {
           doResponseAnyMode("Voyageur inconnu");
         }
         else {
-          let jRep = JSON.parse(reponse);
+          let arrayProto = JSON.parse(reponse);
           fillLog("response", "Ok");
           doResponseAnyMode("Ok");
+          let textProto = arrayToTextProto(arrayProto);
+          writeFileToDisk(textProto, "DevaProto " + arrayProto[0][3] + " (" + arrayProto[0][4] + ").txt" , "text");
         }
       }
     }
   });
+}
+
+/////
+function arrayToTextProto(arrayProto) {
+  let textProto = "";
+
+  for ( let proto of arrayProto ) {
+    textProto += "**********************************************************\n";
+    textProto += proto[1] + "\t" + proto[2] + "\t" + proto[3] + "\t" + proto[4] + "\t" + proto[5] + "\n";
+    textProto += proto[6] + "\n\n";
+  }
+
+  return textProto;
 }
 
 ///////////////////////////   END  proto
@@ -1370,38 +1388,38 @@ function collectPreChatBuffer() {
 ////
 function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-
-  if ( question.match(/\bD(e|i)va\b/i)) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
+  if ( question.match(/\bD(e|i)va\b/i) ) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
   fillLog("question", question);
-
+//////
   if ( question.match(/^\s*:gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-1106-preview';
     // window.location = window.location.href;
     return;
   }
-
-  if ( question.match(/^\s*:gpt3\s*$/i) ) {  // force gpt3
+  else if ( question.match(/^\s*:gpt3\s*$/i) ) {  // force gpt3
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     reponseModel = 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
-  if ( question.match(/^\s*:clear\s*$/i) ) {  // clear the calendar
+  else if ( question.match(/^\s*:clear\s*$/i) ) {  // clear the calendar
     clearCalendar();
     return;
   }
-
-  if ( question.match(/^\s*:proto\s*$/i) ) {  // protocole
-
+  else if ( question.match(/^\s*:proto\s*all\s*$/i) ) {  // protocole
+    readProtoFromDatabase("all");
+    return;
   }
 
+  /*
   if ( question.match(/^:/) ) {  // process sql request
     let sql = question.match(/^:(.*)/);
     let sqlWhere = sql[1];
     travellerReadAnyKeyword(sqlWhere);
     return;
   }
+  */
 
   if ( $("#paramPage").css("display") == "block" ) {
     travellerReadAnyKeyword(travellerKeywordArray(question));
