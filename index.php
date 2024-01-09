@@ -38,6 +38,10 @@
   <script src="speech.js"></script>
 <!-- ************************************************************************** -->
   <div id="DEVA">
+<!-- -->
+  <div class="d-flex flex-row-reverse">
+    <div id="record-widget"></div>
+  </div>
 <!--           -->
 <!--  TOOLBAR  -->
 <!--           -->
@@ -64,7 +68,7 @@
   <div id="chatParamOffcanvas" class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1">
 
     <div id="dialogButtonsOffcanvas" class="d-flex flex-row mt-2">
-      <button id="chatParamButton" class="btn toolbarButton ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
+      <button id="chatParamButtonOffcanvas" class="btn toolbarButton ms-3" data-bs-dismiss="offcanvas" type="button">
         <img src="icons/chat-left-text.svg" width=30>
       </button>
       <button id="micButtonOffcanvas" class="btn toolbarButton" type="button">
@@ -279,10 +283,10 @@
         </div>
       </div>
     </div>
-    <!--                                                     -->
-    <!--    travellerModal  create or edit traveller         -->
-    <!--                                                     -->
-      <div id="travellerModal" data-client-id= "" class="modal fade" data-bs-backdrop="static" tabindex="-1">
+    <!--                                                 -->
+    <!--    travellerModal  create or edit traveller     -->
+    <!--                                                 -->
+      <div id="travellerModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
@@ -295,7 +299,6 @@
                   <img id="imgFromDisk" src="icons/person-fill.svg" width="90" class="avatar-md style="border-radius:0!important" img-thumbnail">
                 </label>
                 <input id="imgFromDiskInput" type="file" style="opacity:0">
-
               </div>
               <div class="d-grid gap-2">
                 <div class="mb-2">
@@ -364,7 +367,7 @@
       <!--                   -->
       <!--   confirmModal    -->
       <!--                   -->
-      <div id="confirmModal" class="modal fade" data-bs-backdrop="static"  tabindex="-1">
+      <div id="confirmModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -378,6 +381,62 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
               <button id="confirmModalOK" type="button" class="btn btn-primary">OK</button>
             </div>
+          </div>
+        </div>
+      </div>
+      <!--                 -->
+      <!--   protoModal    -->
+      <!--                 -->
+      <div id="protoModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog  modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Gestion des protocoles</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+              <h5>Enregistrer</h5>
+              <br/>
+              <div class="d-grid gap-2">
+                <div class="mb-2">
+                  <label for="tester" class="form-label">Nom du testeur</label>
+                  <input id="tester" type="text" class="form-control"/>
+                </div>
+                <div class="mb-2">
+                  <label for="participant" class="form-label">Nom du paticipant</label>
+                  <input id="participant" type="text" class="form-control"/>
+                </div>
+                <div class="mb-2">
+                  <label for="condition" class="form-label">Condition expérimentale</label>
+                  <input id="condition" type="text" class="form-control"/>
+                </div>
+                <button id="record" class="btn btn-success mt-1">Commencer l'enregistrement</button>
+                <br/>
+                <h5>Télécharger</h5>
+                <div class="mt-0">
+                  <button id="down-last" class="btn btn-light">Le dernier protocole</button>
+                </div>
+                <div class="mt-1">
+                  <button id="down-my" class="btn btn-light">Mes protocoles</button>
+                </div>
+                <div class="mt-1">
+                  <button id="down-all" class="btn btn-light">Tous les protocoles</button>
+                </div>
+                <h5  class="mt-4">Supprimer</h5>
+                <div class="mt-0">
+                  <button id="sup-last" class="btn btn-light">Le dernier protocole</button>
+                </div>
+                <div class="mt-1">
+                  <button id="sup-my" class="btn btn-light">Mes protocoles</button>
+                </div>
+              </div>
+            </div>
+            <!--
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button id="confirmModalOK" type="button" class="btn btn-success">OK</button>
+            </div>
+            -->
           </div>
         </div>
       </div>

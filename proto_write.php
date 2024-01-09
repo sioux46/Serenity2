@@ -12,9 +12,10 @@ $userName = $_POST["userName"];
 $devaVersion = $_POST["devaVersion"];
 $tester = $_POST["tester"];
 $participant = $_POST["participant"];
+$condition = $_POST["condition"];
 $prototext = $_POST["prototext"];
 // echo
-$query = "INSERT INTO proto (`userName`, `clientIP`, `date`, `time`, `devaVersion`, `userAgent`, `tester`, `participant`, `prototext`) VALUES ('$userName', '$clientIP', '$date', '$time', '$devaVersion', '$userAgent', '$tester', '$participant', '$prototext')";
+$query = "INSERT INTO proto (`userName`, `clientIP`, `date`, `time`, `devaVersion`, `userAgent`, `tester`, `participant`, `condition`, `prototext`) VALUES ('$userName', '$clientIP', '$date', '$time', '$devaVersion', '$userAgent', '$tester', '$participant', '$condition', '$prototext')";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) $reponse = "ok";

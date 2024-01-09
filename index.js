@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.07.1";
+var devaVersion = "v4.01.09.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -158,7 +158,7 @@ function readSettingListFromDatabase() {
 
 
 
-/////////////////////////////////////////////////  traveller
+/////////////////////////////////////////////////  $travel$   START  traveller
 /////
 function initContactBook() {
   $.ajax({
@@ -457,10 +457,6 @@ function userAgent() {
   return agent;
 }
 
-
-
-/////////////////////////////////////////////////////////  START   proto
-
 /////   Ecriture fichier texte sur disque
 function writeFileToDisk(data, filename, type) {
   var file;
@@ -481,8 +477,19 @@ function writeFileToDisk(data, filename, type) {
   }, 10);
 }
 
+///////////////////////////////////////////////////////// $proto$  START   proto
+
 /////
-function writeProtoToDatabase(proto, tester, participant) {
+function startProtoRecording() {
+  console.log("Début enregistrement protocole");
+}
+
+function stopProtoRecording() {
+  console.log("Fin enregistrement protocole");
+}
+
+/////
+function writeProtoToDatabase(proto, tester, participant, condition) {
   $.ajax({
     url: 'proto_write.php',
     type:'post',
@@ -492,6 +499,7 @@ function writeProtoToDatabase(proto, tester, participant) {
       'devaVersion': devaVersion,
       'tester': tester,
       'participant': participant,
+      'condition': condition,
       'prototext': proto
     },
     complete: function(xhr, result) {
@@ -524,7 +532,7 @@ function readProtoFromDatabase(whichproto) {
         var reponse = xhr.responseText;
         if ( reponse == "empty" ) {
           fillLog("response", "Erreur lecture protocole");
-          doResponseAnyMode("Voyageur inconnu");
+          doResponseAnyMode("Protocole non trouvé");
         }
         else {
           let arrayProto = JSON.parse(reponse);
@@ -1404,11 +1412,19 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
     return;
   }
   else if ( question.match(/^\s*:clear\s*$/i) ) {  // clear the calendar
-    clearCalendar();
+    $("#chatParamButtonOffcanvas").trigger("click");
+    $("#startButton").trigger("click");
+    $("#start").css("opacity", 0.1);
+    $("#start").animate( {"opacity": 1 }, 2000);
+    // setTimeout( function() {
+       clearCalendar();
+    // }, 0);
+      //$("#devaVersion").trigger("click"); // init calendar
     return;
   }
-  else if ( question.match(/^\s*:proto\s*all\s*$/i) ) {  // protocole
-    readProtoFromDatabase("all");
+  else if ( question.match(/^\s*:proto\s*$/i) ) {  // protocole
+    $("#chatParamButtonOffcanvas").trigger("click");
+    $("#protoModal").modal("show");
     return;
   }
 
@@ -2227,13 +2243,16 @@ function textTimeToNumTime(text) {
 
 // ****************************************************************************************
 // ****************************************************************************************
-// **************************************************************************     R E A D Y
+// *******************************************************************   $ready$  R E A D Y
 
 $(document).ready(function () {
 
 //////////////////
 $("#devaVersion").text(devaVersion);
 if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
+
+/////////////////
+$("#record-widget").css("display", "none");
 
 //////////////////
 $(window).focus( function() {
@@ -2251,12 +2270,9 @@ if (!window.location.origin.match(/paris8/) ) {
     $("#singleInputModal").modal("show");
   }
   else {
-
   //  $("#start").css({"display": "block"});  // show start page
-
   //  initContactBook();
   //  readCalFromDatabase();
-
     verifBaseUserName(baseUserName);
   }
 }
@@ -2272,15 +2288,36 @@ if ( window.speechSynthesis ) { // if not android webview
   speechSynthesis.addEventListener("voiceschanged", () => { voices = speechSynthesis.getVoices(); });
 }
 
+////////////////////////////////////////////////////  $proto$   PROTO MODAL
+$("#protoModal").find("#record").on("click", function(e) {
+  if ( $("#protoModal").find("#record").text() == "Commencer l'enregistrement" ) {
+    $("#protoModal").find("#record").text("Terminer l'enregistrement");
+    $("#protoModal").find("#record").removeClass("btn-success").addClass("btn-danger");
+//    $("#protoModal").modal("hide");
+    $("#protoModal").find(".btn-close").trigger("click");
+    startProtoRecording();
+    $("#record-widget").css("display", "block");
+//    $("#startButton").trigger("click");
+  }
+
+  else {
+    stopProtoRecording();
+    $("#record-widget").css("display", "none");
+    $("#protoModal").find("#record").text("Commencer l'enregistrement");
+    $("#protoModal").find("#record").removeClass("btn-danger").addClass("btn-success");
+  }
+
+});
+
 
 ////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
                                 //  offcanvas mic & speaker
-$("#micButtonOffcanvas").on("click", function (e) {
+$("#micButtonOffcanvas").on("click", function(e) {
   $("#micButton").trigger("click");
 });
 
-$("#speakerButtonOffcanvas").on("click", function (e) {
+$("#speakerButtonOffcanvas").on("click", function(e) {
   $("#speakerButton").trigger("click");
 });
 
@@ -2638,6 +2675,7 @@ $("#ontoTree-title").on("click", function (ev) {
 });
 
 //////////   same as typing "clear" in prompt
+/*
 $("#devaVersion").on("click", function (e) {
   $("#start").css("opacity", 0.1);
   $("#start").animate( {"opacity": 1 }, 2000);
@@ -2645,7 +2683,8 @@ $("#devaVersion").on("click", function (e) {
      clearCalendar();
   }, 360);
 });
-//
+*/
+
 
 /*
 $('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
@@ -2694,6 +2733,10 @@ var ontoTree = [];
 // exemple: ["meuble", [["chaise",[]], ["table", []]]
 
 ontoTree = importTree(importData);
+
+////////////////////                PROTO RECORDING
+
+var actualProto = "";
 
 /////////////////////               CONTACTBOOK
 

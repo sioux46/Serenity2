@@ -9,8 +9,14 @@ body {
   font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 
-#devaVersion:hover {
-  cursor: pointer;
+#record-widget {
+  position: fixed;
+  z-index: 5000;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: white;
+  border: 5px solid #fb003a;
 }
 
 .calendar-events {
