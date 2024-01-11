@@ -482,14 +482,25 @@ function writeFileToDisk(data, filename, type) {
 /////
 function startProtoRecording() {
   console.log("Début enregistrement protocole");
+  $("#clearLogButton").trigger("click"); // clear textarea + newChat
+  actualProto = "";
+  protoRecording = true;
 }
 
 function stopProtoRecording() {
   console.log("Fin enregistrement protocole");
+  protoRecording = false;
+  writeProtoToDatabase(
+        actualProto,
+        $("#protoModal").find("#tester").val(),
+        $("#protoModal").find("#participant").val(),
+        $("#protoModal").find("#condition").val()
+  );
 }
 
 /////
 function writeProtoToDatabase(proto, tester, participant, condition) {
+  let protoMinusQuote = proto.replace(/'/g, '‘'); // change quote to ‘
   $.ajax({
     url: 'proto_write.php',
     type:'post',
@@ -500,7 +511,7 @@ function writeProtoToDatabase(proto, tester, participant, condition) {
       'tester': tester,
       'participant': participant,
       'condition': condition,
-      'prototext': proto
+      'prototext': JSON.stringify(protoMinusQuote)
     },
     complete: function(xhr, result) {
       if (result != 'success') {
@@ -539,6 +550,8 @@ function readProtoFromDatabase(whichproto) {
           fillLog("response", "Ok");
           doResponseAnyMode("Ok");
           let textProto = arrayToTextProto(arrayProto);
+          textProto = textProto.replace(/^"/, "");
+          textProto = textProto.replace(/"$/, "");
           writeFileToDisk(textProto, "DevaProto " + arrayProto[0][3] + " (" + arrayProto[0][4] + ").txt" , "text");
         }
       }
@@ -549,11 +562,15 @@ function readProtoFromDatabase(whichproto) {
 /////
 function arrayToTextProto(arrayProto) {
   let textProto = "";
-
+  let p6 = "";
   for ( let proto of arrayProto ) {
-    textProto += "**********************************************************\n";
-    textProto += proto[1] + "\t" + proto[2] + "\t" + proto[3] + "\t" + proto[4] + "\t" + proto[5] + "\n";
-    textProto += proto[6] + "\n\n";
+    textProto += "**************************************************************************\n";
+    textProto += proto[0] + "\t" + proto[1] + "\t" + proto[2] + "\t" + proto[3] + "\t" + proto[4] + "\t" + proto[5] + "\n\n";
+
+    p6 = proto[6].replace(/"> /, "> ");
+    p6 = p6.replace(/^"/, "");
+    p6 = p6.replace(/"$/, "");
+    textProto += p6 + "\n\n";
   }
 
   return textProto;
@@ -1091,7 +1108,7 @@ function removeBeforeCalEvents(events) {
           ids.push(event.id);
   }
   $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
-  // saveEvoCalEvents();
+  saveEvoCalEvents();
 }
 
 ////
@@ -1112,7 +1129,7 @@ function clearCalendar() {
 /////////////////////////////////////////////////////////////////////////////////////////////
                                             //  chatGPT S E R V I C E   C A L L
 ////////////////////////////////////////////////////////////////////////////////////////////
-function chatGPTserviceCall(serviceBuffer) {
+function chatGPTserviceCall(serviceBuffer) {                     // $service$
 
   waitingForGPT = true;
 
@@ -1226,6 +1243,9 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
 
+      // Add event from chatGPTserviceCall to actualProto
+      if ( protoRecording ) actualProto += "\n" + date + ", " + time + ", " + description;
+
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
 
@@ -1247,6 +1267,9 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
     for ( let event of evoCalEvents_OLD ) {
       console.log("restore event bad format GPT4 > time: " + event.name + ", description: " + event.description + ", date: " + event.date);
       addCalEvent(event.name, event.description, event.date);
+
+      // Add restored evoCalEvents to actualProto
+      if ( protoRecording ) actualProto += "\ntime: " + event.name + ", description: " + event.description + ", date: " + event.date + "(rewind to previous calendar version)";
     }
     saveEvoCalEvents();
   }
@@ -1629,7 +1652,7 @@ function handleResponse(reponse) {
       refreshDateDisplay(dateForEvo);
     }
 
-    serviceBuffer = [];
+    serviceBuffer = [];   // $service$
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
     // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
@@ -1876,20 +1899,32 @@ function doSpeechSynth (text) {
   window.speechSynthesis.speak(ut);
 }
 
-////                                  fillLog
+/////                                  fillLog
 function fillLog(who, text) {
   let debText = "> ";
   if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
-  if ( who == "question" )
-          $("#logTextarea").val( $("#logTextarea").val() + debText + settinglist.userName + ": " + text + "\n");
+
+  if ( who == "question" ) {
+    $("#logTextarea").val( $("#logTextarea").val() + debText + settinglist.userName + ": " + text + "\n");
+
+    // Add question to actualProto
+    if ( protoRecording && !text.match(/^:/) ) {
+      actualProto += debText + settinglist.userName + ": " + text;
+    }
+  }
 
   else if ( who == "response")  {
-    $("#logTextarea").val( $("#logTextarea").val() + "> " + settinglist.assistantName + ": " + text );
+    $("#logTextarea").val( $("#logTextarea").val() + "> " + settinglist.assistantName + ": " + text + "\n");
     if ( text == "Je vous en pris" ) {
       questionMode = "audio";
       $("#micButton").trigger("click");
       $("#micButton").trigger("click");
       $("#micButton").trigger("click");
+    }
+
+    // Add response to actualProto
+    if ( protoRecording ) {
+      actualProto += debText + settinglist.assistantName + ": " + text;
     }
   }
 
@@ -2293,11 +2328,9 @@ $("#protoModal").find("#record").on("click", function(e) {
   if ( $("#protoModal").find("#record").text() == "Commencer l'enregistrement" ) {
     $("#protoModal").find("#record").text("Terminer l'enregistrement");
     $("#protoModal").find("#record").removeClass("btn-success").addClass("btn-danger");
-//    $("#protoModal").modal("hide");
     $("#protoModal").find(".btn-close").trigger("click");
     startProtoRecording();
     $("#record-widget").css("display", "block");
-//    $("#startButton").trigger("click");
   }
 
   else {
@@ -2306,7 +2339,18 @@ $("#protoModal").find("#record").on("click", function(e) {
     $("#protoModal").find("#record").text("Commencer l'enregistrement");
     $("#protoModal").find("#record").removeClass("btn-danger").addClass("btn-success");
   }
+});
 
+$("#protoModal").find("#down-last").on("click", function(e) {
+  readProtoFromDatabase("last");
+});
+
+$("#protoModal").find("#down-my").on("click", function(e) {
+  readProtoFromDatabase("my");
+});
+
+$("#protoModal").find("#down-all").on("click", function(e) {
+  readProtoFromDatabase("all");
 });
 
 
@@ -2734,9 +2778,10 @@ var ontoTree = [];
 
 ontoTree = importTree(importData);
 
-////////////////////                PROTO RECORDING
+/////////////////  $proto$          PROTO RECORDING
 
 var actualProto = "";
+var protoRecording = false;
 
 /////////////////////               CONTACTBOOK
 

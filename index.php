@@ -387,7 +387,7 @@
       <!--                 -->
       <!--   protoModal    -->
       <!--                 -->
-      <div id="protoModal" class="modal fade" data-bs-backdrop="static" tabindex="-1">
+      <div id="protoModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog  modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">

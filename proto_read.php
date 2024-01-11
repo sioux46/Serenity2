@@ -5,10 +5,21 @@ $base=connect();
 $username = $_POST['username'];
 $whichproto = $_POST['whichproto']; // all, my, last
 //
-if ( $whichproto == "all" ) {
-  $query = "SELECT userName, tester, participant, date, time, devaVersion, prototext FROM proto";
-  $result = $base->query($query);
+if ( $whichproto == "all" ) { // all protos
+  $query = "SELECT `condition`, tester, participant, date, time, devaVersion, prototext FROM proto";
 }
+else if ( $whichproto == "my" ) {  // username protos
+  $query = "SELECT `condition`, tester, participant, date, time, devaVersion, prototext FROM proto WHERE username = '$username'";
+}
+else if ( $whichproto == "last" ) {
+  $query = "SELECT `condition`, tester, participant, date, time, devaVersion, prototext FROM proto WHERE username = '$username' ORDER BY id DESC LIMIT 1";
+}
+else {
+  echo 'Error ! Bad whichproto parameter';
+  exit(1);
+}
+//
+$result = $base->query($query);
 //
 if ( $base->errno == 0 ) {
   if ( !$result->num_rows ) {
