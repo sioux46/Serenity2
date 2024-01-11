@@ -564,8 +564,8 @@ function arrayToTextProto(arrayProto) {
   let textProto = "";
   let p6 = "";
   for ( let proto of arrayProto ) {
-    textProto += "**************************************************************************\n";
-    textProto += proto[0] + "\t" + proto[1] + "\t" + proto[2] + "\t" + proto[3] + "\t" + proto[4] + "\t" + proto[5] + "\n\n";
+    textProto += "********************************\n";
+    textProto += proto[3] + ", " + proto[4] + ", " + proto[5] + " [" + proto[0] + "] [" + proto[1] + "] [" + proto[2] + "]\n\n";
 
     p6 = proto[6].replace(/"> /, "> ");
     p6 = p6.replace(/^"/, "");
