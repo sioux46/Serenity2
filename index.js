@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.12.2";
+var devaVersion = "v4.01.12.4";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -487,6 +487,7 @@ function startProtoRecording() {
   protoRecording = true;
 }
 
+/////
 function stopProtoRecording() {
   console.log("Fin enregistrement protocole");
   protoRecording = false;
@@ -496,6 +497,36 @@ function stopProtoRecording() {
         $("#protoModal").find("#participant").val(),
         $("#protoModal").find("#condition").val()
   );
+}
+
+/////
+function deleteProtoInDatabase(whichproto) {
+  $.ajax({
+    url: "proto_delete.php",
+    type: "post",
+    data: {
+      "userName": JSON.parse(localStorage.getItem('baseUserName')),
+      "whichproto": whichproto
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading protocole from database");
+      }
+      else {
+        console.log("Success deleting protocole from database");
+        var reponse = xhr.responseText;
+        if ( reponse == "empty" ) {
+          fillLog("response", "Erreur suppression protocole");
+          doResponseAnyMode("Protocoles non supprimés");
+        }
+        else {
+          fillLog("response", "Protocoles supprimés");
+          doResponseAnyMode("Protocoles supprimés");
+          console.log("Protocoles supprimés");
+        }
+      }
+    }
+  });
 }
 
 /////
@@ -2343,6 +2374,14 @@ $("#protoModal").find("#down-my").on("click", function(e) {
 
 $("#protoModal").find("#down-all").on("click", function(e) {
   readProtoFromDatabase("all");
+});
+
+$("#protoModal").find("#sup-last").on("click", function(e) {
+  deleteProtoInDatabase("last");
+});
+
+$("#protoModal").find("#sup-my").on("click", function(e) {
+  deleteProtoInDatabase("my");
 });
 
 

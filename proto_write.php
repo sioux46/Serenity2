@@ -3,8 +3,6 @@ header('Content-Type: text/html; charset=utf-8');
 require_once("connectMySql.php");
 $base=connect();
 //
-//echo "post connect";
-//
 $date = date('Y-m-d');
 $time = date('H:i:s');
 $clientIP = $_SERVER["REMOTE_ADDR"];
