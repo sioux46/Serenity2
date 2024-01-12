@@ -511,7 +511,8 @@ function writeProtoToDatabase(proto, tester, participant, condition) {
       'tester': tester,
       'participant': participant,
       'condition': condition,
-      'prototext': JSON.stringify(protoMinusQuote)
+      // 'prototext': JSON.stringify(protoMinusQuote)
+      'prototext': protoMinusQuote
     },
     complete: function(xhr, result) {
       if (result != 'success') {
@@ -1417,24 +1418,24 @@ function collectPreChatBuffer() {
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////
-function questionAnalyse(question) {   // ********************** Q U E S T I O N   A N A L Y S E *********
+function questionAnalyse(question) {   // $question$   ************* Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
   if ( question.match(/\bD(e|i)va\b/i) ) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
   fillLog("question", question);
 //////
-  if ( question.match(/^\s*:gpt4\s*$/i) ) {  // force gpt4
+  if ( question.match(/^\s*::gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
     reponseModel = 'gpt-4-1106-preview';
     // window.location = window.location.href;
     return;
   }
-  else if ( question.match(/^\s*:gpt3\s*$/i) ) {  // force gpt3
+  else if ( question.match(/^\s*::gpt3\s*$/i) ) {  // force gpt3
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
     reponseModel = 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
-  else if ( question.match(/^\s*:clear\s*$/i) ) {  // clear the calendar
+  else if ( question.match(/^\s*::clear\s*$/i) ) {  // clear the calendar
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#startButton").trigger("click");
     $("#start").css("opacity", 0.1);
@@ -1445,20 +1446,11 @@ function questionAnalyse(question) {   // ********************** Q U E S T I O N
       //$("#devaVersion").trigger("click"); // init calendar
     return;
   }
-  else if ( question.match(/^\s*:proto\s*$/i) ) {  // protocole
+  else if ( question.match(/^\s*::proto\s*$/i) ) {  // protocole
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#protoModal").modal("show");
     return;
   }
-
-  /*
-  if ( question.match(/^:/) ) {  // process sql request
-    let sql = question.match(/^:(.*)/);
-    let sqlWhere = sql[1];
-    travellerReadAnyKeyword(sqlWhere);
-    return;
-  }
-  */
 
   if ( $("#paramPage").css("display") == "block" ) {
     travellerReadAnyKeyword(travellerKeywordArray(question));
