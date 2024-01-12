@@ -414,7 +414,7 @@
                 <br/>
                 <h5>Télécharger</h5>
                 <div class="mt-0">
-                  <button id="down-last" class="btn btn-light">Le dernier protocole</button>
+                  <button id="down-last" class="btn btn-light">Mon dernier protocole</button>
                 </div>
                 <div class="mt-1">
                   <button id="down-my" class="btn btn-light">Mes protocoles</button>
@@ -424,7 +424,7 @@
                 </div>
                 <h5  class="mt-4">Supprimer</h5>
                 <div class="mt-0">
-                  <button id="sup-last" class="btn btn-light">Le dernier protocole</button>
+                  <button id="sup-last" class="btn btn-light">Mon dernier protocole</button>
                 </div>
                 <div class="mt-1">
                   <button id="sup-my" class="btn btn-light">Mes protocoles</button>
