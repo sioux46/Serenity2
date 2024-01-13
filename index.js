@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.13.1";
+var devaVersion = "v4.01.13.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1276,7 +1276,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
 
       // Add event from chatGPTserviceCall to actualProto
-      if ( protoRecording ) actualProto += "\n" + date + ", " + time + ", " + description;
+      if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
 
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
@@ -1922,7 +1922,7 @@ function doSpeechSynth (text) {
   window.speechSynthesis.speak(ut);
 }
 
-/////                                  fillLog
+/////                                  $fillLog$
 function fillLog(who, text) {
   let debText = "> ";
   if ( $("#logTextarea").val() != "" ) debText = "\n\n> ";
@@ -2875,11 +2875,11 @@ var lastQuestion = "";
 
 var newChat = true;
 var waitingForGPT = false;
-
+//                                TIME OUT
 var postChatTimeout;
 var recogTimeout;
-var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
-var clearPostChatValue = 120000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+var stopRecogValue = 30000;  // 15000 = 15 seconds, 60000 = 1 minute
+var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways

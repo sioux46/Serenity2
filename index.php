@@ -379,7 +379,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-              <button id="confirmModalOK" type="button" class="btn btn-primary">OK</button>
+              <button id="confirmModalOK" type="button" class="btn btn-success">OK</button>
             </div>
           </div>
         </div>
