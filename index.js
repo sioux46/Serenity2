@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.12.4";
+var devaVersion = "v4.01.13.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2377,13 +2377,29 @@ $("#protoModal").find("#down-all").on("click", function(e) {
 });
 
 $("#protoModal").find("#sup-last").on("click", function(e) {
-  deleteProtoInDatabase("last");
+  $("#confirmModal").attr("data-deva-confirm", "sup-last");
+  $("#protoModal").css("visibility", "hidden");
+  $("#confirmModal").find("h5").text("Supprimer mon dernier protocole ?");
+  $("#confirmModal").modal("show");
 });
 
 $("#protoModal").find("#sup-my").on("click", function(e) {
-  deleteProtoInDatabase("my");
+  $("#confirmModal").attr("data-deva-confirm", "sup-my");
+  $("#protoModal").css("visibility", "hidden");
+  $("#confirmModal").find("h5").text("Supprimer tous mes protocoles ?");
+  $("#confirmModal").modal("show");
 });
 
+//////                                  confirm modal handling
+$("#confirmModal").find("#confirmModalOK").on("click", function (e) {
+  let action = $("#confirmModal").attr("data-deva-confirm");
+  if ( action == "sup-last" ) deleteProtoInDatabase("last");
+  else if ( action == "sup-my" ) deleteProtoInDatabase("my");
+});
+$("#confirmModal button").on("click", function(e) {
+  $("#protoModal").css("visibility", "visible");
+  $("#confirmModal").modal("hide");
+});
 
 ////////////////////////////////////////////////////  TOOLBAR BUTTONS
 
