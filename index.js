@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.13.2";
+var devaVersion = "v4.01.14.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1684,7 +1684,7 @@ function handleResponse(reponse) {
 
     // Listez mon agenda pour serviceCall
     //serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
-    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en placant le dernier rendez-vous dont on a parlé à la fin de la liste. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en plaçant en dernier de liste le rendez-vous que l'on vient juste d'ajouté ou de modifié. Répondez sans ajouter d'autre remarque"});
 
 
     chatGPTserviceCall(serviceBuffer);
@@ -1793,7 +1793,7 @@ function clearPostChatTimeout() {
 
 
 ////////////////////////////////////////////////////////////////////////
-//                                          *** Speech RECOGNITION ***
+//                           $recog$          *** Speech RECOGNITION ***
 
 ////
 function initRecognition() {
@@ -1821,6 +1821,7 @@ function initRecognition() {
 
         // if ( recogResult.match(/\bD(e|i)va\b/i)) recogResult = recogResult.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
         // fillLog("question", recogResult);
+
         questionAnalyse(recogResult);
 
       }
@@ -1835,7 +1836,7 @@ function startRecog() {
   if ( window.speechSynthesis.speaking ) return;
   if ( !activePage ) return; // No audio in startPage
 
-  $("#micButton, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
+  $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
   $("#micButton, #micButtonOffcanvas").css("border", "3px solid #fa0039");
   try { recognition.start(); recogResult = "waitinggggg"; } catch(e) {}
   recognizing = true;
@@ -1875,7 +1876,7 @@ function resetRecog() {
   recogResult = "";
   console.log("Fin d'écoute");
   $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-mute-fill.svg");
-  $("#micButton img, #micButtonOffcanvas").css("border", "3px solid white");
+  $("#micButton, #micButtonOffcanvas").css("border", "3px solid white");
 
   // else {
     // questionMode = "text";
@@ -1894,7 +1895,8 @@ function doSpeechSynth (text) {
     // actualVoice = voices[0]; // Rocko
   }
 
-  if ( text.match(/\bD(e|i)va\b/i)) text = text.replaceAll(/\bD(e|i)va\b/gi, "Diva"); // prononce 'Diva'
+  text = text.replaceAll(/\bD(e|i)va\b/gi, "Diva"); // prononce 'Diva'
+
 
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
@@ -1911,6 +1913,7 @@ function doSpeechSynth (text) {
   };
   ut.onend = function(e) {
     recogResult = "";
+    // restart recog at the end of speach
     if ( questionMode == "audio" && response != "Je vous en pris" ) {
       startRecog();
       return;
@@ -1979,7 +1982,7 @@ function doResponseAnyMode( response ) {
   console.log(response);
 }
 
-////                            KEYBOARD EVENTS
+////////////////                            KEYBOARD EVENTS
 /* $(document).keydown(function (event) {
   if ( event.which == 32 ) {
     // if ( window.speechSynthesis.paused ) window.speechSynthesis.resume();
@@ -1987,6 +1990,13 @@ function doResponseAnyMode( response ) {
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
   }
 }); */
+$(document).keydown(function (event) {
+  if ( event.which == 9 ) {
+    $("#questionButton").trigger("click");
+  }
+});
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////   D A T E   &   T I M E
@@ -2440,6 +2450,7 @@ $("#micButton").on("click", function (ev) {
   }
   setTimeout( function() { console.log(audioState()); }, 500);
 });
+
 //-------------------------------------------------------------
 //                                                        toggle speaker
 $("#speakerButton").on("click", function (ev) {
@@ -2589,10 +2600,10 @@ quality: 0.8// 80%
 
 $("#imgFromDiskInput").resizeImg({
   before:function(file) {
-    console.log("kiki");
+    console.log("before resize");
   },
   callback:function(result) {
-    console.log("coucou");
+    console.log("after resize");
     $("#imgFromDisk").attr("src", result);
   }
 });
@@ -2879,11 +2890,11 @@ var waitingForGPT = false;
 var postChatTimeout;
 var recogTimeout;
 var stopRecogValue = 30000;  // 15000 = 15 seconds, 60000 = 1 minute
-var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+var clearPostChatValue = 31000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
-var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  //   'gpt-4-0613'; // 'gpt-3.5-turbo-1106'  'gpt-3.5-turbo-0613'
+var reponseModel = 'gpt-4-1106-preview';  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview";
 // var reponseTemperature;
 // var userName;
 // var assistantName;

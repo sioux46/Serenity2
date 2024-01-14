@@ -71,13 +71,17 @@
       <button id="chatParamButtonOffcanvas" class="btn toolbarButton ms-3" data-bs-dismiss="offcanvas" type="button">
         <img src="icons/chat-left-text.svg" width=30>
       </button>
-      <button id="micButtonOffcanvas" class="btn toolbarButton" type="button">
+
+      <!-- style="visibility:hidden;" -->
+      <button id="micButtonOffcanvas" class="btn toolbarButton"  type="button">
         <img src="icons/mic-mute-fill.svg" width=30>
       </button>
-      <button id="speakerButtonOffcanvas" class="btn toolbarButton" type="button">
+      <button id="speakerButtonOffcanvas" class="btn toolbarButton"  type="button">
         <img src="icons/volume-mute-fill.svg" width=30>
       </button>
+
     </div>
+
     <!--
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="chatParamOffcanvasLabel"><strong>Converser avec DEVA</strong></h5>
