@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.14.2";
+var devaVersion = "v4.01.16.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -532,6 +532,7 @@ function deleteProtoInDatabase(whichproto) {
 /////
 function writeProtoToDatabase(proto, tester, participant, condition) {
   let protoMinusQuote = proto.replace(/'/g, '‘'); // change quote to ‘
+  protoMinusQuote = protoMinusQuote.replace(/\n\n\n/g, "\n"); // sup returns
   $.ajax({
     url: 'proto_write.php',
     type:'post',
@@ -843,6 +844,12 @@ function initCalendar() {
 
     if ( flagEditTrash == "trash") {                          // trash event
       if ( true ) {
+
+        if ( protoRecording ) {
+          actualProto += "\n................................";
+          actualProto += "\n  - " + event.date + ", " + event.name + ", " + event.description + ", (Supprimé manuellement)";
+        }
+
         $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
         calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
         calendar.selectDate( event.date );
@@ -949,11 +956,13 @@ function initCalendar() {
         if ( event.id == eventId ) {
           event.description = title;   // title/description;
           event.name = time;   // name/time;
+
+          if ( protoRecording ) {
+            actualProto += "\n................................";
+            actualProto += "\n  - " + event.date + ", " + time + ", " + title + ", (Modifié manuellement)";
+          }
         }
       }
-      // sortCalendarEvents(calendar.$active.date);
-//      globalSortCalendarEvents();
-//      saveEvoCalEvents();
       flagEditTrash = "";
       postChatBuffer = [];  // forget recent chat
     }
@@ -970,8 +979,16 @@ function initCalendar() {
           color: "#009099", // "#fe7f78",
         }
       ]);
+
+      if ( protoRecording ) {
+        actualProto += "\n................................";
+        actualProto += "\n  - " + calendar.$active.event_date + ", " + time + ", " + title + ", (Ajouté manuellement)";
+      }
       postChatBuffer = [];  // forget recent chat
     }
+
+    // proto recording
+    // if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
 
     $("#eventModal").modal("hide");   // HIDE MODAL
 
@@ -1281,7 +1298,9 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
 
-    refreshDateDisplay(date); // select the agenda date of the modified event
+    // response is a global for the gpt normal response (not sevice call)
+    // don't refresh display in case of event delete
+    if ( !response.match(/supprim/i) ) refreshDateDisplay(date); // select the agenda date of the modified event
     globalSortCalendarEvents();
     saveEvoCalEvents();
 
@@ -1553,7 +1572,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     chatBuffer = chatBuffer.concat(calendarBuffer);
 
     //------------------------------------------------------------------
-    // question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
+    question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
     //-------------------------------------------------------------------
     console.log("envoyé à ChatGPT: " + question);
     postChatBuffer.push({ role: "user", content: question });
@@ -1935,12 +1954,15 @@ function fillLog(who, text) {
 
     // Add question to actualProto
     if ( protoRecording && !text.match(/^:/) ) {
+      if ( !actualProto ) actualProto = "................................\n";
+      else actualProto += "\n................................\n";
       actualProto += debText + settinglist.userName + ": " + text;
     }
   }
 
   else if ( who == "response")  {
-    $("#logTextarea").val( $("#logTextarea").val() + "> " + settinglist.assistantName + ": " + text + "\n");
+    debText = "\n< ";
+    $("#logTextarea").val( $("#logTextarea").val() + "< " + settinglist.assistantName + ": " + text + "\n");
     if ( text == "Je vous en pris" ) {
       questionMode = "audio";
       $("#micButton").trigger("click");
@@ -1958,6 +1980,7 @@ function fillLog(who, text) {
     $("#logTextarea").val( $("#logTextarea").val() + "\n*** " + text + "\n");
   }
   document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
+  $("#questionTextarea").focus(); // vous avez la parole
 }
 
 /////                                audioState
@@ -2889,8 +2912,8 @@ var waitingForGPT = false;
 //                                TIME OUT
 var postChatTimeout;
 var recogTimeout;
-var stopRecogValue = 30000;  // 15000 = 15 seconds, 60000 = 1 minute
-var clearPostChatValue = 31000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
+var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways
