@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.16.3";
+var devaVersion = "v4.01.17.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -483,7 +483,7 @@ function writeFileToDisk(data, filename, type) {
 function startProtoRecording() {
   console.log("Début enregistrement protocole");
   $("#clearLogButton").trigger("click"); // clear textarea + newChat
-  actualProto = "";
+  actualProto = printCalendar();
   protoRecording = true;
 }
 
@@ -786,7 +786,7 @@ function initOntoTreeChoose(label, move, labs) {
 
 //////////////////////////////////////////////    C A L E N D A R    Functions ////
 
-/////                      DEB   INITCALENDAR()
+/////                      DEB   INITCALENDAR()   $initcal$
 function initCalendar() {
 
   $('#evoCalendar').evoCalendar({
@@ -847,7 +847,7 @@ function initCalendar() {
 
         if ( protoRecording ) {
           actualProto += "\n................................";
-          actualProto += "\n  - " + event.date + ", " + event.name + ", " + event.description + ", (Supprimé manuellement)";
+          actualProto += "\n  - " + printCalDate(event.date) + ", " + event.name + ", " + event.description + ", (Supprimé manuellement)";
         }
 
         $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
@@ -959,7 +959,7 @@ function initCalendar() {
 
           if ( protoRecording ) {
             actualProto += "\n................................";
-            actualProto += "\n  - " + event.date + ", " + time + ", " + title + ", (Modifié manuellement)";
+            actualProto += "\n  - " + printCalDate(event.date) + ", " + time + ", " + title + ", (Modifié manuellement)";
           }
         }
       }
@@ -982,7 +982,7 @@ function initCalendar() {
 
       if ( protoRecording ) {
         actualProto += "\n................................";
-        actualProto += "\n  - " + calendar.$active.event_date + ", " + time + ", " + title + ", (Ajouté manuellement)";
+        actualProto += "\n  - " + printCalDate(calendar.$active.event_date) + ", " + time + ", " + title + ", (Ajouté manuellement)";
       }
       postChatBuffer = [];  // forget recent chat
     }
@@ -2023,6 +2023,23 @@ $(document).keydown(function (event) {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////   D A T E   &   T I M E
+
+/////
+function printCalendar() {
+  let cal = "";
+  for (let event of evoCalEvents ) {
+    cal += " - " + printCalDate(event.date) + ", " + event.name + ", " + event.description;
+    cal += "\n";
+  }
+  return cal;
+}
+
+/////
+function printCalDate(calDate) {  //  return day, month, year ( 21)
+  let d = calDate.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  d = d[2] + "/" + d[1] + "/" + d[3];
+  return d;
+}
 
 ////
 function frenchMonthNamesForRegExp() {
