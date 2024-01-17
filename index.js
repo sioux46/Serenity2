@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.17.1";
+var devaVersion = "v4.01.17.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -810,7 +810,7 @@ function initCalendar() {
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
     addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
     addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
-    addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
+    // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
     addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
     saveEvoCalEvents();
   }
@@ -1172,7 +1172,7 @@ function clearCalendar() {
   evoCalEvents = [];
   saveEvoCalEvents();
   // evoCalEvents = JSON.parse(localStorage.getItem('eventList'));
-  setTimeout( function() { window.location = ""; }, 800);
+  setTimeout( function() { window.location = window.location; }, 1000);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
