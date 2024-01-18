@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.17.3";
+var devaVersion = "v4.01.18.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -484,6 +484,7 @@ function startProtoRecording() {
   console.log("Début enregistrement protocole");
   $("#clearLogButton").trigger("click"); // clear textarea + newChat
   actualProto = printCalendar();
+  printMicHp();
   protoRecording = true;
 }
 
@@ -1807,6 +1808,11 @@ function clearPostChatTimeout() {
     postChatBuffer = [];  // forget recent chat
     // $("#startButton").trigger("click");
     fillLog("service", "Fin de conversation");
+    if ( protoRecording ) {
+      actualProto += "\n................................\n";
+      actualProto += "Fin de conversation\n";
+      if ( protoRecording ) printMicHp();
+    }
     // window.location = window.location.href;
   }, clearPostChatValue); // 10 min = 600000,  5 min = 300000, 1 min = 60000
 }
@@ -1984,6 +1990,16 @@ function fillLog(who, text) {
   $("#questionTextarea").focus(); // vous avez la parole
 }
 
+/////
+function printMicHp() {
+  actualProto += "\n................................\n";
+  if ( questionMode == "text" ) actualProto += "micro: OFF, ";
+  else if ( questionMode == "audio" ) actualProto += "micro: ON, ";
+
+  if ( reponseMode == "text" ) actualProto += "haut-parleur: OFF";
+  else if ( reponseMode == "audio" ) actualProto += "haut-parleur: ON";
+}
+
 /////                                audioState
 function audioState() {
   let state = {};
@@ -1991,6 +2007,10 @@ function audioState() {
   state.recognizing = recognizing;
   state.reponseMode = reponseMode;
   state.speaking = window.speechSynthesis.speaking;
+  let mic = questionMode;
+  let hp = reponseMode;
+
+  // if ( protoRecording ) printMicHp();
   return state;
 }
 
@@ -2018,8 +2038,18 @@ $(document).keydown(function (event) {
   if ( event.which == 9 ) {
     $("#questionButton").trigger("click");
   }
-});
 
+  else if ( protoRecording ) {
+    if ( event.which == 37 ) { // micro
+      console.log( "micro key" );
+      $("#micButton").trigger("click");
+    }
+    else if ( event.which == 39 ) { // hp
+      console.log( "hp key" );
+      $("#speakerButton").trigger("click");
+    }
+  }
+});
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2474,6 +2504,7 @@ $("#micButton").on("click", function (ev) {
 
   if ( questionMode == "text" ) {
     questionMode = "audio";
+    if ( $("#micButton img").attr("src") != "icons/mic-fill.svg" ) printMicHp();
     $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
     $("#micButton, #micButtonOffcanvas").css("border", "3px solid #fa0039");
 
@@ -2485,6 +2516,7 @@ $("#micButton").on("click", function (ev) {
   }
   else {
     questionMode = "text";
+    if ( $("#micButton img").attr("src") != "icons/mic-mute-fill.svg" ) printMicHp();
     $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-mute-fill.svg");
     $("#micButton, #micButtonOffcanvas").css("border", "3px solid white");
     stopRecog();
@@ -2513,12 +2545,14 @@ $("#speakerButton").on("click", function (ev) {
 
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
+    if ( $("#speakerButton img").attr("src") != "icons/volume-up-fill.svg" ) printMicHp();
     $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-up-fill.svg");
     $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid #fa0039");
 
   }
   else {
     reponseMode = "text";
+    if ( $("#speakerButton img").attr("src") != "icons/volume-mute-fill.svg" ) printMicHp();
     $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-mute-fill.svg");
     $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid white");
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
