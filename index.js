@@ -1923,7 +1923,6 @@ function doSpeechSynth (text) {
 
   text = text.replaceAll(/\bD(e|i)va\b/gi, "Diva"); // prononce 'Diva'
 
-
   var ut = new SpeechSynthesisUtterance();
   ut.text = text;
   ut.lang = 'fr-FR';
@@ -1991,13 +1990,18 @@ function fillLog(who, text) {
 }
 
 /////
-function printMicHp() {
+function printMicHp(action) { // action = speakOn speakOff micOn micOff
+  if ( !protoRecording ) return;
   actualProto += "\n................................\n";
+  if ( action ) {
+    if ( action.match(/mic/) ) actualProto += "clic micro, ";
+    if ( action.match(/speak/) ) actualProto += "clic hp, ";
+  }
   if ( questionMode == "text" ) actualProto += "micro: OFF, ";
   else if ( questionMode == "audio" ) actualProto += "micro: ON, ";
 
   if ( reponseMode == "text" ) actualProto += "haut-parleur: OFF";
-  else if ( reponseMode == "audio" ) actualProto += "haut-parleur: ON";
+  else if ( reponseMode == "audio" ) actualProto += "hp: ON";
 }
 
 /////                                audioState
@@ -2027,13 +2031,6 @@ function doResponseAnyMode( response ) {
 }
 
 ////////////////                            KEYBOARD EVENTS
-/* $(document).keydown(function (event) {
-  if ( event.which == 32 ) {
-    // if ( window.speechSynthesis.paused ) window.speechSynthesis.resume();
-    // else window.speechSynthesis.pause();
-    if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
-  }
-}); */
 $(document).keydown(function (event) {
   if ( event.which == 9 ) {
     $("#questionButton").trigger("click");
@@ -2043,10 +2040,12 @@ $(document).keydown(function (event) {
     if ( event.which == 37 ) { // micro
       console.log( "micro key" );
       $("#micButton").trigger("click");
+      actualProto += " (action clavier)\n";
     }
     else if ( event.which == 39 ) { // hp
       console.log( "hp key" );
       $("#speakerButton").trigger("click");
+      actualProto += " (action clavier)";
     }
   }
 });
@@ -2504,7 +2503,7 @@ $("#micButton").on("click", function (ev) {
 
   if ( questionMode == "text" ) {
     questionMode = "audio";
-    if ( $("#micButton img").attr("src") != "icons/mic-fill.svg" ) printMicHp();
+    if ( $("#micButton img").attr("src") != "icons/mic-fill.svg" ) printMicHp("micOn");
     $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-fill.svg");
     $("#micButton, #micButtonOffcanvas").css("border", "3px solid #fa0039");
 
@@ -2516,7 +2515,7 @@ $("#micButton").on("click", function (ev) {
   }
   else {
     questionMode = "text";
-    if ( $("#micButton img").attr("src") != "icons/mic-mute-fill.svg" ) printMicHp();
+    if ( $("#micButton img").attr("src") != "icons/mic-mute-fill.svg" ) printMicHp("micOff");
     $("#micButton img, #micButtonOffcanvas img").attr("src", "icons/mic-mute-fill.svg");
     $("#micButton, #micButtonOffcanvas").css("border", "3px solid white");
     stopRecog();
@@ -2545,14 +2544,14 @@ $("#speakerButton").on("click", function (ev) {
 
   if ( reponseMode == "text" ) {
     reponseMode = "audio";
-    if ( $("#speakerButton img").attr("src") != "icons/volume-up-fill.svg" ) printMicHp();
+    if ( $("#speakerButton img").attr("src") != "icons/volume-up-fill.svg" ) printMicHp("speakOn");
     $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-up-fill.svg");
     $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid #fa0039");
 
   }
   else {
     reponseMode = "text";
-    if ( $("#speakerButton img").attr("src") != "icons/volume-mute-fill.svg" ) printMicHp();
+    if ( $("#speakerButton img").attr("src") != "icons/volume-mute-fill.svg" ) printMicHp("speakOff");
     $("#speakerButton img, #speakerButtonOffcanvas img").attr("src", "icons/volume-mute-fill.svg");
     $("#speakerButton, #speakerButtonOffcanvas").css("border", "3px solid white");
     if ( window.speechSynthesis.speaking ) window.speechSynthesis.cancel();
@@ -2765,6 +2764,7 @@ $("#chatParamSpeechPitch").on("change", function (e) {
 
 //////
 $("#questionButton").on("click", function(e) {
+  if ( questionMode == "audio" && reponseMode == "audio") stopRecog(); // stopRecog();  resetRecog();
   let question = $("#questionTextarea").val();
   if ( question ) {
     $("#questionTextarea").val("");
