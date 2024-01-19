@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.18.2";
+var devaVersion = "v4.01.19.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2040,7 +2040,7 @@ $(document).keydown(function (event) {
     if ( event.which == 37 ) { // micro
       console.log( "micro key" );
       $("#micButton").trigger("click");
-      actualProto += " (action clavier)\n";
+      actualProto += " (action clavier)";
     }
     else if ( event.which == 39 ) { // hp
       console.log( "hp key" );

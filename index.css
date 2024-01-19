@@ -44,6 +44,10 @@ body {
   float: right;
 }
 
+.img-select:hover {
+  cursor: pointer;
+}
+
 .card:hover {
   background-color: #fff;
   -webkit-box-shadow: 0 3px 12px -4px rgba(0, 0, 0, 0.65);

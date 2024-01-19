@@ -299,7 +299,7 @@
             </div>
             <div class="modal-body">
               <div>
-                <label for="imgFromDiskInput" class="form-label">
+                <label for="imgFromDiskInput" class="form-label img-select">
                   <img id="imgFromDisk" src="icons/person-fill.svg" width="90" class="avatar-md style="border-radius:0!important" img-thumbnail">
                 </label>
                 <input id="imgFromDiskInput" type="file" style="opacity:0">
