@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.19.1";
+var devaVersion = "v4.01.20.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -483,9 +483,9 @@ function writeFileToDisk(data, filename, type) {
 function startProtoRecording() {
   console.log("Début enregistrement protocole");
   $("#clearLogButton").trigger("click"); // clear textarea + newChat
+  protoRecording = true;
   actualProto = printCalendar();
   printMicHp();
-  protoRecording = true;
 }
 
 /////
@@ -2000,7 +2000,7 @@ function printMicHp(action) { // action = speakOn speakOff micOn micOff
   if ( questionMode == "text" ) actualProto += "micro: OFF, ";
   else if ( questionMode == "audio" ) actualProto += "micro: ON, ";
 
-  if ( reponseMode == "text" ) actualProto += "haut-parleur: OFF";
+  if ( reponseMode == "text" ) actualProto += "hp: OFF";
   else if ( reponseMode == "audio" ) actualProto += "hp: ON";
 }
 
@@ -2387,7 +2387,7 @@ $(document).ready(function () {
 
 //////////////////
 $("#devaVersion").text(devaVersion);
-if ( window.location.origin.match(/paris8/) ) return; // getDevaPass();
+if ( window.location.origin.match(/paris0/) ) return; // getDevaPass();
 
 /////////////////
 $("#record-widget").css("display", "none");
@@ -2401,7 +2401,7 @@ $(window).focus( function() {
 });
 
 //////////////////   handle baseUserName
-if (!window.location.origin.match(/paris8/) ) {
+if (!window.location.origin.match(/paris0/) ) {
   let baseUserName = JSON.parse(localStorage.getItem('baseUserName'));
   if ( !baseUserName ) {
     $("#singleInputModal input").val("");
