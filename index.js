@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.01.20.1";
+var devaVersion = "v4.02.06.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1050,7 +1050,8 @@ function readCalFromDatabase() {
         if ( xhr.responseText != "empty" )
             evoCalEvents = JSON.parse(xhr.responseText);
             if ( evoCalEvents.length > 1 ) evoCalEvents = JSON.parse(evoCalEvents[0]);
-            else evoCalEvents = JSON.parse(evoCalEvents);
+            else if ( evoCalEvents.length == 1 ) evoCalEvents = JSON.parse(evoCalEvents);
+            else evoCalEvents = [];  // new user
         initCalendar();
       }
     }
