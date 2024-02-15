@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.15.1";
+var devaVersion = "v4.02.15.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1667,8 +1667,8 @@ function handleResponse(reponse) {
   // let serviceBuffer;
 
   if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
-  if ( reponse.match(/( modifié| enlevé|remplacé| changé| déplacé| décalé| repoussé| reporté| avancé| reculé| complété| annulé| inchangé| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/( noté| ajouté|nouveau rendez-vous|nouveau rdv|réservation|réservé| retenu)/i) ) action = "modify"; // "add";
+  if ( reponse.match(/( modifié| modifier| enlevé| enlever| remplacé| remplacer| changé| changer| déplacé| déplacer| décalé| décaler| repoussé| repousser| reporté| reporter| avancé| avancer| reculé| reculer| complété| compléter| annulé| annuler| inchangé| inchanger| désormais)/i) ) action = "modify";
+  else if ( reponse.match(/( noté| noter| ajouté| ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé| réserver| retenu|je passe|je vien|je revien|j'arrive)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/( supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify"; // "remove";
   // else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
   // else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
