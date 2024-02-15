@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.06.1";
+var devaVersion = "v4.02.15.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1421,7 +1421,7 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
   chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
-  chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacement, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
+  chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
 
   chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
@@ -1457,7 +1457,7 @@ function collectPreChatBuffer() {
   // consigne agenda
   chatBuffer.push({ role: "system", content: "Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans votre agenda. Vous notez ces réservations dans votre agenda."});
 
-  chatBuffer.push({ role: "system", content: "Notez mes demandes de résevation de vol dans votre agenda."});
+  chatBuffer.push({ role: "system", content: "Notez mes demandes de réservation de vol dans votre agenda."});
 
   chatBuffer.push({ role: "system", content: "faite une réponse courte."});
 
@@ -2037,7 +2037,7 @@ $(document).keydown(function (event) {
     $("#questionButton").trigger("click");
   }
 
-  else if ( protoRecording ) {
+//  else if ( protoRecording ) {
     if ( event.which == 37 ) { // micro
       console.log( "micro key" );
       $("#micButton").trigger("click");
@@ -2048,7 +2048,7 @@ $(document).keydown(function (event) {
       $("#speakerButton").trigger("click");
       actualProto += " (action clavier)";
     }
-  }
+//  }
 });
 
 
