@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.15.2";
+var devaVersion = "v4.02.16.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1190,7 +1190,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"
+              model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -1208,7 +1208,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
           console.log("Error A P I Open A I !");
         }
         else {
-          console.log("Response gpt-4-1106-preview serviceCall:\n" + reponse);
+          console.log("Response gpt-4-turbo-preview serviceCall:\n" + reponse);
           newEventListFromServiceCall(reponse);
         }
       }
@@ -1478,13 +1478,13 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
 //////
   if ( question.match(/^\s*::gpt4\s*$/i) ) {  // force gpt4
     forceGPT4 = true; fillLog("service", "GPT-4 activé");
-    reponseModel = 'gpt-4-1106-preview';
+    reponseModel = 'gpt-4-turbo-preview';
     // window.location = window.location.href;
     return;
   }
   else if ( question.match(/^\s*::gpt3\s*$/i) ) {  // force gpt3
     forceGPT4 = false; fillLog("service", "GPT-3.5 activé");
-    reponseModel = 'gpt-3.5-turbo-1106';
+    reponseModel = "gpt-3.5-turbo-0125"; // 'gpt-3.5-turbo-1106';
     // window.location = window.location.href;
     return;
   }
@@ -1668,7 +1668,7 @@ function handleResponse(reponse) {
 
   if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
   if ( reponse.match(/( modifié| modifier| enlevé| enlever| remplacé| remplacer| changé| changer| déplacé| déplacer| décalé| décaler| repoussé| repousser| reporté| reporter| avancé| avancer| reculé| reculer| complété| compléter| annulé| annuler| inchangé| inchanger| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/( noté| noter| ajouté| ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé| réserver| retenu|je passe|je vien|je revien|j'arrive)/i) ) action = "modify"; // "add";
+  else if ( reponse.match(/( noté| noter| ajouté| ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé| réserver| retenu|vous chercher|vous prendre|Prise en charge|passer vous |venir vous |je passe|je vien|je revien|j'arrive|mis à jour)/i) ) action = "modify"; // "add";
   else if ( reponse.match(/( supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify"; // "remove";
   // else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
   // else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
@@ -2969,8 +2969,8 @@ var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
 var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
-var forceGPT4 = false; // gpt4 allways
-var reponseModel = 'gpt-4-1106-preview';  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview";
+var forceGPT4 = false; // gpt4 allways // not used
+var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
 // var assistantName;
