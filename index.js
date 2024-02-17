@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.17.2";
+var devaVersion = "v4.02.17.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1676,7 +1676,7 @@ function handleResponse(reponse) {
   else if ( reponse.match(/( partiron| arriveron|reviendron| supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify";
 */
 
-  if ( reponse.match(/\b\d{4}\b/i) ) action = "modify";
+  if ( reponse.match(/\b\d{4}\b/i) && !reponse.match(/\?$/) ) action = "modify";
   if ( !action ) return;
 
   rep = reponse;
@@ -2975,7 +2975,7 @@ var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
+var reponseModel = "gpt-4-0125-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
 // var assistantName;
