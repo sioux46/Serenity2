@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.17.1";
+var devaVersion = "v4.02.17.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1467,7 +1467,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
 
-  chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable" });
+  chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
   return chatBuffer;
 }
