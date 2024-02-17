@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.16.2";
+var devaVersion = "v4.02.17.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1408,11 +1408,11 @@ function addCalEvent(time, description, date) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-//                                                          P R E C H A T    BUFFER
+//                                           $prechat       P R E C H A T    BUFFER
 function collectPreChatBuffer() {
   var chatBuffer = [];
 
-  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ".  Vous devez répondre à mes questions." });
+  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ". J'habite rue Blanche à Paris." });
   chatBuffer.push({ role: "system", content: "Répondez " +  settinglist.responseStyle + " " + settinglist.responseDetail + "." });
 
   // date
@@ -1466,6 +1466,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
   chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
+
+  chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable" });
 
   return chatBuffer;
 }
@@ -1666,12 +1668,15 @@ function handleResponse(reponse) {
   let date;
   // let serviceBuffer;
 
-  if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
+  // if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
+
+  /*
   if ( reponse.match(/( modifié| modifier| enlevé| enlever| remplacé| remplacer| changé| changer| déplacé| déplacer| décalé| décaler| repoussé| repousser| reporté| reporter| avancé| avancer| reculé| reculer| complété| compléter| annulé| annuler| inchangé| inchanger| désormais)/i) ) action = "modify";
   else if ( reponse.match(/( noté| noter| ajouté| ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé| réserver| retenu|vous chercher|vous prendre|Prise en charge|passer vous |venir vous |je passe|je vien|je revien|j'arrive|mis à jour)/i) ) action = "modify"; // "add";
-  else if ( reponse.match(/( supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify"; // "remove";
-  // else if ( reponse.match(new RegExp(" " + frenchMonthNamesForRegExp(), 'i')) ) action = "modify";
-  // else if ( reponse.match(/\b\d{4}\b/) )  action = "modify";
+  else if ( reponse.match(/( partiron| arriveron|reviendron| supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify";
+*/
+
+  if ( reponse.match(/\b\d{4}\b/i) ) action = "modify";
   if ( !action ) return;
 
   rep = reponse;
@@ -2970,7 +2975,7 @@ var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125";  "gpt-4-turbo-preview";
+var reponseModel = "gpt-4-1106-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
 // var assistantName;
