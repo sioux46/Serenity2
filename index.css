@@ -95,6 +95,11 @@ body {
   border-color: #fff;
 }
 
+#chatParamChangeUserButton {
+  color: red;
+  font-weight: bold;
+}
+
 #chatParamOffcanvas,
 #paramOffcanvas,
 .modal-content {
