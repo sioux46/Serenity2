@@ -97,17 +97,18 @@ function verifBaseUserName(baseUserName) {
 
 ////////////////////////////////////////////////////////  settings
 
-/////     init settinglist
-function initSettingList() {
-  console.log("initSettinglist");
+/////     verif settinglist
+function verifSettingList() {
+  console.log("verifSettinglist");
 
-  settinglist.responseStyle = " ";
-  settinglist.responseDetail = " de façon concise ";
-  settinglist.userName = "Monsieur";
-  settinglist.assistantName = "Deva";
-  settinglist.reponseTemperature = 0.7;
-  settinglist.speechRate = 1.1;
-  settinglist.speechPitch = 2;
+  if ( !settinglist.responseStyle ) settinglist.responseStyle = " ";
+  if ( !settinglist.responseDetail ) settinglist.responseDetail = " de façon concise ";
+  if ( !settinglist.userName ) settinglist.userName = "Monsieur";
+  if ( !settinglist.userAdress ) settinglist.userAdress = "22 rue Blanche, Paris";
+  if ( !settinglist.assistantName ) settinglist.assistantName = "Deva";
+  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.7;
+  if ( !settinglist.speechRate ) settinglist.speechRate = 1.1;
+  if ( !settinglist.speechPitch ) settinglist.speechPitch = 2;
 }
 
 /////     write settinglist to database
@@ -145,12 +146,11 @@ function readSettingListFromDatabase() {
       }
       else {
         console.log("Success reading settinglist from database");
-        if ( xhr.responseText != "empty" )
-              settinglist = JSON.parse(JSON.parse(xhr.responseText));
-        else  {
-          initSettingList();
-          writeSettingListToDatabase();
+        if ( xhr.responseText != "empty" ) {
+          settinglist = JSON.parse(JSON.parse(xhr.responseText));
         }
+        verifSettingList();
+        writeSettingListToDatabase();
       }
     }
   });
@@ -1412,7 +1412,7 @@ function addCalEvent(time, description, date) {
 function collectPreChatBuffer() {
   var chatBuffer = [];
 
-  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ". J'habite rue Blanche à Paris." });
+  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ". J'habite " +  settinglist.userAdress + "." });
   chatBuffer.push({ role: "system", content: "Répondez " +  settinglist.responseStyle + " " + settinglist.responseDetail + "." });
 
   // date
@@ -2709,6 +2709,7 @@ $("#chatParamOffcanvas").on("blur", function(e) {
 
 $("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas modal
   $("#chatParamUserName").val(settinglist.userName);
+  $("#chatParamUserAdress").val(settinglist.userAdress);
   $("#chatParamAssistantName").val(settinglist.assistantName);
   $("#chatParamStyle").val(settinglist.responseStyle);
   $("#chatParamDetail").val(settinglist.responseDetail);
@@ -2732,6 +2733,11 @@ $("#chatParamUserName").on("change", function (e) {
     $("#clearLogButton").trigger("click"); // clear textarea + newChat
   }
   settinglist.userName = $("#chatParamUserName").val();
+  writeSettingListToDatabase();
+});
+
+$("#chatParamUserAdress").on("change", function (e) {
+  settinglist.userAdress = $("#chatParamUserAdress").val();
   writeSettingListToDatabase();
 });
 

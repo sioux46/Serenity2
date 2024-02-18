@@ -210,6 +210,10 @@
                 <input id="chatParamUserName" type="text" class="form-control"/>
               </div>
               <div class="mb-2">
+                <label for="chatParamUserAdress" class="form-label">Adresse du conducteur</label>
+                <input id="chatParamUserAdress" type="text" class="form-control"/>
+              </div>
+              <div class="mb-2">
                 <label for="chatParamAssistantName" class="form-label">Nom de l'assistant</label>
                 <input id="chatParamAssistantName" type="text" class="form-control"/>
               </div>
