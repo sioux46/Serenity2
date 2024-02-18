@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.18.6";
+var devaVersion = "v4.02.18.9";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -147,8 +147,14 @@ function readSettingListFromDatabase() {
       else {
         console.log("Success reading settinglist from database");
         if ( xhr.responseText != "empty" ) {
-          settinglist = JSON.parse(JSON.parse(xhr.responseText));
-          verifSettingList();
+
+
+          settinglist = JSON.parse(xhr.responseText); // bug handling
+          if ( settinglist.length > 1 ) settinglist = JSON.parse(evoCalEvents[0]);
+          else if ( settinglist.length == 1 ) settinglist = JSON.parse(settinglist);
+
+          // settinglist = JSON.parse(JSON.parse(xhr.responseText));
+          // if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
         }
         else {
         verifSettingList();
@@ -1525,7 +1531,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
   response = ""; // global
 
   if ( question.match(new RegExp("^Merci " + settinglist.assistantName, 'i'))) { // stopRecog handled in fillLog()
-    response = "Je vous en pris";
+    response = "Je vous en prie";
   }
   else if ( question.match(new RegExp("^Coucou " + settinglist.assistantName, 'i'))) {
     response = "Bonjour " + settinglist.userName + ". Que puij faire pour vous ?";
@@ -1949,7 +1955,7 @@ function doSpeechSynth (text) {
   ut.onend = function(e) {
     recogResult = "";
     // restart recog at the end of speach
-    if ( questionMode == "audio" && response != "Je vous en pris" ) {
+    if ( questionMode == "audio" && response != "Je vous en prie" ) {
       startRecog();
       return;
     }
@@ -1979,7 +1985,7 @@ function fillLog(who, text) {
   else if ( who == "response")  {
     debText = "\n< ";
     $("#logTextarea").val( $("#logTextarea").val() + "< " + settinglist.assistantName + ": " + text + "\n");
-    if ( text == "Je vous en pris" ) {
+    if ( text == "Je vous en prie" ) {
       questionMode = "audio";
       $("#micButton").trigger("click");
       $("#micButton").trigger("click");
