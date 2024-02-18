@@ -96,14 +96,14 @@ body {
 }
 
 #chatParamChangeUserButton {
-  color: red;
+  color: red !important;
   font-weight: bold;
 }
 
 #chatParamOffcanvas,
 #paramOffcanvas,
 .modal-content {
-  background-color: #f8f8f8;
+  background-color: #f8f8f8 !important;
 }
 
 #chatParamButton {
