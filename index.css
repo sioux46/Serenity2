@@ -59,6 +59,20 @@ body {
   float: right;
 }
 
+#chatParamChangeUserButton {
+  color: red;
+  font-weight: bold;
+}
+
+#chatParamOffcanvas,
+#paramOffcanvas {
+  background-color: #f8f8f8;
+}
+
+.modal-content {
+  background-color: #f8f8f8;
+}
+
 #toolBar {
   position: fixed;
   height: 4.2rem;
@@ -93,17 +107,6 @@ body {
   border: 3px;
   padding: 6px;
   border-color: #fff;
-}
-
-#chatParamChangeUserButton {
-  color: red !important;
-  font-weight: bold;
-}
-
-#chatParamOffcanvas,
-#paramOffcanvas,
-.modal-content {
-  background-color: #f8f8f8 !important;
 }
 
 #chatParamButton {
