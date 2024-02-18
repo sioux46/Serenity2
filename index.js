@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.18.1";
+var devaVersion = "v4.02.18.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1465,7 +1465,8 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
+  // chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
+  chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
@@ -2277,7 +2278,7 @@ function actualTrueTime() {
   if ( hours.length == 1 ) hours = "0" + hours;
   var minutes = now.getMinutes();
   if ( minutes.length == 1 ) minutes = "0" + hours;
-  return hours + ":" + minutes; // + ":" + seconds;
+  return hours + "h" + minutes; // + ":" + seconds;
 }
 
 ////

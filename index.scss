@@ -122,18 +122,25 @@ body {
   border-color: #fff;
 }
 
+#chatParamOffcanvas,
+#paramOffcanvas,
+.modal-content {
+  background-color: #f8f8f8;
+}
+
 #chatParamButton {
   background-color: unset;
 }
 
 #micButton,
 #micButtonOffcanvas {
-  background-color: yellow !important; // $sebDarkBlue
+  border: 3px solid white;
+  background-color: yellow !important;
 }
 
 #speakerButton,
 #speakerButtonOffcanvas {
-  //  border: 3px solid $colorBeige;
+  border: 3px solid white;
   background-color: yellow !important;
 }
 
