@@ -104,7 +104,7 @@ function verifSettingList() {
   if ( !settinglist.responseStyle ) settinglist.responseStyle = " ";
   if ( !settinglist.responseDetail ) settinglist.responseDetail = " de façon concise ";
   if ( !settinglist.userName ) settinglist.userName = "Monsieur";
-  if ( !settinglist.userAdress ) settinglist.userAdress = "22 rue Blanche, Paris";
+  if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
   if ( !settinglist.assistantName ) settinglist.assistantName = "Deva";
   if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.7;
   if ( !settinglist.speechRate ) settinglist.speechRate = 1.1;
