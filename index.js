@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.18.5";
+var devaVersion = "v4.02.18.6";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -148,9 +148,12 @@ function readSettingListFromDatabase() {
         console.log("Success reading settinglist from database");
         if ( xhr.responseText != "empty" ) {
           settinglist = JSON.parse(JSON.parse(xhr.responseText));
+          verifSettingList();
         }
+        else {
         verifSettingList();
         writeSettingListToDatabase();
+      }
       }
     }
   });
