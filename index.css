@@ -59,6 +59,8 @@ body {
   float: right;
 }
 
+/*
+
 #chatParamChangeUserButton {
   color: red;
   font-weight: bold;
@@ -73,6 +75,7 @@ body {
   background-color: #f8f8f8;
 }
 
+*/
 #toolBar {
   position: fixed;
   height: 4.2rem;
@@ -113,6 +116,7 @@ body {
   background-color: unset;
 }
 
+/*
 #micButton,
 #micButtonOffcanvas {
   border: 3px solid white;
@@ -124,7 +128,7 @@ body {
   border: 3px solid white;
   background-color: yellow !important;
 }
-
+*/
 .deva-tittle {
   background-color: hsl(235, 100%, 30%) !important;
 }
