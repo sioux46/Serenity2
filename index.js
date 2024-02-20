@@ -2800,7 +2800,7 @@ $("#clearLogButton").on("click", function(e) { // clear textarea + newChat
 });
 
 $("#copyButton").on("click", function(e) { // copy historic to clipboard
-  if ( window.getSelection().type == "Caret" ) $("#logTextarea").select();
+  /* if ( window.getSelection().type == "Caret" ) */ $("#logTextarea").select();
   document.execCommand('copy');
   setTimeout(function() {
     window.getSelection().removeAllRanges();
