@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.19.2";
+var devaVersion = "v4.02.20.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -157,9 +157,9 @@ function readSettingListFromDatabase() {
           // if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
         }
         else {
-        verifSettingList();
-        writeSettingListToDatabase();
-      }
+          verifSettingList();
+          writeSettingListToDatabase();
+        }
       }
     }
   });
@@ -2797,6 +2797,11 @@ $("#questionButton").on("click", function(e) {
 $("#clearLogButton").on("click", function(e) { // clear textarea + newChat
   $("#logTextarea").val("");
   newChat = true;
+});
+
+$("#copyButton").on("click", function(e) { // copy historic to clipboard
+  $("#logTextarea").select();
+  document.execCommand('copy');
 });
 
 ///////////////////////////////////////////////  SHOW PAGES   /////

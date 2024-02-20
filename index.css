@@ -259,9 +259,12 @@ body {
 }
 
 #clearLogButton {
-  position: relative;
   padding: 0;
-  margin-left: auto;
+  width: fit-content;
+}
+
+#copyButton {
+  padding: 0;
   width: fit-content;
 }
 

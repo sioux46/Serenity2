@@ -316,9 +316,17 @@ body {
 }
 
 #clearLogButton {
-  position: relative;
+  //position: relative;
   padding: 0;
-  margin-left: auto;
+  //margin-left: auto;
+  width: fit-content;
+  // top: -0.6rem;
+}
+
+#copyButton {
+  //position: relative;
+  padding: 0;
+  //margin-l: auto;
   width: fit-content;
   // top: -0.6rem;
 }

@@ -95,9 +95,14 @@
           <div id="voyageText" class="container form-floating d-grid gap-2">
             <div><strong>Historique des conversations:</strong></div>
             <textarea id="logTextarea" autofocus class="form-control"></textarea>
-            <button id="clearLogButton" class="btn" type="button">
-              <img src="icons/trash.svg" width=30>
-            </button>
+            <div class="d-flex flex-row-reverse">
+              <button id="clearLogButton" class="btn p-2" type="button">
+                <img src="icons/trash.svg" width=30>
+              </button>
+              <button id="copyButton" class="btn p-2" type="button">
+                <img src="icons/copy.svg" width=30>
+              </button>
+            </div>
             <div><strong>Vous avez la parole:</strong></div>
             <textarea id="questionTextarea" class="form-control" autofocus></textarea>
             <button id="questionButton" class="btn" type="button">
