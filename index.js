@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.20.1";
+var devaVersion = "v4.02.20.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2800,8 +2800,11 @@ $("#clearLogButton").on("click", function(e) { // clear textarea + newChat
 });
 
 $("#copyButton").on("click", function(e) { // copy historic to clipboard
-  $("#logTextarea").select();
+  if ( window.getSelection().type == "Caret" ) $("#logTextarea").select();
   document.execCommand('copy');
+  setTimeout(function() {
+    window.getSelection().removeAllRanges();
+  }, 500);
 });
 
 ///////////////////////////////////////////////  SHOW PAGES   /////
