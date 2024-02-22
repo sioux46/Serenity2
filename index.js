@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.21.1";
+var devaVersion = "v4.02.22.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1432,7 +1432,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
 
-  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier janvier 2024 à 1h59, motif: Tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier janvier 2024 à 1h59 pour faire le tour du quartier avec Tatata" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
 
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour le premier janvier avec Tatata" });
@@ -1444,8 +1444,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9 heure avec votre arrière cousine Guendeline" });
 
-  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour aujourd'hui à 1h59, motif: tour de piste avec Tititi" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
+  chatBuffer.push({ role: "user", content: "Ajoutez le coiffeur aujourd'hui à 1h59" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: coiffeur" });
 
   chatBuffer.push({ role: "user", content: "Supprimez ce dernier rdv" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " + actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
@@ -1476,7 +1476,8 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  // chatBuffer.push({ role: "system", content: "L'heure actuelle est " + actualTrueTime() + "." });
+  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février n'a que 28 jours donc le premier mars est un samedi" });
+
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
