@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.20.2";
+var devaVersion = "v4.02.21.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1453,7 +1453,9 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "user", content: "Videz entièrement votre agenda. Supprimez tous les rendez-vous." });
   chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous ont été supprimés. Mon agenda est vide" });
 
-  chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure"});
+  chatBuffer.push({ role: "system", content: "Vous m'avertissez en cas de conflits d'horaires." });
+
+  chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure" });
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
   chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
 
