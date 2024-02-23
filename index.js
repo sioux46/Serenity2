@@ -1476,7 +1476,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février n'a que 28 jours donc le premier mars est un samedi" });
+  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le premier mars est un samedi" });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
