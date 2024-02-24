@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.24.1";
+var devaVersion = "v4.02.24.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1432,28 +1432,26 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
 
-  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier janvier 2024 à 1h59 pour faire le tour du quartier avec Tatata" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le lundi premier janvier 2024 à 9 heure, motif: Tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier décembre 2024 à 15h pour faire le tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le dimanche premier décembre 2024 à 15 heure, motif: Tour du quartier avec Tatata" });
 
-  chatBuffer.push({ role: "user", content: "Supprimez le rdv pour le premier janvier avec Tatata" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le lundi premier janvier 2024 à 1h59 heure, motif: Tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "user", content: "Supprimez le rdv pour le premier décembre avec Tatata" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le dimanche premier décembre 2024 à 15 heure, motif: Tour du quartier avec Tatata" });
 
-  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 2h01 avec mon arrière cousine Guendeline" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9h avec votre arrière cousine Guendeline" });
+  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 12h avec mon arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 12 heure, motif: votre arrière cousine Guendeline" });
 
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 9 heure avec votre arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 12 heure, motif: votre arrière cousine Guendeline" });
 
-  chatBuffer.push({ role: "user", content: "Ajoutez le coiffeur aujourd'hui à 1h59" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: coiffeur" });
+  chatBuffer.push({ role: "user", content: "Ajoutez le coiffeur aujourd'hui à 16h" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 16 heure, motif: coiffeur" });
 
-  chatBuffer.push({ role: "user", content: "Supprimez ce dernier rdv" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " + actualDay((actualDate())) + " " + actualDate() + " à 1h59, motif: tour de piste avec Tititi" });
-
-  chatBuffer.push({ role: "user", content: "Videz entièrement votre agenda. Supprimez tous les rendez-vous." });
-  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous ont été supprimés. Mon agenda est vide" });
-
-  chatBuffer.push({ role: "system", content: "Vous m'avertissez en cas de conflits d'horaires." });
+  chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir et me demandez quoi faire." });
+  chatBuffer.push({ role: "user", content: "Ajoutez rdv avec le plombier aujourd'hui à 16h10" });
+  chatBuffer.push({ role: "assistant", content: "Il y a un conflit d'horaires le " +  actualDay((actualDate())) + " " + actualDate() + " : le rendez-vous avec le coiffeur à 16h00 et le rendez-vous avec le plombier à 16h10. Que dois-je faire ?" });
+  chatBuffer.push({ role: "user", content: "Supprimer le coiffeur" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 16 heure, motif: coiffeur. Rendez-vous confirmé avec le plombier le " + actualDay((actualDate())) + " " + actualDate() + " à 16h10" });
 
   chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure" });
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
@@ -1462,6 +1460,10 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
   chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
+
+  //
+  chatBuffer.push({ role: "user", content: "Videz entièrement votre agenda. Supprimez tous les rendez-vous." });
+  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous ont été supprimés. Mon agenda est vide" });
 
   chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez un agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
 
@@ -1477,6 +1479,9 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
   chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le premier mars est un vendredi" });
+
+  chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir." });
+  chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez me demandez quoi faire." });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
