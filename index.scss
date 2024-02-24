@@ -9,6 +9,7 @@ $devaRed: #fa0039;
 // hsl(235, 0%, 64%) !important  // deva gray color
 
 html {
+  // overflow: hidden;
   overscroll-behavior: none;
 }
 
@@ -16,7 +17,8 @@ html {
 body {
   /* font-family: "Times New Roman", Times, serif; */
   font-family: Verdana, Arial, Helvetica, sans-serif;
-  // background-color: $colorBeige;
+  // overflow: hidden;
+  overscroll-behavior: none;
 }
 
 #devaVersion:hover {
