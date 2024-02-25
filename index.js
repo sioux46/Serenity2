@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.24.2";
+var devaVersion = "v4.02.25.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1478,8 +1478,10 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le premier mars est un vendredi" });
+  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le 29 février est un jeudi. Le premier mars est un vendredi" });
 
+  // conflits d'horaire
+  chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même, il n'y a pas de conflict d'horaire." });
   chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir." });
   chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez me demandez quoi faire." });
 
