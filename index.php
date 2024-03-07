@@ -348,7 +348,7 @@
                   <input id="address" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="equipment" class="form-label">Équipement</label>
+                  <label for="equipment" class="form-label">Particularité</label>
                   <input id="equipment" type="text" class="form-control"/>
                 </div>
               </div>

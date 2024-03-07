@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.02.25.1";
+var devaVersion = "v4.03.07.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -61,7 +61,7 @@ function verifBaseUserName(baseUserName) {
             localStorage.setItem('baseUserName', JSON.stringify(baseUserName));
 
             // read database
-            initContactBook();
+            initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
             readCalFromDatabase();
             readSettingListFromDatabase();
 
@@ -169,12 +169,14 @@ function readSettingListFromDatabase() {
 
 /////////////////////////////////////////////////  $travel$   START  traveller
 /////
-function initContactBook() {
+
+function initContactBook(userName) {
   $.ajax({
     url: "traveller_read_all.php",
     type: "post",
     data: {
-      "username": JSON.parse(localStorage.getItem('baseUserName'))},
+      "username": userName
+    },
     complete: function(xhr, result) {
       if (result != 'success') {
         console.log("Error reading traveller from database");
@@ -200,6 +202,89 @@ function initContactBook() {
   });
 }
 
+/*function initContactBook(userName) {
+  let baseUserName;
+  if ( !contactBook ||  contactBook.length == 0 ) baseUserName = "demo0";
+  else baseUserName = userName;
+
+  $.ajax({
+    url: "traveller_read_all.php",
+    type: "post",
+    data: {
+      // "username": JSON.parse(localStorage.getItem('baseUserName'))
+      "username": baseUserName
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error reading traveller from database");
+      }
+      else {
+        console.log("Success reading traveller from database");
+        var reponse = xhr.responseText;
+        if ( reponse == "empty") {
+          contactBook = [];
+          $("#travellerCards").html("");
+        }
+        else {
+          let jRep = JSON.parse(reponse);
+          if ( !contactBook ||  contactBook.length == 0 ) {
+            for ( let contact of jRep ) {
+              contact[1] = '' + Math.random();
+              contact[2] = JSON.parse(localStorage.getItem('baseUserName'));
+            }
+            travellersWrite(jRep); // copy travellers from demo0 to baseUserName
+          }
+          contactBook = bluidTravellersOjectTable(jRep);
+          let html = "";
+          for ( let contact of contactBook ) {
+            html += buildCardHtml(contact);
+          }
+          $("#travellerCards").html(html);
+        }
+      }
+    }
+  });
+}*/
+
+/////
+function travellersWrite(travellers) {
+  for ( let t of travellers ) {
+      travellerWrite(t);
+  }
+}
+
+/////
+function travellerWrite(traveller) {
+  setTimeout(function() {
+    $.ajax({
+      url: "traveller_write.php",
+      type: "post",
+      data: {
+        "clientid": traveller[1],
+        "username": traveller[2],
+        "lastname": traveller[3],
+        "firstname": traveller[4],
+        "nickname": traveller[5],
+        "phone": traveller[6],
+        "address": traveller[7],
+        "travellertype": traveller[8],
+        "equipment": traveller[9],
+        "imgsrc": traveller[10]
+      },
+      complete: function(xhr, result) {
+        if (result != 'success') {
+          console.log("Error writing traveller to databas");
+        }
+        else {
+          console.log("Success writing taveller to database");
+          // initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
+        }
+      }
+    });
+  }, 200);
+}
+
+/////
 function travellerRead(select, where, orderby) {
 
   if ( !where ) {
@@ -375,9 +460,9 @@ function buildEditTravellerFromModal(clientid) {
         console.log("Error writing traveller to databas");
       }
       else {
-        console.log("Success writing taveller to database");
+        console.log("Success writing traveller to database");
         // contactBook.push(newTraveller);
-        initContactBook();
+        initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
       }
     }
   });
@@ -821,7 +906,7 @@ function initCalendar() {
     addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
     addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
     // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
-    addCalEvent("21h00", "Départ pour la Bretagne", actualDateToEvoDate("afterTomorrow"));
+    addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
     saveEvoCalEvents();
   }
 
@@ -1478,7 +1563,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le 29 février est un jeudi. Le premier mars est un vendredi" });
+  // chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le 29 février est un jeudi. Le premier mars est un vendredi" });
 
   // conflits d'horaire
   chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même, il n'y a pas de conflict d'horaire." });
@@ -1527,10 +1612,10 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     return;
   }
 
-  if ( $("#paramPage").css("display") == "block" ) {
-    travellerReadAnyKeyword(travellerKeywordArray(question));
-    return;
-  }
+  //  if ( activePage == "#paramPage" ) {
+  //  travellerReadAnyKeyword(travellerKeywordArray(question));
+  //  return;
+  //  }
 
   clearPostChatTimeout(); // re-init timeout
 
@@ -2422,7 +2507,7 @@ $("#record-widget").css("display", "none");
 $(window).focus( function() {
   console.log("Window focus");
   updateCalFromDatabase();
-  initContactBook();
+  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
   readSettingListFromDatabase();
 });
 
@@ -2435,7 +2520,7 @@ if (!window.location.origin.match(/paris0/) ) {
   }
   else {
   //  $("#start").css({"display": "block"});  // show start page
-  //  initContactBook();
+  //  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
   //  readCalFromDatabase();
     verifBaseUserName(baseUserName);
   }
@@ -2599,7 +2684,7 @@ $("#showCarButton").on("click", function (e) {  // car button
 });
 
 $("#showTravellerButton").on("click", function (e) {  // Traveller button
-  initContactBook();
+  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
   if ( activeParamDisplay == "traveller" ) return;
   $(".param-button").css("border", "3px solid white");
   $("#showTravellerButton").css("border", "3px solid #fa0039");
@@ -2629,7 +2714,7 @@ $("#travellerCards").on("click", function(e) {
           }
           else {
             console.log("Success deleting taveller from database");
-            initContactBook();
+            initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
           }
         }
       });
