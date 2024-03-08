@@ -8,6 +8,8 @@ ini_set("display_errors", 1);
 //
 $username = $_POST['username'];
 $clear = $_POST['clear'];
+
+if ( $username == 'demo0 ') exit(0);
 //
 if ( $clear == "yes" ) {
   $query = "DELETE FROM traveller WHERE `username` = '$username'";

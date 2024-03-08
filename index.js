@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.08.1";
+var devaVersion = "v4.03.08.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1642,6 +1642,11 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
   else if ( question.match(/^\s*::proto\s*$/i) ) {  // protocole
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#protoModal").modal("show");
+    return;
+  }
+
+  else if ( question.match(/^\s*::id\s*$/i) ) {  // show user id
+    fillLog("response", JSON.parse(localStorage.getItem('baseUserName')));
     return;
   }
 
