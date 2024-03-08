@@ -1,4 +1,5 @@
 <?php
+// traveller_read_all.php
 require_once("connectMySql.php");
 $base=connect();
 //

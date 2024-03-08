@@ -1,7 +1,8 @@
 <?php
+//
 require_once("connectMySql.php");
 $base=connect();
-//
+// traveller_write.php
 $clientid = $_POST["clientid"];
 $username = $_POST["username"];
 $lastname = $_POST["lastname"];

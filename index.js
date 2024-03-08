@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.07.1";
+var devaVersion = "v4.03.08.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -247,6 +247,28 @@ function initContactBook(userName) {
 }*/
 
 /////
+function clearContacts(clear) {  // load predefined contact list
+  $.ajax({
+    url: "traveller_read_predefined.php",
+    type: "post",
+    data: {
+      "username": JSON.parse(localStorage.getItem('baseUserName')),
+      "clear": clear
+    },
+    complete: function(xhr, result) {
+      if (result != 'success') {
+        console.log("Error writing traveller to database");
+      }
+      else {
+        console.log("Success writing taveller to database");
+        initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
+      }
+    }
+  });
+}
+
+
+/////
 function travellersWrite(travellers) {
   for ( let t of travellers ) {
       travellerWrite(t);
@@ -273,7 +295,7 @@ function travellerWrite(traveller) {
       },
       complete: function(xhr, result) {
         if (result != 'success') {
-          console.log("Error writing traveller to databas");
+          console.log("Error writing traveller to database");
         }
         else {
           console.log("Success writing taveller to database");
@@ -1595,7 +1617,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     // window.location = window.location.href;
     return;
   }
-  else if ( question.match(/^\s*::clear\s*$/i) ) {  // clear the calendar
+  else if ( question.match(/^\s*::clear\s*$/i) || question.match(/^\s*::initagenda\s*$/i) ) { // init calendar
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#startButton").trigger("click");
     $("#start").css("opacity", 0.1);
@@ -1606,11 +1628,24 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
       //$("#devaVersion").trigger("click"); // init calendar
     return;
   }
+
+  else if ( question.match(/^\s*::initcontact\s*$/i) ) {  // init traveller
+    clearContacts("yes"); // delete existing travellers
+    return;
+  }
+
+  else if ( question.match(/^\s*::addinitcontact\s*$/i) ) {  // add init traveller
+    clearContacts("no"); // don't delete existing travellers
+    return;
+  }
+
   else if ( question.match(/^\s*::proto\s*$/i) ) {  // protocole
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#protoModal").modal("show");
     return;
   }
+
+
 
   //  if ( activePage == "#paramPage" ) {
   //  travellerReadAnyKeyword(travellerKeywordArray(question));
@@ -1731,7 +1766,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
         else {
           let assistantMessage = { role: "assistant", content: reponse };
 
-          // assistant response added to buffer, ready for nexte question
+          // assistant response added to buffer, ready for next question
           postChatBuffer.push(assistantMessage);
           handleResponse(reponse);
         }
