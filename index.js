@@ -1,13 +1,13 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.08.2";
+var devaVersion = "v4.03.09.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
 
 class traveller {
-  constructor(lastname, firstname, nickname, travellertype ,phone, address, equipment, imgsrc) {
+  constructor(lastname, firstname, nickname, travellertype ,phone, address, equipment, imgsrc, notes) {
     this.clientid = '' + Math.random();
     this.lastname = lastname;
     this.firstname = firstname;
@@ -17,6 +17,7 @@ class traveller {
     this.travellertype = travellertype; // (Conducteur attitré, Conducteur additonnel, Passager)
     this.equipment = equipment;
     this.imgsrc = imgsrc;
+    this.notes = notes;
   }
   getInfo() {
     return `${this.lastname} ${this.firstname} (Tel: ${this.nickname})`;
@@ -167,9 +168,33 @@ function readSettingListFromDatabase() {
 
 
 
-/////////////////////////////////////////////////  $travel$   START  traveller
+/////////////////////////////////////////////////////////////  $travel$   START  traveller
 /////
 
+/////                  Collecting contactBook to send to ChatGPT
+function collectContactBook() {
+  let prompt = [];
+  let content = "";
+
+  content += "Vous avez accès à mes contacts. Mes contacts contiennent une liste de personnes avec lesquelles je voyage habituellement. Voici la liste: \n";
+
+  for ( let trav of contactBook ) {
+    if ( trav.firstname ) content += "- Prénom: " + trav.firstname;
+    if ( trav.lastname ) content += ". Nom: " + trav.lastname;
+    if ( trav.nickname ) content += ". Surnom: " + trav.nickname;
+    if ( trav.travellertype ) content += ". Type de voyageur: " + trav.travellertype;
+    if ( trav.phone ) content += ". Télépnone: " + trav.phone;
+    if ( trav.address ) content += ". Adresse: " + trav.address;
+    if ( trav.equipment ) content += ". Équipement: " + trav.equipment;
+    if ( trav.notes ) content += ". Particularités: " + trav.notes;
+    content += ".\n";
+  }
+  prompt.push({ role: "system", content: content});
+
+  return prompt;
+}
+
+/////
 function initContactBook(userName) {
   $.ajax({
     url: "traveller_read_all.php",
@@ -202,49 +227,6 @@ function initContactBook(userName) {
   });
 }
 
-/*function initContactBook(userName) {
-  let baseUserName;
-  if ( !contactBook ||  contactBook.length == 0 ) baseUserName = "demo0";
-  else baseUserName = userName;
-
-  $.ajax({
-    url: "traveller_read_all.php",
-    type: "post",
-    data: {
-      // "username": JSON.parse(localStorage.getItem('baseUserName'))
-      "username": baseUserName
-    },
-    complete: function(xhr, result) {
-      if (result != 'success') {
-        console.log("Error reading traveller from database");
-      }
-      else {
-        console.log("Success reading traveller from database");
-        var reponse = xhr.responseText;
-        if ( reponse == "empty") {
-          contactBook = [];
-          $("#travellerCards").html("");
-        }
-        else {
-          let jRep = JSON.parse(reponse);
-          if ( !contactBook ||  contactBook.length == 0 ) {
-            for ( let contact of jRep ) {
-              contact[1] = '' + Math.random();
-              contact[2] = JSON.parse(localStorage.getItem('baseUserName'));
-            }
-            travellersWrite(jRep); // copy travellers from demo0 to baseUserName
-          }
-          contactBook = bluidTravellersOjectTable(jRep);
-          let html = "";
-          for ( let contact of contactBook ) {
-            html += buildCardHtml(contact);
-          }
-          $("#travellerCards").html(html);
-        }
-      }
-    }
-  });
-}*/
 
 /////
 function clearContacts(clear) {  // load predefined contact list
@@ -291,7 +273,8 @@ function travellerWrite(traveller) {
         "address": traveller[7],
         "travellertype": traveller[8],
         "equipment": traveller[9],
-        "imgsrc": traveller[10]
+        "imgsrc": traveller[10],
+        "notes": traveller[11]
       },
       complete: function(xhr, result) {
         if (result != 'success') {
@@ -383,6 +366,7 @@ function travellerKeywordArray(question) {  // collect all names in traveller ba
     if ( traveller.address ) valSet.add(traveller.address);
     if ( traveller.travellertype ) valSet.add(traveller.travellertype);
     if ( traveller.equipment ) valSet.add(traveller.equipment);
+    if ( traveller.notes ) valSet.add(traveller.notes);
   }
 
   let repArray = [];
@@ -408,7 +392,7 @@ function travellerKeywordArray(question) {  // collect all names in traveller ba
 function bluidTravellersOjectTable(tabsTable) {
   let objsTable = [];
   for ( let tab of tabsTable ) {
-    let obj = new traveller( tab[3], tab[4], tab[5], tab[6], tab[7], tab[8], tab[9], tab[10] );
+    let obj = new traveller( tab[3], tab[4], tab[5], tab[6], tab[7], tab[8], tab[9], tab[10], tab[11] );
     obj.clientid = tab[1];
     objsTable.push(obj);
   }
@@ -426,6 +410,7 @@ function clearTravellerModal() {
   $("#travellerModal").find("#address").val("");
   $("#travellerModal").find("#equipment").val("");
   $("#travellerModal").find("#imgFromDisk").attr("src", "icons/person-fill.svg");
+  $("#travellerModal").find("#notes").val("");
 }
 
 function editTravellerModalLoad(clientid) {
@@ -445,6 +430,7 @@ function editTravellerModalLoad(clientid) {
   $("#travellerModal").find("#address").val(traveller.address);
   $("#travellerModal").find("#equipment").val(traveller.equipment);
   $("#travellerModal").find("#imgFromDisk").attr("src", traveller.imgsrc);
+  $("#travellerModal").find("#notes").val(traveller.notes);
 }
 
 ///// build traveller from modal and send to database
@@ -458,7 +444,8 @@ function buildEditTravellerFromModal(clientid) {
       $("#travellerModal").find("#phone").val().trim(),
       $("#travellerModal").find("#address").val().trim(),
       $("#travellerModal").find("#equipment").val().trim(),
-      $("#travellerModal").find("#imgFromDisk").attr("src")
+      $("#travellerModal").find("#imgFromDisk").attr("src"),
+      $("#travellerModal").find("#notes").val().trim()
   );
   if ( clientid ) newTraveller.clientid = clientid; // traveller allready exist (edit)
 
@@ -475,7 +462,8 @@ function buildEditTravellerFromModal(clientid) {
       "address": newTraveller.address,
       "travellertype": newTraveller.travellertype,
       "equipment": newTraveller.equipment,
-      "imgsrc": newTraveller.imgsrc
+      "imgsrc": newTraveller.imgsrc,
+      "notes": newTraveller.notes
     },
     complete: function(xhr, result) {
       if (result != 'success') {
@@ -526,11 +514,13 @@ function buildCardHtml(card) {
           if ( card.travellertype ) html +=
               '<h6 class="travellertype"  style="color:#518f97;"><strong>' + card.travellertype + '</strong></h6>';
           if ( card.phone ) html +=
-              '<p class="text-dark mb-0"><i class="fa fa-phone" style="font-size:19px; color:#518f97;"></i><span style="position:relative; top:-2px; left:13px;">' + card.phone + '</span></p>';
+              '<p class="text-dark mb-0"><img src="icons/telephone-fill.svg" width="24"><span style="position:relative; top:4px; left:9px;">' + card.phone + '</span></p>';
           if ( card.address ) html +=
-              '<p class="text-dark mb-0 mt-1"><i class="material-icons" style="font-size:26px;  color:#518f97;">mail</i><span style="position:relative; top:-8px; left:6px;">' + card.address + '</span></p>';
+              '<p class="text-dark mb-0 mt-1"><img src="icons/envelope-fill.svg" width="24"><span style="position:relative; top:0px; left:9px;">' + card.address + '</span></p>';
           if ( card.equipment ) html +=
-              '<p class="text-dark mb-0"><i class="fa fa-car-side" style="font-size:20px; color:#518f97;"></i><span style="position:relative; top:-2px; left:10px;">' + card.equipment + '</span></p>';
+              '<p class="text-dark mb-0"><img src="icons/car-front-fill.svg" width="24"><span style="position:relative; top:0px; left:9px;">' + card.equipment + '</span></p>';
+          if ( card.notes ) html +=
+              '<p class="text-dark mb-0"><img src="icons/info-circle-fill.svg" width="24"><span style="position:relative; top:0px; left:9px;">' + card.notes + '</span></p>';
         html += '</div>' +
         '<div class="d-flex gap-1 pt-2 trash-edit-box">' +
           '<div class="edit-trash" style="display:none">' +
@@ -1720,6 +1710,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     chatBuffer.push({ role: "user", content: "Ajouter les rendez-vous suivant à votre agenda" });
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
+    chatBuffer = chatBuffer.concat( collectContactBook());
 
     //------------------------------------------------------------------
     question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...

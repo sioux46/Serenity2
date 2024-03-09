@@ -16,7 +16,7 @@ if ( $clear == "yes" ) {
   $result = $base->query($query);
 }
 
-$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`) SELECT RAND(), '$username', `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc` FROM traveller WHERE `username` = 'demo0'";
+$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`, `notes`) SELECT RAND(), '$username', `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`, `notes` FROM traveller WHERE `username` = 'demo0'";
 $result = $base->query($query);
 
 if ( $base->errno == 0 ) $reponse = "ok";

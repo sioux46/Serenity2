@@ -1,8 +1,8 @@
 <?php
-//
+// traveller_write.php
 require_once("connectMySql.php");
 $base=connect();
-// traveller_write.php
+//
 $clientid = $_POST["clientid"];
 $username = $_POST["username"];
 $lastname = $_POST["lastname"];
@@ -13,11 +13,12 @@ $address = $_POST["address"];
 $travellertype = $_POST["travellertype"];
 $equipment = $_POST["equipment"];
 $imgsrc = $_POST["imgsrc"];
+$notes = $_POST["notes"];
 //
 $query = "DELETE FROM traveller WHERE `clientid` = '$clientid'";
 $result = $base->query($query);
 //
-$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`) VALUES ( '$clientid', '$username', '$lastname', '$firstname', '$nickname', '$travellertype', '$phone', '$address', '$equipment', '$imgsrc')";
+$query = "INSERT INTO traveller (`clientid`, `username`, `lastname`, `firstname`, `nickname`, `travellertype`, `phone`, `address`, `equipment`, `imgsrc`, `notes`) VALUES ( '$clientid', '$username', '$lastname', '$firstname', '$nickname', '$travellertype', '$phone', '$address', '$equipment', '$imgsrc', '$notes')";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) $reponse = "ok";

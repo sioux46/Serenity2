@@ -348,8 +348,12 @@
                   <input id="address" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="equipment" class="form-label">Particularité</label>
+                  <label for="equipment" class="form-label">Équipement</label>
                   <input id="equipment" type="text" class="form-control"/>
+                </div>
+                <div class="mb-2">
+                  <label for="notes" class="form-label">Notes</label>
+                  <input id="notes" type="text" class="form-control"/>
                 </div>
               </div>
             </div>
