@@ -178,8 +178,10 @@ function collectContactBook() {
 
   content += "Vous avez accès à mes contacts. Mes contacts contiennent une liste de personnes avec lesquelles je voyage habituellement. Voici la liste: \n";
 
+  let i = 0;
   for ( let trav of contactBook ) {
-    if ( trav.firstname ) content += "- Prénom: " + trav.firstname;
+    i++;
+    if ( trav.firstname ) content += i + "/ Prénom: " + trav.firstname;
     if ( trav.lastname ) content += ". Nom: " + trav.lastname;
     if ( trav.nickname ) content += ". Surnom: " + trav.nickname;
     if ( trav.travellertype ) content += ". Type de voyageur: " + trav.travellertype;
@@ -514,7 +516,7 @@ function buildCardHtml(card) {
           if ( card.travellertype ) html +=
               '<h6 class="travellertype"  style="color:#518f97;"><strong>' + card.travellertype + '</strong></h6>';
           if ( card.phone ) html +=
-              '<p class="text-dark mb-0"><img src="icons/telephone-fill.svg" width="24"><span style="position:relative; top:4px; left:9px;">' + card.phone + '</span></p>';
+              '<p class="text-dark mb-0"><img src="icons/telephone-fill.svg" width="24"><span style="position:relative; top:5px; left:9px;">' + card.phone + '</span></p>';
           if ( card.address ) html +=
               '<p class="text-dark mb-0 mt-1"><img src="icons/envelope-fill.svg" width="24"><span style="position:relative; top:0px; left:9px;">' + card.address + '</span></p>';
           if ( card.equipment ) html +=
@@ -1611,7 +1613,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     $("#chatParamButtonOffcanvas").trigger("click");
     $("#startButton").trigger("click");
     $("#start").css("opacity", 0.1);
-    $("#start").animate( {"opacity": 1 }, 2000);
+    $("#start").animate( {"opacity": 1 }, 1000);
     // setTimeout( function() {
        clearCalendar();
     // }, 0);
@@ -1640,7 +1642,9 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     return;
   }
 
-
+  else if ( question.match(/^\s*::/i) ) {  // enter error
+    return;
+  }
 
   //  if ( activePage == "#paramPage" ) {
   //  travellerReadAnyKeyword(travellerKeywordArray(question));
@@ -1781,6 +1785,8 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
           repToSpeech = repToSpeech.replace(/-/g, " ");   // hypen don't work
           if ( !repToSpeech.match(/\.$/) ) repToSpeech = repToSpeech + ".";
 
+          repToSpeech = repToSpeech.replace(/\*/g, " "); // supprimer *
+
           doSpeechSynth(repToSpeech);
         }
         else {
@@ -1793,7 +1799,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
 }
 
 //////////////////////////////////////////////////////// R E S P O N S E    a n a l y s e
-////
+////                                $rep
 function handleResponse(reponse) {
   let rep;
   let action = "";
@@ -2528,7 +2534,16 @@ function textTimeToNumTime(text) {
 $(document).ready(function () {
 
 //////////////////
-$("#devaVersion").text(devaVersion);
+if ( window.location.origin.match(/8888/) ||
+    JSON.parse(localStorage.getItem('baseUserName')).match(/^seb$/) ||
+    JSON.parse(localStorage.getItem('baseUserName')).match(/^test/i) ||
+// JSON.parse(localStorage.getItem('baseUserName')).match(/^Manip/) ||
+    JSON.parse(localStorage.getItem('baseUserName')).match(/8888/i) ||
+    JSON.parse(localStorage.getItem('baseUserName')).match(/^demo0$/) )
+  $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
+else
+  $("#devaVersion").text(devaVersion);
+
 if ( window.location.origin.match(/paris0/) ) return; // getDevaPass();
 
 /////////////////
