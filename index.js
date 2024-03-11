@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.09.1";
+var devaVersion = "v4.03.11.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -178,12 +178,15 @@ function collectContactBook() {
 
   content += "Vous avez accès à mes contacts. Mes contacts contiennent une liste de personnes avec lesquelles je voyage habituellement. Voici la liste: \n";
 
-  let i = 0;
+  let i = 0; let nickNoQuote;
   for ( let trav of contactBook ) {
     i++;
     if ( trav.firstname ) content += i + "/ Prénom: " + trav.firstname;
     if ( trav.lastname ) content += ". Nom: " + trav.lastname;
-    if ( trav.nickname ) content += ". Surnom: " + trav.nickname;
+    if ( trav.nickname ) {
+      nickNoQuote = trav.nickname.replace(/"/g, "'");
+      content += ". Surnom: " + nickNoQuote;
+    }
     if ( trav.travellertype ) content += ". Type de voyageur: " + trav.travellertype;
     if ( trav.phone ) content += ". Télépnone: " + trav.phone;
     if ( trav.address ) content += ". Adresse: " + trav.address;
@@ -2534,6 +2537,8 @@ function textTimeToNumTime(text) {
 $(document).ready(function () {
 
 //////////////////
+if ( !JSON.parse(localStorage.getItem('baseUserName')) ) localStorage.setItem('baseUserName', JSON.stringify(""));
+
 if ( window.location.origin.match(/8888/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^seb$/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^test/i) ||
