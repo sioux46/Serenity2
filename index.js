@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.11.3";
+var devaVersion = "v4.03.21.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -184,7 +184,7 @@ function collectContactBook() {
     if ( trav.firstname ) content += i + "/ Prénom: " + trav.firstname;
     if ( trav.lastname ) content += ". Nom: " + trav.lastname;
     if ( trav.nickname ) {
-      nickNoQuote = trav.nickname.replace(/"/g, "'");
+      nickNoQuote = trav.nickname.replace(/"/g, ""); // sup double quote
       content += ". Surnom: " + nickNoQuote;
     }
     if ( trav.travellertype ) content += ". Type de voyageur: " + trav.travellertype;
@@ -643,7 +643,8 @@ function deleteProtoInDatabase(whichproto) {
 
 /////
 function writeProtoToDatabase(proto, tester, participant, condition) {
-  let protoMinusQuote = proto.replace(/'/g, '‘'); // change quote to ‘
+  let protoMinusQuote = proto.replace(/'/g, '‘'); // change simple quote to ‘
+  protoMinusQuote = protoMinusQuote.replace(/"/g, '‘'); // change double quote to ‘
   protoMinusQuote = protoMinusQuote.replace(/\n\n\n/g, "\n"); // sup returns
   $.ajax({
     url: 'proto_write.php',
@@ -1856,7 +1857,10 @@ function handleResponse(reponse) {
 
     // Listez mon agenda pour serviceCall
     //serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
-    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en plaçant en dernier de liste le rendez-vous que l'on vient juste d'ajouté ou de modifié. Répondez sans ajouter d'autre remarque"});
+
+    // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous que l'on vient juste d'ajouté ou de modifié. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
 
 
     chatGPTserviceCall(serviceBuffer);
