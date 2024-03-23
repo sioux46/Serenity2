@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.03.21.1";
+var devaVersion = "v4.03.23.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -585,7 +585,7 @@ function writeFileToDisk(data, filename, type) {
   setTimeout(function() {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url); // free memory
-  }, 10);
+  }, 100);
 }
 
 ///////////////////////////////////////////////////////// $proto$  START   proto
@@ -1358,7 +1358,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
     // rep = rep.replace(/\n\n.*/, "");
     rep = rep + "\n";
 
-
+    if ( protoRecording ) actualProto += "\n-------- État de l'agenda:";
     do {
       lig = rep.match(/.*\n+?/)[0];
 
