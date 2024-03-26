@@ -2543,17 +2543,25 @@ $(document).ready(function () {
 //////////////////
 if ( !JSON.parse(localStorage.getItem('baseUserName')) ) localStorage.setItem('baseUserName', JSON.stringify(""));
 
+
 if ( window.location.origin.match(/8888/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^seb$/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^test/i) ||
-// JSON.parse(localStorage.getItem('baseUserName')).match(/^Manip/) ||
+    JSON.parse(localStorage.getItem('baseUserName')).match(/^Manip/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/8888/i) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^demo0$/) )
   $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
 else
   $("#devaVersion").text(devaVersion);
 
-if ( window.location.origin.match(/paris0/) ) return; // getDevaPass();
+/*
+setTimeout( function() {
+   $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
+}, 500);
+*/
+
+
+// if ( window.location.origin.match(/paris0/) ) return; // getDevaPass();
 
 /////////////////
 $("#record-widget").css("display", "none");
@@ -3144,8 +3152,8 @@ var waitingForGPT = false;
 //                                TIME OUT
 var postChatTimeout;
 var recogTimeout;
-var stopRecogValue = 60000;  // 15000 = 15 seconds, 60000 = 1 minute
-var clearPostChatValue = 60000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+var stopRecogValue = 90000;  // 15000 = 15 seconds, 60000 = 1 minute
+var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
