@@ -1186,7 +1186,11 @@ function updateCalFromDatabase() {
         console.log("Success reading evoCalEvents from database");
         let updateCal, oldCalIds = [];
         if ( xhr.responseText != "empty" ) {
-          updateCal = JSON.parse(JSON.parse(xhr.responseText)); // read base
+//          updateCal = JSON.parse(JSON.parse(xhr.responseText)); // read base
+
+updateCal = JSON.parse(xhr.responseText);
+if ( updateCal.length > 1 ) updateCal = JSON.parse(updateCal[0]);
+else updateCal = JSON.parse(updateCal);
 
           for ( let event of evoCalEvents ) { // collect IDs
             oldCalIds.push(event.id);

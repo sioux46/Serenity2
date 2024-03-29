@@ -443,10 +443,10 @@
                 </div>
                 <h5  class="mt-4">Supprimer</h5>
                 <div class="mt-0">
-                  <button id="sup-last" class="btn btn-light">Mon dernier protocole</button>
+                  <button disabled id="sup-last" class="btn btn-light">Mon dernier protocole</button>
                 </div>
                 <div class="mt-1">
-                  <button id="sup-my" class="btn btn-light">Mes protocoles</button>
+                  <button disabled id="sup-my" class="btn btn-light">Mes protocoles</button>
                 </div>
               </div>
             </div>
