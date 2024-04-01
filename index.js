@@ -151,7 +151,7 @@ function readSettingListFromDatabase() {
 
 
           settinglist = JSON.parse(xhr.responseText); // bug handling
-          if ( settinglist.length > 1 ) settinglist = JSON.parse(evoCalEvents[0]);
+          if ( settinglist.length > 1 ) settinglist = JSON.parse(settinglist[0]);
           else if ( settinglist.length == 1 ) settinglist = JSON.parse(settinglist);
 
           // settinglist = JSON.parse(JSON.parse(xhr.responseText));
