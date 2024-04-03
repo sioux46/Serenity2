@@ -1826,7 +1826,9 @@ function handleResponse(reponse) {
   else if ( reponse.match(/( partiron| arriveron|reviendron| supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify";
 */
 
-  if ( reponse.match(/\b\d{4}\b/i) && !reponse.match(/\?$/) ) action = "modify";
+  // if ( reponse.match(/\b\d{4}\b/i) && !reponse.match(/\?$/) ) action = "modify";
+  // if ( ( reponse.match(/\b20\d{2}\b/) || reponse.match(/\bmotif:/) ) && !reponse.match(/\?$/) ) action = "modify";
+  if ( !reponse.match(/\?$/) ) action = "modify";
   if ( !action ) return;
 
   rep = reponse;
