@@ -5,10 +5,13 @@ $base=connect();
 $username = $_POST["username"];
 $setting = $_POST["setting"];
 //
-$query = "DELETE FROM setting WHERE `username` = '$username'";
-$result = $base->query($query);
+// $query = "DELETE FROM setting WHERE `username` = '$username'";
+// $result = $base->query($query);
 //
-$query = "INSERT INTO setting (`username`, `settinglist`) VALUES ('$username', '$setting')";
+// $query = "INSERT INTO setting (`username`, `settinglist`) VALUES ('$username', '$setting')";
+// $result = $base->query($query);
+//
+$query = "UPDATE `setting` SET `settinglist` = '$setting' WHERE `username` = '$username'";
 $result = $base->query($query);
 //
 if ( $base->errno == 0 ) $reponse = "ok";
