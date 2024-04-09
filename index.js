@@ -1667,7 +1667,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
 
   response = ""; // global
 
-  if ( question.match(new RegExp("^Merci " + settinglist.assistantName, 'i'))) { // stopRecog handled in fillLog()
+  if ( question.match(new RegExp("^(À|A) bientôt " + settinglist.assistantName, 'i'))) { // Cut the mic. stopRecog handled in fillLog()
     response = "Je vous en prie";
   }
   else if ( question.match(new RegExp("^Coucou " + settinglist.assistantName, 'i'))) {
@@ -1677,7 +1677,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
   //////////////////////////////////////////////////////////////////
   else  {
     let action = "";
-    if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà).*agenda/i) ) action = "showAgenda";
+    // if ( question.match(/(consulte|ouvr|affich|montr|voir\s|alle(r|z)\sà).*agenda/i) ) action = "showAgenda";
 
     if ( action == "showAgenda" ) {
       $("#startButton").trigger("click"); $("#sheduleButton").trigger("click");
