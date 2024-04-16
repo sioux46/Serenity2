@@ -36,4 +36,10 @@ body,
   background-color: yellow !important;
 }
 
+#geoLocText {
+  position: relative;
+  text-align: center;
+  top: -8px;
+}
+
 /*# sourceMappingURL=deva.css.map */

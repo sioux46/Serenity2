@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.14.1";
+var devaVersion = "v4.04.16.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -45,6 +45,89 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 ////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
+
+////////////////////////////  GEOLOCALISATION
+/////
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(showPosition);
+  } else {
+    // x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+/////
+function showPosition(position) {
+    console.log("geoloc");
+    reverseLocation(position.coords.latitude, position.coords.longitude);
+    // x.innerHTML="Latitude: " + position.coords.latitude +
+    // "<br>Longitude: " + position.coords.longitude;
+/*
+    coords: GeolocationCoordinates
+      accuracy: 14.657
+      altitude: null
+      altitudeAccuracy: null
+      heading: null
+      latitude: 48.8617475
+      longitude: 2.3491577
+      speed: null
+      GeolocationCoordinates
+    timestamp: 1713084988086
+*/
+}
+
+/////
+function reverseLocation(lat, lon) {
+// let lat = truncateDecimals(latitude, 6);
+// let lon = truncateDecimals(longitude, 6);
+const url = 'https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=geocodejson&zoom=18&addressdetails=1';
+
+fetch(url)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur réseau');
+    }
+    return response.json();
+  })
+  .then(data => {
+    actualGeoLoc = data.features[0].properties.geocoding;
+    console.log(actualGeoLoc.label);
+
+    //let text = "";
+    //text += data.
+    /* if ( data.address.house_number ) $("#geoLocText").text(data.display_name); */
+    testGeoCount++;
+    if ( true ) { // actualGeoLoc.housenumber ) {
+      $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+
+      if ( previousLabel != actualGeoLoc.label ) {
+        previousLabel = actualGeoLoc.label;
+        // Creating map options
+        let mapOptions = {
+          center: [lat, lon],
+          zoom: 18
+        };
+        // Creating a map object
+        // let map;
+        if ( map ) {
+          map.off();
+          map.remove();
+        }
+        map = new L.map("map", mapOptions);
+        // Creating a Layer object
+        let layer = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+        // Adding layer to the map
+        map.addLayer(layer);
+        // add marker
+        let marker = L.marker([lat, lon]);
+        marker.addTo(map);
+      }
+    }
+  })
+  .catch(error => {
+    console.error('Echec de la retro-localisation', error);
+  });
+}
 
 ////////////////////  V E R I F I C A T I O N  baseUserName
 function verifBaseUserName(baseUserName) {
@@ -2534,6 +2617,13 @@ function textTimeToNumTime(text) {
   return "12h00";
 }
 
+/////
+function truncateDecimals(number, digits) {
+    var power = Math.pow(10, digits);
+    return Math.floor(number * power) / power;
+}
+
+
 
 
 /////////////////////////////////////////////////////////////////////  Fin F U N C T I O N S
@@ -3092,6 +3182,11 @@ $("#sEventTime, #sEventTime2").on("click", function (ev) {
 //  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
+/////   start geoloc whatching
+setTimeout(function() {
+  getLocation();
+}, 3000);
+
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
 
@@ -3172,3 +3267,8 @@ var reponseModel = "gpt-4-0125-preview";  //  'gpt-3.5-turbo-1106';  "gpt-4-1106
 //var responseDetail;
 //                        Settings list
 var settinglist = {};
+//                        Geo Location
+var actualGeoLoc="";
+var testGeoCount= 0;
+var map;
+var previousLabel;
