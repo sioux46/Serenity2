@@ -166,7 +166,7 @@
       <p id="geoLocText"></p>
     </div>
     <div class="container-fluid">
-      <div id="map" style = "width:100%; height:100vh;"></div>
+      <div id="map"></div>
     </div>
   </div>
 <!--               -->

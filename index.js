@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.16.1";
+var devaVersion = "v4.04.17.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -50,15 +50,15 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 /////
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(showPosition);
+    watchID = navigator.geolocation.watchPosition(showPosition);
   } else {
-    // x.innerHTML = "Geolocation is not supported by this browser.";
+    x.innerHTML = "Geolocation is not supported by this browser.";
   }
 }
 
 /////
 function showPosition(position) {
-    console.log("geoloc");
+    console.log("geoloc: " + testGeoCount );
     reverseLocation(position.coords.latitude, position.coords.longitude);
     // x.innerHTML="Latitude: " + position.coords.latitude +
     // "<br>Longitude: " + position.coords.longitude;
@@ -100,6 +100,7 @@ fetch(url)
     if ( true ) { // actualGeoLoc.housenumber ) {
       $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
 
+      $("#map").height($(window).height() - $("#map").offset().top);
       if ( previousLabel != actualGeoLoc.label ) {
         previousLabel = actualGeoLoc.label;
         // Creating map options
@@ -3084,6 +3085,10 @@ $("#sheduleButton").on("click", function (ev) {
 
 /////       show voyage page
 $("#voyageButton").on("click", function (ev) {
+  previousLabel = ""; // refrech map
+  // if ( watchID ) navigator.geolocation.clearWatch(watchID);
+  if ( !watchID ) setTimeout(function() { getLocation(); }, 500);
+
   showPage("#voyage");
   $("#toolBar").css("display", "block");
   //initOntoTreeChoose(ontoTree[0]);
@@ -3182,10 +3187,10 @@ $("#sEventTime, #sEventTime2").on("click", function (ev) {
 //  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
+
+
 /////   start geoloc whatching
-setTimeout(function() {
-  getLocation();
-}, 3000);
+// setTimeout(function() { getLocation(); }, 3000);
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
@@ -3271,4 +3276,5 @@ var settinglist = {};
 var actualGeoLoc="";
 var testGeoCount= 0;
 var map;
-var previousLabel;
+var previousLabel = "";
+var watchID = 0;
