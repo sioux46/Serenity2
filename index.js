@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.18.5";
+var devaVersion = "v4.04.18.6";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -61,9 +61,7 @@ function showPosition(position) {
     actualPosition = position;
     console.log("geoloc: " + testGeoCount );
     reverseLocation(position.coords.latitude, position.coords.longitude);
-    // x.innerHTML="Latitude: " + position.coords.latitude +
-    // "<br>Longitude: " + position.coords.longitude;
-/*
+    /*
     coords: GeolocationCoordinates
       accuracy: 14.657
       altitude: null
@@ -93,38 +91,16 @@ fetch(url)
   .then(data => {
     actualGeoLoc = data.features[0].properties.geocoding;
     console.log(actualGeoLoc.label);
+    // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+    $("#geoLocText").text(displayGeoLocLabel() + "\n[" + testGeoCount + "]");
 
     //let text = "";
     //text += data.
     /* if ( data.address.house_number ) $("#geoLocText").text(data.display_name); */
     testGeoCount++;
     if ( activePage == "#voyage" ) {
-      // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
 
-      // $("#map").height($(window).height() - $("#map").offset().top);
       displayMap();
-/*      if ( previousLabel != actualGeoLoc.label ) {
-        previousLabel = actualGeoLoc.label;
-        // Creating map options
-        let mapOptions = {
-          center: [lat, lon],
-          zoom: 18
-        };
-        // Creating a map object
-        // let map;
-        if ( map ) {
-          map.off();
-          map.remove();
-        }
-        map = new L.map("map", mapOptions);
-        // Creating a Layer object
-        let layer = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
-        // Adding layer to the map
-        map.addLayer(layer);
-        // add marker
-        let marker = L.marker([lat, lon]);
-        marker.addTo(map);
-      } */
     }
   })
   .catch(error => {
@@ -137,7 +113,8 @@ function displayMap() {
   let lat = actualPosition.coords.latitude;
   let lon = actualPosition.coords.longitude;
 
-  $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+  // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+  $("#geoLocText").text(displayGeoLocLabel() + "\n[" + testGeoCount + "]");
   $("#map").height($(window).height() - $("#map").offset().top);
 
   if ( previousLabel != actualGeoLoc.label ) {
@@ -162,6 +139,24 @@ function displayMap() {
     let marker = L.marker([lat, lon]);
     marker.addTo(map);
   }
+}
+
+/////
+function displayGeoLocLabel() {
+
+  let lab= actualGeoLoc.label;
+  lab = lab.replace(/France métropolitaine, /, "");
+  lab = lab.replace(/, France$/, "");
+  lab = lab.replace(/ Arrondissement/, "");
+  return lab;
+  /*
+  if ( actualGeoLoc.housenumber ) lab += actualGeoLoc.housenumber + ", ";
+  if ( actualGeoLoc.street ) lab += actualGeoLoc.street + ", ";
+  if ( actualGeoLoc.admin.level10 ) lab += actualGeoLoc.admin.level10 + ", ";
+  if ( actualGeoLoc.postcode ) lab += actualGeoLoc.postcode + ", ";
+  if ( actualGeoLoc.admin.level8 ) lab += actualGeoLoc.admin.level8;
+  */
+  return lab;
 }
 ////////////////////  V E R I F I C A T I O N  baseUserName
 function verifBaseUserName(baseUserName) {
