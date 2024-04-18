@@ -1807,6 +1807,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
     chatBuffer = chatBuffer.concat( collectContactBook());
+    chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + actualGeoLoc.label });
 
     //------------------------------------------------------------------
     question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
@@ -3263,7 +3264,7 @@ var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var reponseModel = "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
+var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
 // var assistantName;
