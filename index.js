@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.18.1";
+var devaVersion = "v4.04.18.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -58,6 +58,7 @@ function getLocation() {
 
 /////
 function showPosition(position) {
+    actualPosition = position;
     console.log("geoloc: " + testGeoCount );
     reverseLocation(position.coords.latitude, position.coords.longitude);
     // x.innerHTML="Latitude: " + position.coords.latitude +
@@ -97,11 +98,12 @@ fetch(url)
     //text += data.
     /* if ( data.address.house_number ) $("#geoLocText").text(data.display_name); */
     testGeoCount++;
-    if ( true ) { // actualGeoLoc.housenumber ) {
+    if ( activePage == "#voyage" ) {
       $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
 
       $("#map").height($(window).height() - $("#map").offset().top);
-      if ( previousLabel != actualGeoLoc.label ) {
+      displayMap();
+/*      if ( previousLabel != actualGeoLoc.label ) {
         previousLabel = actualGeoLoc.label;
         // Creating map options
         let mapOptions = {
@@ -122,7 +124,7 @@ fetch(url)
         // add marker
         let marker = L.marker([lat, lon]);
         marker.addTo(map);
-      }
+      } */
     }
   })
   .catch(error => {
@@ -130,6 +132,34 @@ fetch(url)
   });
 }
 
+/////
+function displayMap() {
+  let lat = actualPosition.coords.latitude;
+  let lon = actualPosition.coords.longitude;
+
+  if ( previousLabel != actualGeoLoc.label ) {
+    previousLabel = actualGeoLoc.label;
+    // Creating map options
+    let mapOptions = {
+      center: [lat, lon],
+      zoom: 18
+    };
+    // Creating a map object
+    // let map;
+    if ( map ) {
+      map.off();
+      map.remove();
+    }
+    map = new L.map("map", mapOptions);
+    // Creating a Layer object
+    let layer = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+    // Adding layer to the map
+    map.addLayer(layer);
+    // add marker
+    let marker = L.marker([lat, lon]);
+    marker.addTo(map);
+  }
+}
 ////////////////////  V E R I F I C A T I O N  baseUserName
 function verifBaseUserName(baseUserName) {
   if ( baseUserName ) {
@@ -3087,8 +3117,10 @@ $("#sheduleButton").on("click", function (ev) {
 /////       show voyage page
 $("#voyageButton").on("click", function (ev) {
   previousLabel = ""; // refrech map
+  setTimeout(function() { displayMap(); }, 500);
+
   // if ( watchID ) navigator.geolocation.clearWatch(watchID);
-  if ( !watchID ) setTimeout(function() { getLocation(); }, 500);
+  // if ( !watchID ) setTimeout(function() { getLocation(); }, 500);
 
   showPage("#voyage");
   $("#toolBar").css("display", "block");
@@ -3188,10 +3220,9 @@ $("#sEventTime, #sEventTime2").on("click", function (ev) {
 //  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
-
-
 /////   start geoloc whatching
-// setTimeout(function() { getLocation(); }, 3000);
+setTimeout(function() { getLocation(); }, 1000);
+// setTimeout(function() { navigator.geolocation.getCurrentPosition(showPosition); }, 3000);
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
@@ -3275,6 +3306,7 @@ var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-previe
 var settinglist = {};
 //                        Geo Location
 var actualGeoLoc="";
+var actualPosition;
 var testGeoCount= 0;
 var map;
 var previousLabel = "";
