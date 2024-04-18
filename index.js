@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.18.3";
+var devaVersion = "v4.04.18.5";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -99,9 +99,9 @@ fetch(url)
     /* if ( data.address.house_number ) $("#geoLocText").text(data.display_name); */
     testGeoCount++;
     if ( activePage == "#voyage" ) {
-      $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+      // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
 
-      $("#map").height($(window).height() - $("#map").offset().top);
+      // $("#map").height($(window).height() - $("#map").offset().top);
       displayMap();
 /*      if ( previousLabel != actualGeoLoc.label ) {
         previousLabel = actualGeoLoc.label;
@@ -136,6 +136,9 @@ fetch(url)
 function displayMap() {
   let lat = actualPosition.coords.latitude;
   let lon = actualPosition.coords.longitude;
+
+  $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
+  $("#map").height($(window).height() - $("#map").offset().top);
 
   if ( previousLabel != actualGeoLoc.label ) {
     previousLabel = actualGeoLoc.label;
@@ -3220,7 +3223,16 @@ $("#sEventTime, #sEventTime2").on("click", function (ev) {
 //  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
-/////   start geoloc whatching
+/////                                     start geoloc whatching
+screen.orientation.addEventListener("change", (event) => {
+  displayMap();
+});
+
+/////
+$(window).resize(function(){
+  displayMap();
+});
+
 setTimeout(function() { getLocation(); }, 1000);
 // setTimeout(function() { navigator.geolocation.getCurrentPosition(showPosition); }, 3000);
 
