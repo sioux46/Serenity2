@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.18.6";
+var devaVersion = "v4.04.19.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -92,7 +92,7 @@ fetch(url)
     actualGeoLoc = data.features[0].properties.geocoding;
     console.log(actualGeoLoc.label);
     // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
-    $("#geoLocText").text(displayGeoLocLabel() + "\n[" + testGeoCount + "]");
+    $("#geoLocText").text(displayGeoLocLabel());
 
     //let text = "";
     //text += data.
@@ -114,7 +114,7 @@ function displayMap() {
   let lon = actualPosition.coords.longitude;
 
   // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
-  $("#geoLocText").text(displayGeoLocLabel() + "\n[" + testGeoCount + "]");
+  $("#geoLocText").text(displayGeoLocLabel());
   $("#map").height($(window).height() - $("#map").offset().top);
 
   if ( previousLabel != actualGeoLoc.label ) {
@@ -156,8 +156,37 @@ function displayGeoLocLabel() {
   if ( actualGeoLoc.postcode ) lab += actualGeoLoc.postcode + ", ";
   if ( actualGeoLoc.admin.level8 ) lab += actualGeoLoc.admin.level8;
   */
-  return lab;
 }
+
+/////
+async function getCoordinates(placeName) {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(placeName)}`);
+        const data = await response.json();
+
+        if (data.length > 0) {
+            const location = data[0];
+            return { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
+        } else {
+            throw new Error('Aucun résultat trouvé pour ce lieu.');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération des coordonnées:', error);
+        return null;
+    }
+}
+/*
+const place = "Paris, France";
+getCoordinates(place)
+    .then(coordinates => {
+        if (coordinates) {
+            console.log(`Les coordonnées de ${place} sont : Latitude ${coordinates.latitude}, Longitude ${coordinates.longitude}`);
+        } else {
+            console.log(`Impossible de récupérer les coordonnées de ${place}.`);
+        }
+    });
+*/
+
 ////////////////////  V E R I F I C A T I O N  baseUserName
 function verifBaseUserName(baseUserName) {
   if ( baseUserName ) {
@@ -1835,7 +1864,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
     chatBuffer = chatBuffer.concat( collectContactBook());
-    chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + actualGeoLoc.label });
+    chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + displayGeoLocLabel() });
 
     //------------------------------------------------------------------
     question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
