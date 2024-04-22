@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.19.2";
+var devaVersion = "v4.04.22.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -77,8 +77,6 @@ function showPosition(position) {
 
 /////
 function reverseLocation(lat, lon) {
-// let lat = truncateDecimals(latitude, 6);
-// let lon = truncateDecimals(longitude, 6);
 const url = 'https://nominatim.openstreetmap.org/reverse?lat=' + lat + '&lon=' + lon + '&format=geocodejson&zoom=18&addressdetails=1';
 
 fetch(url)
@@ -93,13 +91,8 @@ fetch(url)
     console.log(actualGeoLoc.label);
     // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
     $("#geoLocText").text(displayGeoLocLabel());
-
-    //let text = "";
-    //text += data.
-    /* if ( data.address.house_number ) $("#geoLocText").text(data.display_name); */
     testGeoCount++;
     if ( activePage == "#voyage" ) {
-
       displayMap();
     }
   })
@@ -122,7 +115,7 @@ function displayMap() {
     // Creating map options
     let mapOptions = {
       center: [lat, lon],
-      zoom: 18
+      zoom: 16
     };
     // Creating a map object
     // let map;
@@ -160,23 +153,23 @@ function displayGeoLocLabel() {
 
 /////
 async function getCoordinates(placeName) {
-    try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(placeName)}`);
-        const data = await response.json();
+  try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(placeName)}`);
+      const data = await response.json();
 
-        if (data.length > 0) {
-            const location = data[0];
-            return { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
-        } else {
-            throw new Error('Aucun résultat trouvé pour ce lieu.');
-        }
-    } catch (error) {
-        console.error('Erreur lors de la récupération des coordonnées:', error);
-        return null;
-    }
+      if (data.length > 0) {
+          const location = data[0];
+          return { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
+      } else {
+          throw new Error('Aucun résultat trouvé pour ce lieu.');
+      }
+  } catch (error) {
+      console.error('Erreur lors de la récupération des coordonnées:', error);
+      return null;
+  }
 }
 /*
-const place = "Paris, France";
+var place = "Paris, France";
 getCoordinates(place)
     .then(coordinates => {
         if (coordinates) {
@@ -2008,8 +2001,9 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous que l'on vient juste d'ajouté ou de modifié. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
 
+    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat

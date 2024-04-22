@@ -39,7 +39,7 @@ body,
 #geoLocText {
   position: relative;
   text-align: center;
-  top: -20px;
+  top: -14px;
   margin-bottom: 0 !important;
 }
 
@@ -48,7 +48,7 @@ body,
   height: 100vh;
   position: relative;
   display: block;
-  top: -12px;
+  top: -14px;
 }
 
 /*# sourceMappingURL=deva.css.map */
