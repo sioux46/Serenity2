@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.22.1";
+var devaVersion = "v4.04.24.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -115,7 +115,7 @@ function displayMap() {
     // Creating map options
     let mapOptions = {
       center: [lat, lon],
-      zoom: 16
+      zoom: prevZoom
     };
     // Creating a map object
     // let map;
@@ -132,6 +132,18 @@ function displayMap() {
     let marker = L.marker([lat, lon]);
     marker.addTo(map);
   }
+  map.on('zoomend',function(e){
+	  let currZoom = map.getZoom();
+    let diff = prevZoom - currZoom;
+    if(diff > 0){
+  	   console.log('zoomed out');
+    } else if(diff < 0) {
+  	   console.log('zoomed in');
+    } else {
+  	   console.log('no change');
+    }
+    prevZoom = currZoom;
+  });
 }
 
 /////
@@ -180,7 +192,7 @@ getCoordinates(place)
     });
 */
 
-////////////////////  V E R I F I C A T I O N  baseUserName
+////////////////////  V E R I F I C A T I O N /////////////////////////////  baseUserName
 function verifBaseUserName(baseUserName) {
   if ( baseUserName ) {
     $.ajax({
@@ -2003,7 +2015,9 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> triés par ordre chronoligique décroissant en ajoutant le motif et en placant en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -3241,7 +3255,7 @@ $("#sEventTime, #sEventTime2").on("click", function (ev) {
 //  if ( !$("#sEventTime2").val() ) $("#sEventTime2").val($("#sEventTime").val());
 });
 
-/////                                     start geoloc whatching
+/////                                     start GEOLOC whatching
 screen.orientation.addEventListener("change", (event) => {
   displayMap();
 });
@@ -3253,6 +3267,10 @@ $(window).resize(function(){
 
 setTimeout(function() { getLocation(); }, 1000);
 // setTimeout(function() { navigator.geolocation.getCurrentPosition(showPosition); }, 3000);
+
+$("a.leaflet-control-zoom-out").on("click", function (ev) {
+  console.log("zoom out");
+});
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
@@ -3339,5 +3357,7 @@ var actualGeoLoc="";
 var actualPosition;
 var testGeoCount= 0;
 var map;
+// var currZoom;
+var prevZoom = 16;
 var previousLabel = "";
 var watchID = 0;
