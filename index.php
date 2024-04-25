@@ -85,6 +85,9 @@
       <button id="speakerButtonOffcanvas" class="btn toolbarButton"  type="button">
         <img src="icons/volume-mute-fill.svg" width=30>
       </button>
+      <button id="startButton2" class="btn toolbarButton ms-auto" type="button" style="display: inline-block;">
+        <img src="icons/splash.png" width="40">
+      </button>
 
     </div>
 

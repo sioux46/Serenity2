@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.24.2";
+var devaVersion = "v4.04.25.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -103,6 +103,10 @@ fetch(url)
 
 /////
 function displayMap() {
+  if ( !actualPosition.coords ) {
+    console.log("No position found");
+    return;
+  }
   let lat = actualPosition.coords.latitude;
   let lon = actualPosition.coords.longitude;
 
@@ -3140,6 +3144,11 @@ $("#startButton").on("click", function (ev) {
     $("#start").css({"display": "block", "top": "-50rem"});
     $("#start").animate({"top": 0}, 400);
   }
+});
+
+$("#startButton2").on("click", function (ev) {
+  $("#chatParamButtonOffcanvas").trigger("click");
+  $("#startButton").trigger("click");
 });
 
 /////       show shedule page
