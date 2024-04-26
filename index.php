@@ -86,7 +86,7 @@
         <img src="icons/volume-mute-fill.svg" width=30>
       </button>
       <button id="startButton2" class="btn toolbarButton ms-auto" type="button">
-        <img src="icons/splash.png" width="30">
+        <img src="icons/splash.png" width="30" height=30>
       </button>
       <!--<button id="startButton2" class="btn toolbarButton ms-auto" type="button" style="display: inline-block;">
         <img src="icons/splash.png" width="40">
