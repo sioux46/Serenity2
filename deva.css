@@ -51,4 +51,14 @@ body,
   top: -14px;
 }
 
+#startButton {
+  float: right;
+  position: relative;
+  left: -14px;
+}
+
+#startButton2 {
+  margin-right: 15px;
+}
+
 /*# sourceMappingURL=deva.css.map */

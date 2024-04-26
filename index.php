@@ -64,7 +64,7 @@
       </button>
 
       <button id="startButton" class="btn toolbarButton ms-auto" type="button">
-        <img src="icons/splash.png" width=40>
+        <img src="icons/splash.png" width=30>
       </button>
     </div>
   </div>
