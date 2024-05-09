@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.04.26.3";
+var devaVersion = "v4.05.09.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -46,7 +46,7 @@ JSON.stringify(car2) // '{"brand":"Toyota","type":"Corolla","year":2020}'
 /////////////////////////////////////////////// F U N C T I O N S
 ////////////////////////////////////////////////////////////////////
 
-////////////////////////////  GEOLOCALISATION
+////////////////////////////  GEOLOCALISATION   $geoloc
 /////
 function getLocation() {
   if (navigator.geolocation) {
@@ -132,8 +132,25 @@ function displayMap() {
     let layer = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
     // Adding layer to the map
     map.addLayer(layer);
+
+    // Icon options
+    let iconOptions = {
+      iconUrl: 'icons/billeJauneSmall.png',
+      iconSize: [60, 60]
+    };
+    // Creating a custom icon
+    let customIcon = L.icon(iconOptions);
+    // Creating Marker Options
+    let markerOptions = {
+     title: "MyLocation",
+     clickable: true,
+     draggable: true,
+     icon: customIcon
+    };
+
+    // Creating a Marker
+    let marker = L.marker([lat, lon], markerOptions);
     // add marker
-    let marker = L.marker([lat, lon]);
     marker.addTo(map);
   }
   map.on('zoomend',function(e){
@@ -168,7 +185,7 @@ function displayGeoLocLabel() {
 }
 
 /////
-async function getCoordinates(placeName) {
+async function getCoordinates(placeName) { // placeName = "14 rue Emile blémont, Paris";
   try {
       const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(placeName)}`);
       const data = await response.json();
@@ -185,7 +202,7 @@ async function getCoordinates(placeName) {
   }
 }
 /*
-var place = "Paris, France";
+var place = "14 rue Emile blémont, Paris";
 getCoordinates(place)
     .then(coordinates => {
         if (coordinates) {
@@ -1562,7 +1579,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
 
       // Add event from chatGPTserviceCall to actualProto
-      if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
+//      if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
 
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
@@ -1589,13 +1606,14 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       addCalEvent(event.name, event.description, event.date);
 
       // Add restored evoCalEvents to actualProto
-      if ( protoRecording ) actualProto += "\ntime: " + event.name + ", description: " + event.description + ", date: " + event.date + "(rewind to previous calendar version)";
+//      if ( protoRecording ) actualProto += "\ntime: " + event.name + ", description: " + event.description + ", date: " + event.date + "(rewind to previous calendar version)";
     }
     saveEvoCalEvents();
   }
 
   let activeDate = calendar.getActiveDate();
   refreshDateDisplay(activeDate);
+  if ( protoRecording ) actualProto += "\n" +  printCalendar();
 
   $(".calendar-events").css("opacity", 0.1);
   setTimeout( function() { $(".calendar-events").animate({"opacity": 1}, 10); }, 350);
@@ -2021,7 +2039,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> triés par ordre chronoligique décroissant en ajoutant le motif et en placant en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> triés par ordre chronoligique décroissant en ajoutant le motif et en placant en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -2371,6 +2389,7 @@ $(document).keydown(function (event) {
 
 /////
 function printCalendar() {
+  globalSortCalendarEvents();
   let cal = "";
   for (let event of evoCalEvents ) {
     cal += " - " + printCalDate(event.date) + ", " + event.name + ", " + event.description;
