@@ -1070,7 +1070,7 @@ function initOntoTreeChoose(label, move, labs) {
 
 //////////////////////////////////////////////    C A L E N D A R    Functions ////
 
-/////                      DEB   INITCALENDAR()   $initcal$
+/////                      DEB   INITCALENDAR()   $initcal  $cal
 function initCalendar() {
 
   $('#evoCalendar').evoCalendar({
@@ -1204,7 +1204,9 @@ function initCalendar() {
     let val = $("#sEventTime").val();
     let val2 = $("#sEventTime2").val();
 
-    if ( !val ) val = "12:00";
+    if ( !val ) val = "12:00"; // 00:00
+    //if ( !val ) val = "";
+    //if ( val == "00:00" ) val = "";
 
     if ( !title ) title = "Motif à déterminer";
 
@@ -1477,8 +1479,8 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4-turbo-2024-04-09"),
-              // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
+              // model: JSON.stringify("gpt-4-turbo-2024-04-09"),
+              model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
