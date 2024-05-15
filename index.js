@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.15.3";
+var devaVersion = "v4.05.15.5";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2046,7 +2046,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> triés par ordre chronoligique décroissant en ajoutant le motif et en placant en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste le rendez-vous dont on vient juste de parler. Si ce rendez-vous est supprimé, ne le listez pas. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
