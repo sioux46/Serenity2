@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.11.1";
+var devaVersion = "v4.05.15.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1479,8 +1479,8 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              // model: JSON.stringify("gpt-4-turbo-2024-04-09"),
-              model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
+              model: JSON.stringify("gpt-4o"), // JSON.stringify("gpt-4-turbo-2024-04-09"),
+              // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
@@ -3378,7 +3378,7 @@ var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var reponseModel = "gpt-4-turbo-2024-04-09";
+var reponseModel = "gpt-4o"; // "gpt-4-turbo-2024-04-09";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
