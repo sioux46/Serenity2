@@ -196,7 +196,7 @@ async function getCoordinates(placeName) { // placeName = "14 rue Emile blémont
 
       if (data.length > 0) {
           const location = data[0];
-          return { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon) };
+          return { latitude: parseFloat(location.lat), longitude: parseFloat(location.lon), placeName: placeName };
       } else {
           throw new Error('Aucun résultat trouvé pour ce lieu.');
       }
@@ -206,15 +206,24 @@ async function getCoordinates(placeName) { // placeName = "14 rue Emile blémont
   }
 }
 /*
-var place = "14 rue Emile blémont, Paris";
+
+function processItems(ps) {
+for ( var place of ps ) {
 getCoordinates(place)
     .then(coordinates => {
         if (coordinates) {
-            console.log(`Les coordonnées de ${place} sont : Latitude ${coordinates.latitude}, Longitude ${coordinates.longitude}`);
+            console.log(`Les coordonnées de ${coordinates.placeName} sont : Latitude ${coordinates.latitude}, Longitude ${coordinates.longitude}`);
         } else {
             console.log(`Impossible de récupérer les coordonnées de ${place}.`);
         }
     });
+}
+}
+
+var places = [];
+places[0] =  "14 rue Emile blémont, Paris";
+places[1] = "La Rochelle";
+processItems(places);
 */
 
 ////////////////////  V E R I F I C A T I O N /////////////////////////////  baseUserName
