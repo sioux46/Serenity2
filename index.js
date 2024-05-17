@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.15.5";
+var devaVersion = "v4.05.17.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1089,6 +1089,7 @@ function initCalendar() {
 
   removeBeforeCalEvents(evoCalEvents);
 
+/*
   if ( !evoCalEvents.length ) {
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
@@ -1098,6 +1099,7 @@ function initCalendar() {
     addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
     saveEvoCalEvents();
   }
+*/
 
   ///////////// manage/hide togglers
   $(".calendar-table th").on("click", function(e) {
@@ -1188,6 +1190,7 @@ function initCalendar() {
 
   ///// show eventModal                     ADD NEW EVENT
   $(".event-plus").on("click", function (ev) {
+    if ( date1CompareDate2(calendar.$active.event_date, actualDateToEvoDate("today")) == "before" ) return;
     clearEventModal();
     let hours = new Date().getHours();
     let minutes = new Date().getMinutes();
@@ -1254,6 +1257,7 @@ function initCalendar() {
     }
 
     else {    // new event
+
       if ( time == "hundefined" ) time = "";
       $("#evoCalendar").evoCalendar('addCalendarEvent', [
         {
@@ -1370,6 +1374,7 @@ else updateCal = JSON.parse(updateCal);
           }
           $("#evoCalendar").evoCalendar('removeCalendarEvent', oldCalIds);
           $("#evoCalendar").evoCalendar('addCalendarEvent', updateCal);
+          removeBeforeCalEvents(evoCalEvents); // forget past events
         }
       }
     }
@@ -1450,6 +1455,16 @@ function removeBeforeCalEvents(events) {
   }
   $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
   saveEvoCalEvents();
+
+  if ( !evoCalEvents.length ) {
+    addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
+    addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
+    addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
+    addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
+    // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
+    addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
+    saveEvoCalEvents();
+  }
 }
 
 ////
