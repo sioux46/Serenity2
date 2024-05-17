@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.17.1";
+var devaVersion = "v4.05.17.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2350,7 +2350,8 @@ function fillLog(who, text) {
     $("#logTextarea").val( $("#logTextarea").val() + "\n*** " + text + "\n");
   }
   document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
-  $("#questionTextarea").focus(); // vous avez la parole
+  if (questionMode == "audio" ) $("#questionTextarea").blur(); // question aurale
+  else $("#questionTextarea").focus(); // question écrite
 }
 
 /////
