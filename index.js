@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.17.2";
+var devaVersion = "v4.05.18.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -150,19 +150,24 @@ function displayMap() {
     };
 
     // Creating a Marker
-        let marker = L.marker([lat, lon], markerOptions);
-        // marker.bindTooltip("Ma position", {permanent: true, direction:"right"} ).openTooltip();
+        let marker1 = L.marker([lat, lon], markerOptions);
+
+    // Marker maion
+        //let marker2 = L.marker([48.8833452, 2.332396]);
+        //marker2.bindTooltip("Maison", {permanent: true, direction:"right"} ).openTooltip();
+
     // Adding popup to the marker
         // marker.bindPopup('Ma position').openPopup();
-    // add marker
-        marker.addTo(map);
+    // add markers
+        marker1.addTo(map);
+        // marker2.addTo(map);
   }
   map.on('zoomend',function(e){
 	  let currZoom = map.getZoom();
     let diff = prevZoom - currZoom;
-    if(diff > 0){
+    if (diff > 0) {
   	   console.log('zoomed out');
-    } else if(diff < 0) {
+    } else if (diff < 0) {
   	   console.log('zoomed in');
     } else {
   	   console.log('no change');
@@ -205,8 +210,8 @@ async function getCoordinates(placeName) { // placeName = "14 rue Emile blémont
       return null;
   }
 }
-/*
 
+/*
 function processItems(ps) {
 for ( var place of ps ) {
 getCoordinates(place)
@@ -221,8 +226,8 @@ getCoordinates(place)
 }
 
 var places = [];
-places[0] =  "14 rue Emile blémont, Paris";
-places[1] = "La Rochelle";
+places[0] =  "14 rue Emile blémont, Paris"; // Latitude 48.8949313, Longitude 2.3418722
+places[1] = "104 rue Blanche, Paris"; // Latitude 48.8833452, Longitude 2.332396
 processItems(places);
 */
 
@@ -1190,7 +1195,6 @@ function initCalendar() {
 
     // console.log(activeDate);
     globalSortCalendarEvents();
-//    saveEvoCalEvents();
     $("#evoCalendar").evoCalendar('toggleEventList',true);
   });
 
@@ -1407,7 +1411,6 @@ function globalSortCalendarEvents() {
   for ( let event of evoCalEvents ) {
     sortCalendarEvents(event.date);
   }
-//  saveEvoCalEvents();
 }
 
 /////
@@ -1432,7 +1435,6 @@ function sortCalendarEvents(date) {
       evoCalEvents[eventIndex[i-1]] = newEvent;
     }
   }
-//  saveEvoCalEvents();
 }
 
 /////
@@ -1457,13 +1459,16 @@ function date1CompareDate2(date1, date2) {
 
 ////
 function removeBeforeCalEvents(events) {
+  let flagSave = false;
   let ids = [];
   for ( let event of events ) {
     if ( date1CompareDate2(event.date, actualDateToEvoDate("today")) == "before" )
           ids.push(event.id);
   }
-  $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
-  saveEvoCalEvents();
+  if ( ids.length ) {
+    $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
+    flagSave = true;
+  }
 
   if ( !evoCalEvents.length ) {
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
@@ -1472,8 +1477,9 @@ function removeBeforeCalEvents(events) {
     addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
     // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
     addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
-    saveEvoCalEvents();
+    flagSave = true;
   }
+  if ( flagSave ) saveEvoCalEvents();
 }
 
 ////
@@ -1550,7 +1556,6 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
   while ( evoCalEvents.length ) {
     $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
   }
-  // saveEvoCalEvents();
 
   // agenda non vide
   if ( reponse.match(/^agenda vide\.?/i) ) rep = response;  // reSponse is a globlal
