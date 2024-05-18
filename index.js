@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.18.1";
+var devaVersion = "v4.05.18.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1479,7 +1479,7 @@ function removeBeforeCalEvents(events) {
     addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
     flagSave = true;
   }
-  if ( flagSave ) saveEvoCalEvents();
+  if ( flagSave ) setTimeout( function() { saveEvoCalEvents(); }, 100);
 }
 
 ////
@@ -1928,6 +1928,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     chatBuffer = chatBuffer.concat(calendarBuffer);
     chatBuffer = chatBuffer.concat( collectContactBook());
     chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + displayGeoLocLabel() });
+    chatBuffer.push({ role: "system", content: "Répondez sans faire d'autre remarque." });
 
     //------------------------------------------------------------------
     question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
