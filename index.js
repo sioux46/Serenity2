@@ -292,7 +292,7 @@ function verifSettingList() {
   if ( !settinglist.userName ) settinglist.userName = "Monsieur";
   if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
   if ( !settinglist.assistantName ) settinglist.assistantName = "Deva";
-  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.7;
+  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.5;
   if ( !settinglist.speechRate ) settinglist.speechRate = 1.1;
   if ( !settinglist.speechPitch ) settinglist.speechPitch = 2;
 }
@@ -1947,7 +1947,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call ****
+function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call ****  $chat
 
   waitingForGPT = true;
   $.ajax({
@@ -2790,13 +2790,14 @@ setTimeout( function() {
 /////////////////
 $("#record-widget").css("display", "none");
 
-//////////////////
+/////////////////
+/*
 $(window).focus( function() {
   console.log("Window focus");
   updateCalFromDatabase();
   initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
   readSettingListFromDatabase();
-});
+}); */
 
 //////////////////   handle baseUserName
 if (!window.location.origin.match(/paris0/) ) {
