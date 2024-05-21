@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.20.1";
+var devaVersion = "v4.05.21.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2791,13 +2791,14 @@ setTimeout( function() {
 $("#record-widget").css("display", "none");
 
 /////////////////
-/*
+
 $(window).focus( function() {
   console.log("Window focus");
-  updateCalFromDatabase();
-  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
-  readSettingListFromDatabase();
-}); */
+  // updateCalFromDatabase();
+  // initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
+  //readSettingListFromDatabase();
+  removeBeforeCalEvents(evoCalEvents); // forget past events
+});
 
 //////////////////   handle baseUserName
 if (!window.location.origin.match(/paris0/) ) {
