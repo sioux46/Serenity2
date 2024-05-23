@@ -455,17 +455,19 @@
                   <button id="down-last" class="btn btn-light">Mon dernier protocole</button>
                 </div>
                 <div class="mt-1">
-                  <button id="down-my" class="btn btn-light">Mes protocoles</button>
+                  <button id="down-my" class="btn btn-light">Tous mes protocoles</button>
                 </div>
+              <!--
                 <div class="mt-1">
                   <button id="down-all" class="btn btn-light">Tous les protocoles</button>
                 </div>
+              -->
                 <h5  class="mt-4">Supprimer</h5>
                 <div class="mt-0">
-                  <button disabled id="sup-last" class="btn btn-light">Mon dernier protocole</button>
+                  <button id="sup-last" class="btn btn-light">Mon dernier protocole</button>
                 </div>
                 <div class="mt-1">
-                  <button disabled id="sup-my" class="btn btn-light">Mes protocoles</button>
+                  <button id="sup-my" class="btn btn-light">Tous mes protocoles</button>
                 </div>
               </div>
             </div>
