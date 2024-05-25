@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.23.1";
+var devaVersion = "v4.05.25.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2799,6 +2799,11 @@ $(window).focus( function() {
   // updateCalFromDatabase();
   // initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
   //readSettingListFromDatabase();
+
+  let calTodayDate = $(".calendar-today").text();
+  let realTodayDate = actualDate().match(/^(\d{1,2}) /)[1];
+  if ( calTodayDate != realTodayDate ) window.location = window.location;
+
   removeBeforeCalEvents(evoCalEvents); // forget past events
 });
 
