@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.25.1";
+var devaVersion = "v4.05.26.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -254,7 +254,7 @@ function verifBaseUserName(baseUserName) {
             $("#singleInputModal input").val("");
             $("#singleInputModal").modal("hide");
             $("#start").css({"display": "block"}); // show start page
-
+            $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
 
             /////       C O N N E C T I O N  count
 
@@ -2769,25 +2769,23 @@ $(document).ready(function () {
 //////////////////
 if ( !JSON.parse(localStorage.getItem('baseUserName')) ) localStorage.setItem('baseUserName', JSON.stringify(""));
 
-
+/*
 if ( window.location.origin.match(/8888/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^seb$/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^test/i) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/^Manip/) ||
     JSON.parse(localStorage.getItem('baseUserName')).match(/8888/i) ||
-    JSON.parse(localStorage.getItem('baseUserName')).match(/^demo0$/) )
+    JSON.parse(localStorage.getItem('baseUserName')).match(/^demo0/) )
   $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
 else
+
   $("#devaVersion").text(devaVersion);
 
-/*
+
 setTimeout( function() {
    $("#devaVersion").text(devaVersion + " " + JSON.parse(localStorage.getItem('baseUserName')) + " ");
 }, 500);
 */
-
-
-// if ( window.location.origin.match(/paris0/) ) return; // getDevaPass();
 
 /////////////////
 $("#record-widget").css("display", "none");
