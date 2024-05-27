@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.26.1";
+var devaVersion = "v4.05.27.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -169,8 +169,6 @@ function displayMap() {
   	   console.log('zoomed out');
     } else if (diff < 0) {
   	   console.log('zoomed in');
-    } else {
-  	   console.log('no change');
     }
     prevZoom = currZoom;
   });
@@ -178,12 +176,13 @@ function displayMap() {
 
 /////
 function displayGeoLocLabel() {
-
-  let lab= actualGeoLoc.label;
-  lab = lab.replace(/France métropolitaine, /, "");
-  lab = lab.replace(/, France$/, "");
-  lab = lab.replace(/ Arrondissement/, "");
-  return lab;
+  try {
+    let lab= actualGeoLoc.label;
+    lab = lab.replace(/France métropolitaine, /, "");
+    lab = lab.replace(/, France$/, "");
+    lab = lab.replace(/ Arrondissement/, "");
+    return lab;
+  } catch(e) {}
   /*
   if ( actualGeoLoc.housenumber ) lab += actualGeoLoc.housenumber + ", ";
   if ( actualGeoLoc.street ) lab += actualGeoLoc.street + ", ";
@@ -536,8 +535,6 @@ function travellerReadAnyKeyword(keywords) {
   for ( let keyword of kw ) {
     if ( !first ) where += " or ";
     first = false;
-//    where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword +
-//      "' or travellertype rlike '" + keyword +  "' or address rlike '" + keyword +  "' or equipment rlike '" + keyword + "'";
     where += "firstname rlike '" + keyword + "' or nickname rlike '" + keyword + "' or lastname rlike '" + keyword + "'";
   }
   where += ")";
@@ -894,8 +891,9 @@ function readProtoFromDatabase(whichproto) {
 function arrayToTextProto(arrayProto) {
   let textProto = "";
   let p6 = "";
+  let actualId = JSON.parse(localStorage.getItem('baseUserName'));
   for ( let proto of arrayProto ) {
-    textProto += "********************************\n";
+    textProto += "******************************** ID: " + actualId + "\n";
     textProto += proto[3] + ", " + proto[4] + ", " + proto[5] + " [" + proto[0] + "] [" + proto[1] + "] [" + proto[2] + "]\n\n";
 
     p6 = proto[6].replace(/"> /, "> ");
@@ -908,24 +906,6 @@ function arrayToTextProto(arrayProto) {
 }
 
 ///////////////////////////   END  proto
-
-/*
-function getDevaPass() {
-  let truePass = "ziva";
-
-  let pass = JSON.parse(localStorage.getItem('devaPass'));
-  if ( pass && pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
-    $("#start").css({"display": "block"});  // show start page
-    return;
-  }
-  pass = window.prompt("Entez le mot de passe pour Deva:");
-  if (  pass.match(new RegExp("^" + truePass + "$", 'i')) ) {
-    localStorage.setItem('devaPass', JSON.stringify(pass));
-    $("#start").css({"display": "block"});  // show start page
-  }
-  else window.location = "";
-}
-*/
 
 /////
 function getDateNow() {
@@ -1290,16 +1270,10 @@ function initCalendar() {
       postChatBuffer = [];  // forget recent chat
     }
 
-    // proto recording
-    // if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
-
     $("#eventModal").modal("hide");   // HIDE MODAL
 
     let activeDate = calendar.$active.date; // calendar.$active.events[0].date;
-    // sortCalendarEvents( activeDate );
     globalSortCalendarEvents();
-    //calendar.selectDate( "01/01/2022" ); // change selected date to refresh date display
-    //calendar.selectDate( activeDate );
     refreshDateDisplay(activeDate);
 
     saveEvoCalEvents();
@@ -1632,9 +1606,14 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
     // fillLog("service", "Mauvais format réponse:\n" + rep );
 
     // erasing evoCalEvents
-    while ( evoCalEvents.length ) {
-      $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
+    // while ( evoCalEvents.length ) {
+    //   $('#evoCalendar').evoCalendar('removeCalendarEvent', evoCalEvents[0].id);
+    // }
+    let ids = [];
+    for ( let event of evoCalEvents ) {
+      ids.push(event.id);
     }
+    $('#evoCalendar').evoCalendar('removeCalendarEvent', ids);
 
     // restoring evoCalEvents
     for ( let event of evoCalEvents_OLD ) {
@@ -1826,10 +1805,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     $("#startButton").trigger("click");
     $("#start").css("opacity", 0.1);
     $("#start").animate( {"opacity": 1 }, 1000);
-    // setTimeout( function() {
-       clearCalendar();
-    // }, 0);
-      //$("#devaVersion").trigger("click"); // init calendar
+    clearCalendar();
     return;
   }
 
@@ -2022,18 +1998,7 @@ function handleResponse(reponse) {
   let subDesc;
   let dateForEvo;
   let date;
-  // let serviceBuffer;
 
-  // if ( reponse.match(/Voici( la liste| les dates| la date)/i) ) return;
-
-  /*
-  if ( reponse.match(/( modifié| modifier| enlevé| enlever| remplacé| remplacer| changé| changer| déplacé| déplacer| décalé| décaler| repoussé| repousser| reporté| reporter| avancé| avancer| reculé| reculer| complété| compléter| annulé| annuler| inchangé| inchanger| désormais)/i) ) action = "modify";
-  else if ( reponse.match(/( noté| noter| ajouté| ajouter|nouveau rendez-vous|nouveau rdv|réservation|réservé| réserver| retenu|vous chercher|vous prendre|Prise en charge|passer vous |venir vous |je passe|je vien|je revien|j'arrive|mis à jour)/i) ) action = "modify"; // "add";
-  else if ( reponse.match(/( partiron| arriveron|reviendron| supprimé| enlevé| retiré| effacé| ôté)/i) ) action = "modify";
-*/
-
-  // if ( reponse.match(/\b\d{4}\b/i) && !reponse.match(/\?$/) ) action = "modify";
-  // if ( ( reponse.match(/\b20\d{2}\b/) || reponse.match(/\bmotif:/) ) && !reponse.match(/\?$/) ) action = "modify";
   if ( !reponse.match(/\?$/) ) action = "modify";
   if ( !action ) return;
 
@@ -2084,7 +2049,7 @@ function handleResponse(reponse) {
     // postChatBuffer = [];             // forget recent chat
   }
   /////////////////////////////////////////////
-
+/*
   else if ( action ) {  // NON ATTEINGNABLE        // calendar is to be updated for add or remove
     if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
@@ -2135,9 +2100,9 @@ function handleResponse(reponse) {
     if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
 
     if ( !description ) {
-
-      subDesc = rep.match(/.*\s+(avec\s+|chez\s+|dans\s+|aller\s+|voir\s+|pour\s+les\s+)(.*)\s+pour\s+le\s+.*/i);
-      if ( subDesc ) description= subDesc[1];
+*/
+//      subDesc = rep.match(/.*\s+(avec\s+|chez\s+|dans\s+|aller\s+|voir\s+|pour\s+les\s+)(.*)\s+pour\s+le\s+.*/i);
+/*      if ( subDesc ) description= subDesc[1];
     }
     console.log(description);
     console.log(dateForEvo);
@@ -2171,6 +2136,7 @@ function handleResponse(reponse) {
     ///////////////////////////////////////////////// FIN ACTION
     // postChatBuffer = [];  // forget recent chat
   }
+*/
 }
 
 ////////////////////////////////////////////////////////
@@ -2813,9 +2779,6 @@ if (!window.location.origin.match(/paris0/) ) {
     $("#singleInputModal").modal("show");
   }
   else {
-  //  $("#start").css({"display": "block"});  // show start page
-  //  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
-  //  readCalFromDatabase();
     verifBaseUserName(baseUserName);
   }
 }
@@ -3281,18 +3244,6 @@ $("#ontoTree-title").on("click", function (ev) {
   initOntoTreeChoose(node[2], "down");
 });
 
-//////////   same as typing "clear" in prompt
-/*
-$("#devaVersion").on("click", function (e) {
-  $("#start").css("opacity", 0.1);
-  $("#start").animate( {"opacity": 1 }, 2000);
-  setTimeout( function() {
-     clearCalendar();
-  }, 360);
-});
-*/
-
-
 /*
 $('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
   if ( event.isTrigger ) return;
@@ -3304,7 +3255,6 @@ $('#evoCalendar').on('selectMonth', function(event, activeMonth, monthIndex) {
 });
 */
 
-// $('#evoCalendar').on('selectYear', function(event, activeYear) {
 $("button[data-year-val]").on("click", function(e) {
   let month;
   if ( $(this).attr("data-year-val") == "next" ) month = 0; // janvier
