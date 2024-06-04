@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.05.28.1";
+var devaVersion = "v4.06.04.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1568,7 +1568,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
           if ( description.match(/: /) ) description = description.replace(/: /, "");
         }
         else {
-          description = lig.match(/( - |: |motif |, )(.*)/i);
+          description = lig.match(/( - |: |motif |, |\. )(.*)/i);
           if ( description ) description = description[2];
           else description = "Motif à préciser";
         }
@@ -2045,7 +2045,11 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez l'agenda en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste le rendez-vous dont on vient juste de parler. Si ce rendez-vous est supprimé, ne le listez pas. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez l'agenda et toutes chose que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste le rendez-vous dont on vient juste de parler. Si ce rendez-vous est supprimé, ne le listez pas. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste la chose dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
+
+    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Placez en fin de liste la dernière chose dont on vient de parler. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Déplacez en fin de liste la dernière chose dont nous avons parler. Répondez sans ajouter d'autre remarque"});
 
 
     chatGPTserviceCall(serviceBuffer);
@@ -2768,6 +2772,7 @@ $(window).focus( function() {
   //readSettingListFromDatabase();
 
   let calTodayDate = $(".calendar-today").text();
+  if ( calTodayDate.length == 1 ) calTodayDate = "0" + calTodayDate;
   let realTodayDate = actualDate().match(/^(\d{1,2}) /)[1];
   if ( calTodayDate != realTodayDate ) window.location = window.location;
 
