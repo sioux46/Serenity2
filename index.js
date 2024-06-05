@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.04.1";
+var devaVersion = "v4.06.05.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -777,7 +777,8 @@ function startProtoRecording() {
   console.log("Début enregistrement protocole");
   $("#clearLogButton").trigger("click"); // clear textarea + newChat
   protoRecording = true;
-  actualProto = printCalendar();
+  actualProto = "-------- État initial de l'agenda:\n";
+  actualProto += printCalendar();
   printMicHp();
 }
 
@@ -1904,6 +1905,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     chatBuffer = chatBuffer.concat(calendarBuffer);
     chatBuffer = chatBuffer.concat( collectContactBook());
     chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + displayGeoLocLabel() });
+    chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération, soyez le plus concis possible" });
     chatBuffer.push({ role: "system", content: "Répondez sans faire d'autre remarque." });
 
     //------------------------------------------------------------------
