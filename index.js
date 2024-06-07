@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.05.1";
+var devaVersion = "v4.06.07.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1743,6 +1743,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "assistant", content: "Il y a un conflit d'horaires le " +  actualDay((actualDate())) + " " + actualDate() + " : le rendez-vous avec le coiffeur à 16h00 et le rendez-vous avec le plombier à 16h10. Que dois-je faire ?" });
   chatBuffer.push({ role: "user", content: "Supprimer le coiffeur" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 16 heure, motif: coiffeur. Rendez-vous confirmé avec le plombier le " + actualDay((actualDate())) + " " + actualDate() + " à 16h10" });
+
+  chatBuffer.push({ role: "assistant", content: "Refusez d'ajouter un rendez-vous pour une date antérieure à la date du jour" });
 
   chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure" });
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
