@@ -441,7 +441,7 @@
                   <input id="tester" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">
-                  <label for="participant" class="form-label">Nom du paticipant</label>
+                  <label for="participant" class="form-label">Nom du participant</label>
                   <input id="participant" type="text" class="form-control"/>
                 </div>
                 <div class="mb-2">

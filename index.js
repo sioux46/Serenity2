@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.07.1";
+var devaVersion = "v4.06.13.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -103,7 +103,7 @@ fetch(url)
 
 /////
 function displayMap() {
-  if ( !actualPosition.coords ) {
+  if ( !actualPosition || !actualPosition.coords ) {
     console.log("No position found");
     return;
   }
@@ -113,6 +113,7 @@ function displayMap() {
   // $("#geoLocText").text(actualGeoLoc.label + "\n[" + testGeoCount + "]");
   $("#geoLocText").text(displayGeoLocLabel());
   $("#map").height($(window).height() - $("#map").offset().top);
+  $("#map .leaflet-bottom").css("display","none");
 
   if ( previousLabel != actualGeoLoc.label ) {
     previousLabel = actualGeoLoc.label;
@@ -182,7 +183,7 @@ function displayGeoLocLabel() {
     lab = lab.replace(/, France$/, "");
     lab = lab.replace(/ Arrondissement/, "");
     return lab;
-  } catch(e) {}
+  } catch(e) { return("Géolocalisation non trouvée"); }
   /*
   if ( actualGeoLoc.housenumber ) lab += actualGeoLoc.housenumber + ", ";
   if ( actualGeoLoc.street ) lab += actualGeoLoc.street + ", ";
@@ -1201,7 +1202,7 @@ function initCalendar() {
     let val = $("#sEventTime").val();
     let val2 = $("#sEventTime2").val();
 
-    if ( !val ) val = "12:00"; // 00:00
+    if ( !val ) val = " "; // "12:00"; // 00:00
     //if ( !val ) val = "";
     //if ( val == "00:00" ) val = "";
 
@@ -1220,16 +1221,19 @@ function initCalendar() {
     // let time = $("#eventModal").find("#sEventTime").val();
     let time = val;
 
-    let splitTime = time.split(':');
-    time = `${splitTime[0]}h${splitTime[1]}`;
 
-    // let time2 = $("#eventModal").find("#sEventTime2").val();
-    time2 = val2;
+    if ( time != " " ) {
+      let splitTime = time.split(':');
+      time = `${splitTime[0]}h${splitTime[1]}`;
 
-    if ( time2 ) {
-      splitTime = time2.split(':');
-      time2 = `${splitTime[0]}h${splitTime[1]}`;
-      time += ` à ${time2}`;
+      // let time2 = $("#eventModal").find("#sEventTime2").val();
+      time2 = val2;
+
+      if ( time2 ) {
+        splitTime = time2.split(':');
+        time2 = `${splitTime[0]}h${splitTime[1]}`;
+        time += ` à ${time2}`;
+      }
     }
 
     if ( flagEditTrash == "edit") {  // update event
@@ -1237,7 +1241,7 @@ function initCalendar() {
 
       for ( let event of evoCalEvents ) {
         if ( event.id == eventId ) {
-          event.description = title;   // title/description;
+          event.description = title.replaceAll(/"/g,"`");   // title/description  " -> '
           event.name = time;   // name/time;
 
           if ( protoRecording ) {
@@ -1257,7 +1261,7 @@ function initCalendar() {
         {
           id: '' + Math.random(),
           name: time,                 // time/name
-          description: title,
+          description: title.replaceAll(/"/g,"`"),  //   " -> '
           date: calendar.$active.event_date,
           type: "event",
           color: "#009099", // "#fe7f78",
@@ -1512,7 +1516,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
 }
 
 ///////////////////////////////////////////////////////////////////////////
-function newEventListFromServiceCall(reponse) {    // event list response from GPT4
+function newEventListFromServiceCall(reponse) { // event list response from GPT4    $service$
   let rep = reponse;
   let eventList = [];
   let lig = "";
@@ -1548,7 +1552,7 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
       if ( hours ) {
         hours = hours[1];
         if ( hours.length == 1 ) hours = "0" + hours;
-        minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);
+        minutes = lig.match(/(\d{1,2})h(\d{1,2})/i);        // MINUTES
         if ( minutes ) {
           minutes = minutes[2];
           if ( minutes.length == 1 ) minutes = "0" + minutes;
@@ -1556,7 +1560,11 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
         }
         else time = hours + "h00";
       }
-      else time = textTimeToNumTime(lig);  // "12h00" if not found;
+      else time = textTimeToNumTime(lig); // " "  (old "12h00") if not found;
+
+      if ( time == "00h00" || time == " ") {
+        time = "notime";
+      }
 
       description = lig.match(/\d{2}h\d{2}: (.*)/);   // MOTIF (description)
       if ( description ) {
@@ -1577,6 +1585,8 @@ function newEventListFromServiceCall(reponse) {    // event list response from G
         if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
         if ( description.match(/motif/i) ) description = description.replace(/motif/i, "");
       }
+
+      //
 
       date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
       if ( date ) {    // permuter jour et date
@@ -1686,17 +1696,19 @@ function collectEvents(type) {
 ////
 // time: name, description: description, date: date
 function addCalEvent(time, description, date) {
-  if ( !time || !description || !date ) {
+  if ( time == "notime" ) time = "";
+  else if ( !time || !description || !date ) {
     if ( !time ) console.log("No time !  ");
     if ( !date ) console.log("No date !  ");
     return false;
   }
   if ( !description ) console.log("No description !  ");
+
   $("#evoCalendar").evoCalendar('addCalendarEvent', [
     {
       id: '' + Math.random(),
       name: time,                 // time/name
-      description: description,
+      description: description.replaceAll(/"/g,"`"),   //  " -> '
       date: date, // calendar.$active.event_date,
       type: "event",
       color: "#009099", // "#fe7f78",
@@ -1769,7 +1781,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
-  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (si il y a une heure) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
   // chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le 29 février est un jeudi. Le premier mars est un vendredi" });
 
@@ -2053,8 +2065,11 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Placez en fin de liste la dernière chose dont on vient de parler. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Déplacez en fin de liste la dernière chose dont nous avons parler. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Déplacez en fin de liste la dernière chose dont nous avons parler. Répondez sans ajouter d'autre remarque"});
 
+    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant sauf pour l'élément qui parle de ma dernière requête que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez l'élément qui parle de ma dernière requête et placez le à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -2721,7 +2736,7 @@ function textTimeToNumTime(text) {
   if ( text.match(/ tard /i) ) return "23h00";
   if ( text.match(/soir/i) ) return "21h00";
 
-  return "12h00";
+  return " "; // "12h00";
 }
 
 /////
