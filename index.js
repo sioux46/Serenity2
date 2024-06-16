@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.13.2";
+var devaVersion = "v4.06.16.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1579,22 +1579,31 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
         else {
           description = lig.match(/( - |: |motif |, |\. )(.*)/i);
           if ( description ) description = description[2];
-          else description = "Motif à préciser";
+          else {
+            description = lig.match(/\d{2}\/\d{2}\/\d{4} (.*)/);
+            if ( description ) description = description[1];  // no time
+            else description = "";
+          }
         }
-        if ( description.match(/^- /) ) description = description.replace(/^- /, "");
-        if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
-        if ( description.match(/motif/i) ) description = description.replace(/motif/i, "");
+        description = description.replace(/^- /, "");
+        description = description.replace(/\.$/, "");
+        description = description.replace(/motif/i, "");
+        description = description.replace(/^,/,"");
       }
 
       //
 
       date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
-      if ( date ) {    // permuter jour et date
+      if ( date ) {
         if ( date[1].length == 1 ) date[1] = "0" + date[1];
         if ( date[2].length == 1 ) date[2] = "0" + date[2];
-        date = date[2] + "/" + date[1] + "/" + date[3];
+        date = date[2] + "/" + date[1] + "/" + date[3]; // build evoCal date format
       }
-      else date = textDateToNumDate(lig);
+      // else date = textDateToNumDate(lig);
+      else {
+        console.log("Error format date /(\d{1,2})\/(\d{1,2})\/(\d{4})/ from serviceCall");
+        throw new Error("Error format date /(\d{1,2})\/(\d{1,2})\/(\d{4})/ from serviceCall");
+      }
 
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
@@ -1607,7 +1616,7 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
 
     // response is a global for the gpt normal response (not sevice call)
     // don't refresh display in case of event delete
-    if ( !response.match(/supprim/i) ) refreshDateDisplay(date); // select the agenda date of the modified event
+    if ( !response.match(/supprim/i) && flagServiceRefrech == true ) refreshDateDisplay(date); // select the agenda date of the modified event
     globalSortCalendarEvents();
     saveEvoCalEvents();
 
@@ -2039,7 +2048,10 @@ function handleResponse(reponse) {
 
     if ( dateForEvo ) { // select the agenda date of the modified event
       refreshDateDisplay(dateForEvo);
+      flagServiceRefrech = false;
     }
+    else flagServiceRefrech = true;
+    // else refreshDateDisplay(activeDate); // out serviceCall list last event
 
     serviceBuffer = [];   // $service$
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
@@ -2069,7 +2081,9 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant sauf pour l'élément qui parle de ma dernière requête que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez l'élément qui parle de ma dernière requête et placez le à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -3353,6 +3367,7 @@ var evoCalEvents_OLD =[];
 $(".calendar-sidebar > .calendar-year").css("padding", "20px");
 
 var flagEditTrash;
+var flagServiceRefrech;
 
 var questionAnswer = "chatGPT"; // chatGPT v DEVA
 
