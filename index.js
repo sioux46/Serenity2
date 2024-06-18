@@ -1560,7 +1560,7 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
         }
         else time = hours + "h00";
       }
-      else time = textTimeToNumTime(lig); // " "  (old "12h00") if not found;
+      else time = textTimeToNumTime(lig); // " "  if not found; (old "12h00")
 
       if ( time == "00h00" || time == " ") {
         time = "notime";
@@ -1615,8 +1615,13 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
     } while ( rep );
 
     // response is a global for the gpt normal response (not sevice call)
+
+    removeBeforeCalEvents(evoCalEvents); // forget past events
+
     // don't refresh display in case of event delete
-    if ( !response.match(/supprim/i) && flagServiceRefrech == true ) refreshDateDisplay(date); // select the agenda date of the modified event
+    // if ( !response.match(/supprim/i) && flagServiceRefrech == true ) refreshDateDisplay(date); // select the agenda date of the modified event
+    refreshDateDisplay(date); // select the agenda date of the modified event
+
     globalSortCalendarEvents();
     saveEvoCalEvents();
 
@@ -1790,11 +1795,9 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
-  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (si il y a une heure) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
 
-  // chatBuffer.push({ role: "system", content: "2024 est une année bissextile. Février a 29 jours. Le 29 février est un jeudi. Le premier mars est un vendredi" });
-
-  // conflits d'horaire
+    // conflits d'horaire
   chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même, il n'y a pas de conflict d'horaire." });
   chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir." });
   chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez me demandez quoi faire." });
@@ -2807,7 +2810,7 @@ $(window).focus( function() {
   let calTodayDate = $(".calendar-today").text();
   if ( calTodayDate.length == 1 ) calTodayDate = "0" + calTodayDate;
   let realTodayDate = actualDate().match(/^(\d{1,2}) /)[1];
-  if ( calTodayDate != realTodayDate ) window.location = window.location;
+  if ( calTodayDate && calTodayDate != realTodayDate ) window.location = window.location;
 
   removeBeforeCalEvents(evoCalEvents); // forget past events
 });
@@ -3305,7 +3308,8 @@ $("button[data-year-val]").on("click", function(e) {
   // $('#evoCalendar').evoCalendar('toggleEventList', true);
 });
 
-$(".month").on("click", function(e) {
+/*
+$("li.month").on("click", function(e) {  // $("li.month")
   // $('#evoCalendar').evoCalendar('toggleEventList', false);
   let year = $(".calendar-year p").text();
   let month = (Number($(".calendar-months > li.active-month").attr("data-month-val")) + 1).toString();
@@ -3313,6 +3317,22 @@ $(".month").on("click", function(e) {
   // if portrait mode
   if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
 });
+*/
+
+setTimeout( function() {
+  var monthElements = document.getElementsByClassName("month");
+  var monthFunction = function() {
+    let year = $(".calendar-year p").text();
+    let month = (Number($(".calendar-months > li.active-month").attr("data-month-val")) + 1).toString();
+    $('#evoCalendar').evoCalendar("selectDate", month + "/01/" + year );
+    // if portrait mode
+    if ( innerHeight > innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', false);
+  };
+  for (var i = 0; i < monthElements.length; i++) {
+      monthElements[i].addEventListener('click', monthFunction, false);
+  }
+}, 500);
+
 
 /////
 $("#sEventTime, #sEventTime2").on("click", function (ev) {
