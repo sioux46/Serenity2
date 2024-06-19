@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.16.1";
+var devaVersion = "v4.06.19.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1127,6 +1127,10 @@ function initCalendar() {
     if ( flagEditTrash == "trash") {                          // trash event
       if ( true ) {
 
+        if ( evoCalEvents.length == 1 ) {
+          flagEditTrash = "";
+          return;
+        }
         if ( protoRecording ) {
           actualProto += "\n................................";
           actualProto += "\n  - " + printCalDate(event.date) + ", " + event.name + ", " + event.description + ", (Supprimé manuellement)";
@@ -1135,7 +1139,9 @@ function initCalendar() {
         $("#evoCalendar").evoCalendar('removeCalendarEvent', event.id);
         calendar.selectDate( actualDateToEvoDate("tomorrow") ); // change selected date to refresh date display
         calendar.selectDate( event.date );
+        // removeBeforeCalEvents(evoCalEvents); // forget past events
         saveEvoCalEvents();
+
       }
       flagEditTrash = "";
       return;
@@ -1537,7 +1543,7 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
   }
 
   // agenda non vide
-  if ( reponse.match(/^agenda vide\.?/i) ) rep = response;  // reSponse is a globlal
+  // if ( reponse.match(/^agenda vide\.?/i) ) rep = response;  // reSponse is a globlal
 
   try {
     rep = rep.replace(/.*\n\n/, "");
@@ -1981,6 +1987,10 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
           reponse = "Désolé mais je n'ai pas compris votre question. Pouvez-vous la reformuler ?";
           postChatBuffer = [];  // forget recent chat
         }
+        else if ( evoCalEvents.length == 1 && reponse.match(/supprimé/i) ) {
+          reponse = "Suppression impossible. L'agenda doit contenir au moins un rendez-vous.";
+          postChatBuffer = [];  // forget recent chat
+        }
         else {
           let assistantMessage = { role: "assistant", content: reponse };
 
@@ -2033,7 +2043,6 @@ function handleResponse(reponse) {
   rep = reponse;
 
   if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
-
 
   ////////////////////////////////////
   if ( action == "modify" ) {
@@ -2811,6 +2820,7 @@ $(window).focus( function() {
   if ( calTodayDate.length == 1 ) calTodayDate = "0" + calTodayDate;
   let realTodayDate = actualDate().match(/^(\d{1,2}) /)[1];
   if ( calTodayDate && calTodayDate != realTodayDate ) window.location = window.location;
+
 
   removeBeforeCalEvents(evoCalEvents); // forget past events
 });
