@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.19.1";
+var devaVersion = "v4.06.22.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -776,7 +776,8 @@ function writeFileToDisk(data, filename, type) {
 /////
 function startProtoRecording() {
   console.log("Début enregistrement protocole");
-  $("#clearLogButton").trigger("click"); // clear textarea + newChat
+  // $("#clearLogButton").trigger("click"); // clear textarea + newChat
+  newChat = true;
   protoRecording = true;
   actualProto = "-------- État initial de l'agenda:\n";
   actualProto += printCalendar();
@@ -1580,7 +1581,7 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
         description = lig.match(/\d{1,2}h\d{1,2},? (.*)/);   // MOTIF (description)
         if ( description ) {
           description = description[1];
-          if ( description.match(/: /) ) description = description.replace(/: /, "");
+          description = description.replace(/: /, "");
         }
         else {
           description = lig.match(/( - |: |motif |, |\. )(.*)/i);
@@ -1591,12 +1592,12 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
             else description = "";
           }
         }
-        description = description.replace(/^- /, "");
-        description = description.replace(/\.$/, "");
-        description = description.replace(/motif/i, "");
-        description = description.replace(/^,/,"");
       }
-
+      description = description.replace(/^- /, "");
+      description = description.replace(/\.$/, "");
+      description = description.replace(/motif/i, "");
+      description = description.replace(/^,/,"");
+      description = description.replace(/^ /,"");
       //
 
       date = lig.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);          // DATE
@@ -1625,8 +1626,8 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
     removeBeforeCalEvents(evoCalEvents); // forget past events
 
     // don't refresh display in case of event delete
-    // if ( !response.match(/supprim/i) && flagServiceRefrech == true ) refreshDateDisplay(date); // select the agenda date of the modified event
-    refreshDateDisplay(date); // select the agenda date of the modified event
+    if ( !response.match(/supprim/i) && flagServiceRefrech == true ) refreshDateDisplay(date); // select the agenda date of the modified event
+    // refreshDateDisplay(date); // select the agenda date of the modified event
 
     globalSortCalendarEvents();
     saveEvoCalEvents();
@@ -2048,7 +2049,7 @@ function handleResponse(reponse) {
   if ( action == "modify" ) {
 
     // date
-    if ( rep.match(/Premier/i) ) rep = rep.replace(/Premier/i, "01");
+    if ( rep.match(/premier/i) ) rep = rep.replace(/premier/i, "01");
     if ( rep.match(/1er/i) ) rep = rep.replace(/1er/i, "01");
 
     date = rep.match(new RegExp("\\bau\\b.*\\b(\\d{1,2})\\b.*(" + frenchMonthNamesForRegExp() + ")(.*)", 'i'));
@@ -2060,10 +2061,10 @@ function handleResponse(reponse) {
 
     if ( dateForEvo ) { // select the agenda date of the modified event
       refreshDateDisplay(dateForEvo);
-      flagServiceRefrech = false;
+      flagServiceRefrech = false; // don't select date for service call last item
     }
-    else flagServiceRefrech = true;
-    // else refreshDateDisplay(activeDate); // out serviceCall list last event
+    else flagServiceRefrech = true;  // select date for service call last item
+    // else refreshDateDisplay(activeDate); // select date to  activeDate
 
     serviceBuffer = [];   // $service$
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
@@ -3146,7 +3147,8 @@ $("#chatParamChangeUserButton").on("click", function(e) {
 ////  save editing from chatParam modal
 $("#chatParamUserName").on("change", function (e) {
   if ( settinglist.userName != $("#chatParamUserName").val() ) {
-    $("#clearLogButton").trigger("click"); // clear textarea + newChat
+    // $("#clearLogButton").trigger("click"); // clear textarea + newChat
+    newChat = true;
   }
   settinglist.userName = $("#chatParamUserName").val();
   writeSettingListToDatabase();
@@ -3159,7 +3161,8 @@ $("#chatParamUserAdress").on("change", function (e) {
 
 $("#chatParamAssistantName").on("change", function (e) {
   if ( settinglist.assistantName != $("#chatParamAssitantName").val() ) {
-    $("#clearLogButton").trigger("click"); // clear textarea + newChat
+    // $("#clearLogButton").trigger("click"); // clear textarea + newChat
+    newChat = true;
   }
   settinglist.assistantName = $("#chatParamAssistantName").val();
   writeSettingListToDatabase();
