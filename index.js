@@ -2138,19 +2138,19 @@ function handleResponse(reponse) {
     // description
     try { description = date[3]; } catch(e) {}
 
-    if ( description.match(/\d{4}/) ) description = description.replace(/\d{4}/, "");
+    description = description.replace(/\d{4}/, "");
 
-    if ( description.match(/^\s+à\s+/) ) description = description.replace(/^\s+à\s+/, "");
-    if ( description.match(/\d{1,2}h\d{1,2}/i) ) description = description.replace(/\d{1,2}h\d{1,2}/i, "");
-    if ( description.match(/\d{1,2}h/i) ) description = description.replace(/\d{1,2}h/i, "");
-    if ( description.match(/,\s+/) ) description = description.replace(/,\s+/, "");
-    if ( description.match(/motif:\s+/i) ) description = description.replace(/motif:\s+/i, "");
-    if ( description.match(/motif\s+/i) ) description = description.replace(/motif\s+/, "");
-    if ( description.match(/^à ,/) ) description = description.replace(/^à ,/, "");
-    if ( description.match(/^\s+/) ) description = description.replace(/^\s+/, "");
+    description = description.replace(/^\s+à\s+/, "");
+    description = description.replace(/\d{1,2}h\d{1,2}/i, "");
+    description = description.replace(/\d{1,2}h/i, "");
+    description = description.replace(/,\s+/, "");
+    description = description.replace(/motif:\s+/i, "");
+    description = description.replace(/motif\s+/, "");
+    description = description.replace(/^à ,/, "");
+    description = description.replace(/^\s+/, "");
     subDesc = description.match(/(.*\.)\s+/);
     if ( subDesc ) description = subDesc[1];
-    if ( description.match(/\.$/) ) description = description.replace(/\.$/, "");
+    description = description.replace(/\.$/, "");
 
     if ( !description ) {
 */
