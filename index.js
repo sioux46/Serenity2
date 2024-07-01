@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.06.22.1";
+var devaVersion = "v4.07.01.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1129,8 +1129,9 @@ function initCalendar() {
       if ( true ) {
 
         if ( evoCalEvents.length == 1 ) {
-          flagEditTrash = "";
-          return;
+          window.location = window.location;
+          // flagEditTrash = "";
+          // return;
         }
         if ( protoRecording ) {
           actualProto += "\n................................";
@@ -1745,14 +1746,14 @@ function addCalEvent(time, description, date) {
 function collectPreChatBuffer() {
   var chatBuffer = [];
 
-  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client.  Appelez-moi " + settinglist.userName + ". J'habite " +  settinglist.userAdress + "." });
+  chatBuffer.push({ role: "system", content: "Vous êtes " + settinglist.assistantName + ", mon chauffeur et mon secrétaire particulier et mon assistant. Je suis votre client. Vous devez me vouvoyer et m'appeler " + settinglist.userName + ". J'habite " +  settinglist.userAdress + "." });
   chatBuffer.push({ role: "system", content: "Répondez " +  settinglist.responseStyle + " " + settinglist.responseDetail + "." });
 
   // date
   chatBuffer.push({ role: "system", content: "La date pour aujourd'hui est le " + actualDate() + ". Le jour de la semaine est " + actualDay(actualDate()) + "." });
 
-  chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
-  chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
+  // chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
+  // chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
   chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
 
@@ -1762,29 +1763,34 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour le premier décembre avec Tatata" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le dimanche premier décembre 2024 à 15 heure, motif: Tour du quartier avec Tatata" });
 
+/*
   chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 12h avec mon arrière cousine Guendeline" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 12 heure, motif: votre arrière cousine Guendeline" });
-
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le "  +  actualDay(nextDayDate(nextDayDate(actualDate()))) + " " + nextDayDate(nextDayDate(actualDate())) + " à 12 heure, motif: votre arrière cousine Guendeline" });
+*/
+  chatBuffer.push({ role: "user", content: "Ajoutez un rendez-vous pour après-demain à 12h avec mon arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour après-demain à 12 heure, motif: votre arrière cousine Guendeline" });
+  chatBuffer.push({ role: "user", content: "Supprimez le rdv pour après-demain avec mon arrière cousine Guendeline" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour après-demain à 12 heure, motif: votre arrière cousine Guendeline" });
 
-  chatBuffer.push({ role: "user", content: "Ajoutez le coiffeur aujourd'hui à 16h" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 16 heure, motif: coiffeur" });
+  chatBuffer.push({ role: "user", content: "Ajoutez le coiffeur lundi prochain à 16h" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour lundi prochain à 16 heure, motif: coiffeur" });
 
   chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir et me demandez quoi faire." });
-  chatBuffer.push({ role: "user", content: "Ajoutez rdv avec le plombier aujourd'hui à 16h10" });
-  chatBuffer.push({ role: "assistant", content: "Il y a un conflit d'horaires le " +  actualDay((actualDate())) + " " + actualDate() + " : le rendez-vous avec le coiffeur à 16h00 et le rendez-vous avec le plombier à 16h10. Que dois-je faire ?" });
+  chatBuffer.push({ role: "user", content: "Ajoutez rdv avec le plombier lundi prochain à 16h10" });
+  chatBuffer.push({ role: "assistant", content: "Il y a un conflit d'horaires lundi prochain entre le rendez-vous avec le coiffeur à 16h00 et le rendez-vous avec le plombier à 16h10. Que dois-je faire ?" });
   chatBuffer.push({ role: "user", content: "Supprimer le coiffeur" });
-  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour le " +  actualDay((actualDate())) + " " + actualDate() + " à 16 heure, motif: coiffeur. Rendez-vous confirmé avec le plombier le " + actualDay((actualDate())) + " " + actualDate() + " à 16h10" });
+  chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour lundi prochain à 16 heure, motif: coiffeur. Rendez-vous confirmé avec le plombier à 16h10" });
 
   chatBuffer.push({ role: "assistant", content: "Refusez d'ajouter un rendez-vous pour une date antérieure à la date du jour" });
 
   chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure" });
-  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui"});
+  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain"});
   chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
 
   chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
-  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour aujourd'hui à 9h"});
+  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain à 9h"});
   chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
 
   //
@@ -1794,7 +1800,7 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez un agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel, de restaurant, de train, d'avion, ou de taxi; ajoutez le comme un rendez-vous dans votre agenda. Vous notez ces réservations dans votre agenda."});
+  chatBuffer.push({ role: "system", content: "Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel ou de restaurant, ajoutez le comme un rendez-vous dans votre agenda. Vous notez ces réservations dans votre agenda."});
 
   chatBuffer.push({ role: "system", content: "Notez mes demandes de réservation de vol dans votre agenda."});
 
@@ -1802,14 +1808,22 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
-  chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+  // formatage de la réponse
+  //chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+  chatBuffer.push({ role: "system", content: "Quand vous ajoutez un événement dans l'agenda, demandez-moi de préciser la date si celle-ci est absente." });
+  chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
+
 
     // conflits d'horaire
-  chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même, il n'y a pas de conflict d'horaire." });
-  chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir." });
-  chatBuffer.push({ role: "system", content: "En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez me demandez quoi faire." });
+  chatBuffer.push({ role: "system", content: "Quand plusieurs rendez-vous sont très proches dans le temps, il y a un conflit d'horaire. En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir et devez me demandez quoi faire." });
+  chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
+
+    // énumération
+  chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux sans les numéroter et demandez a chaque fois si il faut continuer. soyez le plus concis possible." });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
+
+  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous à venir en tenant compte de la date et de l'heure actuelle mais sans tenir compte des rendez-vous supprimer"});
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
@@ -1884,9 +1898,9 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
   if ( question.match(new RegExp("^(À|A) bientôt " + settinglist.assistantName, 'i'))) { // Cut the mic. stopRecog handled in fillLog()
     response = "Je vous en prie";
   }
-  else if ( question.match(new RegExp("^Coucou " + settinglist.assistantName, 'i'))) {
-    response = "Bonjour " + settinglist.userName + ". Que puij faire pour vous ?";
-  }
+  // else if ( question.match(new RegExp("^Coucou " + settinglist.assistantName, 'i'))) {
+  //   response = "Bonjour " + settinglist.userName + ". Que puij faire pour vous ?";
+  // }
 
   //////////////////////////////////////////////////////////////////
   else  {
@@ -1936,9 +1950,9 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     chatBuffer.push({ role: "user", content: "Ajouter les rendez-vous suivant à votre agenda" });
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
-    chatBuffer = chatBuffer.concat( collectContactBook());
+    if ( contactBook.length ) chatBuffer = chatBuffer.concat( collectContactBook());
     chatBuffer.push({ role: "system", content: "Je me trouve actuellement à " + displayGeoLocLabel() });
-    chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération, soyez le plus concis possible" });
+    // chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération, soyez le plus concis possible" });
     chatBuffer.push({ role: "system", content: "Répondez sans faire d'autre remarque." });
 
     //------------------------------------------------------------------
