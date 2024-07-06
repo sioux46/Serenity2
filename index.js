@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.01.1";
+var devaVersion = "v4.07.06.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1086,18 +1086,6 @@ function initCalendar() {
 
   removeBeforeCalEvents(evoCalEvents);
 
-/*
-  if ( !evoCalEvents.length ) {
-    addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
-    addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
-    addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
-    addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
-    // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
-    addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
-    saveEvoCalEvents();
-  }
-*/
-
   ///////////// manage/hide togglers
   $(".calendar-table th").on("click", function(e) {
     $("#evoCalendar").evoCalendar('toggleSidebar');
@@ -1458,12 +1446,16 @@ function removeBeforeCalEvents(events) {
   }
 
   if ( !evoCalEvents.length ) {
+
+    addCalEvent("09h00", "Dentiste", actualDateToEvoDate("today"));
+/*
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
     addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
     addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
-    // addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
+    addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
     addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
+*/
     flagSave = true;
   }
   if ( flagSave ) setTimeout( function() { saveEvoCalEvents(); }, 100);
@@ -1810,7 +1802,8 @@ function collectPreChatBuffer() {
 
   // formatage de la réponse
   //chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
-  chatBuffer.push({ role: "system", content: "Quand vous ajoutez un événement dans l'agenda, demandez-moi de préciser la date si celle-ci est absente." });
+  chatBuffer.push({ role: "system", content: "Tout évènement doit avoir une date. Avant d'ajoutez un événement, un voyage ou un rendez-vous dans l'agenda, exigez que je précise la date si celle-ci est absente. L'heure est facultative" });
+  chatBuffer.push({ role: "system", content: "Quand vou mentionner la date d'un évènement, ne donnez pas l'année"});
   chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
 
 
@@ -1819,11 +1812,14 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
 
     // énumération
-  chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux sans les numéroter et demandez a chaque fois si il faut continuer. soyez le plus concis possible." });
+  chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux mais sans les numéroter et demandez a chaque fois si vous devez continuer. soyez le plus concis possible." });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
-  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous à venir en tenant compte de la date et de l'heure actuelle mais sans tenir compte des rendez-vous supprimer"});
+  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui sauf si l'heure de ce rendez-vous est inférieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
+
+  chatBuffer.push({ role: "system", content: "Ne mentionnez jamais les évènements d'aujourd'hui quand l'heure pour ces évènements est inférieure à l'heure actuelle."});
+
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
@@ -2110,7 +2106,9 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant sauf pour le rendez-vous qui concerne votre dernière réponse que vous devez passer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
@@ -2555,7 +2553,7 @@ function chatToEvoDate(date) {
 
   let year = date[0].match(/(\d{4})/);
   if ( year ) year = year[1];
-  else year = actualDate().match(/(\d{4})/)[1];
+  else year = actualDate().match(/ (\d{4})/)[1];
 
   let date2 = monthNum[d[2]] + "/" + d[1] + "/" + year;
   return date2;
@@ -3414,7 +3412,7 @@ var evoCalEvents_OLD =[];
 $(".calendar-sidebar > .calendar-year").css("padding", "20px");
 
 var flagEditTrash;
-var flagServiceRefrech;
+var flagServiceRefrech; // active calendar page from service call
 
 var questionAnswer = "chatGPT"; // chatGPT v DEVA
 
