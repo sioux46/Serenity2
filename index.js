@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.06.b";
+var devaVersion = "v4.07.10.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1775,18 +1775,27 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "user", content: "Supprimer le coiffeur" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous supprimé pour lundi prochain à 16 heure, motif: coiffeur. Rendez-vous confirmé avec le plombier à 16h10" });
 
-  chatBuffer.push({ role: "assistant", content: "Refusez d'ajouter un rendez-vous pour une date antérieure à la date du jour" });
+  chatBuffer.push({ role: "system", content: "Refusez d'ajouter un rendez-vous pour une date antérieure à la date du jour" });
 
+/*
   chatBuffer.push({ role: "system", content: "Si l'heure du rendez-vous n'est pas donnée, demandez l'heure" });
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain"});
   chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
+*/
 
   chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
-  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain à 9h"});
+  chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain"});
   chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
 
+  // voyages
+  chatBuffer.push({ role: "system", content: "En cas de départ en voyage ou de déplacement dans une autre ville, exigez que je vous donne la destination sauf si je ne vous l'ai déjà donnée et demandez-moi si il y aura des passagers et des choses à prévoir. Ajoutez ces informations au motif."});
+  chatBuffer.push({ role: "user", content: "Demain je parts en voyage."});
+  chatBuffer.push({ role: "assistant", content: "Quelle-est la destination de ce voyage ?"});
+  chatBuffer.push({ role: "user", content: "Lyon"});
+  chatBuffer.push({ role: "assistant", content: "Y aura-t-il des passagers et des choses à prévoir ?"});
+  chatBuffer.push({ role: "user", content: "Oui, j'emmène ma tante. Prévoir un rehausseur."});
   //
-  chatBuffer.push({ role: "user", content: "Videz entièrement votre agenda. Supprimez tous les rendez-vous." });
+  chatBuffer.push({ role: "user", content: "Maintenat videz entièrement votre agenda. Supprimez tous les rendez-vous et oubliez-les." });
   chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous ont été supprimés. Mon agenda est vide" });
 
   chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez un agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
@@ -1796,14 +1805,12 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Notez mes demandes de réservation de vol dans votre agenda."});
 
-  chatBuffer.push({ role: "system", content: "faite une réponse courte."});
-
-  chatBuffer.push({ role: "system", content: "Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
+  chatBuffer.push({ role: "system", content: "faite une réponse courte. Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
   // formatage de la réponse
   //chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
-  chatBuffer.push({ role: "system", content: "Tout évènement doit avoir une date. Avant d'ajoutez un événement, un voyage ou un rendez-vous dans l'agenda, exigez que je précise la date si celle-ci est absente. L'heure est facultative" });
-  chatBuffer.push({ role: "system", content: "Quand vou mentionner la date d'un évènement, ne donnez pas l'année"});
+  chatBuffer.push({ role: "system", content: "Tout évènement doit avoir une date. Avant d'ajoutez un événement, un voyage ou un rendez-vous dans l'agenda, exigez que je précise la date si celle-ci est absente. L'heure est facultative. Ne la demandez pas." });
+  chatBuffer.push({ role: "system", content: "Quand vous mentionner la date d'un évènement, ne donnez pas l'année dans votre réponse."});
   chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
 
 
@@ -1816,7 +1823,7 @@ function collectPreChatBuffer() {
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
-  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui sauf si l'heure de ce rendez-vous est inférieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
+  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui dont l'heure est inférieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
 
   chatBuffer.push({ role: "system", content: "Ne mentionnez jamais les évènements d'aujourd'hui quand l'heure pour ces évènements est inférieure à l'heure actuelle."});
 
@@ -2108,7 +2115,10 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant sauf pour le rendez-vous qui concerne votre dernière réponse que vous devez passer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant sauf pour le rendez-vous qui concerne votre dernière réponse que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+
 
     chatGPTserviceCall(serviceBuffer);
     // postChatBuffer = [];             // forget recent chat
