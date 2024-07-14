@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.10.a";
+var devaVersion = "v4.07.14.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1836,7 +1836,9 @@ function collectPreChatBuffer() {
 ////
 function questionAnalyse(question) {   // $question$   ************* Q U E S T I O N   A N A L Y S E *********
   if ( !question ) return;
-  if ( question.match(/\bD(e|i)va\b/i) ) question = question.replaceAll(/\bD(e|i)va\b/gi, "Deva"); // write 'Deva'
+  question = question.replaceAll(/\bDiva\b/g, "Deva"); // Diva -> Deva
+  question = question.replaceAll(/\bd'Eva\b/g, "Deva"); // d'Eva -> Deva
+  question = question.replaceAll(/\bEva\b/g, "Deva"); // Eva -> Deva
   fillLog("question", question);
 //////
   if ( question.match(/^\s*::gpt4\s*$/i) ) {  // force gpt4
