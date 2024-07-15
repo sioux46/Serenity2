@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.14.a";
+var devaVersion = "v4.07.15.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -3030,8 +3030,6 @@ $("#showTravellerButton").on("click", function (e) {  // Traveller button
   $(".edit-trash").css("display", "none");
 });
 
-// $("#showTravellerButton").trigger("click");  // show traveller display on startup
-
 //////////// card edit-trash show-hide, trash record, edit record ////////////////
 $("#travellerCards").on("click", function(e) {
 
@@ -3386,12 +3384,19 @@ $(window).resize(function(){
   displayMap();
 });
 
-setTimeout(function() { getLocation(); }, 1000);
+setTimeout(function() {
+  getLocation();
+  $("#showTravellerButton").trigger("click");  // show traveller display on startup
+}, 1000);
+
 // setTimeout(function() { navigator.geolocation.getCurrentPosition(showPosition); }, 3000);
 
 $("a.leaflet-control-zoom-out").on("click", function (ev) {
   console.log("zoom out");
 });
+
+
+
 
 }); // *********************************************  F I N   R E A D Y
 //  *******************************************************************
