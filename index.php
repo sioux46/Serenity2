@@ -56,7 +56,10 @@
 <!--           -->
   <div id="toolBar">
     <div id="dialogButtons d-flex" class="mt-2">
-      <button id="chatParamButton" class="btn toolbarButton ms-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
+      <button id="paramOffcanvasButton" class="btn mt-0 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
+        <img src="icons/gear.svg" width="30">
+      </button>
+      <button id="chatParamButton" class="btn toolbarButton ms-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatParamOffcanvas">
         <img src="icons/chat-left-text.svg" width=30>
       </button>
       <button id="micButton" class="btn toolbarButton" type="button">
@@ -139,9 +142,9 @@
     <div class="container">
       <div class="d-grid gap-4 text-center">
                                                 <!-- data-bs-target="#modalOntoTree" -->
-        <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Agenda des voyages</button>
+        <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Les voyages</button>
         <button id="voyageButton" type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
-        <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramétrer DEVA</button>
+        <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Les voyageurs</button>
       </div>
     </div>
   </div>
@@ -188,12 +191,12 @@
         </div>
       </div>
     </div>
-
+    <!--
     <button id="paramOffcanvasButton" class="btn mt-4 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#paramOffcanvas">
       <img src="icons/gear.svg" width=30>
     </button>
-
-    <button id="showCarButton" class="btn mt-4 ms-0 param-button" type="button">
+    -->
+    <button id="showCarButton" class="btn mt-4 ms-3 param-button" type="button">
       <img src="icons/carBlue.svg" width="30">
     </button>
 
@@ -207,6 +210,12 @@
 
 <!-- -->
     <div id="carSubpage" class="container-fluid param-subpage">
+      <div class="card mt-4 ms-2" style="width: 18rem;">
+        <img src="icons/carBlue.svg" class="card-img-top">
+        <div class="card-body">
+          <h2 class="card-title car-card-title">Ma voiture</h2>
+        </div>
+      </div>
     </div>
 <!-- -->
     <div id="travellerSubpage" class="container-fluid param-subpage">

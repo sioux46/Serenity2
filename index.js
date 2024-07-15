@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.15.a";
+var devaVersion = "v4.07.15.b";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -3078,6 +3078,7 @@ $("#travellerCards").on("click", function(e) {
 
 ///////////////////////////////////////////// create or edit new traveller
 $("#travellerPlus").on("click", function(e) {
+  if ( activeParamDisplay == "car" ) return;
   clearTravellerModal();
   $("#travellerModal").modal("show");
 });
@@ -3436,8 +3437,6 @@ var questionAnswer = "chatGPT"; // chatGPT v DEVA
 var questionMode = "text"; // audio v text
 var reponseMode = "text"; // audio v text
 
-var activeParamDisplay = ""; // to toogle between car and traveller
-
 //                              init SpeechRecognition
 var recognizing = false;
 var recognition = initRecognition();
@@ -3489,3 +3488,6 @@ var map;
 var prevZoom = 16;
 var previousLabel = "";
 var watchID = 0;
+
+var activeParamDisplay = ""; // to toogle between car and traveller
+// param page mode
