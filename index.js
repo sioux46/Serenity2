@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.15.d";
+var devaVersion = "v4.07.15.e";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -2122,7 +2122,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant sauf pour le rendez-vous qui concerne votre dernière réponse que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée, ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage, avec la date, l'heure et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
 
     chatGPTserviceCall(serviceBuffer);
