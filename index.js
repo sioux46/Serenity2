@@ -1488,7 +1488,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify("gpt-4o"), // JSON.stringify("gpt-4-turbo-2024-04-09"),
+              model: JSON.stringify(serviceModel), // "gpt-4o"
               // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
@@ -1507,7 +1507,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
           console.log("Error A P I Open A I !");
         }
         else {
-          console.log("Response gpt-4-turbo-preview serviceCall:\n" + reponse);
+          console.log("Response " +  serviceModel + " serviceCall:\n" + reponse);
           newEventListFromServiceCall(reponse);
         }
       }
@@ -1547,6 +1547,7 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
     if ( protoRecording ) actualProto += "\n-------- État de l'agenda:";
     do {
       lig = rep.match(/.*\n+?/)[0];
+      lig = lig.replace(/(.*)<(\d{1,2}h\d{1,2})>(.*)/, "$1$2$3"); // sup < et >
 
       hours = lig.match(/(\d{1,2})h/i);                     // HOURS
       if ( hours ) {
@@ -2122,7 +2123,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant sauf pour le rendez-vous qui concerne votre dernière réponse que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage, avec la date, l'heure et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
+    serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage, avec la date, l'heure et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
 
 
     chatGPTserviceCall(serviceBuffer);
@@ -3472,6 +3473,7 @@ var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
+var serviceModel = "gpt-4o";
 var reponseModel = "gpt-4o"; // "gpt-4-turbo-2024-04-09";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
