@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.07.21.a";
+var devaVersion = "v4.07.22.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1447,7 +1447,7 @@ function removeBeforeCalEvents(events) {
 
   if ( !evoCalEvents.length ) {
 
-    addCalEvent("09h00", "Dentiste", actualDateToEvoDate("today"));
+    addCalEvent("19h00", "Diner chez ma tante", actualDateToEvoDate("today"));
 /*
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
@@ -1814,10 +1814,9 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Quand vous mentionner la date d'un évènement, ne donnez pas l'année dans votre réponse."});
   chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
 
-
     // conflits d'horaire
   chatBuffer.push({ role: "system", content: "Quand plusieurs rendez-vous sont très proches dans le temps, il y a un conflit d'horaire. En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir et devez me demandez quoi faire." });
-  chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
+  // chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
 
     // énumération
   chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux sans les numérotation et demandez a chaque fois si vous devez continuer. soyez le plus concis possible." });
@@ -1827,9 +1826,10 @@ function collectPreChatBuffer() {
     // départ immédiat
   chatBuffer.push({ role: "system", content: "En cas de départ immédiat avec la voiture, notez dans l'agenda comme un rendez-vous et répondez avec la date sans l'année et l'heure actuelle" });
 
-  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui dont l'heure est inférieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
+    // bonjour
+  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
 
-  chatBuffer.push({ role: "system", content: "Ne mentionnez jamais les évènements d'aujourd'hui quand l'heure pour ces évènements est inférieure à l'heure actuelle."});
+  // chatBuffer.push({ role: "system", content: "Ne mentionnez jamais les évènements d'aujourd'hui quand l'heure pour ces évènements est inférieure à l'heure actuelle."});
 
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
@@ -3474,7 +3474,7 @@ var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
 var serviceModel = "gpt-4o";
-var reponseModel = "gpt-4o"; // "gpt-4-turbo-2024-04-09";
+var reponseModel = "gpt-4o";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
