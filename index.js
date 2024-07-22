@@ -1814,23 +1814,20 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Quand vous mentionner la date d'un évènement, ne donnez pas l'année dans votre réponse."});
   chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
 
-    // conflits d'horaire
-  chatBuffer.push({ role: "system", content: "Quand plusieurs rendez-vous sont très proches dans le temps, il y a un conflit d'horaire. En cas de conflits d'horaires entre plusieurs rendez-vous, vous devez m'avertir et devez me demandez quoi faire." });
-  // chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
-
     // énumération
   chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux sans les numérotation et demandez a chaque fois si vous devez continuer. soyez le plus concis possible." });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
+
+    // conflits d'horaire
+  chatBuffer.push({ role: "system", content: "Quand plusieurs évènements, rendez-vous ou voyages sont très proches dans le temps, il y a un conflit d'horaire. Ne le notez pas dans l'agenda. Avertissez-moi et demandez-moi quoi faire." });
+  // chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
 
     // départ immédiat
   chatBuffer.push({ role: "system", content: "En cas de départ immédiat avec la voiture, notez dans l'agenda comme un rendez-vous et répondez avec la date sans l'année et l'heure actuelle" });
 
     // bonjour
   chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
-
-  // chatBuffer.push({ role: "system", content: "Ne mentionnez jamais les évènements d'aujourd'hui quand l'heure pour ces évènements est inférieure à l'heure actuelle."});
-
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
