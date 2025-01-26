@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v4.08.27.b";
+var devaVersion = "v5.01.26.a";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -292,7 +292,7 @@ function verifSettingList() {
   if ( !settinglist.userName ) settinglist.userName = "Monsieur";
   if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
   if ( !settinglist.assistantName ) settinglist.assistantName = "Deva";
-  /* if ( !settinglist.reponseTemperature ) */ settinglist.reponseTemperature = 0.5;
+  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.5;
   if ( !settinglist.speechRate ) settinglist.speechRate = 1.1;
   if ( !settinglist.speechPitch ) settinglist.speechPitch = 2;
 }
@@ -1825,7 +1825,7 @@ function collectPreChatBuffer() {
   // chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
 
     // départ immédiat
-  chatBuffer.push({ role: "system", content: "En cas de départ immédiat avec la voiture, notez dans l'agenda comme un rendez-vous et répondez avec la date sans l'année et l'heure actuelle" });
+  chatBuffer.push({ role: "system", content: "En cas de départ immédiat avec la voiture, notez dans l'agenda comme un rendez-vous et répondez avec la date sans l'année et avec l'heure actuelle" });
 
     // bonjour
   chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
@@ -1988,8 +1988,8 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
               model: JSON.stringify(reponseModel),
-              // temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
-              temperature: JSON.stringify(0.5),
+              temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
+              // temperature: JSON.stringify(0.7),
               style: JSON.stringify(settinglist.responseStyle),
               details: JSON.stringify(settinglist.responseDetail),
             },
@@ -3153,6 +3153,14 @@ $("#chatParamOffcanvas").on("blur", function(e) {
 */
 
 $("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas modal
+
+  // test temperature...
+  if ( window.location.href.lastIndexOf(":8888") || window.location.href.lastIndexOf("test") ) {
+    $("#chatParamStyle").attr("disabled",false);
+    $("#chatParamDetail").attr("disabled",false);
+    $("#chatParamTemperature").attr("disabled",false);
+  }
+
   $("#chatParamUserName").val(settinglist.userName);
   $("#chatParamUserAdress").val(settinglist.userAdress);
   $("#chatParamAssistantName").val(settinglist.assistantName);
