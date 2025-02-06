@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v5.01.26.a";
+var devaVersion = "v5.01.26.b";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1797,8 +1797,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "assistant", content: "Y aura-t-il des passagers et des choses à prévoir ?"});
   chatBuffer.push({ role: "user", content: "Oui, j'emmène ma tante. Prévoir un rehausseur."});
   //
-  chatBuffer.push({ role: "user", content: "Maintenat videz entièrement votre agenda. Supprimez tous les rendez-vous et oubliez-les." });
-  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous ont été supprimés. Mon agenda est vide" });
+  chatBuffer.push({ role: "user", content: "Maintenant videz entièrement votre agenda. Supprimez tous les rendez-vous et tous les voyages et oubliez-les." });
+  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous et voyages ont été supprimés. Mon agenda est vide" });
 
   chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez un agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
 
@@ -1828,7 +1828,8 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "En cas de départ immédiat avec la voiture, notez dans l'agenda comme un rendez-vous et répondez avec la date sans l'année et avec l'heure actuelle" });
 
     // bonjour
-  chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
+  // chatBuffer.push({ role: "system", content: "Lorsque je vous dis bonjour ou que je vous salut, saluez-moi puis donnez-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle. Oubliez les rendez-vous supprimer."});
+  chatBuffer.push({ role: "system", content: "Oubliez les rendez-vous et les voyages supprimer."});
 
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 
@@ -3155,7 +3156,7 @@ $("#chatParamOffcanvas").on("blur", function(e) {
 $("#paramOffcanvasButton").on("click", function(e) { // load paramOffcanvas modal
 
   // test temperature...
-  if ( window.location.href.lastIndexOf(":8888") || window.location.href.lastIndexOf("test") ) {
+  if ( window.location.href.lastIndexOf(":8888") != -1 || window.location.href.lastIndexOf("test") != -1 ) {
     $("#chatParamStyle").attr("disabled",false);
     $("#chatParamDetail").attr("disabled",false);
     $("#chatParamTemperature").attr("disabled",false);
