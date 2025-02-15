@@ -1447,15 +1447,15 @@ function removeBeforeCalEvents(events) {
 
   if ( !evoCalEvents.length ) {
 
-    addCalEvent("19h00", "Diner chez ma tante", actualDateToEvoDate("today"));
-/*
+    // addCalEvent("19h00", "Diner chez ma tante", actualDateToEvoDate("today"));
+
     addCalEvent("20h00", "Diner chez mon oncle", actualDateToEvoDate("today"));
     addCalEvent("22h15", "Concert Julie et Diana", actualDateToEvoDate("today"));
     addCalEvent("10h15", "Dentiste", actualDateToEvoDate("tomorrow"));
     addCalEvent("09h00", "Réunion avec Rachid et François", actualDateToEvoDate("afterTomorrow"));
     addCalEvent("18h45", "Aller chercher les filles au concervatoire", actualDateToEvoDate("afterTomorrow"));
     addCalEvent("21h00", "Départ pour Dieppe", actualDateToEvoDate("afterTomorrow"));
-*/
+
     flagSave = true;
   }
   if ( flagSave ) setTimeout( function() { saveEvoCalEvents(); }, 100);
