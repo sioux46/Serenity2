@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v5.01.26.b";
+var devaVersion = "v5.02.15.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1488,7 +1488,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify(serviceModel), // "gpt-4o"
+              model: JSON.stringify(serviceModel), // "gpt-4.1" "gpt-4o"
               // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
               temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
@@ -3478,13 +3478,13 @@ var waitingForGPT = false;
 //                                TIME OUT
 var postChatTimeout;
 var recogTimeout;
-var stopRecogValue = 90000;  // 15000 = 15 seconds, 60000 = 1 minute
-var clearPostChatValue = 90000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
+var stopRecogValue = 180000;  // 15000 = 15 seconds, 60000 = 1 minute
+var clearPostChatValue = 180000; // 10 min = 600000,  5 min = 300000, 2 min = 120000, 1 min = 60000
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var serviceModel = "gpt-4o";
-var reponseModel = "gpt-4o";
+var serviceModel = "gpt-4.1"; // "gpt-4o";
+var reponseModel = "gpt-4.1"; // "gpt-4o";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
