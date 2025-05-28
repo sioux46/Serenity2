@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v5.05.11.1";
+var devaVersion = "v5.05.28.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -3483,8 +3483,8 @@ var clearPostChatValue = 180000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var serviceModel = "gpt-4.1"; // "gpt-4o";
-var reponseModel = "gpt-4.1"; // "gpt-4o";
+var serviceModel = "gpt-4o"; // "gpt-4.1";
+var reponseModel = "gpt-4o"; // "gpt-4.1";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;
