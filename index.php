@@ -144,7 +144,7 @@
                                                 <!-- data-bs-target="#modalOntoTree" -->
         <button id="sheduleButton" type="button" class="start-page-btn btn btn-outline-primary" >Les voyages</button>
         <button id="voyageButton" type="button" class="start-page-btn btn btn-outline-primary">Le voyage en cours</button>
-        <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Paramètres</button>
+        <button id="paramButton" type="button" class="start-page-btn btn btn-outline-primary">Les voyageurs</button>
       </div>
     </div>
   </div>
