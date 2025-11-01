@@ -2,6 +2,9 @@
 
 $apiKey = $_SERVER['OPENAI_API_KEY'];
 $url = 'https://api.openai.com/v1/chat/completions';
+// $apiKey = $_SERVER['DEEPSEEK_API_KEY'];
+// $url = 'https://api.deepseek.com/chat/completions';
+
 
 $headers = array(
     'Content-Type: application/json',
