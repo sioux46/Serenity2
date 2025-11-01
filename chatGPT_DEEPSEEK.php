@@ -1,7 +1,10 @@
 <?php
 
-$apiKey = $_SERVER['OPENAI_API_KEY'];
-$url = 'https://api.openai.com/v1/chat/completions';
+// $apiKey = $_SERVER['OPENAI_API_KEY'];
+// $url = 'https://api.openai.com/v1/chat/completions';
+$apiKey = $_SERVER['DEEPSEEK_API_KEY'];
+$url = 'https://api.deepseek.com/chat/completions';
+// $url = 'https://api.deepseek.com';
 
 $headers = array(
     'Content-Type: application/json',
@@ -15,15 +18,18 @@ $temperature = json_decode($_POST['temperature'], true);
 $style = json_decode($_POST['style'], true);
 $details = json_decode($_POST['details'], true);
 
-/* echo "before";
-print_r($chatBuffer);
-exit; */
+/*
+echo "before";
+print_r($apiKey);
+print_r($messages);
+exit;
+*/
 
   $data = array(
-      'model' =>  $model,
+      'model' => "deepseek-chat", // $model, "deepseek-chat", "deepseek-reasoner",
       'messages' => $messages,
       'max_tokens' => 1000, // 3000
-      'temperature' => $temperature,
+      'temperature' => 1.3, // $temperature,
       // 'seed' => 12321 // any integer
       // 'top_p' => 0.5
   );
