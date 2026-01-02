@@ -1490,7 +1490,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
               chatBuffer: JSON.stringify(serviceBuffer),
               model: JSON.stringify(serviceModel), // "gpt-4.1" "gpt-4o"
               // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
-              temperature: JSON.stringify(0), // reponseTemperature // force to 0 for GPT-4
+              temperature: JSON.stringify(0.01), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
             },
@@ -3483,8 +3483,8 @@ var clearPostChatValue = 180000; // 10 min = 600000,  5 min = 300000, 2 min = 12
 
 //                        Paramètres chatGPT
 var forceGPT4 = false; // gpt4 allways // not used
-var serviceModel = "gpt-4o"; // "gpt-4.1";
-var reponseModel = "gpt-4o"; // "gpt-4.1";
+var serviceModel = "gpt-4o"; // "gpt-5.1"; // "gpt-4o"; // "gpt-4.1";
+var reponseModel = "gpt-4o"; // "gpt-5.1"; // "gpt-4o"; // "gpt-4.1";
 // var reponseModel = "gpt-4-0125-preview"; // "gpt-4-turbo"; // "gpt-4-0125-preview";    'gpt-3.5-turbo-1106';  "gpt-4-1106-preview"; "gpt-3.5-turbo-0125"; "gpt-4-0125-preview";  "gpt-4-turbo-preview";
 // var reponseTemperature;
 // var userName;

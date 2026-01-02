@@ -1,6 +1,7 @@
 <?php
 
 $apiKey = $_SERVER['OPENAI_API_KEY'];
+// $url = 'https://api.openai.com/v1/responses'; // for 5.1 ?
 $url = 'https://api.openai.com/v1/chat/completions';
 
 $headers = array(
@@ -26,6 +27,8 @@ exit; */
       'temperature' => $temperature,
       // 'seed' => 12321 // any integer
       // 'top_p' => 0.5
+      // 'reasoning' => [ 'effort' => 'low' ],
+      // 'text' => [ 'verbosity' => 'low' ],
   );
 // }
 
