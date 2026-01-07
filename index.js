@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v5.05.29.1";
+var devaVersion = "v6.01.07.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -292,7 +292,7 @@ function verifSettingList() {
   if ( !settinglist.userName ) settinglist.userName = "Monsieur";
   if ( !settinglist.userAdress ) settinglist.userAdress = "108 rue Blanche, Paris";
   if ( !settinglist.assistantName ) settinglist.assistantName = "Deva";
-  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.5;
+  if ( !settinglist.reponseTemperature ) settinglist.reponseTemperature = 0.7;
   if ( !settinglist.speechRate ) settinglist.speechRate = 1.1;
   if ( !settinglist.speechPitch ) settinglist.speechPitch = 2;
 }
@@ -1609,9 +1609,6 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
       console.log("Add event from GPT4 > time: " + time + ", description: " + description + ", date: " + date);
       if ( !addCalEvent(time, description, date) ) throw new Error("Bad format from serviceCall in the loop");
 
-      // Add event from chatGPTserviceCall to actualProto
-//      if ( protoRecording ) actualProto += "\n  - " + date + ", " + time + ", " + description;
-
       rep = rep.replace(/.*\n+?/, "");
     } while ( rep );
 
@@ -1748,9 +1745,9 @@ function collectPreChatBuffer() {
   // chatBuffer.push({ role: "system", content: "La date pour demain est le " + nextDayDate(actualDate()) + ". Le jour de la semaine pour demain est " + actualDay(nextDayDate(actualDate())) + "." });
   // chatBuffer.push({ role: "system", content: "La date pour après-demain est le " + nextDayDate(nextDayDate(actualDate())) + ". Le jour de la semaine pour après-demain est " + actualDay(nextDayDate(nextDayDate(actualDate()))) + "." });
 
-  chatBuffer.push({ role: "system", content: "Vous tenez à jour votre propre agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
+  chatBuffer.push({ role: "system", content: "Vous tenez à jour mon agenda avec mes déplacements, mes rendez-vous, mes réservations et mes dates de voyage pour pouvoir venir me cherchez et me conduire là où je vais."});
 
-  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à votre agenda pour le premier décembre 2024 à 15h pour faire le tour du quartier avec Tatata" });
+  chatBuffer.push({ role: "user", content: "Ajoutez un rdv à  l'agenda pour le premier décembre 2024 à 15h pour faire le tour du quartier avec Tatata" });
   chatBuffer.push({ role: "assistant", content: "Rendez-vous ajouté pour le dimanche premier décembre 2024 à 15 heure, motif: Tour du quartier avec Tatata" });
 
   chatBuffer.push({ role: "user", content: "Supprimez le rdv pour le premier décembre avec Tatata" });
@@ -1785,7 +1782,7 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "assistant", content: "A quelle heure souhaitez-vous ajouter ce rendez-vous ?"});
 */
 
-  chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée, demandez le motif"});
+  chatBuffer.push({ role: "system", content: "Si le motif du rendez-vous n'est pas donnée ( voyage, réunion, visite, personne à voir, etc.), demandez le motif"});
   chatBuffer.push({ role: "user", content: "Ajouter un rendez-vous pour lundi prochain"});
   chatBuffer.push({ role: "assistant", content: "Quel est le motif de ce rendez-vous ?"});
 
@@ -1797,31 +1794,31 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "assistant", content: "Y aura-t-il des passagers et des choses à prévoir ?"});
   chatBuffer.push({ role: "user", content: "Oui, j'emmène ma tante. Prévoir un rehausseur."});
   //
-  chatBuffer.push({ role: "user", content: "Maintenant videz entièrement votre agenda. Supprimez tous les rendez-vous et tous les voyages et oubliez-les." });
-  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous et voyages ont été supprimés. Mon agenda est vide" });
+  chatBuffer.push({ role: "user", content: "Maintenant videz entièrement  l'agenda. Supprimez tous les rendez-vous et tous les voyages et oubliez-les." });
+  chatBuffer.push({ role: "assistant", content: "Tous les rendez-vous et voyages ont été supprimés. L'agenda est vide" });
 
-  chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez un agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
+  chatBuffer.push({ role: "system", content: "Comme vous êtes mon chauffeur et mon assistant, vous avez mon agenda où vous notez les dates et les motifs de mes déplacements pour pouvoir venir me chercher et me conduire où je vais."});
 
   // consigne agenda
-  chatBuffer.push({ role: "system", content: "Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel ou de restaurant, ajoutez le comme un rendez-vous dans votre agenda. Vous notez ces réservations dans votre agenda."});
+  chatBuffer.push({ role: "system", content: "Vous ajoutez, modifiez et supprimez des rendez-vous, des dates de voyage. Quand je vous demande de faire une réservation d'hôtel ou de restaurant, ajoutez le comme un rendez-vous dans l'agenda. Vous notez ces réservations dans  l'agenda."});
 
-  chatBuffer.push({ role: "system", content: "Notez mes demandes de réservation de vol dans votre agenda."});
+  chatBuffer.push({ role: "system", content: "Notez mes demandes de réservation de vol dans  l'agenda."});
 
   chatBuffer.push({ role: "system", content: "faite une réponse courte. Ne terminez pas votre réponse par une clause 'Veuillez noter'"});
 
   // formatage de la réponse
-  //chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans votre agenda. Demandez-moi de préciser si il y a des informations manquantes." });
+  //chatBuffer.push({ role: "system", content: "votre réponse doit inclure <nom du jour> <numéro du jour> <nom du mois> <année> à <heure> (seulement si il y a une heure dans ma requête) ainsi que le motif du déplacement, dans le cas ou vous ajoutez, modifiez, supprimez ou listez un événement dans  l'agenda. Demandez-moi de préciser si il y a des informations manquantes." });
   chatBuffer.push({ role: "system", content: "Tout évènement doit avoir une date. Avant d'ajoutez un événement, un voyage ou un rendez-vous dans l'agenda, exigez que je précise la date si celle-ci est absente. L'heure est facultative. Ne la demandez pas." });
   chatBuffer.push({ role: "system", content: "Quand vous mentionner la date d'un évènement, ne donnez pas l'année dans votre réponse."});
   chatBuffer.push({ role: "system", content: "Quand vous modifiez l'heure d'un évènement, votre réponse ne doit pas mentionner la date. Quand vous modifiez la date d'un évènement, votre réponse doit mentionner la nouvelle date sans mentionner ni l'année ni l'heure mais en gardant le motif. Quand vous modifiez le motif d'un évènement, votre réponse ne doit pas mentionner l'année. Ne listez pas les évènements supprimés." });
 
     // énumération
-  chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les éléments deux par deux sans les numérotation et demandez a chaque fois si vous devez continuer. soyez le plus concis possible." });
+  chatBuffer.push({ role: "system", content: "Si votre réponse doit comporter une énumération ou une liste d'actions ou d'étapes, donnez les quatre premiers éléments sans les numérotation, et pour les suivants, demandez si vous devez continuer. soyez le plus concis possible." });
 
   chatBuffer.push({ role: "system", content: "Apprenez que l'heure actuelle est " + actualTrueTime() + " . Répondez "  + actualTrueTime() + "quand on vous demande l'heure actuelle." });
 
     // conflits d'horaire
-  chatBuffer.push({ role: "system", content: "Quand plusieurs évènements, rendez-vous ou voyages sont très proches dans le temps, il y a un conflit d'horaire. Ne le notez pas dans l'agenda. Avertissez-moi et demandez-moi quoi faire." });
+  chatBuffer.push({ role: "system", content: "Quand plusieurs évènements, rendez-vous ou voyages sont très proches dans le temps, il y a un conflit d'horaire. Avant de le notez pas dans l'agenda, avertissez-moi et demandez-moi quoi faire." });
   // chatBuffer.push({ role: "system", content: "Si le lieu des rendez-vous est le même ou très proche, il n'y a pas de conflict d'horaire." });
 
     // départ immédiat
@@ -2092,32 +2089,6 @@ function handleResponse(reponse) {
     serviceBuffer = [];   // $service$
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
 
-    // serviceBuffer.push({ role: "user", content: "Listez mes rendez-vous dans le format suivant: donnez en premier <2 chiffres pour le numéro du jour> suivit d'un slash, puis <2 chiffres pour le numéro du mois>/<année> et l'heure au format <2 chiffres pour les heures>h<2 chiffres pour les minutes> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez mes rdv au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres>h<2 chiffres> en ajoutant le motif. Répondez sans ajouter d'autre remarque"});
-
-    // Listez mon agenda pour serviceCall
-    //serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif et en remplaçant aujourd'hui, demain et après-demain par la date correspondante. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous que l'on vient juste d'ajouté ou de modifié. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez votre agenda au format numérique <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et en plaçant en dernier de liste le rendez-vous dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> trié par ordre chronoligique en ajoutant le motif et placez en dernier de la liste le rendez-vous dont on vient juste de parler sauf si ce rendez-vous est supprimé. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste le rendez-vous dont on vient juste de parler. Si ce rendez-vous est supprimé, ne le listez pas. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste le rendez-vous dont on vient juste de parler. Si ce rendez-vous est supprimé, ne le listez pas. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes>. Triez la liste par ordre chronoligique décroissant en ajoutant le motif. Placez en fin de liste la chose dont on vient juste de parler. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Placez en fin de liste la dernière chose dont on vient de parler. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronoligique décroissant. Déplacez en fin de liste la dernière chose dont nous avons parler. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Listez l'agenda, les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant sauf pour l'élément qui parle de ma dernière requête que vous devez placer à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
-
-    // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année> à <2 chiffres pour l'heure>h<2 chiffres pour les minutes> en ajoutant le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
     // serviceBuffer.push({ role: "user", content: "Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi en utilisant le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée ajoutez < à ><2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant. Ensuite déplacez le rendez-vous qui parle de ma dernière requête et placez ce rendez-vous à la fin de la liste. Ne listez pas les évènements supprimés. Répondez sans ajouter d'autre remarque"});
 
@@ -2125,7 +2096,45 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Supprimez les doublons dans l'agenda. Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage, avec la date, l'heure et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste le rendez-vous qui concerne votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage. Pour chaque chose à faire, notez dans l'agenda la date, l'heure si elle est connue et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste l'évènement dont vous parlez dans votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
+    // serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage. Pour chaque chose à faire, notez dans l'agenda la date, l'heure si elle est connue et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste l'évènement dont vous parlez dans votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
+
+    serviceBuffer.push({ role: "system", content: `Tu dois restituer l’état actuel COMPLET de ton agenda.
+
+RÈGLES GÉNÉRALES
+- Ne pose aucune question.
+- Ne fais aucun commentaire.
+- N’ajoute aucune explication.
+- Ne fais aucune hypothèse.
+- Si l’agenda est vide, réponds exactement :
+Agenda vide
+
+CONTENU À LISTER
+- Tous les rendez-vous, déplacements, voyages et départs immédiats
+- Uniquement les événements NON supprimés
+- Si un événement a été modifié ou déplacé, ne conserver que sa dernière version
+- Supprimer tous les doublons et l'ancienne version quand l'heure a été ajoutée
+
+FORMAT DE SORTIE (UNE LIGNE PAR ÉVÉNEMENT)
+- Format date obligatoire : JJ/MM/AAAA
+- Si l’heure est connue ou demandée :
+  - ajouter un espace puis HHhMM
+- Ajouter un espace puis le motif exact
+
+EXEMPLES
+07/01/2026 09h00 Réunion avec Rachid et François
+09/01/2026 Départ pour Londres, week-end avec hôtel et visites
+
+TRI
+- Trier les événements par ordre chronologique décroissant
+- Puis placer en DERNIÈRE POSITION l’événement mentionné dans ta dernière réponse
+
+INTERDICTIONS
+- Ne pas afficher d’en-tête
+- Ne pas numéroter
+- Ne pas utiliser de puces
+- Ne pas lister les événements supprimés
+- Ne pas répéter la date du jour si aucun événement n’y correspond
+`});
 
 
     chatGPTserviceCall(serviceBuffer);
