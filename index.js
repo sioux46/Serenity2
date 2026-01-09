@@ -1663,9 +1663,27 @@ function newEventListFromServiceCall(reponse) { // event list response from GPT4
 ///////////////////////////////////////////////////
 
 ////
+function collectEventService() {
+  let events = [];
+  let content = `Voici le contenu initial de l'agenda:
+  `;
+
+  for ( let event of evoCalEvents ) {
+    content += `${dayFromDate(event.date)} ${dateFromDate(event.date)} à ${event.name}`;
+    if ( event.description ) content += ` motif: ${event.description}
+    `;
+    else content += `
+    `;
+  }
+  events.push({ role: "system", content: content});
+  return events;
+}
+
+////
                           // time: name, description: description, date: date
                           // Collecting agenda events to send to ChatGPT
 function collectEvents(type) {
+  if ( type == "service" ) return collectEventService();
   let events = [];
   let content = "";
 
@@ -1686,7 +1704,7 @@ function collectEvents(type) {
     events.push({ role: "user", content: content});
 
     // assistant
-    if ( type == "normal" ) {
+    // if ( type == "normal" ) {
       flagFirstEvent = false;
       content = "Rendez-vous ajouté pour le " + dayFromDate(event.date) + " " + dateFromDate(event.date);
       if ( event.name ) {
@@ -1698,7 +1716,7 @@ function collectEvents(type) {
       else content += ".";
 
       events.push({ role: "assistant", content: content});
-    }
+    // }
   }
 
 
@@ -1734,7 +1752,7 @@ function addCalEvent(time, description, date) {
 ///////////////////////////////////////////////////////////////////////////////////
 //                                           $prechat       P R E C H A T    BUFFER
 function collectPreChatBuffer() {
-  
+
   var chatBuffer = [];
 
 /*
@@ -1813,15 +1831,17 @@ Lorsque je te dis bonjour ou que je te salue, salue-moi puis donne-moi le procha
 IDENTITÉ
 - Tu m’appelles ${settinglist.userName}.
 - Tu es poli, professionnel et très concis. Tu dois me vouvoyer.
-- Tu ne fais aucune remarque inutile.
 
 RÔLE
 - Tu gères intégralement mon agenda : rendez-vous, déplacements, voyages, vols.
 - Tu ajoutes, modifies, supprimes et confirmes les événements.
 - Tu considères que l’agenda est la seule source de vérité.
 - Les événements supprimés sont définitivement oubliés.
+- Tu organises mes voyages, train, avion, hotel, restaurant
+- Tu me proposes des solution concretes en me donnant les avantages et les inconvénients
 
 RÈGLES DE L’AGENDA
+- Chaque évènement doit avoir sa propre entrée dans l'agenda
 - Tout événement doit avoir une date.
 - L’heure est facultative.
 - Refuse tout événement antérieur à la date du jour.
@@ -1854,12 +1874,10 @@ CONTEXTE ACTUEL
 - Position actuelle : ${displayGeoLocLabel()}
 
 CONTEXTE SIMULÉ
+- Tu fais semblant de pouvoir réserver des hotel, trains, avion, restaurants etc.
 - Tu fais semblant de connaître la météo et les conditions de circulation.
 - Tes informations doivent rester réalistes et cohérentes.
-
-FORMAT DES RÉPONSES
-- Pas de justification
-- Pas de questions inutile`});
+`});
 
   return chatBuffer;
 }
@@ -1983,7 +2001,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     preChatBuffer = collectPreChatBuffer(); // consignes générales
 
     chatBuffer = preChatBuffer;
-    chatBuffer.push({ role: "user", content: "Ajouter les rendez-vous suivant à l'agenda" });
+    // chatBuffer.push({ role: "user", content: "Ajouter les rendez-vous suivant à l'agenda" });
     calendarBuffer = collectEvents("normal"); // Agenda
     chatBuffer = chatBuffer.concat(calendarBuffer);
     if ( contactBook.length ) chatBuffer = chatBuffer.concat( collectContactBook());
@@ -2119,11 +2137,11 @@ function handleResponse(reponse) {
 
     serviceBuffer = [];   // $service$
     serviceBuffer = collectEvents("service").concat(postChatBuffer); // Agenda - assistant message + postChatBuffer
-
+    console.log("postChatBuffer:\n " + postChatBuffer);
 
     // serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage. Pour chaque chose à faire, notez dans l'agenda la date, l'heure si elle est connue et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste l'évènement dont vous parlez dans votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
 
-    serviceBuffer.push({ role: "system", content: `Tu dois restituer l’état actuel COMPLET de ton agenda.
+    serviceBuffer.push({ role: "system", content: `Tu dois restituer l’état actualisé COMPLET de l'agenda.
 
 RÈGLES GÉNÉRALES
 - Ne pose aucune question.
@@ -2134,7 +2152,8 @@ RÈGLES GÉNÉRALES
 Agenda vide
 
 CONTENU À LISTER
-- Tous les rendez-vous, déplacements, voyages et départs immédiats
+- Mettre à jour l'agenda initial en utilisant les modifications contenues dans la conversation
+- Noter avec le maximum de détails
 - Uniquement les événements NON supprimés
 - Si un événement a été modifié ou déplacé, ne conserver que sa dernière version
 - Supprimer tous les doublons et l'ancienne version quand l'heure a été ajoutée
@@ -2150,15 +2169,14 @@ EXEMPLES
 09/01/2026 Départ pour Londres, week-end avec hôtel et visites
 
 TRI
-- Trier les événements par ordre chronologique décroissant
-- Puis placer en DERNIÈRE POSITION l’événement mentionné dans ta dernière réponse
+- Trier les événements par ordre chronologique décroissant sauf pour l'évènement dont on a parlé en dernier qui doit être placé À LA FIN DE LA LISTE
+
 
 INTERDICTIONS
 - Ne pas afficher d’en-tête
 - Ne pas numéroter
 - Ne pas utiliser de puces
 - Ne pas lister les événements supprimés
-- Ne pas répéter la date du jour si aucun événement n’y correspond
 `});
 
 
