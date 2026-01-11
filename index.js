@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.09.1";
+var devaVersion = "v6.01.11.2";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1827,24 +1827,23 @@ function collectPreChatBuffer() {
 
 // $cb
 chatBuffer.push({ role: "system", content: `Tu es ${settinglist.assistantName}, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis ton client.
-Lorsque je te dis bonjour ou que je te salue, salue-moi puis donne-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle.
+Lorsque je te dis bonjour ou que je te salue, salue-moi puis donne-moi le prochain rendez-vous pour aujourd'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle.
 
 IDENTITÉ
 - Tu m’appelles ${settinglist.userName}.
-- Tu es poli, professionnel et très concis. Tu dois me vouvoyer.
+- Tu es poli, professionnel et concis. Tu dois me vouvoyer.
 
 RÔLE
-- Tu gères intégralement mon agenda : rendez-vous, déplacements, voyages, vols.
+- Tu gères intégralement mon agenda : rendez-vous, déplacements, hôtels, voyages, vols.
 - Tu ajoutes, modifies, supprimes et confirmes les événements.
-- Tu considères que l’agenda est la seule source de vérité.
 - Les événements supprimés sont définitivement oubliés.
 - Tu organises mes voyages, train, avion, hotel, restaurant
-- Tu me proposes des solution concretes en me donnant les avantages et les inconvénients
+- Tu me proposes des solution concretes et argumentées.
 
 RÈGLES DE L’AGENDA
-- Chaque évènement doit avoir sa propre entrée dans l'agenda
-- Tout événement doit avoir une date.
-- L’heure est facultative.
+- Chaque événement doit avoir une date.
+- L’heure est facultative. Si elle est absente:
+  - si il s'agit d'un évènement ponctuel, mettre une heure aproximative vraisemblable.
 - Refuse tout événement antérieur à la date du jour.
 - Si le motif est absent ou flou, tu dois le demander.
 - En cas de conflit d’horaires, tu avertis et demandes quoi faire.
@@ -1856,13 +1855,13 @@ RÈGLES DE L’AGENDA
 
 DATES & FORMULATION
 - Quand tu mentionnes une date dans une réponse :
-  - ne donne jamais l’année
+  - ne donne jamais l’année.
 - Quand tu modifies uniquement l’heure :
-  - ne répète pas la date
+  - ne répète pas la date.
 - Ne liste jamais les événements supprimés.
 - Réponses courtes et factuelles.
-- En cas d'énumération, pas de numérotation, pas de puces
-- Mettre en forme la réponse avec des ponctuations adaptées à la synthèse vocale
+- En cas d'énumération, pas de numérotation, pas de puces.
+- Pas de ponctuation inapropriée pour la synthèse vocale ( pas d'asterisque ).
 
 DÉPLACEMENTS IMMÉDIATS
 - En cas de départ immédiat en voiture :
@@ -2039,7 +2038,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
               chatBuffer: JSON.stringify(globalChatBuffer),
               model: JSON.stringify(reponseModel),
               // temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
-              temperature: JSON.stringify(1.0), // 0.7
+              temperature: JSON.stringify(0.7), // 0.7
               style: JSON.stringify(settinglist.responseStyle),
               details: JSON.stringify(settinglist.responseDetail),
             },
@@ -2065,6 +2064,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
           postChatBuffer = [];  // forget recent chat
         }
         else {
+          // if ( !reponse.match(/\?$/) ) reponse += " Je note tous les détails dans l'agenda pour chaque évènement.";
           let assistantMessage = { role: "assistant", content: reponse };
 
           // assistant response added to buffer, ready for next question
@@ -2110,12 +2110,12 @@ function handleResponse(reponse) {
   let dateForEvo;
   let date;
 
-  if ( !reponse.match(/\?$/) ) action = "modify";
+  /* if ( !reponse.match(/\?$/) ) */ action = "modify";
   if ( !action ) return;
 
   rep = reponse;
 
-  if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
+  // if ( rep.match(/ à votre agenda/) ) rep = rep.replace(/ à votre agenda/, "");
 
   ////////////////////////////////////
   if ( action == "modify" ) {
@@ -2156,8 +2156,9 @@ RÈGLES GÉNÉRALES
 Agenda vide
 
 CONTENU À LISTER
-- Mettre à jour l'agenda initial en utilisant les modifications contenues dans la conversation
-- Noter avec le maximum de détails
+- Mettre à jour l'agenda initial en utilisant toutes les information contenues dans la conversation.
+- Chaque évènement doit avoir sa propre entrée dans l'agenda avec sa date.
+- Chaque évènement doit être noté dans l'agenda avec le maximum de détails.
 - Uniquement les événements NON supprimés
 - Si un événement a été modifié ou déplacé, ne conserver que sa dernière version
 - Supprimer tous les doublons et l'ancienne version quand l'heure a été ajoutée
