@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.11.2";
+var devaVersion = "v6.01.11.3";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1285,6 +1285,7 @@ function initCalendar() {
 
 /////     save evoCalEvents to database
 function saveEvoCalEvents() {
+  console.log("writeCalToDatabase");
   writeCalToDatabase();
 }
 
@@ -1353,9 +1354,9 @@ function updateCalFromDatabase() {
         if ( xhr.responseText != "empty" ) {
 //          updateCal = JSON.parse(JSON.parse(xhr.responseText)); // read base
 
-updateCal = JSON.parse(xhr.responseText);
-if ( updateCal.length > 1 ) updateCal = JSON.parse(updateCal[0]);
-else updateCal = JSON.parse(updateCal);
+          updateCal = JSON.parse(xhr.responseText);
+          if ( updateCal.length > 1 ) updateCal = JSON.parse(updateCal[0]);
+          else updateCal = JSON.parse(updateCal);
 
           for ( let event of evoCalEvents ) { // collect IDs
             oldCalIds.push(event.id);
@@ -2910,9 +2911,9 @@ $("#record-widget").css("display", "none");
 
 $(window).focus( function() {
   console.log("Window focus");
-  // updateCalFromDatabase();
-  // initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
-  //readSettingListFromDatabase();
+  updateCalFromDatabase();
+  initContactBook(JSON.parse(localStorage.getItem('baseUserName')));
+  readSettingListFromDatabase();
 
   let calTodayDate = $(".calendar-today").text();
   if ( calTodayDate.length == 1 ) calTodayDate = "0" + calTodayDate;
