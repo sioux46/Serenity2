@@ -1484,13 +1484,13 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
   waitingForGPT = true;
 
   $.ajax({
-    'url': 'chatGPT.php',
+    'url': 'chatGPTtest.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
               model: JSON.stringify(serviceModel), // "gpt-4.1" "gpt-4o"
               // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
-              temperature: JSON.stringify(0.01), // reponseTemperature // force to 0 for GPT-4
+              temperature: JSON.stringify(0.0), // reponseTemperature // force to 0 for GPT-4
               style: JSON.stringify(""), // responseStyle
               details: JSON.stringify("de façon concise"), // responseDetail
             },
@@ -1825,6 +1825,7 @@ function collectPreChatBuffer() {
   chatBuffer.push({ role: "system", content: "Faites semblant de connaitre la météo et les conditions du trafic routier. Donnez une réponse possible et vraisemblable. Faites comme si vous saviez." });
 */
 
+// $cb
 chatBuffer.push({ role: "system", content: `Tu es ${settinglist.assistantName}, mon chauffeur et mon secrétaire particulier et mon assistant. Je suis ton client.
 Lorsque je te dis bonjour ou que je te salue, salue-moi puis donne-moi le prochain rendez-vous pour aujourh'hui si l'heure de ce rendez-vous est supérieure à l'heure actuelle.
 
@@ -1861,6 +1862,7 @@ DATES & FORMULATION
 - Ne liste jamais les événements supprimés.
 - Réponses courtes et factuelles.
 - En cas d'énumération, pas de numérotation, pas de puces
+- Mettre en forme la réponse avec des ponctuations adaptées à la synthèse vocale
 
 DÉPLACEMENTS IMMÉDIATS
 - En cas de départ immédiat en voiture :
@@ -2031,13 +2033,13 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
 
   waitingForGPT = true;
   $.ajax({
-    'url': 'chatGPT.php',
+    'url': 'chatGPTtest.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
               model: JSON.stringify(reponseModel),
-              temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
-              // temperature: JSON.stringify(0.7),
+              // temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
+              temperature: JSON.stringify(1.0), // 0.7
               style: JSON.stringify(settinglist.responseStyle),
               details: JSON.stringify(settinglist.responseDetail),
             },
@@ -2142,6 +2144,7 @@ function handleResponse(reponse) {
 
     // serviceBuffer.push({ role: "user", content: "La date pour aujourd'hui est le " + actualDate() + ". Si un rendez-vous a été modifié ou déplacé, ne garder que la nouvelle version de ce rendez-vous. Supprimez les doublons dans l'agenda. Listez les rendez-vous non supprimés, les rappels et toutes les choses que je dois faire ou que vous devez faire pour moi ainsi que les départs immédiats en voyage. Pour chaque chose à faire, notez dans l'agenda la date, l'heure si elle est connue et le motif. Utilisez le format numérique suivant: <2 chiffres pour le jour>/<2 chiffres pour le mois>/<année>. Si l'heure est donnée et en cas de départ immédiat, ajoutez <2 chiffres pour l'heure>h<2 chiffres pour les minutes> puis ajoutez le motif. Triez la liste par ordre chronologique décroissant puis déplacez en fin de liste l'évènement dont vous parlez dans votre dernière réponse. Ne listez pas les évènements supprimés. Répondez sans entête et sans ajouter d'autre remarque"});
 
+    // $sb
     serviceBuffer.push({ role: "system", content: `Tu dois restituer l’état actualisé COMPLET de l'agenda.
 
 RÈGLES GÉNÉRALES
@@ -2405,8 +2408,10 @@ function doSpeechSynth (text) {
   // ut.voiceURI = 'native';
   ut.volume = 1;
   // Thomas, Amélie, Google UK English, Grandma (Français (Canada)), Flo (Français (Canada))
-  ut.voice = voices.filter(function(voice) {return voice.name == 'Thomas';})[0];
-  // ut.voice = actualVoice;
+  // voices.find(voice => voice.lang === "fr-FR" && voice.name === "Thomas")
+  // marche mieux sans rien
+  // ut.voice = voices.filter(function(voice) {return voice.name == 'Thomas';})[0];
+  // comented out preceding line: marche mieux sans rien
   ut.onstart = function(e) {
     //
   };
@@ -2856,6 +2861,14 @@ function truncateDecimals(number, digits) {
 }
 
 
+//////
+function getFemaleFrenchVoices() {
+    const voices = speechSynthesis.getVoices();
+    return voices.filter(voice => {
+      const isFrench = voice.lang.toLowerCase().startsWith("fr");
+      return isFrench;
+    });
+  }
 
 
 /////////////////////////////////////////////////////////////////////  Fin F U N C T I O N S
