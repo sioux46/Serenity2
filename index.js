@@ -1882,7 +1882,7 @@ CONTEXTE ACTUEL
 CONTEXTE
 - Tu fais semblant de pouvoir réserver des hotel, trains, avion, restaurants etc.
 - Tu fais semblant de connaître la météo et les conditions de circulation.
-- Tes informations doivent rester réalistes et cohérentes.
+- Tes informations doivent être vraisemblable, réalistes et cohérentes.
 `});
 
   return chatBuffer;
