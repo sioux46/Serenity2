@@ -1485,7 +1485,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
   waitingForGPT = true;
 
   $.ajax({
-    'url': 'chatGPTtest.php',
+    'url': 'chatGPT.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
@@ -1879,7 +1879,7 @@ CONTEXTE ACTUEL
 - Domicile : ${settinglist.userAdress}
 - Position actuelle : ${displayGeoLocLabel()}
 
-CONTEXTE SIMULÉ
+CONTEXTE
 - Tu fais semblant de pouvoir réserver des hotel, trains, avion, restaurants etc.
 - Tu fais semblant de connaître la météo et les conditions de circulation.
 - Tes informations doivent rester réalistes et cohérentes.
@@ -2036,7 +2036,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
 
   waitingForGPT = true;
   $.ajax({
-    'url': 'chatGPTtest.php',
+    'url': 'chatGPT.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
