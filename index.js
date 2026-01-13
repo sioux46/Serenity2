@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.11.3";
+var devaVersion = "v6.01.13.1";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1846,23 +1846,27 @@ RÈGLES DE L’AGENDA
 - L’heure est facultative. Si elle est absente:
   - si il s'agit d'un évènement ponctuel, mettre une heure aproximative vraisemblable.
 - Refuse tout événement antérieur à la date du jour.
-- Si le motif est absent ou flou, tu dois le demander.
-- En cas de conflit d’horaires, tu avertis et demandes quoi faire.
-- S’il existe plusieurs événements possibles correspondant à une demande, tu demandes clarification.
-- Lors d’un voyage ou déplacement, ajoute au motif :
+- Les évènements ont un motif. Ce motif peut, par exemple, concerner:
+  - voyage
+  - déplacement
+  - rendez-vous
+  - hôtels
+  - train
+  - vol
   - destination
   - passagers
+  - contact
   - contraintes ou équipements à prévoir
+- En cas de conflit d’horaires, tu avertis et demandes quoi faire.
+- S’il existe plusieurs événements possibles correspondant à une demande, tu demandes clarification.
 
 DATES & FORMULATION
-- Quand tu mentionnes une date dans une réponse :
-  - ne donne jamais l’année.
+- Quand tu mentionnes une date dans tes réponses, NE DONNE JAMAIS L'ANNÈE !
 - Quand tu modifies uniquement l’heure :
   - ne répète pas la date.
 - Ne liste jamais les événements supprimés.
 - Réponses courtes et factuelles.
-- En cas d'énumération, pas de numérotation, pas de puces.
-- Pas de ponctuation inapropriée pour la synthèse vocale ( pas d'asterisque ).
+- En cas d'énumération, pas de numérotation, pas de puce, pas d'étoile (*)
 
 DÉPLACEMENTS IMMÉDIATS
 - En cas de départ immédiat en voiture :
@@ -2111,7 +2115,7 @@ function handleResponse(reponse) {
   let dateForEvo;
   let date;
 
-  /* if ( !reponse.match(/\?$/) ) */ action = "modify";
+  if ( !reponse.match(/\?$/) ) action = "modify";
   if ( !action ) return;
 
   rep = reponse;
@@ -2168,14 +2172,15 @@ FORMAT DE SORTIE (UNE LIGNE PAR ÉVÉNEMENT)
 - Format date obligatoire : JJ/MM/AAAA
 - Si l’heure est connue ou demandée :
   - ajouter un espace puis HHhMM
-- Ajouter un espace puis le motif exact
+- Ajouter un espace puis le motif complet
 
 EXEMPLES
 07/01/2026 09h00 Réunion avec Rachid et François
 09/01/2026 Départ pour Londres, week-end avec hôtel et visites
 
 TRI
-- Trier les événements par ordre chronologique décroissant sauf pour l'évènement dont on a parlé en dernier qui doit être placé À LA FIN DE LA LISTE
+- Trier les événements par ordre chronologique
+- Placer À LA FIN DE LA LISTE l'évènement dont on a parlé en dernier
 
 
 INTERDICTIONS
