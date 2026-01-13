@@ -1860,7 +1860,7 @@ RÈGLES DE L’AGENDA
 - S’il existe plusieurs événements possibles correspondant à une demande, tu demandes clarification.
 
 DATES & FORMULATION
-- Quand tu mentionnes une date dans tes réponses, NE DONNE JAMAIS L'ANNÈE !
+- Quand tu mentionnes une date dans tes réponses, NE DONNE JAMAIS L'ANNÉE !
 - Quand tu modifies uniquement l’heure :
   - ne répète pas la date.
 - Ne liste jamais les événements supprimés.
