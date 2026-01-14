@@ -25,7 +25,7 @@ exit; */
       'model' =>  "mistral-large-latest", // $model,
       'messages' => $messages,
       'max_tokens' => 1000, // 3000
-      'temperature' => 0.7 // $temperature,
+      'temperature' => $temperature,
       // 'seed' => 12321 // any integer
       // 'top_p' => 0.5
   );
@@ -44,11 +44,14 @@ $response = file_get_contents($url, false, $context);
 
 // Process the response
 if ($response === false) {
-    echo 'Error reading response from open a i   A P I.';
+    echo 'Error reading response from Mistral API.';
 } else {
     $responseData = json_decode($response, true);
     // Access the assistant's reply
-    $assistantReply = end($responseData['choices'])['message']['content'];
+    // $assistantReply = end($responseData['choices'])['message']['content'];
+    if (isset($responseData['choices'][0]['message']['content'])) {
+      $assistantReply = $responseData['choices'][0]['message']['content'];
+    }
     echo $assistantReply;
 }
 ?>

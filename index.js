@@ -1508,7 +1508,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
           console.log("Error A P I Open A I !");
         }
         else {
-          console.log("Response " +  serviceModel + " serviceCall:\n" + reponse);
+          console.log("Response du serviceCall:\n" + reponse);
           newEventListFromServiceCall(reponse);
         }
       }
@@ -2018,7 +2018,7 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
     //------------------------------------------------------------------
     question = replaceDateWordsByTrueDateText(question); // out ce soir, demain etc...
     //-------------------------------------------------------------------
-    console.log("envoyé à ChatGPT: " + question);
+    console.log("envoyé au LLM: " + question);
     postChatBuffer.push({ role: "user", content: question });
     lastQuestion = question;
 
@@ -2057,7 +2057,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
       else {
         var reponse = xhr.responseText;
         // fillLog("response", reponse);
-        console.log("Response " + reponseModel + " for user: " + reponse);
+        console.log("Response du LLM pour l'utilisateur: " + reponse);
 
         if ( reponse.match(/^Error/) ) {
           reponse = "Désolé mais je n'ai pas compris votre question. Pouvez-vous la reformuler ?";
@@ -2095,7 +2095,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
           doSpeechSynth(repToSpeech);
         }
         else {
-          console.log("Réponse texte");
+          console.log("Réponse écrite");
           if ( questionMode == "audio" && !reponse.match(/^Error/) ) startRecog();
         }
       }
@@ -2511,7 +2511,7 @@ function doResponseAnyMode( response ) {
     doSpeechSynth(response);
   }
   else {
-    console.log("Réponse texte:");
+    console.log("Réponse écrite:");
   }
   console.log(response);
 }
