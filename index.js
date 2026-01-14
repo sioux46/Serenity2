@@ -2169,7 +2169,7 @@ CONTENU À LISTER
 
 FORMAT DE SORTIE (UNE LIGNE PAR ÉVÉNEMENT)
 - Format date obligatoire : JJ/MM/AAAA
-- Si l’heure est connue ou demandée :
+- Si l’heure est connue :
   - ajouter un espace puis HHhMM
 - Ajouter un espace puis le motif complet
 
