@@ -1,10 +1,9 @@
 <?php
 
-$apiKey = $_SERVER['OPENAI_API_KEY'];
-$url = 'https://api.openai.com/v1/chat/completions';
-// $apiKey = $_SERVER['DEEPSEEK_API_KEY'];
-// $url = 'https://api.deepseek.com/chat/completions';
-
+//$apiKey = $_SERVER['OPENAI_API_KEY'];
+// $url = 'https://api.openai.com/v1/chat/completions';
+$apiKey = $_SERVER['MISTRAL_API_KEY'];
+$url = 'https://api.mistral.ai/v1/chat/completions';
 
 $headers = array(
     'Content-Type: application/json',
@@ -23,7 +22,7 @@ print_r($chatBuffer);
 exit; */
 
   $data = array(
-      'model' =>  $model,
+      'model' =>  "mistral-small-latest", // $model,
       'messages' => $messages,
       'max_tokens' => 1000, // 3000
       'temperature' => $temperature,
@@ -45,11 +44,14 @@ $response = file_get_contents($url, false, $context);
 
 // Process the response
 if ($response === false) {
-    echo 'Error reading response from open a i   A P I.';
+    echo 'Error reading response from Mistral API.';
 } else {
     $responseData = json_decode($response, true);
     // Access the assistant's reply
-    $assistantReply = end($responseData['choices'])['message']['content'];
+    // $assistantReply = end($responseData['choices'])['message']['content'];
+    if (isset($responseData['choices'][0]['message']['content'])) {
+      $assistantReply = $responseData['choices'][0]['message']['content'];
+    }
     echo $assistantReply;
 }
 ?>

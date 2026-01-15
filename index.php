@@ -157,8 +157,14 @@
           <div class="s-page-title container-fluid"><h1>Les voyages</h1></div>  <!--Agenda-->
         </div>
       </div>
-    <div id="shedule-content"> <!--  class="container-fluid" -->
+    <div id="shedule-content">
       <div id="evoCalendar"></div>
+      <!--    chatTrace    -->
+      <div class="container-fluid">
+        <div class="row ms-1 me-1 mt-0 pe-2 ps-2">
+          <textarea id="chatTrace"></textarea>
+        </div>
+      </div>
     </div>
   </div>
 <!--                -->

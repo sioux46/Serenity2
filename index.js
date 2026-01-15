@@ -1485,7 +1485,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
   waitingForGPT = true;
 
   $.ajax({
-    'url': 'chatGPT.php',
+    'url': 'chatLLM.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
@@ -2036,7 +2036,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
 
   waitingForGPT = true;
   $.ajax({
-    'url': 'chatGPT.php',
+    'url': 'chatLLM.php',
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
@@ -2473,6 +2473,8 @@ function fillLog(who, text) {
   document.getElementById("logTextarea").scrollTop = document.getElementById("logTextarea").scrollHeight;
   if (questionMode == "audio" ) $("#questionTextarea").blur(); // question aurale
   else $("#questionTextarea").focus(); // question écrite
+
+  $("#chatTrace").val($("#logTextarea").val());
 }
 
 /////
