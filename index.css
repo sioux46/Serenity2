@@ -275,6 +275,11 @@ body {
   z-index: 1500;
 }
 
+#chatTrace {
+  height: 50rem;
+  width: 100%;
+}
+
 /*
 .parent {
   width: 50%;
