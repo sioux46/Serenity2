@@ -67,7 +67,8 @@ body,
 }
 
 #chatTrace {
-  height: 200px;
+  height: 50rem;
+  width: 100%;
 }
 
 

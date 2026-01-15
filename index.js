@@ -1,7 +1,13 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.15.1";
+var devaVersion = "v6.01.15.2";
+var LLM8888 = "chatLLM_MISTRAL_L.php";
+// "chatLLM_MISTRAL_L.php"; // chatLLM_MISTRAL_S.php chatLLM_GPT.php chatLLM_DEEPSEEK.php
+
+var LLM;
+if ( window.location.href.lastIndexOf("8888") != -1 ) LLM = LLM8888;
+else LLM = "chatLLM.php";
 /* ********************************************************************
 ************************************************************ class
 ********************************************************************* */
@@ -1485,7 +1491,7 @@ function chatGPTserviceCall(serviceBuffer) {                     // $service$
   waitingForGPT = true;
 
   $.ajax({
-    'url': 'chatLLM.php',
+    'url': LLM,
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
@@ -2036,7 +2042,7 @@ function chatGPTcall(globalChatBuffer) {                  // **** chatGPT call *
 
   waitingForGPT = true;
   $.ajax({
-    'url': 'chatLLM.php',
+    'url': LLM,
     'type': 'post',
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),

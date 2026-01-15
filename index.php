@@ -159,9 +159,9 @@
       </div>
     <div id="shedule-content">
       <div id="evoCalendar"></div>
-      <!--    chatTrace    -->
+      <!--                          chatTrace    -->
       <div class="container-fluid">
-        <div class="row ms-1 me-1 mt-0 pe-2 ps-2">
+        <div class="row ms-1 me-1 mt-2 pe-2 ps-2">
           <textarea id="chatTrace"></textarea>
         </div>
       </div>
