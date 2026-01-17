@@ -163,10 +163,12 @@
       <div id="chatTraceContainer" class="container-fluid">
         <div class="row ms-1 me-1 mt-2 pe-2 ps-2">
           <div class="col-4">
-            <textarea id="question2Textarea" autofocus class="form-control"></textarea>
-            <button id="question2Button" class="btn" type="button">
-              <img src="icons/forward.svg" width=36>
-            </button>
+            <textarea id="question2Textarea" autofocus class="form-control" placeholder="Tapez votre requête ici..."></textarea>
+            <div class="d-flex flex-row-reverse">
+              <button id="question2Button" class="btn" type="button">
+                <img src="icons/forward.svg" width=36>
+              </button>
+            </div>
 
           </div>
           <div class="col-8">
