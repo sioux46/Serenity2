@@ -71,7 +71,16 @@ body,
   color: red;
 }
 
-#chatTrace {
-  height: 50rem;
-  width: 100%;
+#chatTrace,
+#question2Textarea {
+  /*width: 100%;*/
+}
+
+#question2Button {
+  position: relative;
+  padding: 0;
+  margin-left: auto;
+  width: fit-content;
+  top: -3rem;
+  left: 1rem;
 }

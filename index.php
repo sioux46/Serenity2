@@ -160,9 +160,18 @@
     <div id="shedule-content">
       <div id="evoCalendar"></div>
       <!--                          chatTrace    -->
-      <div class="container-fluid">
+      <div id="chatTraceContainer" class="container-fluid">
         <div class="row ms-1 me-1 mt-2 pe-2 ps-2">
-          <textarea id="chatTrace"></textarea>
+          <div class="col-4">
+            <textarea id="question2Textarea" autofocus class="form-control"></textarea>
+            <button id="question2Button" class="btn" type="button">
+              <img src="icons/forward.svg" width=36>
+            </button>
+
+          </div>
+          <div class="col-8">
+            <textarea id="chatTrace" autofocus class="form-control"></textarea>
+          </div>
         </div>
       </div>
     </div>

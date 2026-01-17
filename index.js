@@ -1,8 +1,8 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.15.2";
-var LLM8888 = "chatLLM_MISTRAL_L.php";
+var devaVersion = "v6.01.17.1";
+var LLM8888 = "chatLLM_MISTRAL_L.php"; //"chatLLM_MISTRAL_L.py";
 // "chatLLM_MISTRAL_L.php"; // chatLLM_MISTRAL_S.php chatLLM_GPT.php chatLLM_DEEPSEEK.php
 
 var LLM;
@@ -1034,6 +1034,10 @@ function showPage(pageID) {
       activePage = pageID;
       if ( innerHeight < innerWidth ) $('#evoCalendar').evoCalendar('toggleSidebar', true);
       $(pageID).css({"display": "block"});
+      $("#chatTrace").css("height", window.innerHeight - 40 - parseFloat($("#evoCalendar").css("height")) - parseFloat($("#voyage-title").css("height")) + "px");
+      $("#question2Textarea").css("height", $("#chatTrace").css("height"));
+      // $("#question2Textarea").focus();
+
   });
 }
 
@@ -2184,9 +2188,7 @@ EXEMPLES
 09/01/2026 Départ pour Londres, week-end avec hôtel et visites
 
 TRI
-- Trier les événements par ordre chronologique
-- Placer À LA FIN DE LA LISTE l'évènement dont on a parlé en dernier
-
+- Trier la liste par ordre chronologique puis déplacez en fin de liste l'évènement dont tu as parlé dans ta dernière réponse
 
 INTERDICTIONS
 - Ne pas afficher d’en-tête
@@ -2481,6 +2483,8 @@ function fillLog(who, text) {
   else $("#questionTextarea").focus(); // question écrite
 
   $("#chatTrace").val($("#logTextarea").val());
+  document.getElementById("chatTrace").scrollTop = document.getElementById("chatTrace").scrollHeight;
+
 }
 
 /////
@@ -3314,11 +3318,14 @@ $("#chatParamSpeechPitch").on("change", function (e) {
 $("#questionButton").on("click", function(e) {
   if ( questionMode == "audio" && reponseMode == "audio") stopRecog(); // stopRecog();  resetRecog();
   let question = $("#questionTextarea").val();
+  if ( !question ) question = $("#question2Textarea").val();
   if ( question ) {
     $("#questionTextarea").val("");
+    $("#question2Textarea").val("");
     questionAnalyse(question);
   }
 });
+
 
 $("#clearLogButton").on("click", function(e) { // clear textarea + newChat
   $("#logTextarea").val("");
@@ -3356,7 +3363,6 @@ $("#startButton2").on("click", function (ev) {
 $("#sheduleButton").on("click", function (ev) {
   showPage("#shedule");
   $("#toolBar").css("display", "block");
-  //initOntoTreeChoose(ontoTree[0]);
 });
 
 /////       show voyage page
@@ -3490,7 +3496,17 @@ $("a.leaflet-control-zoom-out").on("click", function (ev) {
   console.log("zoom out");
 });
 
+// mobile detect
+ if ( window.matchMedia("(max-width: 600px)").matches  &&
+      window.matchMedia("(pointer: coarse)").matches)
+      $("#chatTraceContainer").css("display", "none"); // test phone
+ else $("#chatTraceContainer").css("display", "block"); // other
 
+ const observer = new ResizeObserver(() => {
+   $("#chatTrace").css("height", window.innerHeight - 40 - parseFloat($("#evoCalendar").css("height")) - parseFloat($("#voyage-title").css("height")) + "px");
+   $("#question2Textarea").css("height", $("#chatTrace").css("height"));
+ });
+ observer.observe($("#DEVA")[0]);
 
 
 }); // *********************************************  F I N   R E A D Y
