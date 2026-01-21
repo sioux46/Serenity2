@@ -1,3 +1,6 @@
+#!/etc/python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import json
 

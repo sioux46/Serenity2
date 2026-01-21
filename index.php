@@ -172,7 +172,7 @@
 
           </div>
           <div class="col-8">
-            <textarea id="chatTrace" autofocus class="form-control"></textarea>
+            <textarea id="chatTrace" autofocus class="form-control" value""></textarea>
           </div>
         </div>
       </div>

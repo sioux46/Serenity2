@@ -21,7 +21,7 @@ foreach ($messages as $msg) {
 }
 
 $data = [
-    'model' => $model, // "gpt-5", //
+    'model' => "gpt-4o", // $model, // "gpt-5", //
     'input' => $inputText, // $inputText,
     'max_output_tokens' => 1000,
     'temperature' => $temperature

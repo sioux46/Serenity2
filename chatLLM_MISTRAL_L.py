@@ -1,4 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
+#/Applications/MAMP/Library/bin/python2
+#
 # -*- coding: utf-8 -*-
 
 import os
