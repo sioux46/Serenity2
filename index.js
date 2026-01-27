@@ -2,7 +2,7 @@
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
 var devaVersion = "v6.01.21.1";
-var LLM8888 = "chatLLM_MISTRAL_M.php"; //"chatLLM_MISTRAL_L.py";
+var LLM8888 = "chatLLM_MISTRAL_L.php"; //"chatLLM_MISTRAL_L.py";
 // "chatLLM_MISTRAL_L.php"; // chatLLM_MISTRAL_S.php chatLLM_GPT.php chatLLM_DEEPSEEK.php
 
 var LLM;
