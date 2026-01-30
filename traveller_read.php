@@ -46,7 +46,7 @@ function arrayResult($result, $colTitles) {
 //echo $i, "  ", "***********************************  ";  // debug
 
 		for ($j = 0; $j < $nbCols; $j++) {
-			$donn = preg_replace('/<!--/','<--',$row[$j]);   // virer les comm. html
+			$donn = str_replace('<!--', '<--', $row[$j] ?? '');   // virer les comm. html
 			$tab[$i][$j] = $donn;   // utf8_encode($donn);
 
 //echo utf8_encode($donn), "  ";  // debug
