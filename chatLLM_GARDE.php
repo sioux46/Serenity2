@@ -1,26 +1,4 @@
 <?php
-session_start();
-$allowedOrigins = [
-    "http://Serenity2.local:8888/index.php",
-    "https://www.siouxlog.fr/deva2mtl/index.php"
-];
-
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-
-if (in_array($origin, $allowedOrigins)) {
-    header("Access-Control-Allow-Origin: $origin");
-    header("Access-Control-Allow-Credentials: true");
-}
-
-header("Access-Control-Allow-Methods: POST");
-header("Access-Control-Allow-Headers: Content-Type, X-CSRF-Token");
-
-// Préflight
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
-    exit;
-}
-/////////////////////////////////////////////////////////
 
 $apiKey = $_SERVER['OPENAI_API_KEY'];
 $url = 'https://api.openai.com/v1/responses';
