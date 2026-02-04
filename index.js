@@ -1,7 +1,7 @@
 // index.js
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
-var devaVersion = "v6.01.30.1";
+var devaVersion = "v6.02.04.1";
 var LLM8888 = "chatLLM.php"; //"chatLLM_MISTRAL_L.py";
 // "chatLLM_MISTRAL_L.php"; // chatLLM_MISTRAL_S.php chatLLM_GPT.php chatLLM_DEEPSEEK.php
 
