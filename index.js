@@ -2,7 +2,7 @@
 //
 // Nomenclature : [Années depuis 2020].[Mois].[Jour].[Nombre dans la journée]
 var devaVersion = "v6.01.30.1";
-var LLM8888 = "chatLLM_MISTRAL_L.php"; //"chatLLM_MISTRAL_L.py";
+var LLM8888 = "chatLLM.php"; //"chatLLM_MISTRAL_L.py";
 // "chatLLM_MISTRAL_L.php"; // chatLLM_MISTRAL_S.php chatLLM_GPT.php chatLLM_DEEPSEEK.php
 
 var LLM;
@@ -1490,27 +1490,31 @@ function clearCalendar() {
 /////////////////////////////////////////////////////////////////////////////////////////////
                                             //  chatGPT S E R V I C E   C A L L
 ////////////////////////////////////////////////////////////////////////////////////////////
-function chatGPTserviceCall(serviceBuffer) {                     // $service$
+function chatGPTserviceCall(serviceBuffer) {
+// $service$
 
   waitingForGPT = true;
+  const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
   $.ajax({
     'url': LLM,
-    'type': 'post',
+    'type': 'POST',
+    'xhrFields': {
+      withCredentials: true   // ← envoie le cookie de session
+    },
     'data': {
               chatBuffer: JSON.stringify(serviceBuffer),
-              model: JSON.stringify(serviceModel), // "gpt-4.1" "gpt-4o"
-              // model: JSON.stringify("gpt-4-1106-preview"), // "gpt-4-turbo-preview" // "gpt-3-turbo-0125" // "gpt-4-0125-preview" // "gpt-4-1106-preview" "gpt-4-0613"  "gpt-3.5-turbo-0613"  "gpt-3.5-turbo-0125"
-              temperature: JSON.stringify(0.0), // reponseTemperature // force to 0 for GPT-4
-              style: JSON.stringify(""), // responseStyle
-              details: JSON.stringify("de façon concise"), // responseDetail
+              model: JSON.stringify(serviceModel),
+              // temperature: JSON.stringify(0.0),
+              temperature: JSON.stringify("service"),
+              csrf: csrf  // ← token CSRF
             },
     'complete': function(xhr, result) {
 
       waitingForGPT = false;
 
       if (result != 'success') {
-        console.log("Fatal error A P I Open A I !!!!");
+        console.log("Fatal error API LLM !!!!");
       }
       else {
         var reponse = xhr.responseText;
@@ -2042,28 +2046,34 @@ function questionAnalyse(question) {   // $question$   ************* Q U E S T I
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-function chatGPTcall(globalChatBuffer) {                  // **** LLM call ****  $chat
+function chatGPTcall(globalChatBuffer) {
+// **** LLM call ****  $chat
+
+  const csrf = document.querySelector('meta[name="csrf-token"]').content;
 
   console.log("LLM: " + LLM);
   waitingForGPT = true;
   $.ajax({
     'url': LLM,
     'type': 'post',
+    'xhrFields': {
+      withCredentials: true   // ← envoie le cookie de session
+    },
     'data': {
               chatBuffer: JSON.stringify(globalChatBuffer),
               model: JSON.stringify(reponseModel),
               // temperature: JSON.stringify(parseFloat(settinglist.reponseTemperature)),
-              temperature: JSON.stringify(0.7), // 0.7
-              style: JSON.stringify(settinglist.responseStyle),
-              details: JSON.stringify(settinglist.responseDetail),
+              // temperature: JSON.stringify(0.7),
+              temperature: JSON.stringify("chat"),
+              csrf: csrf  // ← token CSRF
             },
     'complete': function(xhr, result) {
 
       waitingForGPT = false;
 
       if (result != 'success') {
-        console.log("Fatal error A P I Open A I !!!!");
-        fillLog("response", "Error A P I Open A I !!!!");
+        console.log("Fatal error API LLM !!!!");
+        fillLog("response", "Error API LLM !!!!");
       }
       else {
         var reponse = xhr.responseText;

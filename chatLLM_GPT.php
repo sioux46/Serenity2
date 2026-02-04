@@ -1,8 +1,8 @@
 <?php
 session_start();
 $allowedOrigins = [
-    "http://Serenity2.local:8888/index.php",
-    "https://www.siouxlog.fr/deva2mtl/index.php"
+    "http://Serenity2.local:8888",
+    "https://www.siouxlog.fr"
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

@@ -1,8 +1,8 @@
 <?php
 session_start();
 $allowedOrigins = [
-  "http://Serenity2.local:8888",
-  "https://www.siouxlog.fr"
+    "http://Serenity2.local:8888/index.php",
+    "https://www.siouxlog.fr/deva2mtl/index.php"
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -27,12 +27,6 @@ $apiKey = $_SERVER['MISTRAL_API_KEY'] ?? null;
 if (!$apiKey) {
     http_response_code(500);
     echo json_encode(["error" => "Server misconfigured"]);
-    exit;
-}
-
-// 2. CSRF
-if (!isset($_POST['csrf']) || $_POST['csrf'] !== ($_SESSION['csrf'] ?? null)) {
-    http_response_code(403);
     exit;
 }
 
@@ -62,6 +56,11 @@ if (strlen($_POST['chatBuffer'] ?? "") > 65536) {
 }
 
 //////////////////////////////////////////////////////////
+/*$url = 'https://api.mistral.ai/v1/chat/completions';
+$headers = array(
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $apiKey
+);*/
 
 // 5. Décodage JSON sécurisé
 $raw = $_POST['chatBuffer'] ?? '';
@@ -75,49 +74,39 @@ if (!is_array($messages)) {
 
 // $model = json_decode($_POST['model'], true);
 $temperature = json_decode($_POST['temperature'], true);
-if ( $temperature == "chat" ) $temperature = 0.7;
-else if ( $temperature == "service" ) $temperature = 0.0;
-else  $temperature = 0.7;
+
 /* echo "before";
 print_r($chatBuffer);
 exit; */
 
 // 8. Payload API
-$data = array(
-    'model' =>  "mistral-large-latest", // $model,
-    'messages' => $messages,
-    'max_tokens' => 1000, // 3000
-    'temperature' => $temperature,
+  $data = array(
+      'model' =>  "mistral-large-latest", // $model,
+      'messages' => $messages,
+      'max_tokens' => 1000, // 3000
+      'temperature' => $temperature,
+  );
+// }
+
+$options = array(
+    'http' => array(
+        'header' => implode("\r\n", $headers),
+        'method' => 'POST',
+        'content' => json_encode($data)
+    )
 );
 
-// 9. Requête API sécurisée
-$ch = curl_init("https://api.mistral.ai/v1/chat/completions");
-curl_setopt_array($ch, [
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_POST => true,
-    CURLOPT_HTTPHEADER => [
-        "Content-Type: application/json",
-        "Authorization: Bearer $apiKey"
-    ],
-    CURLOPT_POSTFIELDS => json_encode($data),
-    CURLOPT_TIMEOUT => 15,
-    CURLOPT_SSL_VERIFYPEER => true
-]);
-
-$response = curl_exec($ch);
-
-if ($response === false) {
-    http_response_code(502);
-    echo json_encode(["error" => "API error"]);
-    exit;
-}
+$context = stream_context_create($options);
+$response = file_get_contents($url, false, $context);
 
 // Process the response
-$responseData = json_decode($response, true);
-if (isset($responseData['choices'][0]['message']['content'])) {
-  $assistantReply = $responseData['choices'][0]['message']['content'];
+if ($response === false) {
+    echo 'Error reading response from Mistral API.';
+} else {
+    $responseData = json_decode($response, true);
+    if (isset($responseData['choices'][0]['message']['content'])) {
+      $assistantReply = $responseData['choices'][0]['message']['content'];
+    }
+    echo $assistantReply;
 }
-// echo $assistantReply;
-echo htmlspecialchars($assistantReply, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
-
 ?>
